@@ -197,8 +197,7 @@ function isoProject(x, y, z) {
 }
 
 function is3dModel(entry) {
-  return entry.model.metadata?.frameDimension === "3d"
-    || entry.model.nodes.some(n => n.y !== 0);
+  return entry.model.coordinate_system?.dimension === "3d";
 }
 
 function storyTops(model) {

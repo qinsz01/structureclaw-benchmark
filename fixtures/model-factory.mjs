@@ -13,9 +13,70 @@ const OUT = join(__dirname, "ground-truth-models.json");
 
 // --- helpers ---
 
-const pinned  = [true, true, true, true, true, false];
-const roller  = [false, true, true, true, true, false];
+const pinned  = [true, true, true, false, false, false];
+const roller  = [false, true, true, false, false, false];
 const fixed   = [true, true, true, true, true, true];
+
+function finalizeCoordinateContract(entry) {
+  const dimension = entry.model.metadata?.frameDimension;
+  if (dimension !== "2d" && dimension !== "3d") {
+    throw new Error(`${entry.id}: ground-truth model must explicitly declare metadata.frameDimension`);
+  }
+  for (const node of entry.model.nodes || []) {
+    if (![node.x, node.y, node.z].every((value) => typeof value === "number" && Number.isFinite(value))) {
+      throw new Error(`${entry.id}: node '${node.id}' must have finite global X/Y/Z coordinates`);
+    }
+    if (dimension === "2d" && Math.abs(node.y) > 1e-9) {
+      throw new Error(`${entry.id}: 2-D node '${node.id}' is outside the global X-Z plane`);
+    }
+  }
+  const loadCases = (entry.model.load_cases || []).map((loadCase) => ({
+    ...loadCase,
+    loads: (loadCase.loads || []).map((load) => {
+      const referenceFrame = load.reference_frame === "element-local" ? "element-local" : "global";
+      const hasNode = load.node !== undefined;
+      const hasElement = load.element !== undefined;
+      if (hasNode === hasElement) {
+        throw new Error(`${entry.id}: every benchmark load must target exactly one node or element`);
+      }
+      if (hasNode && ["wx", "wy", "wz"].some((key) => load[key] !== undefined)) {
+        throw new Error(`${entry.id}: nodal loads must use f/m components, not w components`);
+      }
+      if (hasElement && ["fx", "fy", "fz", "mx", "my", "mz", "forces"].some((key) => load[key] !== undefined)) {
+        throw new Error(`${entry.id}: member loads must use w components, not f/m components`);
+      }
+      if (dimension === "2d") {
+        const inactive = referenceFrame === "element-local"
+          ? [load.wy]
+          : [load.fy, load.mx, load.mz, load.wy];
+        if (inactive.some((value) => typeof value === "number" && Math.abs(value) > 1e-9)) {
+          throw new Error(`${entry.id}: 2-D load contains an out-of-plane component`);
+        }
+      }
+      return { ...load, reference_frame: referenceFrame };
+    }),
+  }));
+  return {
+    ...entry,
+    model: {
+      ...entry.model,
+      coordinate_system: {
+        semantics: "global-z-up",
+        version: 1,
+        dimension,
+        plane: dimension === "2d" ? "xz" : null,
+        dof_order: ["ux", "uy", "uz", "rx", "ry", "rz"],
+      },
+      load_cases: loadCases,
+      metadata: {
+        ...(entry.model.metadata || {}),
+        coordinateSemantics: "global-z-up",
+        coordinateContractVersion: 1,
+        frameDimension: dimension,
+      },
+    },
+  };
+}
 
 function steel(id = "1") { return { id, name: "steel", E: 205000, nu: 0.3, rho: 7850 }; }
 function beamSection(id = "1", name = "B1") {
@@ -108,10 +169,10 @@ models.push({
     materials: [steel()],
     sections: [
       { id: "1", name: "HW300x300", type: "H", purpose: "column",
-        shape: { kind: "H", H: 0.3, B: 0.3, tw: 0.01, tf: 0.015 },
+        shape: { kind: "H", H: 300, B: 300, tw: 10, tf: 15 },
         properties: { A: 0.012, Iy: 0.0002, Iz: 0.0002, J: 0.00001, G: 79000 } },
       { id: "2", name: "HN400x200", type: "H", purpose: "beam",
-        shape: { kind: "H", H: 0.4, B: 0.2, tw: 0.008, tf: 0.013 },
+        shape: { kind: "H", H: 400, B: 200, tw: 8, tf: 13 },
         properties: { A: 0.008, Iy: 0.0002, Iz: 0.00003, J: 0.000005, G: 79000 } },
     ],
     stories: [{ id: "F1", height: 4.5, floorLoad: 8, floorLoadUnit: "kN/m2", tributaryWidthM: 6, equivalentLineLoad: 48 }],
@@ -167,10 +228,10 @@ models.push({
     materials: [steel()],
     sections: [
       { id: "1", name: "HW350x350", type: "H", purpose: "column",
-        shape: { kind: "H", H: 0.35, B: 0.35, tw: 0.012, tf: 0.019 },
+        shape: { kind: "H", H: 350, B: 350, tw: 12, tf: 19 },
         properties: { A: 0.017, Iy: 0.0004, Iz: 0.0004, J: 0.00002, G: 79000 } },
       { id: "2", name: "HN500x200", type: "H", purpose: "beam",
-        shape: { kind: "H", H: 0.5, B: 0.2, tw: 0.01, tf: 0.016 },
+        shape: { kind: "H", H: 500, B: 200, tw: 10, tf: 16 },
         properties: { A: 0.011, Iy: 0.0004, Iz: 0.00004, J: 0.000008, G: 79000 } },
     ],
     stories: [
@@ -211,7 +272,7 @@ models.push({
   const nodes = [];
   const elements = [];
   // bottom chord nodes
-  for (let i = 0; i <= panels; i++) nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: fixed } : i === panels ? { restraints: roller } : {}) });
+  for (let i = 0; i <= panels; i++) nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: pinned } : i === panels ? { restraints: roller } : {}) });
   // top chord nodes
   for (let i = 0; i <= panels; i++) nodes.push({ id: `T${i}`, x: i * dx, y: 0, z: H });
   // bottom chords
@@ -245,7 +306,7 @@ models.push({
   const dx = L / panels;
   const nodes = [];
   const elements = [];
-  for (let i = 0; i <= panels; i++) nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: fixed } : i === panels ? { restraints: roller } : {}) });
+  for (let i = 0; i <= panels; i++) nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: pinned } : i === panels ? { restraints: roller } : {}) });
   for (let i = 0; i <= panels; i++) nodes.push({ id: `T${i}`, x: i * dx, y: 0, z: H });
   for (let i = 0; i < panels; i++) {
     elements.push({ id: `BC${i}`, type: "truss", nodes: [`B${i}`, `B${i + 1}`], material: "1", section: "1" });
@@ -282,7 +343,7 @@ models.push({
   const nodes = [];
   const elements = [];
   // bottom chord
-  for (let i = 0; i <= panels; i++) nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: fixed } : i === panels ? { restraints: roller } : {}) });
+  for (let i = 0; i <= panels; i++) nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: pinned } : i === panels ? { restraints: roller } : {}) });
   // top chord (with slope)
   for (let i = 0; i <= panels; i++) {
     const distFromCenter = Math.abs(i * dx - L / 2);
@@ -337,7 +398,7 @@ models.push({
     materials: [{ id: "1", name: "Q345", grade: "Q345", category: "steel", E: 206000, nu: 0.3, rho: 7850, fy: 345 }],
     sections: [{
       id: "1", name: "H600x250x10x16", type: "H",
-      shape: { kind: "H", H: 0.6, B: 0.25, tw: 0.01, tf: 0.016 },
+      shape: { kind: "H", H: 600, B: 250, tw: 10, tf: 16 },
       properties: { A: 0.015, Iy: 0.0009, Iz: 0.0001, J: 0.000005, G: 79000 },
     }],
     load_cases: [{ id: "LC1", type: "dead", loads: [
@@ -373,7 +434,7 @@ models.push({
     materials: [{ id: "1", name: "Q345", grade: "Q345", category: "steel", E: 206000, nu: 0.3, rho: 7850, fy: 345 }],
     sections: [{
       id: "1", name: "H700x300x12x20", type: "H",
-      shape: { kind: "H", H: 0.7, B: 0.3, tw: 0.012, tf: 0.02 },
+      shape: { kind: "H", H: 700, B: 300, tw: 12, tf: 20 },
       properties: { A: 0.022, Iy: 0.0015, Iz: 0.0002, J: 0.00001, G: 79000 },
     }],
     load_cases: [{ id: "LC1", type: "dead", loads: [
@@ -591,12 +652,12 @@ models.push(build3dFrame("frame3d-simple", "2层空间钢框架，X向1跨6m，Y
   sections: [
     {
       id: "1", name: "HW350x350", type: "H", purpose: "column",
-      shape: { kind: "H", H: 0.35, B: 0.35, tw: 0.012, tf: 0.019 },
+      shape: { kind: "H", H: 350, B: 350, tw: 12, tf: 19 },
       properties: { A: 0.017, Iy: 0.0004, Iz: 0.0004, J: 0.00002, G: 79000 },
     },
     {
       id: "2", name: "HN500x200", type: "H", purpose: "beam",
-      shape: { kind: "H", H: 0.5, B: 0.2, tw: 0.01, tf: 0.016 },
+      shape: { kind: "H", H: 500, B: 200, tw: 10, tf: 16 },
       properties: { A: 0.011, Iy: 0.0004, Iz: 0.00004, J: 0.000008, G: 79000 },
     },
   ],
@@ -615,12 +676,12 @@ models.push(build3dFrame("frame3d-complex", "2层空间钢框架，X向2跨6m+6m
   sections: [
     {
       id: "1", name: "HW400x400", type: "H", purpose: "column",
-      shape: { kind: "H", H: 0.4, B: 0.4, tw: 0.013, tf: 0.021 },
+      shape: { kind: "H", H: 400, B: 400, tw: 13, tf: 21 },
       properties: { A: 0.021, Iy: 0.0006, Iz: 0.0006, J: 0.00003, G: 79000 },
     },
     {
       id: "2", name: "HN600x200", type: "H", purpose: "beam",
-      shape: { kind: "H", H: 0.6, B: 0.2, tw: 0.011, tf: 0.017 },
+      shape: { kind: "H", H: 600, B: 200, tw: 11, tf: 17 },
       properties: { A: 0.013, Iy: 0.0007, Iz: 0.00005, J: 0.000009, G: 79000 },
     },
   ],
@@ -639,12 +700,12 @@ models.push(build3dFrame("frame3d-concrete", "2层3D混凝土框架，X向2跨6m
   sections: [
     {
       id: "1", name: "C30 500x500", type: "rect", purpose: "column",
-      shape: { kind: "rect", H: 0.5, B: 0.5 },
+      shape: { kind: "rectangular", H: 500, B: 500 },
       properties: { A: 0.25, Iy: 0.0052, Iz: 0.0052, J: 0.0087, G: 12500 },
     },
     {
       id: "2", name: "C30 300x600", type: "rect", purpose: "beam",
-      shape: { kind: "rect", H: 0.6, B: 0.3 },
+      shape: { kind: "rectangular", H: 600, B: 300 },
       properties: { A: 0.18, Iy: 0.0054, Iz: 0.00135, J: 0.00224, G: 12500 },
     },
   ],
@@ -675,7 +736,6 @@ function hSection(id, name, purpose = "beam") {
     name,
     type: "H",
     purpose,
-    shape: { kind: "H", H: 0.35, B: 0.25, tw: 0.01, tf: 0.016 },
     properties: { A: 0.012, Iy: 0.0003, Iz: 0.00008, J: 0.00001, G: 79000 },
   };
 }
@@ -686,7 +746,7 @@ function rectSection(id, name, width, depth, purpose = "beam") {
     name,
     type: "rect",
     purpose,
-    shape: { kind: "rect", B: width, H: depth },
+    shape: { kind: "rectangular", B: width * 1000, H: depth * 1000 },
     properties: {
       A: width * depth,
       Iy: width * depth ** 3 / 12,
@@ -899,7 +959,7 @@ function buildColumn(id, description, opts) {
 }
 
 function buildPortalSingle(id, description, opts) {
-  const { span, height, roofLoad, material = q345(), section = hSection("1", "H600x250", "portal") } = opts;
+  const { span, height, roofLoad, material = q345(), section = hSection("1", "H600x250", "other") } = opts;
   return {
     id,
     inferredType: "portal-frame",
@@ -960,7 +1020,7 @@ function buildPortalDouble(id, description, opts) {
         { id: "C3", type: "column", nodes: ["N5", "N2"], material: "1", section: "1" },
       ],
       materials: [q345()],
-      sections: [hSection("1", "H700x300", "portal")],
+      sections: [hSection("1", "H700x300", "other")],
       load_cases: [{ id: "LC1", type: "dead", loads }],
       load_combinations: [{ id: "ULS", factors: { LC1: 1.0 } }],
       metadata: { source: "ground-truth", inferredType: "portal-frame", frameDimension: "2d" },
@@ -992,7 +1052,7 @@ function buildMezzaninePortal() {
         { id: "C2", type: "column", nodes: ["N6", "N2"], material: "1", section: "1" },
       ],
       materials: [q345()],
-      sections: [hSection("1", "H600x250", "portal")],
+      sections: [hSection("1", "H600x250", "other")],
       load_cases: [{ id: "LC1", type: "dead", loads: [
         { type: "distributed", element: "R1", wz: -6, wy: 0 },
         { type: "distributed", element: "M1", wz: -4, wy: 0 },
@@ -1015,7 +1075,7 @@ function buildPanelTruss(id, description, opts) {
   const nodes = [];
   const elements = [];
   for (let i = 0; i <= panels; i++) {
-    nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: fixed } : i === panels ? { restraints: roller } : {}) });
+    nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: pinned } : i === panels ? { restraints: roller } : {}) });
     nodes.push({ id: `T${i}`, x: i * dx, y: 0, z: height });
   }
   for (let i = 0; i < panels; i++) {
@@ -1052,7 +1112,7 @@ function buildTrapezoidTruss(id, description, opts) {
   const nodes = [];
   const elements = [];
   for (let i = 0; i <= panels; i++) {
-    nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: fixed } : i === panels ? { restraints: roller } : {}) });
+    nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: pinned } : i === panels ? { restraints: roller } : {}) });
   }
   for (let i = 0; i <= panels; i++) {
     const distFromCenter = Math.abs(i * dx - span / 2);
@@ -1097,7 +1157,7 @@ function buildTriangularTruss12() {
       schema_version: "2.0.0",
       unit_system: "SI",
       nodes: [
-        { id: "B0", x: 0, y: 0, z: 0, restraints: fixed },
+        { id: "B0", x: 0, y: 0, z: 0, restraints: pinned },
         { id: "B1", x: 6, y: 0, z: 0 },
         { id: "B2", x: 12, y: 0, z: 0, restraints: roller },
         { id: "T0", x: 3, y: 0, z: 1.5 },
@@ -1135,7 +1195,7 @@ function buildTriangularRoofTruss(id, description, opts) {
   const nodes = [];
   const elements = [];
   for (let i = 0; i <= panels; i++) {
-    nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: fixed } : i === panels ? { restraints: roller } : {}) });
+    nodes.push({ id: `B${i}`, x: i * dx, y: 0, z: 0, ...(i === 0 ? { restraints: pinned } : i === panels ? { restraints: roller } : {}) });
   }
   const topNodes = [];
   for (let i = 1; i < panels; i++) {
@@ -1417,9 +1477,10 @@ models.push(buildPanelTruss("truss-warren-12m-2m-8k", "Warren桁架，跨度12m�
 }));
 
 // --- write output ---
-writeFileSync(OUT, JSON.stringify(models, null, 2));
-console.log(`Generated ${models.length} ground-truth models → ${OUT}`);
-for (const m of models) {
+const finalizedModels = models.map(finalizeCoordinateContract);
+writeFileSync(OUT, JSON.stringify(finalizedModels, null, 2));
+console.log(`Generated ${finalizedModels.length} ground-truth models → ${OUT}`);
+for (const m of finalizedModels) {
   const n = m.model.nodes.length;
   const e = m.model.elements.length;
   console.log(`  ${m.id}: ${m.inferredType}, ${n} nodes, ${e} elements`);

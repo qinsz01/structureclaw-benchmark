@@ -72,7 +72,13 @@ function pinSupport(cx, cy) {
     <line x1="${cx - 14}" y1="${cy + 16}" x2="${cx + 14}" y2="${cy + 16}" stroke="${COLORS.support}" stroke-width="2"/>`;
 }
 
-function rollerSupport(cx, cy) {
+function rollerSupport(cx, cy, freeAxis = "x") {
+  if (freeAxis === "z") {
+    return `<polygon points="${cx},${cy} ${cx + 14},${cy - 10} ${cx + 14},${cy + 10}" fill="none" stroke="${COLORS.support}" stroke-width="2"/>
+    <circle cx="${cx + 18}" cy="${cy - 6}" r="3" fill="none" stroke="${COLORS.support}" stroke-width="1.5"/>
+    <circle cx="${cx + 18}" cy="${cy + 6}" r="3" fill="none" stroke="${COLORS.support}" stroke-width="1.5"/>
+    <line x1="${cx + 22}" y1="${cy - 14}" x2="${cx + 22}" y2="${cy + 14}" stroke="${COLORS.support}" stroke-width="2"/>`;
+  }
   return `<polygon points="${cx},${cy} ${cx - 10},${cy + 14} ${cx + 10},${cy + 14}" fill="none" stroke="${COLORS.support}" stroke-width="2"/>
     <circle cx="${cx - 6}" cy="${cy + 18}" r="3" fill="none" stroke="${COLORS.support}" stroke-width="1.5"/>
     <circle cx="${cx + 6}" cy="${cy + 18}" r="3" fill="none" stroke="${COLORS.support}" stroke-width="1.5"/>
@@ -104,6 +110,41 @@ function dimLine(x1, y1, x2, y2, label, offset = 25) {
     <line x1="${x2}" y1="${y2}" x2="${dx - 5}" y2="${y2}" stroke="${COLORS.dimLine}" stroke-width="0.8" stroke-dasharray="3,2"/>
     <line x1="${dx}" y1="${y1}" x2="${dx}" y2="${y2}" stroke="${COLORS.dim}" stroke-width="1"/>
     <text x="${dx - 8}" y="${my + 4}" text-anchor="end" font-size="13" fill="${COLORS.dim}" font-weight="bold">${label}</text>`;
+}
+
+function classifyPlanarSupport(restraints) {
+  if (restraints === undefined || restraints === null) return "none";
+  if (!Array.isArray(restraints) || restraints.length !== 6 || !restraints.every(value => typeof value === "boolean")) {
+    throw new Error("Planar support restraints must contain six booleans in ux/uy/uz/rx/ry/rz order");
+  }
+  if (!restraints.some(Boolean)) return "none";
+  const [ux, , uz, , ry] = restraints;
+  if (ux && uz && ry) return "fixed";
+  if (ux && uz && !ry) return "pinned";
+  if (!ux && uz && !ry) return "roller-x";
+  if (ux && !uz && !ry) return "roller-z";
+  return "partial";
+}
+
+function renderPlanarSupport(restraints, cx, cy) {
+  const kind = classifyPlanarSupport(restraints);
+  if (kind === "none") return "";
+  if (kind === "fixed") return fixedSupport(cx, cy);
+  if (kind === "pinned") return pinSupport(cx, cy);
+  if (kind === "roller-x") return rollerSupport(cx, cy, "x");
+  if (kind === "roller-z") return rollerSupport(cx, cy, "z");
+  throw new Error(`The plan renderer cannot represent partial support restraints ${JSON.stringify(restraints)}`);
+}
+
+function validateFixed3dSupport(restraints) {
+  if (!Array.isArray(restraints) || restraints.length !== 6 || !restraints.every(value => typeof value === "boolean")) {
+    throw new Error("3-D support restraints must contain six booleans in ux/uy/uz/rx/ry/rz order");
+  }
+  if (!restraints.some(Boolean)) return false;
+  if (!restraints.every(Boolean)) {
+    throw new Error(`The 3-D benchmark renderer currently supports fixed restraints only, received ${JSON.stringify(restraints)}`);
+  }
+  return true;
 }
 
 function groupedDistributedLoads(model) {
@@ -172,12 +213,7 @@ function renderConstructionPlan(entry) {
   for (const n of nodes) {
     const sx = t.tx(n.x), sy = t.tz(n.z);
     if (!n.restraints) continue;
-    const isFixed = n.restraints[0] && n.restraints[1] && n.restraints[4];
-    const isPinned = n.restraints[1] && !n.restraints[0];
-    const isRoller = !n.restraints[0] && n.restraints[1];
-    if (isFixed) body += fixedSupport(sx, sy);
-    else if (isPinned) body += pinSupport(sx, sy);
-    else if (isRoller) body += rollerSupport(sx, sy);
+    body += renderPlanarSupport(n.restraints, sx, sy);
   }
 
   // Section callout bubbles
@@ -283,12 +319,7 @@ function renderMechanicsDiagram(entry) {
   for (const n of nodes) {
     if (!n.restraints) continue;
     const sx = t.tx(n.x), sy = t.tz(n.z);
-    const isFixed = n.restraints[0] && n.restraints[1] && n.restraints[4];
-    const isPinned = n.restraints[1] && !n.restraints[0];
-    const isRoller = !n.restraints[0] && n.restraints[1];
-    if (isFixed) body += fixedSupport(sx, sy);
-    else if (isPinned) body += pinSupport(sx, sy);
-    else if (isRoller) body += rollerSupport(sx, sy);
+    body += renderPlanarSupport(n.restraints, sx, sy);
   }
 
   // Distributed loads
@@ -470,6 +501,7 @@ function render3dConstruction(entry) {
   // Supports at z=0
   for (const n of nodes) {
     if (!n.restraints) continue;
+    if (!validateFixed3dSupport(n.restraints)) continue;
     const sx = t.tx(n.x, n.y, n.z);
     const sy = t.ty(n.x, n.y, n.z);
     body += `<rect x="${sx - 5}" y="${sy - 2}" width="10" height="10" fill="none" stroke="${COLORS.support}" stroke-width="2"/>`;
@@ -549,6 +581,7 @@ function render3dMechanics(entry) {
   // Supports
   for (const n of nodes) {
     if (!n.restraints) continue;
+    if (!validateFixed3dSupport(n.restraints)) continue;
     const sx = t.tx(n.x, n.y, n.z);
     const sy = t.ty(n.x, n.y, n.z);
     body += `<line x1="${sx - 6}" y1="${sy + 3}" x2="${sx + 6}" y2="${sy + 3}" stroke="${COLORS.support}" stroke-width="2"/>`;
@@ -591,8 +624,7 @@ function render3dMechanics(entry) {
 }
 
 function is3dModel(entry) {
-  return entry.model.metadata?.frameDimension === "3d"
-    || entry.model.nodes.some(n => n.y !== 0);
+  return entry.model.coordinate_system?.dimension === "3d";
 }
 
 // --- Main ---
