@@ -730,7 +730,28 @@ function concrete(id = "1", grade = "C30") {
   };
 }
 
-function hSection(id, name, purpose = "beam") {
+function hSection(id, name, purpose = "beam", dimensions = null) {
+  if (dimensions) {
+    const { H, B, tw, tf } = dimensions;
+    const h = H / 1000;
+    const b = B / 1000;
+    const web = tw / 1000;
+    const flange = tf / 1000;
+    return {
+      id,
+      name,
+      type: "H",
+      purpose,
+      shape: { kind: "H", H, B, tw, tf },
+      properties: {
+        A: 2 * b * flange + (h - 2 * flange) * web,
+        Iy: (b * h ** 3 - (b - web) * (h - 2 * flange) ** 3) / 12,
+        Iz: 2 * flange * b ** 3 / 12 + (h - 2 * flange) * web ** 3 / 12,
+        J: (2 * b * flange ** 3 + (h - 2 * flange) * web ** 3) / 3,
+        G: 79000,
+      },
+    };
+  }
   return {
     id,
     name,
@@ -1083,6 +1104,9 @@ function buildPanelTruss(id, description, opts) {
     elements.push({ id: `TC${i}`, type: "truss", nodes: [`T${i}`, `T${i + 1}`], material: "1", section: "1" });
     elements.push({ id: `D${i}`, type: "truss", nodes: [i % 2 === 0 ? `B${i}` : `T${i}`, i % 2 === 0 ? `T${i + 1}` : `B${i + 1}`], material: "1", section: "1" });
   }
+  for (let i = 0; i <= panels; i++) {
+    elements.push({ id: `V${i}`, type: "truss", nodes: [`B${i}`, `T${i}`], material: "1", section: "1" });
+  }
   const loads = [];
   for (let i = 1; i < panels; i++) {
     loads.push({ node: `${loadChord === "top" ? "T" : "B"}${i}`, fz: -nodeLoad });
@@ -1392,7 +1416,10 @@ models.push(build3dFrame("frame3d-steel-2s-2x1y-8k", "2层3D钢框架，X向2跨
     { storyIndex: 2, loadPerArea: 8 },
   ],
   material: q345(),
-  sections: [hSection("1", "HW350x350", "column"), hSection("2", "HN500x200", "beam")],
+  sections: [
+    hSection("1", "HW350x350", "column", { H: 350, B: 350, tw: 12, tf: 19 }),
+    hSection("2", "HN500x200", "beam", { H: 500, B: 200, tw: 10, tf: 16 }),
+  ],
 }));
 models.push(build3dFrame("frame3d-steel-3s-1x2y-10k", "3层3D钢框架，X向1跨6m，Y向2跨5m+5m，层高3.3m，楼面荷载10kN/m2", {
   bayWidthsX: [6],
@@ -1404,7 +1431,10 @@ models.push(build3dFrame("frame3d-steel-3s-1x2y-10k", "3层3D钢框架，X向1�
     { storyIndex: 3, loadPerArea: 10 },
   ],
   material: q345(),
-  sections: [hSection("1", "HW350x350", "column"), hSection("2", "HN500x200", "beam")],
+  sections: [
+    hSection("1", "HW350x350", "column", { H: 350, B: 350, tw: 12, tf: 19 }),
+    hSection("2", "HN500x200", "beam", { H: 500, B: 200, tw: 10, tf: 16 }),
+  ],
 }));
 
 models.push(buildColumn("column-concrete-4p5-500", "独立混凝土柱，400x400mm，高4.5m，柱顶轴向荷载500kN", {

@@ -90,6 +90,10 @@ function inferEvaluationFocus(assertions = []) {
         focus.add("modeling");
         focus.add("model_match");
         break;
+      case "numerical_matches":
+        focus.add("analysis");
+        focus.add("numerical_match");
+        break;
       case "has_analysis":
       case "engine_match":
         focus.add("analysis");

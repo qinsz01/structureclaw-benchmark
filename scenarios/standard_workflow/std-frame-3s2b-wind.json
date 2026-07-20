@@ -15,7 +15,8 @@
     "modeling",
     "model_match",
     "analysis",
-    "engine_match"
+    "engine_match",
+    "numerical_match"
   ],
   "category": "standard-workflow",
   "tags": [
@@ -54,9 +55,21 @@
       {
         "type": "model_matches",
         "groundTruthId": "frame-3s2b-6m-10k-wind",
-        "loadAxes": ["x", "z"],
+        "loadAxes": [
+          "x",
+          "z"
+        ],
         "tolerances": {
           "load": 0.2
+        }
+      },
+      {
+        "type": "numerical_matches",
+        "groundTruthId": "frame-3s2b-6m-10k-wind",
+        "tolerances": {
+          "load": 0.2,
+          "numeric": 0.01,
+          "numericAbsolute": 1e-8
         }
       },
       {
