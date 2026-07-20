@@ -5,6 +5,7 @@ const test = require("node:test");
 
 const {
   assessCrossEngine,
+  compareEngineMetrics,
   extractEngineMetrics,
   relativeDifference,
 } = require("../lib/cross-engine-ground-truth.cjs");
@@ -108,6 +109,22 @@ test("distinguishes equilibrium validation from full response validation", () =>
   assert.equal(result.tiers.response.pass, false);
 });
 
+test("same-engine metrics use strict frozen-ground-truth comparison", () => {
+  const expected = {
+    totalGravity: 100,
+    bottomColumnAxialSum: 100,
+    maxBottomColumnAxial: 50,
+    maxBottomColumnMoment: 10,
+    maxBeamShear: 20,
+    maxBeamMoment: 30,
+    maxVerticalDisplacement: 0.01,
+    counts: { bottomColumns: 2, columns: 4, beams: 2, displacementNodes: 4 },
+  };
+  assert.equal(compareEngineMetrics({ ...expected, maxBeamMoment: 30.2 }, expected).pass, true);
+  assert.equal(compareEngineMetrics({ ...expected, maxBeamMoment: 31 }, expected).pass, false);
+  assert.equal(compareEngineMetrics({ ...expected, counts: { ...expected.counts, beams: 3 } }, expected).pass, false);
+});
+
 test("derives a commercial-compatible model and an OpenSees-only self-weight variant", () => {
   const source = {
     project: { name: "source" },
@@ -154,6 +171,10 @@ test("automatically selects every losslessly representable three-engine ground-t
 });
 
 test("committed cross-engine results cover the complete supported set", () => {
+  const models = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "ground-truth-models.json"),
+    "utf8",
+  ));
   const validation = JSON.parse(fs.readFileSync(
     path.join(__dirname, "..", "fixtures", "cross-engine-ground-truth-validation.json"),
     "utf8",
@@ -163,7 +184,7 @@ test("committed cross-engine results cover the complete supported set", () => {
     .map((entry) => `cross-${entry.sourceModelId}`)
     .sort();
   assert.deepEqual(validation.cases.map((entry) => entry.caseId).sort(), eligible);
-  assert.equal(validation.supportAudit.totalGroundTruthModels, 47);
+  assert.equal(validation.supportAudit.totalGroundTruthModels, models.length);
 });
 
 test("supported cases preserve each source story's explicit gravity resultant", () => {

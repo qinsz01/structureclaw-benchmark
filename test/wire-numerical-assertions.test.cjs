@@ -28,8 +28,8 @@ test("numerical assertion wiring is explicit, strict, and idempotent", () => {
   assert.equal(first.eligible, 1);
   const model = target.expect.assertions.find((assertion) => assertion.type === "model_matches");
   assert.deepEqual(model.tolerances, {
-    coordinate: 0.1,
     property: 0.02,
+    coordinate: 0.05,
     load: 0.05,
   });
   const numerical = target.expect.assertions.find((assertion) => assertion.type === "numerical_matches");
@@ -37,8 +37,8 @@ test("numerical assertion wiring is explicit, strict, and idempotent", () => {
     type: "numerical_matches",
     groundTruthId: "beam-simple-6m",
     tolerances: {
-      coordinate: 0.1,
       property: 0.02,
+      coordinate: 0.05,
       load: 0.05,
       numeric: 0.01,
       numericAbsolute: 1e-8,
@@ -51,11 +51,37 @@ test("numerical assertion wiring is explicit, strict, and idempotent", () => {
   assert.equal(target.expect.assertions.filter((assertion) => assertion.type === "numerical_matches").length, 1);
 });
 
-test("wiring refuses missing truth and ignores non-engineering robustness cases", () => {
+test("wiring refuses missing truth and covers analyzable robustness cases", () => {
   assert.throws(
     () => wireScenario(scenario(), new Set()),
     /numerical truth is missing/,
   );
   const robustness = scenario("interactive_robustness");
-  assert.deepEqual(wireScenario(robustness, new Set()), { changed: false, eligible: 0 });
+  const result = wireScenario(robustness, new Set(["beam-simple-6m"]));
+  assert.deepEqual(result, { changed: true, eligible: 1 });
+});
+
+test("commercial scenarios are scored only when same-engine truth exists", () => {
+  const target = scenario();
+  target.analysisEngineTarget = "builtin-pkpm";
+  const unavailable = wireScenario(target, new Set(["beam-simple-6m"]));
+  assert.deepEqual(unavailable, { changed: true, eligible: 0 });
+  assert.equal(target.expect.assertions.some((assertion) => assertion.type === "numerical_matches"), false);
+
+  const available = scenario();
+  available.analysisEngineTarget = "builtin-pkpm";
+  const crossTruth = {
+    cases: [{
+      provenance: { sourceModelId: "beam-simple-6m" },
+      engines: { pkpm: { metrics: {} } },
+    }],
+  };
+  assert.deepEqual(wireScenario(available, new Set(["beam-simple-6m"]), crossTruth), {
+    changed: true,
+    eligible: 1,
+  });
+  assert.equal(
+    available.expect.assertions.find((assertion) => assertion.type === "numerical_matches").engineId,
+    "builtin-pkpm",
+  );
 });

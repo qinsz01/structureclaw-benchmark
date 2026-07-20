@@ -718,15 +718,21 @@ function q345(id = "1") {
 }
 
 function concrete(id = "1", grade = "C30") {
+  const properties = {
+    C30: { E: 30000, fc: 14.3 },
+    C35: { E: 31500, fc: 16.7 },
+    C40: { E: 32500, fc: 19.1 },
+  }[grade];
+  if (!properties) throw new Error(`Unsupported concrete grade '${grade}'`);
   return {
     id,
     name: grade,
     grade,
     category: "concrete",
-    E: grade === "C35" ? 31500 : 30000,
+    E: properties.E,
     nu: 0.2,
     rho: 2500,
-    fc: grade === "C35" ? 16.7 : 14.3,
+    fc: properties.fc,
   };
 }
 
@@ -1505,6 +1511,93 @@ models.push(buildPanelTruss("truss-warren-12m-2m-8k", "Warren桁架，跨度12m�
   nodeLoad: 8,
   loadChord: "bottom",
 }));
+
+// --- interactive multi-turn final-state models ---
+
+models.push(buildBeamModel("beam-simple-6m-udl20-point30", "简支梁6m，均布荷载20kN/m，跨中集中力30kN", {
+  supportPositions: [0, 6],
+  endPosition: 6,
+  restraintsByX: { 0: pinned, 6: roller },
+  udl: 20,
+  pointLoads: [{ x: 3, fz: 30 }],
+}));
+models.push(buildBeamModel("beam-simple-8m-udl20", "简支梁8m，均布荷载20kN/m", {
+  supportPositions: [0, 8],
+  endPosition: 8,
+  restraintsByX: { 0: pinned, 8: roller },
+  udl: 20,
+}));
+
+const concreteFrameSections = (grade) => [
+  rectSection("1", `${grade} 500x500`, 0.5, 0.5, "column"),
+  rectSection("2", `${grade} 300x600`, 0.3, 0.6, "beam"),
+];
+for (const grade of ["C30", "C40"]) {
+  models.push(build2dFrame(
+    `concrete-frame-2s2b-6m-10k-${grade.toLowerCase()}`,
+    `2层2跨混凝土框架，6m等跨，层高3.6m，梁线荷载10kN/m，${grade}`,
+    {
+      inferredType: "frame",
+      bayWidths: [6, 6],
+      storyHeights: [3.6, 3.6],
+      floorLoads: [10, 10],
+      material: concrete("1", grade),
+      sections: concreteFrameSections(grade),
+    },
+  ));
+}
+
+models.push(build2dFrame("frame-2s2b-6m-10k", "2层2跨钢框架，6m等跨，层高3.6m，梁线荷载10kN/m", {
+  bayWidths: [6, 6],
+  storyHeights: [3.6, 3.6],
+  floorLoads: [10, 10],
+}));
+models.push(build2dFrame("frame-2s2b-6m-10k-wind", "2层2跨钢框架，梁线荷载10kN/m，右侧节点水平荷载10/15kN", {
+  bayWidths: [6, 6],
+  storyHeights: [3.6, 3.6],
+  floorLoads: [10, 10],
+  lateralLoads: [
+    { storyIndex: 1, xIndices: [2], fx: 10 },
+    { storyIndex: 2, xIndices: [2], fx: 15 },
+  ],
+}));
+models.push(build2dFrame("frame-2s1b-6m-10k-line", "2层单跨钢框架，层高3.6m，梁线荷载10kN/m", {
+  bayWidths: [6],
+  storyHeights: [3.6, 3.6],
+  floorLoads: [10, 10],
+}));
+models.push(build2dFrame("frame-2s1b-6m-10k-line-wind", "2层单跨钢框架，梁线荷载10kN/m，右侧节点水平荷载10/15kN", {
+  bayWidths: [6],
+  storyHeights: [3.6, 3.6],
+  floorLoads: [10, 10],
+  lateralLoads: [
+    { storyIndex: 1, xIndices: [1], fx: 10 },
+    { storyIndex: 2, xIndices: [1], fx: 15 },
+  ],
+}));
+
+models.push(build2dFrame("generic-single-bay-6m-4m-lateral80", "单层单跨平面结构，宽6m，高4m，顶部水平荷载80kN", {
+  inferredType: "generic",
+  bayWidths: [6],
+  storyHeights: [4],
+  lateralLoads: [{ storyIndex: 1, xIndices: [1], fx: 80 }],
+}));
+models.push(buildPortalSingle("portal-simple-18m-7m-6k", "门式刚架跨度18m，柱高7m，屋面荷载6kN/m", {
+  span: 18,
+  height: 7,
+  roofLoad: 6,
+}));
+models.push(buildPortalSingle("portal-simple-18m-9m-6k", "门式刚架跨度18m，柱高9m，屋面荷载6kN/m", {
+  span: 18,
+  height: 9,
+  roofLoad: 6,
+}));
+
+const updatedPratt = structuredClone(models.find((entry) => entry.id === "truss-pratt-15m-top10"));
+updatedPratt.id = "truss-pratt-15m-top15";
+updatedPratt.description = "Pratt桁架跨度15m，高2.5m，5节间，上弦节点荷载15kN";
+for (const load of updatedPratt.model.load_cases[0].loads) load.fz = -15;
+models.push(updatedPratt);
 
 // --- write output ---
 const finalizedModels = models.map(finalizeCoordinateContract);

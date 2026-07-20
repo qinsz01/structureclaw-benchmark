@@ -11,7 +11,9 @@
   "evaluationFocus": [
     "routing",
     "modeling",
+    "model_match",
     "analysis",
+    "numerical_match",
     "semantic",
     "interaction"
   ],
@@ -31,7 +33,7 @@
   ],
   "turns": [
     {
-      "message": "2层单跨钢框架，层高3.6m，跨度6m，每层楼面荷载10kN/m2，请分析",
+      "message": "2层单跨钢框架，层高3.6m，跨度6m，每层梁线荷载10kN/m，请分析",
       "assertions": [
         {
           "type": "structural_type",
@@ -51,11 +53,29 @@
         },
         {
           "type": "has_analysis"
+        },
+        {
+          "type": "model_matches",
+          "groundTruthId": "frame-2s1b-6m-10k-line",
+          "tolerances": {
+            "coordinate": 0.05,
+            "load": 0.05
+          }
+        },
+        {
+          "type": "numerical_matches",
+          "groundTruthId": "frame-2s1b-6m-10k-line",
+          "tolerances": {
+            "coordinate": 0.05,
+            "load": 0.05,
+            "numeric": 0.01,
+            "numericAbsolute": 1e-8
+          }
         }
       ]
     },
     {
-      "message": "现在还需要考虑风荷载，基本风压0.5kN/m2，B类地面粗糙度，请重新分析",
+      "message": "现在考虑等效风荷载：一层右侧节点施加10kN水平力，屋面右侧节点施加15kN水平力，请重新分析",
       "assertions": [
         {
           "type": "has_model",
@@ -64,6 +84,24 @@
         },
         {
           "type": "has_analysis"
+        },
+        {
+          "type": "model_matches",
+          "groundTruthId": "frame-2s1b-6m-10k-line-wind",
+          "tolerances": {
+            "coordinate": 0.05,
+            "load": 0.05
+          }
+        },
+        {
+          "type": "numerical_matches",
+          "groundTruthId": "frame-2s1b-6m-10k-line-wind",
+          "tolerances": {
+            "coordinate": 0.05,
+            "load": 0.05,
+            "numeric": 0.01,
+            "numericAbsolute": 1e-8
+          }
         },
         {
           "type": "natural_language",

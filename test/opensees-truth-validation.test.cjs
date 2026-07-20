@@ -17,7 +17,7 @@ const fixtures = JSON.parse(fs.readFileSync(
   "utf8",
 ));
 
-test("all 47 committed models pass OpenSees truth-input preflight", () => {
+test("all committed models pass OpenSees truth-input preflight", () => {
   for (const entry of fixtures) {
     const validation = validateOpenSeesTruthInput(entry.model);
     assert.equal(validation.pass, true, `${entry.id}: ${validation.issues.join("; ")}`);
