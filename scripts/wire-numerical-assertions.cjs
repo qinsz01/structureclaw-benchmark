@@ -5,6 +5,7 @@ const BENCH_ROOT = path.resolve(__dirname, "..");
 const SCENARIOS_DIR = path.join(BENCH_ROOT, "scenarios");
 const TRUTH_FILE = path.join(BENCH_ROOT, "fixtures", "opensees-ground-truth.json");
 const ELIGIBLE_FAMILIES = new Set(["standard_workflow", "multimodal_reverse_engineering"]);
+const MODEL_LOAD_RELATIVE_TOLERANCE = 0.05;
 
 function collectJsonFiles(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -35,20 +36,34 @@ function wireScenario(scenario, truthIds) {
       if (!truthIds.has(modelAssertion.groundTruthId)) {
         throw new Error(`${scenario.id}: numerical truth is missing '${modelAssertion.groundTruthId}'`);
       }
-      const alreadyPresent = assertions.some((assertion) => (
+      if (modelAssertion.tolerances?.load !== MODEL_LOAD_RELATIVE_TOLERANCE) {
+        modelAssertion.tolerances = {
+          ...(modelAssertion.tolerances || {}),
+          load: MODEL_LOAD_RELATIVE_TOLERANCE,
+        };
+        changed = true;
+      }
+      const numericalAssertion = assertions.find((assertion) => (
         assertion.type === "numerical_matches"
         && assertion.groundTruthId === modelAssertion.groundTruthId
       ));
-      if (alreadyPresent) continue;
+      const numericalTolerances = {
+        ...(modelAssertion.tolerances || {}),
+        numeric: 0.01,
+        numericAbsolute: 1e-8,
+      };
+      if (numericalAssertion) {
+        if (JSON.stringify(numericalAssertion.tolerances) !== JSON.stringify(numericalTolerances)) {
+          numericalAssertion.tolerances = numericalTolerances;
+          changed = true;
+        }
+        continue;
+      }
       const modelIndex = assertions.indexOf(modelAssertion);
       assertions.splice(modelIndex + 1, 0, {
         type: "numerical_matches",
         groundTruthId: modelAssertion.groundTruthId,
-        tolerances: {
-          ...(modelAssertion.tolerances || {}),
-          numeric: 0.01,
-          numericAbsolute: 1e-8,
-        },
+        tolerances: numericalTolerances,
       });
       changed = true;
     }

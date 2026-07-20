@@ -128,6 +128,17 @@ test("load direction and member location are checked independently of total load
   assert.ok(compareStructuralModels(wrongLocation, expected).failures.includes("loads"));
 });
 
+test("load magnitudes use a unified five-percent default tolerance", () => {
+  const expected = fixture();
+  const withinTolerance = fixture();
+  withinTolerance.load_cases[0].loads[0].wz *= 1.04;
+  const outsideTolerance = fixture();
+  outsideTolerance.load_cases[0].loads[0].wz *= 1.06;
+
+  assert.equal(compareStructuralModels(withinTolerance, expected).pass, true);
+  assert.ok(compareStructuralModels(outsideTolerance, expected).failures.includes("loads"));
+});
+
 test("load-combination factors are checked", () => {
   const expected = fixture("frame3d-simple");
   const actual = fixture("frame3d-simple");

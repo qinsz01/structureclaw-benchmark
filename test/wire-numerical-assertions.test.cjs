@@ -26,6 +26,12 @@ test("numerical assertion wiring is explicit, strict, and idempotent", () => {
   const first = wireScenario(target, new Set(["beam-simple-6m"]));
   assert.equal(first.changed, true);
   assert.equal(first.eligible, 1);
+  const model = target.expect.assertions.find((assertion) => assertion.type === "model_matches");
+  assert.deepEqual(model.tolerances, {
+    coordinate: 0.1,
+    property: 0.02,
+    load: 0.05,
+  });
   const numerical = target.expect.assertions.find((assertion) => assertion.type === "numerical_matches");
   assert.deepEqual(numerical, {
     type: "numerical_matches",
@@ -33,6 +39,7 @@ test("numerical assertion wiring is explicit, strict, and idempotent", () => {
     tolerances: {
       coordinate: 0.1,
       property: 0.02,
+      load: 0.05,
       numeric: 0.01,
       numericAbsolute: 1e-8,
     },
