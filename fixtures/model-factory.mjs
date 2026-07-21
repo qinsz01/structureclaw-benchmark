@@ -17,6 +17,25 @@ const pinned  = [true, true, true, false, false, false];
 const roller  = [false, true, true, false, false, false];
 const fixed   = [true, true, true, true, true, true];
 
+function solidRectangularTorsionConstant(width, depth) {
+  const a = Math.max(width, depth);
+  const b = Math.min(width, depth);
+  const aspect = b / a;
+  return a * b ** 3 * (1 / 3 - 0.21 * aspect * (1 - b ** 4 / (12 * a ** 4)));
+}
+
+function normalizeUnspecifiedLoadCaseType(type, description) {
+  const normalized = String(type || "other").toLowerCase();
+  const text = String(description || "");
+  if (normalized === "dead" && !/(?:恒载|恒荷载|自重|dead[\s-]*load|self[\s-]*weight)/iu.test(text)) {
+    return "other";
+  }
+  if (normalized === "live" && !/(?:活载|活荷载|live[\s-]*load)/iu.test(text)) {
+    return "other";
+  }
+  return normalized;
+}
+
 function finalizeCoordinateContract(entry) {
   const dimension = entry.model.metadata?.frameDimension;
   if (dimension !== "2d" && dimension !== "3d") {
@@ -32,6 +51,7 @@ function finalizeCoordinateContract(entry) {
   }
   const loadCases = (entry.model.load_cases || []).map((loadCase) => ({
     ...loadCase,
+    type: normalizeUnspecifiedLoadCaseType(loadCase.type, entry.description),
     loads: (loadCase.loads || []).map((load) => {
       const referenceFrame = load.reference_frame === "element-local" ? "element-local" : "global";
       const hasNode = load.node !== undefined;
@@ -709,12 +729,24 @@ models.push(build3dFrame("frame3d-concrete", "2层3D混凝土框架，X向2跨6m
     {
       id: "1", name: "C30 500x500", type: "rect", purpose: "column",
       shape: { kind: "rectangular", H: 500, B: 500 },
-      properties: { A: 0.25, Iy: 0.0052, Iz: 0.0052, J: 0.0087, G: 12500 },
+      properties: {
+        A: 0.25,
+        Iy: 0.0052,
+        Iz: 0.0052,
+        J: solidRectangularTorsionConstant(0.5, 0.5),
+        G: 12500,
+      },
     },
     {
       id: "2", name: "C30 300x600", type: "rect", purpose: "beam",
       shape: { kind: "rectangular", H: 600, B: 300 },
-      properties: { A: 0.18, Iy: 0.0054, Iz: 0.00135, J: 0.00224, G: 12500 },
+      properties: {
+        A: 0.18,
+        Iy: 0.0054,
+        Iz: 0.00135,
+        J: solidRectangularTorsionConstant(0.3, 0.6),
+        G: 12500,
+      },
     },
   ],
 }));
@@ -786,7 +818,7 @@ function rectSection(id, name, width, depth, purpose = "beam") {
       A: width * depth,
       Iy: width * depth ** 3 / 12,
       Iz: depth * width ** 3 / 12,
-      J: width * depth * (width ** 2 + depth ** 2) / 12,
+      J: solidRectangularTorsionConstant(width, depth),
       G: 12500,
     },
   };
@@ -804,6 +836,7 @@ function buildBeamModel(id, description, opts) {
     restraintsByX = {},
     udl = null,
     pointLoads = [],
+    observationPositions = [],
     material = steel(),
     section = beamSection(),
   } = opts;
@@ -817,6 +850,7 @@ function buildBeamModel(id, description, opts) {
     endPosition,
     ...supportPositions,
     ...pointPositions,
+    ...observationPositions,
     ...(isSingleSpanSimpleUdl ? [endPosition / 2] : []),
   ]);
   const nodes = positions.map((x, index) => {
@@ -865,6 +899,7 @@ function build2dFrame(id, description, opts) {
     tributaryWidthM,
     lateralLoads = [],
     pointLoads = [],
+    includeStoryLoadMetadata = true,
     material = q345(),
     sections = [hSection("1", "HW350x350", "column"), hSection("2", "HN500x200", "beam")],
   } = opts;
@@ -933,9 +968,13 @@ function build2dFrame(id, description, opts) {
     return {
       id: `F${index + 1}`,
       height,
-      floorLoad,
-      floorLoadUnit: floorLoadUnit === "area" ? "kN/m2" : "kN/m",
-      ...(floorLoadUnit === "area" ? { tributaryWidthM: effectiveTributaryWidth, equivalentLineLoad: toEquivalentLineLoad(floorLoad) } : {}),
+      ...(includeStoryLoadMetadata ? {
+        floorLoad,
+        floorLoadUnit: floorLoadUnit === "area" ? "kN/m2" : "kN/m",
+        ...(floorLoadUnit === "area"
+          ? { tributaryWidthM: effectiveTributaryWidth, equivalentLineLoad: toEquivalentLineLoad(floorLoad) }
+          : {}),
+      } : {}),
     };
   });
 
@@ -1310,11 +1349,12 @@ models.push(buildBeamModel("beam-cantilever-3m-point10", "悬臂梁3m，自由�
   restraintsByX: { 0: fixed },
   pointLoads: [{ x: 3, fz: 10 }],
 }));
-models.push(buildBeamModel("beam-overhang-5m-1p5m-udl15", "外伸梁，简支跨5m，外伸1.5m，均布荷载15kN/m", {
+models.push(buildBeamModel("beam-overhang-5m-1p5m-udl15", "外伸梁，简支跨5m，外伸1.5m，均布荷载15kN/m，简支跨跨中挠度观测点x=2.5m", {
   supportPositions: [0, 5],
   endPosition: 6.5,
   restraintsByX: { 0: pinned, 5: roller },
   udl: 15,
+  observationPositions: [2.5],
 }));
 models.push(buildBeamModel("dspan-unequal-4-7-udl10-point30", "不等跨连续梁4m+7m，均布荷载10kN/m，长跨跨中集中力30kN", {
   inferredType: "double-span-beam",
@@ -1381,6 +1421,7 @@ models.push(build2dFrame("concrete-frame-2s1b-6m-12k", "2层混凝土框架，�
   storyHeights: [3.6, 3.6],
   floorLoads: [12, 12],
   floorLoadUnit: "area",
+  includeStoryLoadMetadata: false,
   material: concrete("1", "C30"),
   sections: [rectSection("1", "C30 500x500", 0.5, 0.5, "column"), rectSection("2", "C30 300x600", 0.3, 0.6, "beam")],
 }));
@@ -1390,6 +1431,7 @@ models.push(build2dFrame("concrete-frame-2s1b-6m-10k", "2层混凝土框架，�
   storyHeights: [3.6, 3.6],
   floorLoads: [10, 10],
   floorLoadUnit: "area",
+  includeStoryLoadMetadata: false,
   material: concrete("1", "C30"),
   sections: [rectSection("1", "C30 500x500", 0.5, 0.5, "column"), rectSection("2", "C30 300x600", 0.3, 0.6, "beam")],
 }));
@@ -1399,6 +1441,7 @@ models.push(build2dFrame("concrete-frame-3s1b-6m-10k", "3层混凝土框架，�
   storyHeights: [3.3, 3.3, 3.3],
   floorLoads: [10, 10, 10],
   floorLoadUnit: "area",
+  includeStoryLoadMetadata: false,
   material: concrete("1", "C35"),
   sections: [rectSection("1", "C35 500x500", 0.5, 0.5, "column"), rectSection("2", "C35 300x600", 0.3, 0.6, "beam")],
 }));
@@ -1407,6 +1450,7 @@ models.push(build2dFrame("concrete-frame-2s3b-6m-8k", "2层3跨混凝土框架�
   bayWidths: [6, 6, 6],
   storyHeights: [3.6, 3.6],
   floorLoads: [8, 8],
+  includeStoryLoadMetadata: false,
   material: concrete("1", "C30"),
   sections: [rectSection("1", "C30 500x500", 0.5, 0.5, "column"), rectSection("2", "C30 300x600", 0.3, 0.6, "beam")],
 }));
@@ -1549,6 +1593,7 @@ for (const grade of ["C30", "C40"]) {
       bayWidths: [6, 6],
       storyHeights: [3.6, 3.6],
       floorLoads: [10, 10],
+      includeStoryLoadMetadata: false,
       material: concrete("1", grade),
       sections: concreteFrameSections(grade),
     },

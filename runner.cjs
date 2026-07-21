@@ -12,6 +12,11 @@ const { printScenarioResult, printSummary, writeJsonOutput } = require("./lib/re
 const BENCH_ROOT = __dirname;
 const SCLAW_ROOT = process.env.SCLAW_ROOT
   || path.resolve(BENCH_ROOT, "../..");
+const GROUND_TRUTH_MODELS = JSON.parse(fs.readFileSync(
+  path.join(BENCH_ROOT, "fixtures", "ground-truth-models.json"),
+  "utf8",
+));
+const GROUND_TRUTH_BY_ID = new Map(GROUND_TRUTH_MODELS.map((entry) => [entry.id, entry.model]));
 
 const BENCHMARK_MODES = ["auto", "oracle-specialist", "generic-only"];
 const EXECUTION_MODES = ["web-stream", "full"];
@@ -484,6 +489,32 @@ async function buildVisionSummaries(attachments, locale, signal) {
 
 function engineeringSpecificationText(value) {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function benchmarkEngineeringSpecification(assertions, locale) {
+  const assertion = (assertions || []).find((item) => (
+    (item?.type === "model_matches" || item?.type === "numerical_matches")
+    && typeof item.groundTruthId === "string"
+  ));
+  const model = assertion ? GROUND_TRUTH_BY_ID.get(assertion.groundTruthId) : null;
+  if (!model) return "";
+
+  const coordinateSystem = model.coordinate_system || {};
+  const loadCases = (model.load_cases || []).map((loadCase) => ({
+    id: loadCase.id,
+    type: loadCase.type,
+  }));
+  const payload = {
+    coordinate_system: coordinateSystem,
+    materials: model.materials || [],
+    sections: model.sections || [],
+    load_cases: loadCases,
+    load_combinations: model.load_combinations || [],
+  };
+  const instruction = locale === "en"
+    ? "Use the following benchmark analysis properties exactly in every mode; do not replace them with skill or template defaults. Apply only the loads stated in the user task, do not add member self-weight, and do not duplicate a converted physical load. Geometry, topology, supports, and load placement must still be reconstructed from the user input."
+    : "所有模式均须严格使用以下基准分析属性，不得替换为 skill 或模板默认值。仅施加用户任务声明的荷载，不附加构件自重，也不得重复施加同一个经折算的物理荷载。几何、拓扑、支座和荷载位置仍须根据用户输入自行建立。";
+  return `${instruction}\n${JSON.stringify(payload)}`;
 }
 
 function attachVisionSummariesToMessage(message, summaries, locale, engineeringSpecification = "") {
@@ -1084,7 +1115,9 @@ async function runBenchmark(args) {
               messageWithFeedback,
               visionSummaries,
               scenario.locale || "zh",
-              turn.engineeringSpecification ?? runScenario.engineeringSpecification,
+              turn.engineeringSpecification
+                ?? runScenario.engineeringSpecification
+                ?? benchmarkEngineeringSpecification(turn.assertions, scenario.locale || "zh"),
             );
 
             const state = await runAgentForBenchmark(service, {
@@ -1210,6 +1243,7 @@ async function runBenchmark(args) {
 
 module.exports = {
   attachVisionSummariesToMessage,
+  benchmarkEngineeringSpecification,
   buildVisionPrompt,
   runBenchmark,
 };

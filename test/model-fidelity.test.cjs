@@ -105,6 +105,24 @@ test("parametric section shape and element-local modifiers are checked", () => {
   assert.ok(compareStructuralModels(unexpectedRotation, expected).failures.includes("element modifiers"));
 });
 
+test("equivalent section aliases and unconstrained engineering metadata are accepted", () => {
+  const expected = fixture("concrete-frame-2s1b-6m-12k");
+  const actual = fixture("concrete-frame-2s1b-6m-12k");
+  actual.sections.forEach((section) => { section.type = "rectangular"; });
+  actual.elements.forEach((element) => {
+    element.concrete_grade = "C30";
+    element.rebar_grade = "HRB400";
+  });
+  actual.metadata.elementReferenceVectors = Object.fromEntries(
+    actual.elements.map((element) => [element.id, [0, 1, 0]]),
+  );
+
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+
+  expected.elements[0].concrete_grade = "C35";
+  assert.ok(compareStructuralModels(actual, expected).failures.includes("element modifiers"));
+});
+
 test("schema and unit contracts are part of engineering fidelity", () => {
   const expected = fixture();
   const wrongSchema = fixture();
@@ -146,6 +164,19 @@ test("load-combination factors are checked", () => {
   const comparison = compareStructuralModels(actual, expected);
   assert.equal(comparison.pass, false);
   assert.ok(comparison.failures.includes("load combinations"));
+});
+
+test("unspecified load categories are compatible without weakening explicit categories", () => {
+  const expected = fixture();
+  const actual = fixture();
+  expected.load_cases[0].type = "other";
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+
+  expected.load_cases[0].type = "dead";
+  actual.load_cases[0].type = "live";
+  const explicitMismatch = compareStructuralModels(actual, expected);
+  assert.ok(explicitMismatch.failures.includes("loads"));
+  assert.ok(explicitMismatch.failures.includes("load combinations"));
 });
 
 test("canonical story loads match legacy fields and replace derived solver loads", () => {
