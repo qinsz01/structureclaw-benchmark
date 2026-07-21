@@ -20,7 +20,7 @@
     "l3",
     "en"
   ],
-  "message": "Build a model from this cropped frame drawing only if the critical span, height, and support information are visible; otherwise ask for a complete drawing.",
+  "message": "Review the attached cropped drawing. Build and analyze a model only if all critical geometry, support, and load annotations are visible; otherwise ask for the complete drawing.",
   "locale": "en",
   "maxRetries": 0,
   "benchmarkModes": [
@@ -31,7 +31,7 @@
   "attachments": [
     {
       "fileId": "mm-cropped-frame",
-      "originalName": "cropped-frame-sketch.png",
+      "originalName": "drawing-009.png",
       "relPath": "fixtures/cropped-frame-sketch.png",
       "mimeType": "image/png"
     }
@@ -60,5 +60,13 @@
         "description": "Agent should not invent a full frame model from a cropped drawing with missing span or support information; it should ask for clearer dimensions or a complete drawing."
       }
     ]
+  },
+  "engineeringSpecification": null,
+  "inputContract": {
+    "imageProvides": [
+      "partial-topology"
+    ],
+    "specificationProvides": [],
+    "completeness": "intentionally-incomplete"
   }
 }

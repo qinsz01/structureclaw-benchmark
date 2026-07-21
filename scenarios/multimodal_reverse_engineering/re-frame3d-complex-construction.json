@@ -23,13 +23,13 @@
     "construction-plan",
     "en"
   ],
-  "message": "Use this axonometric construction drawing of the complex 2-story 3D steel frame to build a 3D calculation model and run analysis.",
+  "message": "Build a calculation model from the attached drawing and engineering specification, then run static analysis. Ask for clarification instead of guessing any image information that cannot be identified reliably.",
   "locale": "en",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "re-frame3d-complex-c",
-      "originalName": "frame3d-complex-construction.png",
+      "originalName": "drawing-022.png",
       "relPath": "fixtures/drawings/frame3d-complex-construction.png",
       "mimeType": "image/png"
     }
@@ -77,5 +77,20 @@
         "type": "has_analysis"
       }
     ]
+  },
+  "engineeringSpecification": "Material Q345: E=206000 MPa, nu=0.3, density=7850 kg/m3, fy=345 MPa. Column members use section HW400x400 (H=400 mm, B=400 mm, tw=13 mm, tf=21 mm; A=0.021 m2, Iy=0.0006 m4, Iz=0.0006 m4, J=0.00003 m4, G=79000 MPa). Beam members use section HN600x200 (H=600 mm, B=200 mm, tw=11 mm, tf=17 mm; A=0.013 m2, Iy=0.0007 m4, Iz=0.00005 m4, J=0.000009 m4, G=79000 MPa). Use SI units and the global-z-up coordinate convention. Use only the load cases and load magnitudes annotated in the drawing; do not add member self-weight. Analyze load combination ULS = 1 x D.",
+  "inputContract": {
+    "imageProvides": [
+      "topology",
+      "dimensions",
+      "supports",
+      "loads"
+    ],
+    "specificationProvides": [
+      "materials",
+      "sections",
+      "analysis-settings"
+    ],
+    "completeness": "complete"
   }
 }

@@ -22,13 +22,13 @@
     "mechanics-diagram",
     "en"
   ],
-  "message": "Use this mechanics diagram of the single-story single-bay steel frame to build the calculation model and run analysis.",
+  "message": "Build a calculation model from the attached drawing and engineering specification, then run static analysis. Ask for clarification instead of guessing any image information that cannot be identified reliably.",
   "locale": "en",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "re-frame-simple-1s1b-m",
-      "originalName": "frame-simple-1s1b-mechanics.png",
+      "originalName": "drawing-021.png",
       "relPath": "fixtures/drawings/frame-simple-1s1b-mechanics.png",
       "mimeType": "image/png"
     }
@@ -74,5 +74,20 @@
         "type": "has_analysis"
       }
     ]
+  },
+  "engineeringSpecification": "Material steel: E=205000 MPa, nu=0.3, density=7850 kg/m3. Column members use section HW300x300 (H=300 mm, B=300 mm, tw=10 mm, tf=15 mm; A=0.012 m2, Iy=0.0002 m4, Iz=0.0002 m4, J=0.00001 m4, G=79000 MPa). Beam members use section HN400x200 (H=400 mm, B=200 mm, tw=8 mm, tf=13 mm; A=0.008 m2, Iy=0.0002 m4, Iz=0.00003 m4, J=0.000005 m4, G=79000 MPa). Use SI units and the global-z-up coordinate convention. Use only the load cases and load magnitudes annotated in the drawing; do not add member self-weight. Analyze load combination ULS = 1 x D.",
+  "inputContract": {
+    "imageProvides": [
+      "topology",
+      "dimensions",
+      "supports",
+      "loads"
+    ],
+    "specificationProvides": [
+      "materials",
+      "sections",
+      "analysis-settings"
+    ],
+    "completeness": "complete"
   }
 }

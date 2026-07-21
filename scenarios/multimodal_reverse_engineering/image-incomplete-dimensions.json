@@ -19,13 +19,13 @@
     "image",
     "en"
   ],
-  "message": "Review this frame sketch and decide whether enough dimensions are available for structural analysis. If information is missing, ask the user specific follow-up questions instead of building or analyzing a model.",
+  "message": "Review the attached drawing and determine whether all geometry, support, and load annotations required for analysis are visible. Ask specific follow-up questions instead of building or analyzing an incomplete model.",
   "locale": "en",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "bench-incomplete-dims",
-      "originalName": "incomplete-dimensions.png",
+      "originalName": "drawing-003.png",
       "relPath": "../../tests/llm-benchmark/fixtures/incomplete-dimensions.png",
       "mimeType": "image/png"
     }
@@ -52,5 +52,13 @@
         "description": "The agent should recognize the structure from the image but notice missing dimensions and ask the user to provide specific values"
       }
     ]
+  },
+  "engineeringSpecification": null,
+  "inputContract": {
+    "imageProvides": [
+      "partial-topology"
+    ],
+    "specificationProvides": [],
+    "completeness": "intentionally-incomplete"
   }
 }

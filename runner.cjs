@@ -398,28 +398,24 @@ function contentTextFromOpenAiMessage(message) {
   return typeof reasoning === "string" ? reasoning.trim() : "";
 }
 
-function buildVisionPrompt({ attachment, message, locale }) {
+function buildVisionPrompt(locale) {
   const base = locale === "en"
     ? [
       "You are the vision parser for a structural engineering benchmark.",
       "Extract only information visible in the image. Do not invent missing dimensions, loads, material grades, or supports.",
       "Return compact JSON only, without markdown fences.",
       "Schema: {\"structuralType\": string|null, \"geometry\": string[], \"loads\": string[], \"supports\": string[], \"materialsOrSections\": string[], \"missingOrUnclear\": string[], \"notes\": string[]}.",
-      `Attachment: ${attachment.originalName || attachment.relPath}`,
-      `User task: ${message}`,
     ]
     : [
       "你是结构工程 benchmark 的图片解析器。",
       "只提取图片中可见的文字、标注和几何关系；不要臆测缺失的尺寸、荷载、材料等级或边界条件。",
       "只返回紧凑 JSON，不要使用 markdown 代码块。",
       "Schema: {\"structuralType\": string|null, \"geometry\": string[], \"loads\": string[], \"supports\": string[], \"materialsOrSections\": string[], \"missingOrUnclear\": string[], \"notes\": string[]}.",
-      `附件: ${attachment.originalName || attachment.relPath}`,
-      `用户任务: ${message}`,
     ];
   return base.join("\n");
 }
 
-async function parseImageAttachmentWithVision(attachment, message, locale, signal) {
+async function parseImageAttachmentWithVision(attachment, locale, signal, imageIndex) {
   const cfg = visionConfig();
   if (!cfg) {
     throw new Error("Image benchmark scenario requires LLM_VISION_MODEL/BASE_URL/API_KEY");
@@ -439,7 +435,7 @@ async function parseImageAttachmentWithVision(attachment, message, locale, signa
         role: "user",
         content: [
           { type: "image_url", image_url: { url: dataUri } },
-          { type: "text", text: buildVisionPrompt({ attachment, message, locale }) },
+          { type: "text", text: buildVisionPrompt(locale) },
         ],
       },
     ],
@@ -471,36 +467,52 @@ async function parseImageAttachmentWithVision(attachment, message, locale, signa
     throw new Error("Vision API returned an empty summary");
   }
   return {
-    attachmentName: attachment.originalName || path.basename(filePath),
-    relPath: attachment.relPath,
+    imageIndex,
     model: cfg.model,
     summary,
   };
 }
 
-async function buildVisionSummaries(attachments, message, locale, signal) {
+async function buildVisionSummaries(attachments, locale, signal) {
   const imageAttachments = Array.isArray(attachments) ? attachments.filter(isImageAttachment) : [];
   const summaries = [];
-  for (const attachment of imageAttachments) {
-    summaries.push(await parseImageAttachmentWithVision(attachment, message, locale, signal));
+  for (let index = 0; index < imageAttachments.length; index++) {
+    summaries.push(await parseImageAttachmentWithVision(imageAttachments[index], locale, signal, index + 1));
   }
   return summaries;
 }
 
-function attachVisionSummariesToMessage(message, summaries, locale) {
-  if (!summaries.length) return message;
-  const header = locale === "en"
-    ? "[Benchmark vision attachment summaries]"
-    : "[Benchmark 多模态附件解析结果]";
-  const instruction = locale === "en"
-    ? "The following image/drawing information was extracted by the configured vision model before the agent run. Do not call analyze_file for these image attachments again; continue with skill routing, parameter extraction, model building, analysis, and reporting using this summary plus the user task."
-    : "以下图片/图纸信息已由配置的多模态模型在 agent 运行前解析。不要再对这些图片附件调用 analyze_file；请基于这些摘要和用户任务继续完成 skill 路由、参数抽取、建模、分析和报告。";
-  const blocks = summaries.map((item, index) => [
-    `#${index + 1} ${item.attachmentName}`,
-    `visionModel: ${item.model}`,
-    item.summary,
-  ].join("\n"));
-  return `${header}\n${instruction}\n\n${blocks.join("\n\n")}\n\n[User task]\n${message}`;
+function engineeringSpecificationText(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function attachVisionSummariesToMessage(message, summaries, locale, engineeringSpecification = "") {
+  const specification = engineeringSpecificationText(engineeringSpecification);
+  if (summaries.length === 0 && !specification) return message;
+
+  const sections = [];
+  if (summaries.length > 0) {
+    const header = locale === "en"
+      ? "[Benchmark vision attachment summaries]"
+      : "[Benchmark 多模态附件解析结果]";
+    const instruction = locale === "en"
+      ? "The following information was extracted from the attached images before the agent run. Do not call analyze_file for these image attachments again."
+      : "以下信息已在 agent 运行前从附件图片中提取。不要再对这些图片附件调用 analyze_file。";
+    const blocks = summaries.map((item) => [
+      `#${item.imageIndex}`,
+      item.summary,
+    ].join("\n"));
+    sections.push(`${header}\n${instruction}\n\n${blocks.join("\n\n")}`);
+  }
+
+  if (specification) {
+    const header = locale === "en" ? "[Engineering specification]" : "[工程说明]";
+    sections.push(`${header}\n${specification}`);
+  }
+
+  const taskHeader = locale === "en" ? "[User task]" : "[用户任务]";
+  sections.push(`${taskHeader}\n${message}`);
+  return sections.join("\n\n");
 }
 
 function copyAttachmentsToRuntimeUploads(attachments, conversationId) {
@@ -1062,7 +1074,6 @@ async function runBenchmark(args) {
             const turnContext = buildTurnContext({ scenario: runScenario, turn, benchmarkContext, skillIds });
             const visionSummaries = await buildVisionSummaries(
               turnContext.attachments,
-              messageWithFeedback,
               scenario.locale || "zh",
               caseTimeout.signal,
             );
@@ -1073,6 +1084,7 @@ async function runBenchmark(args) {
               messageWithFeedback,
               visionSummaries,
               scenario.locale || "zh",
+              turn.engineeringSpecification ?? runScenario.engineeringSpecification,
             );
 
             const state = await runAgentForBenchmark(service, {
@@ -1196,7 +1208,11 @@ async function runBenchmark(args) {
   }
 }
 
-module.exports = { runBenchmark };
+module.exports = {
+  attachVisionSummariesToMessage,
+  buildVisionPrompt,
+  runBenchmark,
+};
 
 if (require.main === module) {
   runBenchmark(process.argv.slice(2)).catch((err) => {

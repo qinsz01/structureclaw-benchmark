@@ -22,13 +22,13 @@
     "construction-plan",
     "en"
   ],
-  "message": "Use this construction drawing of the double-span portal frame to build the calculation model and run analysis.",
+  "message": "Build a calculation model from the attached drawing and engineering specification, then run static analysis. Ask for clarification instead of guessing any image information that cannot be identified reliably.",
   "locale": "en",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "re-portal-complex-ds-c",
-      "originalName": "portal-complex-ds-construction.png",
+      "originalName": "drawing-028.png",
       "relPath": "fixtures/drawings/portal-complex-ds-construction.png",
       "mimeType": "image/png"
     }
@@ -76,5 +76,20 @@
         "type": "has_analysis"
       }
     ]
+  },
+  "engineeringSpecification": "Material Q345: E=206000 MPa, nu=0.3, density=7850 kg/m3, fy=345 MPa. All members use section H700x300x12x20 (H=700 mm, B=300 mm, tw=12 mm, tf=20 mm; A=0.022 m2, Iy=0.0015 m4, Iz=0.0002 m4, J=0.00001 m4, G=79000 MPa). Use SI units and the global-z-up coordinate convention. Use only the load cases and load magnitudes annotated in the drawing; do not add member self-weight. Analyze load combination ULS = 1 x LC1.",
+  "inputContract": {
+    "imageProvides": [
+      "topology",
+      "dimensions",
+      "supports",
+      "loads"
+    ],
+    "specificationProvides": [
+      "materials",
+      "sections",
+      "analysis-settings"
+    ],
+    "completeness": "complete"
   }
 }

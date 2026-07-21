@@ -28,14 +28,14 @@
   "attachments": [
     {
       "fileId": "bench-truss-diagram-mt",
-      "originalName": "truss-diagram.png",
+      "originalName": "drawing-004.png",
       "relPath": "../../tests/llm-benchmark/fixtures/truss-diagram.png",
       "mimeType": "image/png"
     }
   ],
   "turns": [
     {
-      "message": "What type of structure is shown in this image?",
+      "message": "Identify the structural system shown in the attached image using only visible evidence.",
       "assertions": [
         {
           "type": "structural_type",
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "message": "The span is 12m, height 3m, node load 20kN. Please run a static analysis.",
+      "message": "Use the engineering specification provided with this turn to build the calculation model and run static analysis.",
       "assertions": [
         {
           "type": "has_model",
@@ -83,7 +83,22 @@
         {
           "type": "has_analysis"
         }
-      ]
+      ],
+      "engineeringSpecification": "Material steel: E=205000 MPa, nu=0.3, density=7850 kg/m3. All members use section T1 (A=0.01 m2). Use SI units and the global-z-up coordinate convention. Use only the load cases and load magnitudes annotated in the drawing; do not add member self-weight. Analyze load combination ULS = 1 x LC1."
     }
-  ]
+  ],
+  "inputContract": {
+    "imageProvides": [
+      "topology",
+      "dimensions",
+      "supports",
+      "loads"
+    ],
+    "specificationProvides": [
+      "materials",
+      "sections",
+      "analysis-settings"
+    ],
+    "completeness": "complete"
+  }
 }

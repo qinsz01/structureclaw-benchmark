@@ -23,13 +23,13 @@
     "image",
     "en"
   ],
-  "message": "Identify the simply supported beam from this sketch, extract the span and load labels, and run static analysis.",
+  "message": "Build a calculation model from the attached drawing and engineering specification, then run static analysis. Ask for clarification instead of guessing any image information that cannot be identified reliably.",
   "locale": "en",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "bench-beam-sketch",
-      "originalName": "beam-sketch.png",
+      "originalName": "drawing-001.png",
       "relPath": "../../tests/llm-benchmark/fixtures/beam-sketch.png",
       "mimeType": "image/png"
     }
@@ -84,5 +84,20 @@
         "description": "The agent should identify the structure as a simply supported beam from the image and extract the span and load values"
       }
     ]
+  },
+  "engineeringSpecification": "Material steel: E=205000 MPa, nu=0.3, density=7850 kg/m3. All members use section B1 (A=0.01 m2, Iy=0.0001 m4, Iz=0.0001 m4, J=0.0001 m4, G=79000 MPa). Use SI units and the global-z-up coordinate convention. Use only the load cases and load magnitudes annotated in the drawing; do not add member self-weight. Analyze load combination ULS = 1 x LC1.",
+  "inputContract": {
+    "imageProvides": [
+      "topology",
+      "dimensions",
+      "supports",
+      "loads"
+    ],
+    "specificationProvides": [
+      "materials",
+      "sections",
+      "analysis-settings"
+    ],
+    "completeness": "complete"
   }
 }
