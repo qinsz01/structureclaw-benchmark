@@ -15,6 +15,21 @@ const outDir = join(__dirname, "drawings");
 mkdirSync(outDir, { recursive: true });
 
 const models = JSON.parse(readFileSync(modelsPath, "utf-8"));
+const DRAWING_MODEL_IDS = new Set([
+  "beam-simple-6m",
+  "beam-complex-12m",
+  "frame-simple-1s1b",
+  "frame-complex-2s2b",
+  "truss-simple-tri",
+  "truss-complex-trap",
+  "portal-simple-18m",
+  "portal-complex-ds",
+  "dspan-simple-5-6",
+  "dspan-complex-3span",
+  "frame3d-simple",
+  "frame3d-complex",
+  "frame3d-concrete",
+]);
 
 // --- SVG generation helpers ---
 
@@ -33,9 +48,6 @@ const COLORS = {
   load: "#c62828",
   loadArrow: "#d32f2f",
   support: "#555",
-  label: "#333",
-  section: "#6a1b9a",
-  title: "#111",
   bg: "#fff",
   node: "#1565c0",
 };
@@ -112,6 +124,15 @@ function dimLine(x1, y1, x2, y2, label, offset = 25) {
     <text x="${dx - 8}" y="${my + 4}" text-anchor="end" font-size="13" fill="${COLORS.dim}" font-weight="bold">${label}</text>`;
 }
 
+function dimensionChainLabel(axis, coordinates) {
+  const intervals = coordinates
+    .slice(1)
+    .map((value, index) => value - coordinates[index])
+    .filter((value) => value > 0)
+    .map((value) => `${fmt(value)}m`);
+  return `${axis}: ${intervals.join(" + ")}`;
+}
+
 function classifyPlanarSupport(restraints) {
   if (restraints === undefined || restraints === null) return "none";
   if (!Array.isArray(restraints) || restraints.length !== 6 || !restraints.every(value => typeof value === "boolean")) {
@@ -162,28 +183,40 @@ function groupedDistributedLoads(model) {
   return [...groups.values()];
 }
 
-function distributedLoadLabel(loads) {
-  if (loads.length === 1) return `${fmt(loads[0].w)} kN/m`;
-  return `${fmt(loads.reduce((sum, load) => sum + load.w, 0))} kN/m`;
+function distributedLoadLabel(loads, element, model) {
+  const story = model.stories?.find(candidate => candidate.id === element.story);
+  const usesStoryAreaLoad = story?.floorLoadUnit === "kN/m2"
+    && Number(story.floorLoad) > 0
+    && Number(story.tributaryWidthM) > 0
+    && Math.abs(Number(story.equivalentLineLoad) - loads[0]?.w) <= 1e-9
+    && loads.length === 1;
+  if (usesStoryAreaLoad) {
+    return `${loads[0].caseId}: p = ${fmt(story.floorLoad)} kN/m2; bt=${fmt(story.tributaryWidthM)}m`;
+  }
+  return loads.map((load) => `${load.caseId}: q = ${fmt(load.w)} kN/m`).join(" + ");
+}
+
+function pointLoadMarkup(caseId, magnitude, cx, cy, structureTopY) {
+  const arrowTop = Math.min(cy - 58, structureTopY - 18);
+  const label = `${caseId}: P = ${fmt(magnitude)} kN`;
+  const labelWidth = Math.max(96, label.length * 7);
+  const boxY = arrowTop - 30;
+  return `<rect x="${cx - labelWidth / 2}" y="${boxY}" width="${labelWidth}" height="21" fill="#fff" stroke="${COLORS.loadArrow}" stroke-width="1.2" rx="3"/>
+    <text x="${cx}" y="${boxY + 15}" text-anchor="middle" font-size="11" fill="${COLORS.load}" font-weight="bold">${label}</text>
+    <line x1="${cx}" y1="${arrowTop}" x2="${cx}" y2="${cy - 6}" stroke="${COLORS.loadArrow}" stroke-width="3"/>
+    <polygon points="${cx - 5},${cy - 12} ${cx + 5},${cy - 12} ${cx},${cy - 2}" fill="${COLORS.loadArrow}"/>`;
 }
 
 // --- Style A: Construction Plan ---
 
 function renderConstructionPlan(entry) {
-  const { id, description, model } = entry;
+  const { model } = entry;
   const nodes = model.nodes;
-  const t = makeTransform(nodes, { l: 140, r: 140, t: 75, b: 140 }, 960, 620);
+  const t = makeTransform(nodes, { l: 140, r: 140, t: 55, b: 140 }, 960, 620);
   const nodeMap = new Map(nodes.map(n => [n.id, n]));
+  const structureTopY = Math.min(...nodes.map((node) => t.tz(node.z)));
 
   let body = "";
-
-  // Title block (wide enough for CJK descriptions)
-  body += `<rect x="10" y="6" width="${t.w - 20}" height="55" fill="#f5f5f5" stroke="#ccc" stroke-width="1" rx="3"/>`;
-  body += `<text x="20" y="24" font-size="13" fill="${COLORS.title}" font-weight="bold">${description}</text>`;
-  const matName = model.materials?.[0]?.name || "steel";
-  const secName = model.sections?.map(s => s.name).join(", ") || "";
-  body += `<text x="20" y="40" font-size="11" fill="${COLORS.label}">Material: ${matName}</text>`;
-  body += `<text x="20" y="54" font-size="11" fill="${COLORS.section}">Section: ${secName}</text>`;
 
   // Grid lines
   const xs = [...new Set(nodes.map(n => n.x))].sort((a, b) => a - b);
@@ -216,23 +249,6 @@ function renderConstructionPlan(entry) {
     body += renderPlanarSupport(n.restraints, sx, sy);
   }
 
-  // Section callout bubbles
-  for (const el of model.elements) {
-    if (el.type !== "beam" && el.type !== "column") continue;
-    const sec = model.sections?.find(s => s.id === el.section);
-    if (!sec) continue;
-    const n1 = nodeMap.get(el.nodes[0]);
-    const n2 = nodeMap.get(el.nodes[1]);
-    const mx = (t.tx(n1.x) + t.tx(n2.x)) / 2;
-    const my = (t.tz(n1.z) + t.tz(n2.z)) / 2;
-    const offsetY = el.type === "column" ? -28 : 22;
-    const name = sec.name;
-    const r = Math.max(16, name.length * 4 + 4);
-    const fs = name.length > 10 ? 7 : name.length > 6 ? 8 : 9;
-    body += `<rect x="${mx - r}" y="${my + offsetY - 10}" width="${r * 2}" height="20" fill="#f3e5f5" stroke="${COLORS.section}" stroke-width="1" rx="3"/>`;
-    body += `<text x="${mx}" y="${my + offsetY + 3}" text-anchor="middle" font-size="${fs}" fill="${COLORS.section}">${name}</text>`;
-  }
-
   // Distributed loads
   for (const group of groupedDistributedLoads(model)) {
     const el = model.elements.find(e => e.id === group.elementId);
@@ -249,8 +265,9 @@ function renderConstructionPlan(entry) {
       body += `<line x1="${ax}" y1="${ay - 30}" x2="${ax}" y2="${ay - 4}" stroke="${COLORS.loadArrow}" stroke-width="1.5"/>`;
       body += `<polygon points="${ax - 3},${ay - 8} ${ax + 3},${ay - 8} ${ax},${ay - 2}" fill="${COLORS.loadArrow}"/>`;
     }
+    body += `<line x1="${x1}" y1="${y1 - 30}" x2="${x2}" y2="${y2 - 30}" stroke="${COLORS.loadArrow}" stroke-width="1"/>`;
     const lx = (x1 + x2) / 2, ly = (y1 + y2) / 2 - 38;
-    body += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12" fill="${COLORS.load}" font-weight="bold">${distributedLoadLabel(group.loads)}</text>`;
+    body += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12" fill="${COLORS.load}" font-weight="bold">${distributedLoadLabel(group.loads, el, model)}</text>`;
   }
 
   // Point loads
@@ -262,9 +279,7 @@ function renderConstructionPlan(entry) {
         const sx = t.tx(n.x), sy = t.tz(n.z);
         const fz = Math.abs(load.fz || 0);
         if (fz > 0) {
-          body += `<line x1="${sx}" y1="${sy - 40}" x2="${sx}" y2="${sy - 5}" stroke="${COLORS.loadArrow}" stroke-width="2"/>`;
-          body += `<polygon points="${sx - 4},${sy - 9} ${sx + 4},${sy - 9} ${sx},${sy - 2}" fill="${COLORS.loadArrow}"/>`;
-          body += `<text x="${sx + 8}" y="${sy - 25}" font-size="12" fill="${COLORS.load}" font-weight="bold">${fmt(fz)} kN</text>`;
+          body += pointLoadMarkup(lc.id, fz, sx, sy, structureTopY);
         }
       }
     }
@@ -290,15 +305,13 @@ function renderConstructionPlan(entry) {
 // --- Style B: Mechanics Diagram ---
 
 function renderMechanicsDiagram(entry) {
-  const { id, description, model } = entry;
+  const { model } = entry;
   const nodes = model.nodes;
-  const t = makeTransform(nodes, { l: 120, r: 140, t: 80, b: 130 }, 920, 550);
+  const t = makeTransform(nodes, { l: 120, r: 140, t: 55, b: 130 }, 920, 550);
   const nodeMap = new Map(nodes.map(n => [n.id, n]));
+  const structureTopY = Math.min(...nodes.map((node) => t.tz(node.z)));
 
   let body = "";
-
-  // Title
-  body += `<text x="${t.w / 2}" y="25" text-anchor="middle" font-size="14" fill="${COLORS.title}" font-weight="bold">${description}</text>`;
 
   // Elements
   for (const el of model.elements) {
@@ -340,7 +353,7 @@ function renderMechanicsDiagram(entry) {
     }
     body += `<line x1="${x1}" y1="${y1 - 28}" x2="${x2}" y2="${y2 - 28}" stroke="${COLORS.loadArrow}" stroke-width="1"/>`;
     const lx = (x1 + x2) / 2, ly = Math.min(y1, y2) - 36;
-    body += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12" fill="${COLORS.load}" font-weight="bold">${distributedLoadLabel(group.loads)}</text>`;
+    body += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12" fill="${COLORS.load}" font-weight="bold">${distributedLoadLabel(group.loads, el, model)}</text>`;
   }
 
   // Point loads
@@ -352,22 +365,24 @@ function renderMechanicsDiagram(entry) {
         const sx = t.tx(n.x), sy = t.tz(n.z);
         const fz = Math.abs(load.fz || 0);
         if (fz > 0) {
-          body += `<line x1="${sx}" y1="${sy - 35}" x2="${sx}" y2="${sy - 5}" stroke="${COLORS.loadArrow}" stroke-width="2"/>`;
-          body += `<polygon points="${sx - 4},${sy - 9} ${sx + 4},${sy - 9} ${sx},${sy - 2}" fill="${COLORS.loadArrow}"/>`;
-          body += `<text x="${sx + 8}" y="${sy - 20}" font-size="12" fill="${COLORS.load}" font-weight="bold">${fmt(fz)} kN</text>`;
+          body += pointLoadMarkup(lc.id, fz, sx, sy, structureTopY);
         }
       }
     }
   }
 
-  // Key dimensions
+  // Consecutive dimensions preserve every bay and story independently.
   const xs = [...new Set(nodes.map(n => n.x))].sort((a, b) => a - b);
   const zs = [...new Set(nodes.map(n => n.z))].sort((a, b) => a - b);
   if (xs.length >= 2) {
-    body += dimLine(t.tx(xs[0]), t.tz(Math.min(...zs)), t.tx(xs[xs.length - 1]), t.tz(Math.min(...zs)), `${fmt(xs[xs.length - 1] - xs[0])}m`, 35);
+    for (let i = 0; i < xs.length - 1; i++) {
+      body += dimLine(t.tx(xs[i]), t.tz(Math.min(...zs)), t.tx(xs[i + 1]), t.tz(Math.min(...zs)), `${fmt(xs[i + 1] - xs[i])}m`, 35);
+    }
   }
   if (zs.length >= 2) {
-    body += dimLine(t.tx(Math.min(...xs)), t.tz(zs[0]), t.tx(Math.min(...xs)), t.tz(zs[zs.length - 1]), `${fmt(zs[zs.length - 1] - zs[0])}m`, 35);
+    for (let i = 0; i < zs.length - 1; i++) {
+      body += dimLine(t.tx(Math.min(...xs)), t.tz(zs[i]), t.tx(Math.min(...xs)), t.tz(zs[i + 1]), `${fmt(zs[i + 1] - zs[i])}m`, 35);
+    }
   }
 
   return svgWrap(t.w, t.h, body);
@@ -410,9 +425,49 @@ function equivalentLineLoadForStory(model, storyId) {
 function storyLoadLabel(model, story) {
   const areaLoad = Math.abs(Number(story.floorLoad) || 0);
   const lineLoad = equivalentLineLoadForStory(model, story.id);
-  if (areaLoad > 0) return `${story.id} floor load ${fmt(areaLoad)} kN/m2`;
-  if (lineLoad > 0) return `${story.id} X-beam UDL ${fmt(lineLoad)} kN/m`;
+  const loadCase = (model.load_cases || []).find((candidate) => (
+    (candidate.loads || []).some((load) => load.story === story.id)
+  ));
+  const prefix = loadCase ? `${story.id} ${loadCase.id}` : story.id;
+  if (areaLoad > 0) return `${prefix}: p = ${fmt(areaLoad)} kN/m2`;
+  if (lineLoad > 0) return `${prefix}: q = ${fmt(lineLoad)} kN/m`;
   return "";
+}
+
+function render3dParameterLegends(model, transform, xs, ys, zs) {
+  const dimensionBoxX = 80;
+  const dimensionBoxY = transform.h - 58;
+  const dimensionBoxW = transform.w - 160;
+  const dimensionLabels = [
+    dimensionChainLabel("X", xs),
+    dimensionChainLabel("Y", ys),
+    dimensionChainLabel("Z", zs),
+  ];
+  let body = `<rect x="${dimensionBoxX}" y="${dimensionBoxY}" width="${dimensionBoxW}" height="34" fill="#fff" stroke="${COLORS.dimLine}" stroke-width="1" rx="3"/>`;
+  for (let index = 0; index < dimensionLabels.length; index++) {
+    const x = dimensionBoxX + dimensionBoxW * (index + 0.5) / dimensionLabels.length;
+    body += `<text x="${x}" y="${dimensionBoxY + 22}" text-anchor="middle" font-size="12" fill="${COLORS.dim}" font-weight="bold">${dimensionLabels[index]}</text>`;
+  }
+
+  const loadLabels = storyTops(model)
+    .map((story) => storyLoadLabel(model, story))
+    .filter(Boolean);
+  if (loadLabels.length > 0) {
+    const loadBoxW = 190;
+    const loadBoxX = transform.w - loadBoxW - 18;
+    const loadBoxY = 18;
+    const loadBoxH = 18 + loadLabels.length * 20;
+    body += `<rect x="${loadBoxX}" y="${loadBoxY}" width="${loadBoxW}" height="${loadBoxH}" fill="#fff" stroke="#ef9a9a" stroke-width="1" rx="3"/>`;
+    for (let index = 0; index < loadLabels.length; index++) {
+      body += `<text x="${loadBoxX + 10}" y="${loadBoxY + 20 + index * 20}" font-size="12" fill="${COLORS.load}" font-weight="bold">${loadLabels[index]}</text>`;
+    }
+  }
+  const supportBoxX = 18;
+  const supportBoxY = 18;
+  const supportBoxW = 315;
+  body += `<rect x="${supportBoxX}" y="${supportBoxY}" width="${supportBoxW}" height="38" fill="#fff" stroke="#bdbdbd" stroke-width="1" rx="3"/>`;
+  body += `<text x="${supportBoxX + 10}" y="${supportBoxY + 24}" font-size="11" fill="${COLORS.support}" font-weight="bold">All base supports: FIXED [UX UY UZ RX RY RZ]</text>`;
+  return body;
 }
 
 function make3dTransform(nodes, padding = { l: 120, r: 140, t: 75, b: 140 }, w = 960, h = 640) {
@@ -440,26 +495,17 @@ function make3dTransform(nodes, padding = { l: 120, r: 140, t: 75, b: 140 }, w =
 }
 
 function render3dConstruction(entry) {
-  const { id, description, model } = entry;
+  const { model } = entry;
   const nodes = model.nodes;
-  const t = make3dTransform(nodes, { l: 120, r: 140, t: 75, b: 140 }, 960, 640);
+  const t = make3dTransform(nodes, { l: 120, r: 140, t: 45, b: 140 }, 960, 640);
   const nodeMap = new Map(nodes.map(n => [n.id, n]));
 
   let body = "";
-
-  // Title block
-  body += `<rect x="10" y="6" width="${t.w - 20}" height="55" fill="#f5f5f5" stroke="#ccc" stroke-width="1" rx="3"/>`;
-  body += `<text x="20" y="24" font-size="13" fill="${COLORS.title}" font-weight="bold">${description}</text>`;
-  const matName = model.materials?.[0]?.name || "steel";
-  const secName = model.sections?.map(s => s.name).join(", ") || "";
-  body += `<text x="20" y="40" font-size="11" fill="${COLORS.label}">Material: ${matName}</text>`;
-  body += `<text x="20" y="54" font-size="11" fill="${COLORS.section}">Section: ${secName}</text>`;
 
   // Grid lines at ground level (z=0)
   const ys = [...new Set(nodes.map(n => n.y))].sort((a, b) => a - b);
   const xs = [...new Set(nodes.map(n => n.x))].sort((a, b) => a - b);
   const zs = [...new Set(nodes.map(n => n.z))].sort((a, b) => a - b);
-  const zMax = Math.max(...zs);
   const xMax = Math.max(...xs);
   const yMax = Math.max(...ys);
 
@@ -508,51 +554,31 @@ function render3dConstruction(entry) {
     body += `<line x1="${sx - 8}" y1="${sy + 10}" x2="${sx + 8}" y2="${sy + 10}" stroke="${COLORS.support}" stroke-width="2"/>`;
   }
 
-  // Floor load labels, one per story at the cumulative floor elevation.
+  // Floor load arrows; exact magnitudes are listed in the unobstructed legend.
   for (const story of storyTops(model)) {
     const label = storyLoadLabel(model, story);
     if (!label) continue;
-    const midX = xMax / 2, midY = yMax / 2;
-    const lx = t.tx(midX, midY, story.topZ);
-    const ly = t.ty(midX, midY, story.topZ);
-    body += `<text x="${lx}" y="${ly - 16}" text-anchor="middle" font-size="12" fill="${COLORS.load}" font-weight="bold">${label}</text>`;
+    const midY = yMax / 2;
+    for (const xFrac of [0.25, 0.5, 0.75]) {
+      const ax = t.tx(xMax * xFrac, midY, story.topZ + 0.65);
+      const ay1 = t.ty(xMax * xFrac, midY, story.topZ + 0.65);
+      const ay2 = t.ty(xMax * xFrac, midY, story.topZ + 0.08);
+      body += `<line x1="${ax}" y1="${ay1}" x2="${ax}" y2="${ay2}" stroke="${COLORS.loadArrow}" stroke-width="1.5"/>`;
+      body += `<polygon points="${ax - 3},${ay2 - 6} ${ax + 3},${ay2 - 6} ${ax},${ay2}" fill="${COLORS.loadArrow}"/>`;
+    }
   }
-
-  // Dimension annotations
-  // Total X span
-  const dxStart = t.tx(0, 0, 0);
-  const dxEnd = t.tx(xMax, 0, 0);
-  const dyStart = t.ty(0, 0, 0);
-  const dyEnd = t.ty(xMax, 0, 0);
-  body += `<text x="${(dxStart + dxEnd) / 2}" y="${Math.max(dyStart, dyEnd) + 25}" text-anchor="middle" font-size="12" fill="${COLORS.dim}" font-weight="bold">X: ${fmt(xMax)}m</text>`;
-
-  // Total Y span
-  const yxStart = t.tx(0, 0, 0);
-  const yxEnd = t.tx(0, yMax, 0);
-  const yyStart = t.ty(0, 0, 0);
-  const yyEnd = t.ty(0, yMax, 0);
-  body += `<text x="${Math.min(yxStart, yxEnd) - 30}" y="${(yyStart + yyEnd) / 2 + 4}" text-anchor="middle" font-size="12" fill="${COLORS.dim}" font-weight="bold">Y: ${fmt(yMax)}m</text>`;
-
-  // Height
-  const hxStart = t.tx(xMax, 0, 0);
-  const hxEnd = t.tx(xMax, 0, zMax);
-  const hyStart = t.ty(xMax, 0, 0);
-  const hyEnd = t.ty(xMax, 0, zMax);
-  body += `<text x="${hxEnd + 30}" y="${(hyStart + hyEnd) / 2 + 4}" text-anchor="middle" font-size="12" fill="${COLORS.dim}" font-weight="bold">H: ${fmt(zMax)}m</text>`;
+  body += render3dParameterLegends(model, t, xs, ys, zs);
 
   return svgWrap(t.w, t.h, body);
 }
 
 function render3dMechanics(entry) {
-  const { id, description, model } = entry;
+  const { model } = entry;
   const nodes = model.nodes;
-  const t = make3dTransform(nodes, { l: 110, r: 130, t: 80, b: 120 }, 920, 580);
+  const t = make3dTransform(nodes, { l: 110, r: 130, t: 45, b: 120 }, 920, 580);
   const nodeMap = new Map(nodes.map(n => [n.id, n]));
 
   let body = "";
-
-  // Title
-  body += `<text x="${t.w / 2}" y="25" text-anchor="middle" font-size="14" fill="${COLORS.title}" font-weight="bold">${description}</text>`;
 
   // Elements
   const columns = model.elements.filter(e => e.type === "column");
@@ -591,26 +617,13 @@ function render3dMechanics(entry) {
   const xs = [...new Set(nodes.map(n => n.x))].sort((a, b) => a - b);
   const ys = [...new Set(nodes.map(n => n.y))].sort((a, b) => a - b);
   const zs = [...new Set(nodes.map(n => n.z))].sort((a, b) => a - b);
-  const xMax = Math.max(...xs), yMax = Math.max(...ys), zMax = Math.max(...zs);
-
-  const lx1 = t.tx(xMax / 2, 0, 0), ly1 = t.ty(xMax / 2, 0, 0);
-  body += `<text x="${lx1}" y="${ly1 + 20}" text-anchor="middle" font-size="12" fill="${COLORS.dim}" font-weight="bold">${fmt(xMax)}m</text>`;
-
-  const lx2 = t.tx(0, yMax / 2, 0), ly2 = t.ty(0, yMax / 2, 0);
-  body += `<text x="${lx2 - 25}" y="${ly2 + 4}" text-anchor="middle" font-size="12" fill="${COLORS.dim}" font-weight="bold">${fmt(yMax)}m</text>`;
-
-  const lx3 = t.tx(xMax, 0, zMax / 2), ly3 = t.ty(xMax, 0, zMax / 2);
-  body += `<text x="${lx3 + 25}" y="${ly3 + 4}" text-anchor="middle" font-size="12" fill="${COLORS.dim}" font-weight="bold">${fmt(zMax)}m</text>`;
+  const xMax = Math.max(...xs), yMax = Math.max(...ys);
 
   // Floor loads
   for (const story of storyTops(model)) {
     const label = storyLoadLabel(model, story);
     if (!label) continue;
-    const midX = xMax / 2;
     const midY = yMax / 2;
-    const lx = t.tx(midX, midY, story.topZ);
-    const ly = t.ty(midX, midY, story.topZ);
-    body += `<text x="${lx}" y="${ly - 18}" text-anchor="middle" font-size="12" fill="${COLORS.load}" font-weight="bold">${label}</text>`;
     for (const xFrac of [0.25, 0.5, 0.75]) {
       const ax = t.tx(xMax * xFrac, midY, story.topZ + 0.65);
       const ay1 = t.ty(xMax * xFrac, midY, story.topZ + 0.65);
@@ -620,6 +633,8 @@ function render3dMechanics(entry) {
     }
   }
 
+  body += render3dParameterLegends(model, t, xs, ys, zs);
+
   return svgWrap(t.w, t.h, body);
 }
 
@@ -627,10 +642,93 @@ function is3dModel(entry) {
   return entry.model.coordinate_system?.dimension === "3d";
 }
 
+function nonzero(value) {
+  return Math.abs(Number(value) || 0) > 1e-12;
+}
+
+function validatePlanarDrawingEvidence(entry) {
+  const { model } = entry;
+  const nodeIds = new Set(model.nodes.map((node) => node.id));
+  const elementIds = new Set(model.elements.map((element) => element.id));
+  if (model.nodes.some((node) => nonzero(node.y))) {
+    throw new Error(`${entry.id}: planar drawing nodes must lie in the global X-Z plane`);
+  }
+  for (const node of model.nodes) {
+    if (node.restraints) renderPlanarSupport(node.restraints, 0, 0);
+  }
+  for (const loadCase of model.load_cases || []) {
+    for (const load of loadCase.loads || []) {
+      if (load.node) {
+        if (!nodeIds.has(load.node)
+          || !(Number(load.fz) < 0)
+          || nonzero(load.fx)
+          || nonzero(load.fy)) {
+          throw new Error(`${entry.id}: point load ${loadCase.id} cannot be represented without loss`);
+        }
+      } else if (load.element) {
+        if (!elementIds.has(load.element)
+          || load.type !== "distributed"
+          || !(Number(load.wz) < 0)
+          || nonzero(load.wx)
+          || nonzero(load.wy)) {
+          throw new Error(`${entry.id}: distributed load ${loadCase.id} cannot be represented without loss`);
+        }
+      } else {
+        throw new Error(`${entry.id}: load ${loadCase.id} has no renderable target`);
+      }
+      if (load.reference_frame !== "global") {
+        throw new Error(`${entry.id}: only global load directions can be drawn unambiguously`);
+      }
+    }
+  }
+}
+
+function validate3dDrawingEvidence(entry) {
+  const { model } = entry;
+  const storyIds = new Set((model.stories || []).map((story) => story.id));
+  const loadedStories = new Set();
+  const nodeElevations = [...new Set(model.nodes.map((node) => node.z))];
+  for (const node of model.nodes) {
+    if (node.restraints) validateFixed3dSupport(node.restraints);
+  }
+  for (const loadCase of model.load_cases || []) {
+    for (const load of loadCase.loads || []) {
+      if (load.type !== "distributed"
+        || load.source !== "story_floor_loads"
+        || !storyIds.has(load.story)
+        || !(Number(load.wz) < 0)
+        || nonzero(load.wx)
+        || nonzero(load.wy)
+        || load.reference_frame !== "global") {
+        throw new Error(`${entry.id}: 3-D load ${loadCase.id} cannot be represented by a story-area-load legend`);
+      }
+      loadedStories.add(load.story);
+    }
+  }
+  for (const story of storyTops(model)) {
+    if (story.floorLoadUnit !== "kN/m2"
+      || Number(story.floorLoad) <= 0
+      || !loadedStories.has(story.id)
+      || !nodeElevations.some((value) => Math.abs(value - story.topZ) <= 1e-9)) {
+      throw new Error(`${entry.id}: story ${story.id} lacks complete visible area-load evidence`);
+    }
+  }
+}
+
+function validateDrawingEvidence(entry) {
+  if (is3dModel(entry)) validate3dDrawingEvidence(entry);
+  else validatePlanarDrawingEvidence(entry);
+}
+
 // --- Main ---
 
 async function renderAll() {
-  for (const model of models) {
+  const drawingModels = models.filter((model) => DRAWING_MODEL_IDS.has(model.id));
+  if (drawingModels.length !== DRAWING_MODEL_IDS.size) {
+    throw new Error(`Expected ${DRAWING_MODEL_IDS.size} drawing models, found ${drawingModels.length}`);
+  }
+  for (const model of drawingModels) {
+    validateDrawingEvidence(model);
     const is3d = is3dModel(model);
     for (const style of ["construction", "mechanics"]) {
       const suffix = style === "construction" ? "construction" : "mechanics";
@@ -648,7 +746,7 @@ async function renderAll() {
       console.log(`  ${fileName}: ${meta.width}x${meta.height}, ${meta.size} bytes${is3d ? " (3D)" : ""}`);
     }
   }
-  console.log(`\nRendered ${models.length * 2} drawings.`);
+  console.log(`\nRendered ${drawingModels.length * 2} drawings.`);
 }
 
 renderAll().catch((err) => { console.error("Error:", err); process.exit(1); });

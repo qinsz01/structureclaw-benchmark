@@ -300,6 +300,19 @@ edit only these three selectors in `experiments/llm-experiments.local.json`:
 The template config stores model names, base URLs, and the environment variable
 that holds each API key. It does not store secrets.
 
+Image scenarios use an explicit, non-overlapping input contract. The drawing is
+the sole source of topology, dimensions, supports, and load magnitudes; a
+separate `engineeringSpecification` supplies materials, sections, and analysis
+settings. Task prompts contain no case-specific numeric parameters, attachment
+names are neutral, and the vision parser receives neither the task nor the file
+identity. Complete drawings use consecutive coordinate dimension chains rather
+than total spans or assumed symmetry, and 3-D drawings state the base restraint
+DOFs explicitly. Load annotations consistently use `P` for point loads, `q` for
+distributed line loads, and `p` for area loads. Three robustness cases
+deliberately withhold critical image evidence and the engineering specification
+so that safe clarification, rather than model construction, is the expected
+outcome.
+
 ```bash
 npm run experiment:init
 
