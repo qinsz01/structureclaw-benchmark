@@ -12,17 +12,15 @@
   "analysisEngineTarget": "builtin-pkpm",
   "evaluationFocus": [
     "routing",
-    "modeling",
-    "model_match",
-    "analysis",
-    "engine_match"
+    "interaction"
   ],
-  "category": "standard-workflow",
+  "category": "adapter-boundary",
   "tags": [
     "frame",
     "standard",
     "l2",
-    "en"
+    "en",
+    "unsupported-2d-commercial-adapter"
   ],
   "message": "Use PKPM to run static analysis for a single-story single-bay steel frame with 4.5m story height, 6m span, and 10kN/m vertical line load on the beam.",
   "locale": "en",
@@ -46,27 +44,9 @@
           "generic"
         ]
       },
-      {
-        "type": "has_model",
-        "minNodes": 4,
-        "minElements": 3
-      },
-      {
-        "type": "model_matches",
-        "groundTruthId": "frame-simple-1s1b-10k",
-        "tolerances": {
-          "load": 0.05,
-          "coordinate": 0.05
-        }
-      },
-      {
-        "type": "has_analysis"
-      },
-      {
-        "type": "engine_match",
-        "expected": "builtin-pkpm",
-        "skillId": "pkpm-static"
-      }
+      { "type": "has_interaction_questions" },
+      { "type": "no_bad_model" },
+      { "type": "should_not_analyze" }
     ]
   }
 }

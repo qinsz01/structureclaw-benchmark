@@ -12,17 +12,15 @@
   "analysisEngineTarget": "builtin-pkpm",
   "evaluationFocus": [
     "routing",
-    "modeling",
-    "model_match",
-    "analysis",
-    "engine_match"
+    "interaction"
   ],
-  "category": "standard-workflow",
+  "category": "adapter-boundary",
   "tags": [
     "concrete-frame",
     "standard",
     "en",
-    "l2"
+    "l2",
+    "unsupported-2d-commercial-adapter"
   ],
   "message": "Use PKPM to run static analysis for a 2-story 3-bay reinforced concrete office frame with C30 concrete, 3.6m story height, 6m bays, and 8kN/m floor load.",
   "locale": "en",
@@ -46,27 +44,9 @@
           "generic"
         ]
       },
-      {
-        "type": "has_model",
-        "minNodes": 9,
-        "minElements": 8
-      },
-      {
-        "type": "model_matches",
-        "groundTruthId": "concrete-frame-2s3b-6m-8k",
-        "tolerances": {
-          "load": 0.05,
-          "coordinate": 0.05
-        }
-      },
-      {
-        "type": "has_analysis"
-      },
-      {
-        "type": "engine_match",
-        "expected": "builtin-pkpm",
-        "skillId": "pkpm-static"
-      }
+      { "type": "has_interaction_questions" },
+      { "type": "no_bad_model" },
+      { "type": "should_not_analyze" }
     ]
   }
 }

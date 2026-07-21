@@ -85,3 +85,16 @@ test("commercial scenarios are scored only when same-engine truth exists", () =>
     "builtin-pkpm",
   );
 });
+
+test("numerical report scenarios also require trace-grounded report values", () => {
+  const target = scenario();
+  target.evaluationFocus.push("report");
+  target.expect.assertions.push({ type: "has_report" });
+  const first = wireScenario(target, new Set(["beam-simple-6m"]));
+  assert.equal(first.changed, true);
+  assert.equal(
+    target.expect.assertions.filter((assertion) => assertion.type === "report_numerical_consistency").length,
+    1,
+  );
+  assert.equal(wireScenario(target, new Set(["beam-simple-6m"])).changed, false);
+});

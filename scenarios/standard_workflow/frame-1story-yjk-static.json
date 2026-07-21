@@ -6,23 +6,21 @@
   "inputModality": "text",
   "structureType": "frame",
   "benchmarkStructureType": "steel-frame",
-  "difficulty": "L1",
+  "difficulty": "L2",
   "skillTarget": "frame",
   "analysisSkillTarget": "yjk-static",
   "analysisEngineTarget": "builtin-yjk",
   "evaluationFocus": [
     "routing",
-    "modeling",
-    "model_match",
-    "analysis",
-    "engine_match"
+    "interaction"
   ],
-  "category": "static-analysis",
+  "category": "adapter-boundary",
   "tags": [
     "frame",
     "single-story",
     "static",
-    "en"
+    "en",
+    "unsupported-2d-commercial-adapter"
   ],
   "message": "Use YJK to run static analysis for a single-story single-bay steel frame with a 6m span, 4.5m height, and 8kN/m2 roof load converted with a 6m tributary width to a 48kN/m roof beam line load.",
   "locale": "en",
@@ -46,27 +44,9 @@
           "generic"
         ]
       },
-      {
-        "type": "has_model",
-        "minNodes": 4,
-        "minElements": 3
-      },
-      {
-        "type": "model_matches",
-        "groundTruthId": "frame-simple-1s1b",
-        "tolerances": {
-          "load": 0.05,
-          "coordinate": 0.05
-        }
-      },
-      {
-        "type": "has_analysis"
-      },
-      {
-        "type": "engine_match",
-        "expected": "builtin-yjk",
-        "skillId": "yjk-static"
-      }
+      { "type": "has_interaction_questions" },
+      { "type": "no_bad_model" },
+      { "type": "should_not_analyze" }
     ]
   }
 }

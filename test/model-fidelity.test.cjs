@@ -142,10 +142,25 @@ test("load magnitudes use a unified five-percent default tolerance", () => {
 test("load-combination factors are checked", () => {
   const expected = fixture("frame3d-simple");
   const actual = fixture("frame3d-simple");
-  actual.load_combinations[0].factors.D = 1.0;
+  actual.load_combinations[0].factors.D = 1.2;
   const comparison = compareStructuralModels(actual, expected);
   assert.equal(comparison.pass, false);
   assert.ok(comparison.failures.includes("load combinations"));
+});
+
+test("canonical story loads match legacy fields and replace derived solver loads", () => {
+  const expected = fixture("frame3d-simple");
+  const actual = fixture("frame3d-simple");
+  actual.stories = actual.stories.map((story) => ({
+    id: story.id,
+    height: story.height,
+    floor_loads: [{ type: "dead", value: story.floorLoad }],
+    dead_load: story.floorLoad,
+  }));
+  actual.load_cases[0].loads = [];
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+  actual.stories[0].floor_loads[0].value *= 1.1;
+  assert.ok(compareStructuralModels(actual, expected).failures.includes("stories"));
 });
 
 test("story definitions and entity assignments are checked", () => {

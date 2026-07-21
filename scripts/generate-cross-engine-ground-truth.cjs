@@ -3,7 +3,13 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const { buildValidationEntry } = require("../lib/cross-engine-ground-truth.cjs");
+const {
+  buildValidationEntry,
+  compareCommercialEngineResponses,
+  compareEngineMetrics,
+  extractEngineMetrics,
+  normalizeCommercialEngineResponse,
+} = require("../lib/cross-engine-ground-truth.cjs");
 const { canonicalJson, sha256 } = require("../lib/numerical-ground-truth.cjs");
 
 const BENCH_ROOT = path.resolve(__dirname, "..");
@@ -241,14 +247,15 @@ function engineEnvironment(engine, tempRoot, caseId) {
   return env;
 }
 
-function runEngine(engine, model, definition, options, tempRoot) {
-  const caseDir = path.join(tempRoot, definition.id);
+function runEngine(engine, model, definition, options, tempRoot, runNumber) {
+  const runId = `${definition.id}-run-${runNumber}`;
+  const caseDir = path.join(tempRoot, definition.id, `run-${runNumber}`);
   fs.mkdirSync(caseDir, { recursive: true });
   const input = path.join(caseDir, `${engine}-input.json`);
   const output = path.join(caseDir, `${engine}-output.json`);
   const parameters = engine === "opensees"
     ? { loadCombinationId: "CROSS_ENGINE_DL", floorLoadTransferMode: "auto_code_cn" }
-    : { timeout: 600, traceId: definition.id };
+    : { timeout: 600, traceId: runId };
   fs.writeFileSync(input, canonicalJson({ model, parameters }), "utf8");
   const child = spawnSync(options.python, [
     WORKER,
@@ -258,7 +265,7 @@ function runEngine(engine, model, definition, options, tempRoot) {
     "--output", output,
   ], {
     cwd: BENCH_ROOT,
-    env: engineEnvironment(engine, tempRoot, definition.id),
+    env: engineEnvironment(engine, tempRoot, runId),
     encoding: "utf8",
     windowsHide: true,
     timeout: 15 * 60 * 1000,
@@ -276,7 +283,51 @@ function runEngine(engine, model, definition, options, tempRoot) {
   };
 }
 
-function verifyCommitted(committed, generated) {
+function identityMappings(model) {
+  return {
+    nodeMapping: Object.fromEntries((model.nodes || []).map((node) => [String(node.id), String(node.id)])),
+    elementMapping: Object.fromEntries((model.elements || []).map((element) => [String(element.id), String(element.id)])),
+    elementOrientation: Object.fromEntries((model.elements || []).map((element) => [String(element.id), "same"])),
+  };
+}
+
+function verifyRepeatedEngineRun(engine, model, firstRun, secondRun) {
+  const tolerances = { numeric: 1e-4, numericAbsolute: 1e-8 };
+  if (canonicalJson(firstRun.identity) !== canonicalJson(secondRun.identity)) {
+    throw new Error(`${engine}: solver identity changed between repeated runs`);
+  }
+  if (engine === "opensees") {
+    const first = extractEngineMetrics(engine, model, firstRun.result);
+    const second = extractEngineMetrics(engine, model, secondRun.result);
+    const comparison = compareEngineMetrics(second, first, tolerances);
+    if (!comparison.pass) {
+      throw new Error(`${engine}: repeated metrics disagree: ${comparison.failures.slice(0, 5).join("; ")}`);
+    }
+    return {
+      runCount: 2,
+      normalizedOutputHashes: [sha256(first), sha256(second)],
+      ...comparison,
+    };
+  }
+  const first = normalizeCommercialEngineResponse(engine, model, firstRun.result);
+  const second = normalizeCommercialEngineResponse(engine, model, secondRun.result);
+  const comparison = compareCommercialEngineResponses(
+    second,
+    first,
+    identityMappings(model),
+    tolerances,
+  );
+  if (!comparison.pass) {
+    throw new Error(`${engine}: repeated responses disagree: ${comparison.failures.slice(0, 5).join("; ")}`);
+  }
+  return {
+    runCount: 2,
+    normalizedOutputHashes: [sha256(first), sha256(second)],
+    ...comparison,
+  };
+}
+
+function verifyCommitted(committed, generated, sourceById) {
   for (const field of ["sourceModelFileSha256", "caseDefinitionFileSha256"]) {
     if (committed[field] !== generated[field]) throw new Error(`${field} changed`);
   }
@@ -296,6 +347,21 @@ function verifyCommitted(committed, generated) {
       }
       if (prior.engines[engine].inputSha256 !== actual.engines[engine].inputSha256) {
         throw new Error(`${actual.caseId}: ${engine} input changed`);
+      }
+      if (prior.engines[engine].repeatability?.runCount !== 2
+        || actual.engines[engine].repeatability?.runCount !== 2) {
+        throw new Error(`${actual.caseId}: ${engine} is missing two-run repeatability evidence`);
+      }
+      if (engine !== "opensees") {
+        const comparison = compareCommercialEngineResponses(
+          actual.engines[engine].response,
+          prior.engines[engine].response,
+          identityMappings(sourceById.get(actual.provenance.sourceModelId)),
+          { numeric: 1e-4, numericAbsolute: 1e-8 },
+        );
+        if (!comparison.pass) {
+          throw new Error(`${actual.caseId}: ${engine} response changed: ${comparison.failures.slice(0, 5).join("; ")}`);
+        }
       }
       for (const metric of Object.keys(generated.comparisonPolicy)) {
         const expectedValue = Number(prior.engines[engine].metrics[metric]);
@@ -339,17 +405,30 @@ function main() {
       if (!source) throw new Error(`${definition.id}: unknown source model '${definition.sourceModelId}'`);
       const commonModel = deriveCommonModel(source, definition.id);
       const engineRuns = {};
+      const repeatability = {};
       for (const engine of ENGINES) {
-        process.stdout.write(`[Cross-engine truth] ${definition.id}: ${engine}\n`);
+        const engineModel = engine === "opensees" ? openSeesModel(commonModel) : commonModel;
+        process.stdout.write(`[Cross-engine truth] ${definition.id}: ${engine} run 1/2\n`);
         engineRuns[engine] = runEngine(
           engine,
-          engine === "opensees" ? openSeesModel(commonModel) : commonModel,
+          engineModel,
           definition,
           options,
           tempRoot,
+          1,
         );
+        process.stdout.write(`[Cross-engine truth] ${definition.id}: ${engine} run 2/2\n`);
+        const secondRun = runEngine(
+          engine,
+          engineModel,
+          definition,
+          options,
+          tempRoot,
+          2,
+        );
+        repeatability[engine] = verifyRepeatedEngineRun(engine, commonModel, engineRuns[engine], secondRun);
       }
-      cases.push(buildValidationEntry({
+      const validationEntry = buildValidationEntry({
         caseId: definition.id,
         model: commonModel,
         engineRuns,
@@ -370,10 +449,14 @@ function main() {
             maxBeamMoment: "OpenSees exposes member-end moments while the current PKPM/YJK result adapters expose the maximum across member stations.",
           },
         },
-      }));
+      });
+      for (const engine of ENGINES) {
+        validationEntry.engines[engine].repeatability = repeatability[engine];
+      }
+      cases.push(validationEntry);
     }
     const generated = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       role: "external three-engine validation of canonical numerical ground truth",
       sourceModelFileSha256: sha256(sources),
       caseDefinitionFileSha256: sha256(definitions),
@@ -400,7 +483,7 @@ function main() {
     }
     if (options.verify) {
       if (!fs.existsSync(options.output)) throw new Error(`No committed validation file at ${options.output}`);
-      verifyCommitted(JSON.parse(fs.readFileSync(options.output, "utf8")), generated);
+      verifyCommitted(JSON.parse(fs.readFileSync(options.output, "utf8")), generated, sourceById);
       process.stdout.write(`Verified ${cases.length} cross-engine validation cases\n`);
       return;
     }

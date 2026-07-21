@@ -91,6 +91,18 @@ function wireScenario(scenario, truthIds, crossEngineTruth = { cases: [] }) {
       });
       changed = true;
     }
+    const reportIndex = assertions.findIndex((assertion) => assertion.type === "has_report");
+    const consistencyIndex = assertions.findIndex(
+      (assertion) => assertion.type === "report_numerical_consistency",
+    );
+    const hasNumerical = assertions.some((assertion) => assertion.type === "numerical_matches");
+    if (reportIndex >= 0 && hasNumerical && consistencyIndex < 0) {
+      assertions.splice(reportIndex + 1, 0, { type: "report_numerical_consistency" });
+      changed = true;
+    } else if ((!hasNumerical || reportIndex < 0) && consistencyIndex >= 0) {
+      assertions.splice(consistencyIndex, 1);
+      changed = true;
+    }
   }
   const hasNumericalAssertion = assertionGroups(scenario)
     .some((assertions) => assertions.some((assertion) => assertion.type === "numerical_matches"));

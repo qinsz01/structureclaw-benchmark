@@ -5,8 +5,10 @@ const test = require("node:test");
 
 const {
   assessCrossEngine,
+  compareCommercialEngineResponses,
   compareEngineMetrics,
   extractEngineMetrics,
+  normalizeCommercialEngineResponse,
   relativeDifference,
 } = require("../lib/cross-engine-ground-truth.cjs");
 const {
@@ -39,6 +41,20 @@ function commercialCase(axial, shear, moment, displacement, reaction = 0) {
     },
     reactions: reaction ? { N0: { fz: reaction } } : {},
   };
+}
+
+function completeYjkCase(axial, shear, moment, displacement, reaction = 0) {
+  const result = commercialCase(axial, shear, moment, displacement, reaction);
+  result.displacements.N0 = { ux: 0, uy: 0, uz: 0, rx: 0, ry: 0, rz: 0 };
+  result.reactions = Object.fromEntries(model.nodes.map((node) => [node.id, {
+    fx: 0,
+    fy: 0,
+    fz: node.id === "N0" ? reaction : 0,
+    mx: 0,
+    my: 0,
+    mz: 0,
+  }]));
+  return result;
 }
 
 test("normalizes equivalent OpenSees and commercial dead-load results", () => {
@@ -125,6 +141,32 @@ test("same-engine metrics use strict frozen-ground-truth comparison", () => {
   assert.equal(compareEngineMetrics({ ...expected, counts: { ...expected.counts, beams: 3 } }, expected).pass, false);
 });
 
+test("commercial response normalization and comparison cover every mapped entity", () => {
+  const pkpmRaw = { status: "success", caseResults: { DL: commercialCase(100, 20, 30, 0.01) } };
+  const yjkRaw = {
+    status: "success",
+    summary: { load_cases: [{ id: 1, key: "lc_1", name: "恒载", kind: 1 }] },
+    caseResults: { lc_1: completeYjkCase(100, 20, 30, 0.01, 100) },
+  };
+  const pkpm = normalizeCommercialEngineResponse("pkpm", model, pkpmRaw);
+  const yjk = normalizeCommercialEngineResponse("yjk", model, yjkRaw);
+  assert.deepEqual(Object.keys(pkpm.displacements).sort(), ["N1", "N2"]);
+  assert.deepEqual(Object.keys(pkpm.forces).sort(), ["B1", "C1"]);
+  assert.deepEqual(Object.keys(yjk.displacements).sort(), ["N0", "N1", "N2"]);
+  assert.deepEqual(Object.keys(yjk.reactions).sort(), ["N0", "N1", "N2"]);
+  const mappings = {
+    nodeMapping: { N0: "N0", N1: "N1", N2: "N2" },
+    elementMapping: { C1: "C1", B1: "B1" },
+    elementOrientation: { C1: "same", B1: "same" },
+  };
+  assert.equal(compareCommercialEngineResponses(yjk, yjk, mappings).pass, true);
+  const changed = structuredClone(yjk);
+  changed.forces.B1.N += 10;
+  assert.equal(compareCommercialEngineResponses(changed, yjk, mappings).pass, false);
+  delete changed.displacements.N2;
+  assert.equal(compareCommercialEngineResponses(changed, yjk, mappings).pass, false);
+});
+
 test("derives a commercial-compatible model and an OpenSees-only self-weight variant", () => {
   const source = {
     project: { name: "source" },
@@ -185,6 +227,25 @@ test("committed cross-engine results cover the complete supported set", () => {
     .sort();
   assert.deepEqual(validation.cases.map((entry) => entry.caseId).sort(), eligible);
   assert.equal(validation.supportAudit.totalGroundTruthModels, models.length);
+  for (const entry of validation.cases) {
+    const source = models.find((candidate) => candidate.id === entry.provenance.sourceModelId).model;
+    const baseZ = Math.min(...source.nodes.map((node) => Number(node.z || 0)));
+    for (const engine of ["pkpm", "yjk"]) {
+      assert.ok(entry.engines[engine].normalizedResponseSha256, `${entry.caseId}/${engine}`);
+      assert.ok(entry.engines[engine].response, `${entry.caseId}/${engine}`);
+      assert.equal(Object.keys(entry.engines[engine].response.forces).length, source.elements.length);
+      assert.equal(
+        Object.keys(entry.engines[engine].response.displacements).length,
+        engine === "pkpm"
+          ? source.nodes.filter((node) => Number(node.z || 0) !== baseZ).length
+          : source.nodes.length,
+      );
+      assert.equal(
+        Object.keys(entry.engines[engine].response.reactions).length,
+        engine === "pkpm" ? 0 : source.nodes.length,
+      );
+    }
+  }
 });
 
 test("supported cases preserve each source story's explicit gravity resultant", () => {

@@ -9,6 +9,11 @@ const {
 } = require("../lib/opensees-truth-validation.cjs");
 const { compareStructuralModels } = require("../lib/model-fidelity.cjs");
 const { sha256 } = require("../lib/numerical-ground-truth.cjs");
+const { compareAnalysisResults } = require("../lib/analysis-fidelity.cjs");
+const {
+  INDEPENDENT_SOLVER_VERSION,
+  solveIndependentLinearModel,
+} = require("../lib/independent-linear-solver.cjs");
 const { validateNumericalTruthPayload } = require("../lib/validate-scenarios.cjs");
 const { executionVariant } = require("../scripts/generate-opensees-ground-truth.cjs");
 
@@ -40,9 +45,9 @@ test("the second solver run changes entity order without changing engineering me
 
 function pointLoadModel() {
   return {
-    coordinate_system: { dimension: "2d" },
+    coordinate_system: { dimension: "2d", plane: "xz" },
     nodes: [
-      { id: "A", x: 0, y: 0, z: 0 },
+      { id: "A", x: 0, y: 0, z: 0, restraints: [true, true, true, true, true, true] },
       { id: "B", x: 2, y: 0, z: 0 },
     ],
     elements: [{ id: "E", type: "beam", nodes: ["A", "B"], material: "M", section: "S" }],
@@ -96,12 +101,11 @@ test("preflight rejects unsupported truth inputs before solver execution", () =>
 function validNumericalManifest() {
   const model = pointLoadModel();
   const groundTruth = [{ id: "synthetic-beam", model }];
+  const independentResult = solveIndependentLinearModel(model);
   const result = {
-    status: "success",
+    ...independentResult,
     analysisMode: "opensees_2d_frame",
-    displacements: { A: { ux: 0, uz: 0 }, B: { ux: 0, uz: -0.01 } },
-    reactions: { A: { fz: 10, my: -20 } },
-    forces: { E: { axial: 0 } },
+    responseCoordinateConvention: "global-xyz",
   };
   const tolerances = { absolute: 1e-10, relative: 1e-10 };
   return {
@@ -134,6 +138,12 @@ function validNumericalManifest() {
           ],
           equilibrium: [{ pass: true }, { pass: true }],
           analytical: [{ applicable: false, pass: true }, { applicable: false, pass: true }],
+          independentLinearSolver: {
+            name: "Independent direct-stiffness linear solver",
+            version: INDEPENDENT_SOLVER_VERSION,
+            inputSha256: sha256(model),
+            outputSha256: sha256(independentResult),
+          },
         },
       }],
     },
@@ -159,4 +169,29 @@ test("committed numerical manifests are independently revalidated", () => {
   assert.ok(corruptedErrors.some((error) => error.includes("execution variants")));
   assert.ok(corruptedErrors.some((error) => error.includes("distinct solver configurations")));
   assert.ok(corruptedErrors.some((error) => error.includes("recomputed equilibrium")));
+});
+
+test("all committed 2-D truths agree with an independent direct-stiffness solution", () => {
+  const truth = new Map(JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "opensees-ground-truth.json"),
+    "utf8",
+  )).models.map((entry) => [entry.modelId, entry.result]));
+  for (const entry of fixtures.filter((item) => item.model.coordinate_system?.dimension === "2d")) {
+    const independent = solveIndependentLinearModel(entry.model);
+    const comparison = compareAnalysisResults(
+      independent,
+      truth.get(entry.id),
+      {
+        nodeMapping: Object.fromEntries(entry.model.nodes.map((node) => [String(node.id), String(node.id)])),
+        elementMapping: Object.fromEntries(
+          entry.model.elements.map((element) => [String(element.id), String(element.id)]),
+        ),
+        elementOrientation: Object.fromEntries(
+          entry.model.elements.map((element) => [String(element.id), "same"]),
+        ),
+      },
+      { numericAbsolute: 1e-7, numeric: 1e-6 },
+    );
+    assert.equal(comparison.pass, true, `${entry.id}: ${comparison.failures.slice(0, 3).join("; ")}`);
+  }
 });

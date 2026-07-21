@@ -598,7 +598,15 @@ function build3dFrame(id, description, opts) {
           e.nodes[0] === `N${si}_${xi}_${yi}` && e.nodes[1] === `N${si}_${xi + 1}_${yi}`
         );
         if (beamEl) {
-          loads.push({ type: "distributed", element: beamEl.id, wz: -wPerBeam, wy: 0 });
+          loads.push({
+            type: "distributed",
+            element: beamEl.id,
+            wz: -wPerBeam,
+            wy: 0,
+            story: `F${si}`,
+            source: "story_floor_loads",
+            load_kind: "dead",
+          });
         }
       }
     }
@@ -624,7 +632,7 @@ function build3dFrame(id, description, opts) {
       sections,
       stories,
       load_cases: [{ id: "D", type: "dead", loads }],
-      load_combinations: [{ id: "ULS", factors: { D: 1.2 } }],
+      load_combinations: [{ id: "ULS", factors: { D: 1.0 } }],
       metadata: {
         source: "ground-truth",
         inferredType: "frame",

@@ -12,41 +12,18 @@ const validation = JSON.parse(fs.readFileSync(
   "utf8",
 ));
 
-function syntheticCommercialResult(engine, model, metrics) {
-  const nodes = new Map(model.nodes.map((node) => [String(node.id), node]));
-  const baseZ = Math.min(...model.nodes.map((node) => Number(node.z || 0)));
-  const baseNodes = model.nodes.filter((node) => Number(node.z || 0) === baseZ);
-  const upperNodes = model.nodes.filter((node) => Number(node.z || 0) !== baseZ);
-  const bottomColumns = model.elements.filter((element) => element.type === "column"
-    && element.nodes.some((id) => Number(nodes.get(String(id))?.z || 0) === baseZ));
-  const beams = model.elements.filter((element) => element.type === "beam");
-  const remainingAxial = metrics.bottomColumnAxialSum - metrics.maxBottomColumnAxial;
-  const otherAxial = bottomColumns.length > 1 ? remainingAxial / (bottomColumns.length - 1) : 0;
-  const forces = {};
-  bottomColumns.forEach((element, index) => {
-    forces[element.id] = {
-      N: -(index === 0 ? metrics.maxBottomColumnAxial : otherAxial),
-      V: 0,
-      M: index === 0 ? metrics.maxBottomColumnMoment : 0,
-    };
-  });
-  beams.forEach((element, index) => {
-    forces[element.id] = {
-      N: 0,
-      V: index === 0 ? metrics.maxBeamShear : 0,
-      M: index === 0 ? metrics.maxBeamMoment : 0,
-    };
-  });
-  const displacements = Object.fromEntries(upperNodes.map((node, index) => [node.id, {
-    uz: index === 0 ? -metrics.maxVerticalDisplacement : 0,
-  }]));
-  const reactions = { [baseNodes[0].id]: { fz: metrics.totalGravity } };
-  const loadCase = { status: "success", forces, displacements, reactions };
+function commercialResultFromTruth(engine, response) {
+  const loadCase = {
+    status: "success",
+    forces: response.forces,
+    displacements: response.displacements,
+    reactions: response.reactions,
+  };
   if (engine === "pkpm") return { status: "success", caseResults: { DL: loadCase } };
   return {
     status: "success",
-    summary: { load_cases: [{ id: 1, key: "lc_1", name: "恒载", kind: 1 }] },
-    caseResults: { lc_1: loadCase },
+    summary: { load_cases: [{ id: 1, key: response.caseKey, name: "恒载", kind: 1 }] },
+    caseResults: { [response.caseKey]: loadCase },
   };
 }
 
@@ -55,7 +32,7 @@ for (const engine of ["pkpm", "yjk"]) {
     const entry = validation.cases[0];
     const modelId = entry.provenance.sourceModelId;
     const model = models.find((candidate) => candidate.id === modelId).model;
-    const rawResult = syntheticCommercialResult(engine, model, entry.engines[engine].metrics);
+    const rawResult = commercialResultFromTruth(engine, entry.engines[engine].response);
     const scenario = {
       id: `same-engine-${engine}`,
       analysisEngineTarget: `builtin-${engine}`,
@@ -91,4 +68,26 @@ test("malformed commercial results fail diagnostically instead of aborting evalu
   const numerical = evaluation.metrics.find((metric) => metric.metric === "numerical_matches");
   assert.equal(numerical.pass, false);
   assert.match(numerical.actual, /per-load-case results are required/);
+});
+
+test("a changed commercial response component fails numerical matching", async () => {
+  const entry = validation.cases[0];
+  const modelId = entry.provenance.sourceModelId;
+  const model = models.find((candidate) => candidate.id === modelId).model;
+  const response = structuredClone(entry.engines.yjk.response);
+  const nodeId = Object.keys(response.displacements)[0];
+  const component = Object.keys(response.displacements[nodeId])[0];
+  response.displacements[nodeId][component] += 1;
+  const evaluation = await evaluateScenario({
+    id: "changed-yjk-response",
+    analysisEngineTarget: "builtin-yjk",
+    expect: { assertions: [{ type: "numerical_matches", groundTruthId: modelId }] },
+  }, {
+    model,
+    analysisResult: commercialResultFromTruth("yjk", response),
+    messages: [],
+  }, 0);
+  const numerical = evaluation.metrics.find((metric) => metric.metric === "numerical_matches");
+  assert.equal(numerical.pass, false);
+  assert.match(numerical.actual, /displacements/);
 });

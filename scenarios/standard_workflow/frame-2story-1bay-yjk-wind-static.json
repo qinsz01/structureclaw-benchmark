@@ -12,17 +12,15 @@
   "analysisEngineTarget": "builtin-yjk",
   "evaluationFocus": [
     "routing",
-    "modeling",
-    "model_match",
-    "analysis",
-    "engine_match"
+    "interaction"
   ],
-  "category": "standard-workflow",
+  "category": "adapter-boundary",
   "tags": [
     "frame",
     "standard",
     "zh",
-    "wind"
+    "wind",
+    "unsupported-2d-commercial-adapter"
   ],
   "message": "2层单跨钢框架，层高3.6m，跨度6m，每层楼面荷载10kN/m2按6m等效受荷宽度折算为梁线荷载60kN/m；右侧一、二层节点分别施加等效水平风荷载10kN、15kN，请使用YJK进行静力分析",
   "locale": "zh",
@@ -46,27 +44,9 @@
           "generic"
         ]
       },
-      {
-        "type": "has_model",
-        "minNodes": 6,
-        "minElements": 6
-      },
-      {
-        "type": "model_matches",
-        "groundTruthId": "frame-2s1b-6m-10k-wind",
-        "tolerances": {
-          "load": 0.05,
-          "coordinate": 0.05
-        }
-      },
-      {
-        "type": "has_analysis"
-      },
-      {
-        "type": "engine_match",
-        "expected": "builtin-yjk",
-        "skillId": "yjk-static"
-      }
+      { "type": "has_interaction_questions" },
+      { "type": "no_bad_model" },
+      { "type": "should_not_analyze" }
     ]
   }
 }

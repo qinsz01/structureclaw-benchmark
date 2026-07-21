@@ -163,7 +163,9 @@ load's mapped target, reference frame, direction, and magnitude are also checked
 Entity IDs may differ when the engineering relationships are preserved. The optional
 `matcherVersion: "v1"` switch exists only to reproduce archived arXiv-v1 scoring;
 strict matching is the default. Current strict assertions use a 0.05 m coordinate
-tolerance and a 5% load-magnitude tolerance throughout the benchmark.
+tolerance and a 5% load-magnitude tolerance throughout the benchmark. Canonical
+`stories.floor_loads` and legacy `floorLoad` fields are compared by engineering
+meaning; solver-derived loads marked `story_floor_loads` are not counted twice.
 
 Numerical values must never be entered manually. Generation requires the exact
 OpenSeesPy package version pinned by StructureClaw and runs every one of the 59
@@ -180,9 +182,16 @@ The manifest records the wrapper package, platform runtime package
 (`openseespywin`/`openseespylinux`), and native OpenSees engine versions separately.
 Canonical simply supported and cantilever beam fixtures are additionally checked
 against closed-form Euler–Bernoulli reactions, bending moments, and displacements.
+All 53 canonical 2-D fixtures are also solved by the independent Euler–Bernoulli
+frame/truss direct-stiffness implementation in `lib/independent-linear-solver.cjs`.
+Generation fails unless its full signed response agrees with OpenSees, and the
+independent input/output hashes and comparison errors are stored per fixture.
 OpenSees numerical assertions compare the full node displacement, reaction, and
 member-response trees at 1% tolerance. Signed member forces are compared after
 normalizing reversed member orientation, rather than by absolute magnitude alone.
+For numerical report scenarios, `report_numerical_consistency` additionally
+requires the structured report to embed the current analysis artifact exactly;
+report length alone is not treated as numerical faithfulness.
 
 ```bash
 # Explicit interpreter is recommended.
@@ -212,16 +221,21 @@ canonical truth above. The three engines receive the same regular 3-D geometry,
 material/section definitions, story gravity loads, and member self-weight. Results
 are reduced to the same dead-load case and compared pairwise. The record contains
 source/input hashes, executable/API hashes, normalized metrics, tolerances,
-exclusions, and every pairwise difference.
+exclusions, and every pairwise difference. Every engine is run twice in isolated
+work directories. PKPM and YJK must reproduce their complete normalized response
+within 0.01%; both response hashes and comparison diagnostics are stored.
 
 For scenarios that explicitly request PKPM or YJK, `numerical_matches` compares
 the runtime result directly with the frozen ground truth produced by that same
-engine, using a 1% tolerance on normalized scalar response metrics and exact count
-matching. OpenSees remains an independent cross-engine validation reference; its
-values are not substituted for an engine's own numerical ground truth. Commercial
-2-D scenarios that cannot be represented losslessly by the current PKPM/YJK
-conversion path retain strict model and engine-execution checks but are not assigned
-a misleading numerical pass/fail assertion.
+engine. PKPM compares every available non-base-node displacement and member-force
+component; YJK additionally compares every node reaction. Entity coverage must be
+exact and every frozen response value uses a 1% tolerance. OpenSees remains an
+independent cross-engine validation reference; its values are not substituted for
+an engine's own numerical ground truth. The current benchmark has 107 analyzable
+model targets and all 107 carry `numerical_matches`. Seven planar requests that
+cannot be represented losslessly by the current 3-D PKPM/YJK adapters are explicit
+adapter-boundary cases: they require clarification and safe non-execution, and are
+not included in the numerical denominator.
 
 Validation is deliberately tiered. `equilibrium` covers total vertical action and
 the bottom-column axial sum. `response` additionally covers load distribution,
@@ -233,7 +247,10 @@ PKPM/YJK expose maxima across member stations.
 Eligibility is derived from the complete ground-truth file rather than a handpicked
 case list. Of the current 59 fixtures, 53 are canonical 2-D models that cannot be
 extruded into commercial 3-D standard floors without inventing geometry. All six
-3-D fixtures declare physical section dimensions and are cross-validated. PKPM
+3-D fixtures declare physical section dimensions and are cross-validated. In the
+current frozen record all six pass equilibrium validation; two also pass every
+declared cross-platform response threshold, while four retain explicit response
+differences rather than weakening the thresholds. PKPM
 copied-standard-floor IDs are refreshed after SATWE execution, so different story
 loads remain exactly traceable to the source model. The generated support audit
 records every inclusion and exclusion, and a regression test fails if any eligible

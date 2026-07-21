@@ -14,6 +14,11 @@ const {
   validateOpenSeesTruthInput,
 } = require("../lib/opensees-truth-validation.cjs");
 const { checkAnalyticalOracle } = require("../lib/analytical-oracle.cjs");
+const { compareAnalysisResults } = require("../lib/analysis-fidelity.cjs");
+const {
+  INDEPENDENT_SOLVER_VERSION,
+  solveIndependentLinearModel,
+} = require("../lib/independent-linear-solver.cjs");
 
 const BENCH_ROOT = path.resolve(__dirname, "..");
 const SCLAW_ROOT = path.resolve(BENCH_ROOT, "../..");
@@ -25,6 +30,7 @@ const REQUIREMENTS = path.join(
   "backend", "src", "agent-skills", "analysis", "runtime", "requirements.txt",
 );
 const NUMERIC_TOLERANCES = { absolute: 1e-10, relative: 1e-10 };
+const INDEPENDENT_TOLERANCES = { numericAbsolute: 1e-7, numeric: 1e-6 };
 
 function parseArgs(argv) {
   const options = {
@@ -211,6 +217,43 @@ function calculateModel(entry, options, tempRoot, pinnedVersion) {
     }
     return check;
   });
+  let independentLinearSolver = null;
+  if (entry.model.coordinate_system?.dimension === "2d") {
+    const independentResult = solveIndependentLinearModel(entry.model);
+    const comparison = compareAnalysisResults(
+      independentResult,
+      runs[0].result,
+      {
+        nodeMapping: Object.fromEntries(entry.model.nodes.map((node) => [String(node.id), String(node.id)])),
+        elementMapping: Object.fromEntries(
+          entry.model.elements.map((element) => [String(element.id), String(element.id)]),
+        ),
+        elementOrientation: Object.fromEntries(
+          entry.model.elements.map((element) => [String(element.id), "same"]),
+        ),
+      },
+      INDEPENDENT_TOLERANCES,
+    );
+    if (!comparison.pass) {
+      throw new Error(
+        `${entry.id}: independent direct-stiffness solution disagrees: ${comparison.failures.slice(0, 5).join("; ")}`,
+      );
+    }
+    independentLinearSolver = {
+      name: "Independent direct-stiffness linear solver",
+      version: INDEPENDENT_SOLVER_VERSION,
+      method: entry.model.elements.every((element) => element.type === "truss")
+        ? "2-D linear truss direct stiffness"
+        : "2-D Euler-Bernoulli frame direct stiffness",
+      implementation: "lib/independent-linear-solver.cjs",
+      inputSha256: sha256(entry.model),
+      outputSha256: sha256(independentResult),
+      comparedValues: comparison.comparedValues,
+      maxAbsoluteDifference: comparison.maxAbsoluteDifference,
+      maxRelativeDifference: comparison.maxRelativeDifference,
+      tolerances: comparison.tolerances,
+    };
+  }
   return {
     modelId: entry.id,
     inputSha256: sha256(entry.model),
@@ -222,6 +265,7 @@ function calculateModel(entry, options, tempRoot, pinnedVersion) {
       solverConfigurations: runs.map((run) => run.solverConfiguration),
       equilibrium,
       analytical,
+      independentLinearSolver,
     },
     result: runs[0].result,
   };
@@ -251,6 +295,10 @@ function verifyCommitted(committed, generated, sourceHash) {
     }
     if (canonicalJson(expected.analysisSelection) !== canonicalJson(actual.analysisSelection)) {
       throw new Error(`${actual.modelId}: analysis selection changed`);
+    }
+    if (canonicalJson(expected.verification?.independentLinearSolver)
+      !== canonicalJson(actual.verification?.independentLinearSolver)) {
+      throw new Error(`${actual.modelId}: independent linear-solver verification changed`);
     }
     const comparison = compareNumericalResults(expected.result, actual.result, NUMERIC_TOLERANCES);
     if (!comparison.pass) {

@@ -6,24 +6,21 @@
   "inputModality": "text",
   "structureType": "concrete-frame",
   "benchmarkStructureType": "concrete-frame",
-  "difficulty": "L1",
+  "difficulty": "L2",
   "skillTarget": "concrete-frame",
   "analysisSkillTarget": "yjk-static",
   "analysisEngineTarget": "builtin-yjk",
   "evaluationFocus": [
     "routing",
-    "modeling",
-    "model_match",
-    "analysis",
-    "engine_match",
-    "report"
+    "interaction"
   ],
-  "category": "static-analysis",
+  "category": "adapter-boundary",
   "tags": [
     "concrete-frame",
     "static",
     "en",
-    "report"
+    "report",
+    "unsupported-2d-commercial-adapter"
   ],
   "message": "Use YJK to run static analysis and generate a report for a 2-story single-bay reinforced concrete frame with C30 concrete, HRB400 reinforcement, 3.6m story height, 6m bay width, and 10kN/m2 floor load converted with a 6m tributary width to a 60kN/m beam line load.",
   "locale": "en",
@@ -47,30 +44,9 @@
           "generic"
         ]
       },
-      {
-        "type": "has_model",
-        "minNodes": 6,
-        "minElements": 6
-      },
-      {
-        "type": "model_matches",
-        "groundTruthId": "concrete-frame-2s1b-6m-10k",
-        "tolerances": {
-          "load": 0.05,
-          "coordinate": 0.05
-        }
-      },
-      {
-        "type": "has_analysis"
-      },
-      {
-        "type": "engine_match",
-        "expected": "builtin-yjk",
-        "skillId": "yjk-static"
-      },
-      {
-        "type": "has_report"
-      }
+      { "type": "has_interaction_questions" },
+      { "type": "no_bad_model" },
+      { "type": "should_not_analyze" }
     ]
   }
 }

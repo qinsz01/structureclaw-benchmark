@@ -12,18 +12,15 @@
   "analysisEngineTarget": "builtin-pkpm",
   "evaluationFocus": [
     "routing",
-    "modeling",
-    "model_match",
-    "analysis",
-    "engine_match",
-    "semantic"
+    "interaction"
   ],
-  "category": "static-analysis",
+  "category": "adapter-boundary",
   "tags": [
     "frame",
     "static",
     "zh",
-    "multi-bay"
+    "multi-bay",
+    "unsupported-2d-commercial-adapter"
   ],
   "message": "3层2跨钢框架，层高3.3m，跨度5.4m和6m，每层楼面荷载15kN/m，请使用PKPM进行静力分析",
   "locale": "zh",
@@ -47,31 +44,9 @@
           "generic"
         ]
       },
-      {
-        "type": "has_model",
-        "minNodes": 12,
-        "minElements": 12
-      },
-      {
-        "type": "model_matches",
-        "groundTruthId": "frame-3s2b-5p4-6-15k",
-        "tolerances": {
-          "load": 0.05,
-          "coordinate": 0.05
-        }
-      },
-      {
-        "type": "has_analysis"
-      },
-      {
-        "type": "engine_match",
-        "expected": "builtin-pkpm",
-        "skillId": "pkpm-static"
-      },
-      {
-        "type": "natural_language",
-        "description": "Model should represent a 3-story 2-bay frame with correct node and element count"
-      }
+      { "type": "has_interaction_questions" },
+      { "type": "no_bad_model" },
+      { "type": "should_not_analyze" }
     ]
   }
 }
