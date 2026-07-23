@@ -88,6 +88,53 @@ test("distributed loads use their member midpoint and loaded length", () => {
   assert.equal(equilibrium.pass, true, equilibrium.failures.join("; "));
 });
 
+test("empty dead-load cases include declared story floor loads in equilibrium", () => {
+  const model = {
+    coordinate_system: { dimension: "3d" },
+    nodes: [
+      { id: "N00", x: 0, y: 0, z: 0 },
+      { id: "N10", x: 6, y: 0, z: 0 },
+      { id: "N01", x: 0, y: 5, z: 0 },
+      { id: "N11", x: 6, y: 5, z: 0 },
+      { id: "T00", x: 0, y: 0, z: 3.6, story: "F1" },
+      { id: "T10", x: 6, y: 0, z: 3.6, story: "F1" },
+      { id: "T01", x: 0, y: 5, z: 3.6, story: "F1" },
+      { id: "T11", x: 6, y: 5, z: 3.6, story: "F1" },
+    ],
+    elements: [],
+    stories: [{
+      id: "F1",
+      elevation: 0,
+      height: 3.6,
+      floor_loads: [{ type: "dead", value: 10 }],
+      dead_load: 10,
+    }],
+    load_cases: [{ id: "D", type: "dead", loads: [] }],
+    load_combinations: [{ id: "ULS", factors: { D: 1 } }],
+  };
+  const reactions = {
+    N00: { fz: 75 },
+    N10: { fz: 75 },
+    N01: { fz: 75 },
+    N11: { fz: 75 },
+  };
+  const equilibrium = checkStaticEquilibrium(
+    model,
+    { reactions },
+    { loadCombinationId: "ULS", factors: { D: 1 } },
+  );
+  assert.equal(equilibrium.pass, true, equilibrium.failures.join("; "));
+
+  reactions.N11.fz = 70;
+  const unbalanced = checkStaticEquilibrium(
+    model,
+    { reactions },
+    { loadCombinationId: "ULS", factors: { D: 1 } },
+  );
+  assert.equal(unbalanced.pass, false);
+  assert.ok(unbalanced.failures.some((failure) => failure.includes("force")));
+});
+
 test("preflight rejects unsupported truth inputs before solver execution", () => {
   const model = pointLoadModel();
   model.sections[0].properties.Iy = 0;

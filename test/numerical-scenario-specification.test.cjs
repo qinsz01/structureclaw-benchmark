@@ -47,6 +47,29 @@ test("multimodal concrete frames separate geometry evidence from complete engine
   }
 });
 
+test("3-D frame ground truths keep floor loads canonical until analysis", () => {
+  const groundTruth = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "ground-truth-models.json"),
+    "utf8",
+  ));
+  const frames = groundTruth.filter((entry) => (
+    entry.model?.coordinate_system?.dimension === "3d"
+    && entry.inferredType === "frame"
+  ));
+  assert.ok(frames.length >= 6);
+  for (const entry of frames) {
+    assert.ok(entry.model.stories.every((story) => (
+      Array.isArray(story.floor_loads)
+      && story.floor_loads.some((load) => load.type === "dead")
+      && Number.isFinite(story.dead_load)
+      && Number.isFinite(story.elevation)
+    )), entry.id);
+    assert.ok(entry.model.load_cases.every((loadCase) => (
+      (loadCase.loads || []).every((load) => load.source !== "story_floor_loads")
+    )), entry.id);
+  }
+});
+
 test("interactive concrete material revision starts from a fully determined model", () => {
   const scenario = JSON.parse(fs.readFileSync(
     path.join(INTERACTIVE_DIR, "robust-update-concrete-material.json"),
@@ -56,6 +79,16 @@ test("interactive concrete material revision starts from a fully determined mode
   assert.match(message, /2D/u);
   assert.match(message, /500\s*mm\s*×\s*500\s*mm/u);
   assert.match(message, /300\s*mm\s*×\s*600\s*mm/u);
+});
+
+test("interactive frame nodal-load revision specifies the loaded node", () => {
+  const scenario = JSON.parse(fs.readFileSync(
+    path.join(INTERACTIVE_DIR, "robust-update-generic-increase-load.json"),
+    "utf8",
+  ));
+  for (const turn of scenario.turns) {
+    assert.match(turn.message, /右上节点/u, `${scenario.id}: ambiguous nodal-load location`);
+  }
 });
 
 test("numerical beam targets expose observation nodes required only for response comparison", () => {
@@ -129,7 +162,7 @@ test("numerical beam targets expose observation nodes required only for response
         scenario.engineeringSpecification,
         group.engineeringSpecification,
       ].filter(Boolean).join(" ");
-      assert.match(specification, /(?:midspan|跨中)/iu, `${scenario.id}: hidden observation location`);
+      assert.match(specification, /(?:midspan|midpoint|跨中|中点)/iu, `${scenario.id}: hidden observation location`);
       assert.match(specification, /(?:analysis node|分析节点)/iu, `${scenario.id}: hidden observation node`);
       assert.match(specification, /(?:connected|连接)/iu, `${scenario.id}: hidden element subdivision`);
       assert.match(specification, /(?:deflection|displacement|挠度|位移)/iu, `${scenario.id}: hidden response quantity`);
@@ -175,11 +208,137 @@ test("every strict model target receives common analysis properties without answ
       if (!assertions.some((item) => item.type === "model_matches")) continue;
       targetCount += 1;
       const specification = benchmarkEngineeringSpecification(assertions, scenario.locale || "zh");
-      assert.match(specification, /"coordinate_system"/u, `${scenario.id}: missing coordinate specification`);
-      assert.match(specification, /"materials"/u, `${scenario.id}: missing material specification`);
-      assert.match(specification, /"sections"/u, `${scenario.id}: missing section specification`);
-      assert.doesNotMatch(specification, /"nodes"|"elements"|"loads"\s*:/u, `${scenario.id}: leaked target model answer`);
+      assert.match(specification, /(?:Coordinate system|坐标系):/u, `${scenario.id}: missing coordinate specification`);
+      assert.match(specification, /(?:Materials|材料):/u, `${scenario.id}: missing material specification`);
+      assert.match(specification, /(?:Sections|截面):/u, `${scenario.id}: missing section specification`);
+      assert.match(
+        specification,
+        /(?:extract_draft_params|parameter extraction|参数提取)/u,
+        `${scenario.id}: engineering properties are not explicitly propagated to parameter extraction`,
+      );
+      assert.doesNotMatch(specification, /(?:Nodes|节点|Elements|构件|Loads|荷载)\s*:/u, `${scenario.id}: leaked target model answer`);
     }
   }
   assert.ok(targetCount >= 100);
+});
+
+test("portal-frame analysis properties expose a parseable complete H-section name", () => {
+  const scenario = JSON.parse(fs.readFileSync(
+    path.join(SCENARIO_DIR, "portal-frame-static-18m.json"),
+    "utf8",
+  ));
+  const specification = benchmarkEngineeringSpecification(scenario.expect.assertions, scenario.locale);
+  assert.match(specification, /member=H600x250x10x16/u);
+});
+
+test("portal-frame ground truth uses complete and geometrically consistent H-sections", () => {
+  const groundTruth = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "ground-truth-models.json"),
+    "utf8",
+  ));
+  const portalModels = groundTruth.filter((entry) => entry.inferredType === "portal-frame");
+  assert.ok(portalModels.length >= 7);
+
+  for (const entry of portalModels) {
+    for (const section of entry.model.sections) {
+      const { H, B, tw, tf } = section.shape || {};
+      assert.ok([H, B, tw, tf].every(Number.isFinite), `${entry.id}: incomplete H-section shape`);
+      const hw = H - 2 * tf;
+      const expected = {
+        A: (tw * hw + 2 * B * tf) / 1e6,
+        Iy: ((tw * hw ** 3) / 12 + (2 * B * tf ** 3) / 12 + 2 * B * tf * ((hw + tf) / 2) ** 2) / 1e12,
+        Iz: ((2 * tf * B ** 3) / 12 + (hw * tw ** 3) / 12) / 1e12,
+        J: (2 * B * tf ** 3 + hw * tw ** 3) / 3 / 1e12,
+      };
+      for (const [key, value] of Object.entries(expected)) {
+        assert.ok(
+          Math.abs(section.properties[key] - value) <= Math.max(1e-12, Math.abs(value) * 1e-12),
+          `${entry.id}: ${key} is inconsistent with the declared shape`,
+        );
+      }
+    }
+  }
+});
+
+test("portal-frame ground truth distinguishes columns from beams", () => {
+  const groundTruth = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "ground-truth-models.json"),
+    "utf8",
+  ));
+  const portalModels = groundTruth.filter((entry) => entry.inferredType === "portal-frame");
+
+  for (const entry of portalModels) {
+    const nodes = new Map(entry.model.nodes.map((node) => [String(node.id), node]));
+    for (const element of entry.model.elements) {
+      const [start, end] = element.nodes.map((id) => nodes.get(String(id)));
+      assert.ok(start && end, `${entry.id}: element '${element.id}' references missing nodes`);
+      const isVertical = Math.abs(start.x - end.x) <= 1e-9
+        && Math.abs(start.y - end.y) <= 1e-9
+        && Math.abs(start.z - end.z) > 1e-9;
+      if (isVertical) {
+        assert.equal(element.type, "column", `${entry.id}: vertical element '${element.id}' must be a column`);
+      }
+    }
+  }
+});
+
+test("steel column benchmark declares a complete executable catalog section", () => {
+  const scenario = JSON.parse(fs.readFileSync(
+    path.join(SCENARIO_DIR, "std-column-steel-5m-en.json"),
+    "utf8",
+  ));
+  const groundTruth = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "ground-truth-models.json"),
+    "utf8",
+  ));
+  const target = groundTruth.find((entry) => entry.id === "column-steel-5m-700")?.model;
+
+  assert.match(scenario.message, /HW300x300/u);
+  assert.ok(target);
+  assert.deepEqual(target.sections[0], {
+    id: "1",
+    name: "HW300x300",
+    type: "H",
+    purpose: "column",
+    shape: { kind: "H", H: 300, B: 300, tw: 10, tf: 15 },
+    properties: {
+      A: 0.01192,
+      Iy: 2.04e-4,
+      Iz: 6.75e-5,
+      J: 4.23e-6,
+      G: 79000,
+    },
+  });
+  const specification = benchmarkEngineeringSpecification(scenario.expect.assertions, scenario.locale);
+  assert.match(specification, /name=HW300x300/u);
+  assert.match(specification, /shape\(kind=H, H=300, B=300, tw=10, tf=15\)/u);
+});
+
+test("steel frame ground truth uses executable catalog sections without duplicate load metadata", () => {
+  const groundTruth = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "ground-truth-models.json"),
+    "utf8",
+  ));
+  const target = groundTruth.find((entry) => entry.id === "frame-2s1b-6m-10k")?.model;
+  assert.ok(target);
+  assert.deepEqual(target.sections[0].properties, {
+    A: 0.01739,
+    Iy: 4.03e-4,
+    Iz: 1.36e-4,
+    J: 8.63e-6,
+    G: 79000,
+  });
+  assert.deepEqual(target.sections[1].properties, {
+    A: 0.01143,
+    Iy: 5.02e-4,
+    Iz: 2.14e-5,
+    J: 1.24e-6,
+    G: 79000,
+  });
+  assert.ok(target.stories.every((story) => (
+    story.floorLoad === undefined
+    && story.tributaryWidthM === undefined
+    && story.equivalentLineLoad === undefined
+  )));
+  assert.equal(target.load_cases[0].loads.length, 2);
 });

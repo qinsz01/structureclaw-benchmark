@@ -18,6 +18,7 @@ const {
   openSeesModel,
   storyFloorLoads,
 } = require("../scripts/generate-cross-engine-ground-truth.cjs");
+const { sha256 } = require("../lib/numerical-ground-truth.cjs");
 
 const model = {
   nodes: [
@@ -248,7 +249,30 @@ test("committed cross-engine results cover the complete supported set", () => {
   }
 });
 
-test("supported cases preserve each source story's explicit gravity resultant", () => {
+test("committed cross-engine provenance hashes reproduce every engine input", () => {
+  const models = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "ground-truth-models.json"),
+    "utf8",
+  ));
+  const committed = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "fixtures", "cross-engine-ground-truth-validation.json"),
+    "utf8",
+  ));
+  const sourceById = new Map(models.map((entry) => [entry.id, entry.model]));
+  assert.equal(committed.sourceModelFileSha256, sha256(models));
+  for (const entry of committed.cases) {
+    const source = sourceById.get(entry.provenance.sourceModelId);
+    assert.ok(source, entry.caseId);
+    assert.equal(entry.provenance.sourceModelSha256, sha256(source), entry.caseId);
+    const common = deriveCommonModel(source, entry.caseId);
+    assert.equal(entry.inputSha256, sha256(common), entry.caseId);
+    assert.equal(entry.engines.pkpm.inputSha256, sha256(common), `${entry.caseId}/pkpm`);
+    assert.equal(entry.engines.yjk.inputSha256, sha256(common), `${entry.caseId}/yjk`);
+    assert.equal(entry.engines.opensees.inputSha256, sha256(openSeesModel(common)), `${entry.caseId}/opensees`);
+  }
+});
+
+test("supported cases preserve each source story's explicit gravity resultant when present", () => {
   const models = JSON.parse(fs.readFileSync(
     path.join(__dirname, "..", "fixtures", "ground-truth-models.json"),
     "utf8",
@@ -263,9 +287,11 @@ test("supported cases preserve each source story's explicit gravity resultant", 
     let storyTop = 0;
     for (const story of model.stories) {
       storyTop += Number(story.height);
-      const explicitResultant = model.load_cases
+      const explicitLoads = model.load_cases
         .flatMap((loadCase) => loadCase.loads || [])
-        .filter((load) => load.type === "distributed")
+        .filter((load) => load.type === "distributed");
+      if (explicitLoads.length === 0) continue;
+      const explicitResultant = explicitLoads
         .reduce((sum, load) => {
           const element = elements.get(String(load.element));
           const ends = element.nodes.map((id) => nodes.get(String(id)));

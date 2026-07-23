@@ -416,10 +416,10 @@
             "tf": 15
           },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0002,
-            "Iz": 0.0002,
-            "J": 0.00001,
+            "A": 0.01192,
+            "Iy": 0.000204,
+            "Iz": 0.0000675,
+            "J": 0.00000423,
             "G": 79000
           }
         },
@@ -436,10 +436,10 @@
             "tf": 13
           },
           "properties": {
-            "A": 0.008,
-            "Iy": 0.0002,
-            "Iz": 0.00003,
-            "J": 0.000005,
+            "A": 0.00842,
+            "Iy": 0.000237,
+            "Iz": 0.0000174,
+            "J": 8.44e-7,
             "G": 79000
           }
         }
@@ -741,10 +741,10 @@
             "tf": 19
           },
           "properties": {
-            "A": 0.017,
-            "Iy": 0.0004,
-            "Iz": 0.0004,
-            "J": 0.00002,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -761,10 +761,10 @@
             "tf": 16
           },
           "properties": {
-            "A": 0.011,
-            "Iy": 0.0004,
-            "Iz": 0.00004,
-            "J": 0.000008,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -2177,7 +2177,7 @@
       "elements": [
         {
           "id": "1",
-          "type": "beam",
+          "type": "column",
           "nodes": [
             "1",
             "3"
@@ -2197,7 +2197,7 @@
         },
         {
           "id": "3",
-          "type": "beam",
+          "type": "column",
           "nodes": [
             "4",
             "2"
@@ -2231,10 +2231,10 @@
             "tf": 16
           },
           "properties": {
-            "A": 0.015,
-            "Iy": 0.0009,
-            "Iz": 0.0001,
-            "J": 0.000005,
+            "A": 0.01368,
+            "Iy": 0.0008349913600000005,
+            "Iz": 0.000041714,
+            "J": 8.72e-7,
             "G": 79000
           }
         }
@@ -2357,7 +2357,7 @@
       "elements": [
         {
           "id": "1",
-          "type": "beam",
+          "type": "column",
           "nodes": [
             "1",
             "4"
@@ -2387,7 +2387,7 @@
         },
         {
           "id": "4",
-          "type": "beam",
+          "type": "column",
           "nodes": [
             "6",
             "3"
@@ -2397,7 +2397,7 @@
         },
         {
           "id": "5",
-          "type": "beam",
+          "type": "column",
           "nodes": [
             "5",
             "2"
@@ -2431,10 +2431,10 @@
             "tf": 20
           },
           "properties": {
-            "A": 0.022,
-            "Iy": 0.0015,
-            "Iz": 0.0002,
-            "J": 0.00001,
+            "A": 0.01992,
+            "Iy": 0.001675096000000001,
+            "Iz": 0.00009009503999999997,
+            "J": 0.0000019801600000000003,
             "G": 79000
           }
         }
@@ -3138,10 +3138,10 @@
             "tf": 19
           },
           "properties": {
-            "A": 0.017,
-            "Iy": 0.0004,
-            "Iz": 0.0004,
-            "J": 0.00002,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -3158,10 +3158,10 @@
             "tf": 16
           },
           "properties": {
-            "A": 0.011,
-            "Iy": 0.0004,
-            "Iz": 0.00004,
-            "J": 0.000008,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -3170,62 +3170,34 @@
         {
           "id": "F1",
           "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 10
+            }
+          ],
+          "dead_load": 10,
+          "elevation": 0
         },
         {
           "id": "F2",
           "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 10
+            }
+          ],
+          "dead_load": 10,
+          "elevation": 3.6
         }
       ],
       "load_cases": [
         {
           "id": "D",
-          "type": "other",
-          "loads": [
-            {
-              "type": "distributed",
-              "element": "BX9",
-              "wz": -25,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX10",
-              "wz": -25,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX11",
-              "wz": -25,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX12",
-              "wz": -25,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            }
-          ]
+          "type": "dead",
+          "loads": [],
+          "description": "Dead floor loads from stories.floor_loads"
         }
       ],
       "load_combinations": [
@@ -4008,10 +3980,10 @@
             "tf": 21
           },
           "properties": {
-            "A": 0.021,
-            "Iy": 0.0006,
-            "Iz": 0.0006,
-            "J": 0.00003,
+            "A": 0.01972,
+            "Iy": 0.000667,
+            "Iz": 0.000224,
+            "J": 0.0000101,
             "G": 79000
           }
         },
@@ -4028,10 +4000,10 @@
             "tf": 17
           },
           "properties": {
-            "A": 0.013,
-            "Iy": 0.0007,
-            "Iz": 0.00005,
-            "J": 0.000009,
+            "A": 0.01341,
+            "Iy": 0.000906,
+            "Iz": 0.0000227,
+            "J": 0.00000148,
             "G": 79000
           }
         }
@@ -4040,142 +4012,34 @@
         {
           "id": "F1",
           "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 10
+            }
+          ],
+          "dead_load": 10,
+          "elevation": 0
         },
         {
           "id": "F2",
           "height": 3.6,
-          "floorLoad": 8,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 8
+            }
+          ],
+          "dead_load": 8,
+          "elevation": 3.6
         }
       ],
       "load_cases": [
         {
           "id": "D",
-          "type": "other",
-          "loads": [
-            {
-              "type": "distributed",
-              "element": "BX19",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX20",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX21",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX22",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX23",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX24",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX25",
-              "wz": -26.666666666666668,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX26",
-              "wz": -26.666666666666668,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX27",
-              "wz": -26.666666666666668,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX28",
-              "wz": -26.666666666666668,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX29",
-              "wz": -26.666666666666668,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX30",
-              "wz": -26.666666666666668,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            }
-          ]
+          "type": "dead",
+          "loads": [],
+          "description": "Dead floor loads from stories.floor_loads"
         }
       ],
       "load_combinations": [
@@ -4734,102 +4598,34 @@
         {
           "id": "F1",
           "height": 3.6,
-          "floorLoad": 12,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 12
+            }
+          ],
+          "dead_load": 12,
+          "elevation": 0
         },
         {
           "id": "F2",
           "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 10
+            }
+          ],
+          "dead_load": 10,
+          "elevation": 3.6
         }
       ],
       "load_cases": [
         {
           "id": "D",
-          "type": "other",
-          "loads": [
-            {
-              "type": "distributed",
-              "element": "BX13",
-              "wz": -30,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX14",
-              "wz": -30,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX15",
-              "wz": -30,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX16",
-              "wz": -30,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX17",
-              "wz": -25,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX18",
-              "wz": -25,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX19",
-              "wz": -25,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX20",
-              "wz": -25,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            }
-          ]
+          "type": "dead",
+          "loads": [],
+          "description": "Dead floor loads from stories.floor_loads"
         }
       ],
       "load_combinations": [
@@ -5546,7 +5342,7 @@
   {
     "id": "beam-overhang-5m-1p5m-udl15",
     "inferredType": "beam",
-    "description": "外伸梁，简支跨5m，外伸1.5m，均布荷载15kN/m，简支跨跨中挠度观测点x=2.5m",
+    "description": "外伸梁，简支跨5m，外伸1.5m，均布荷载15kN/m，全长中点挠度观测点x=3.25m",
     "model": {
       "schema_version": "2.0.0",
       "unit_system": "SI",
@@ -5567,7 +5363,7 @@
         },
         {
           "id": "N2",
-          "x": 2.5,
+          "x": 3.25,
           "y": 0,
           "z": 0
         },
@@ -5986,11 +5782,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -5999,11 +5802,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -6011,9 +5821,7 @@
       "stories": [
         {
           "id": "F1",
-          "height": 4.5,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 4.5
         }
       ],
       "load_cases": [
@@ -6220,11 +6028,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -6233,11 +6048,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -6245,19 +6067,11 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2",
-          "tributaryWidthM": 6,
-          "equivalentLineLoad": 60
+          "height": 3.6
         },
         {
           "id": "F2",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2",
-          "tributaryWidthM": 6,
-          "equivalentLineLoad": 60
+          "height": 3.6
         }
       ],
       "load_cases": [
@@ -6473,11 +6287,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -6486,11 +6307,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -6498,19 +6326,11 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2",
-          "tributaryWidthM": 6,
-          "equivalentLineLoad": 60
+          "height": 3.6
         },
         {
           "id": "F2",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2",
-          "tributaryWidthM": 6,
-          "equivalentLineLoad": 60
+          "height": 3.6
         }
       ],
       "load_cases": [
@@ -6806,11 +6626,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -6819,11 +6646,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -6831,15 +6665,11 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         },
         {
           "id": "F2",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         }
       ],
       "load_cases": [
@@ -7212,11 +7042,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -7225,11 +7062,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -7237,21 +7081,15 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.3,
-          "floorLoad": 15,
-          "floorLoadUnit": "kN/m"
+          "height": 3.3
         },
         {
           "id": "F2",
-          "height": 3.3,
-          "floorLoad": 15,
-          "floorLoadUnit": "kN/m"
+          "height": 3.3
         },
         {
           "id": "F3",
-          "height": 3.3,
-          "floorLoad": 15,
-          "floorLoadUnit": "kN/m"
+          "height": 3.3
         }
       ],
       "load_cases": [
@@ -7639,11 +7477,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -7652,11 +7497,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -7664,21 +7516,15 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         },
         {
           "id": "F2",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         },
         {
           "id": "F3",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         }
       ],
       "load_cases": [
@@ -7893,11 +7739,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -7906,11 +7759,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -7918,11 +7778,7 @@
       "stories": [
         {
           "id": "F1",
-          "height": 12,
-          "floorLoad": 1.5,
-          "floorLoadUnit": "kN/m2",
-          "tributaryWidthM": 24,
-          "equivalentLineLoad": 36
+          "height": 12
         }
       ],
       "load_cases": [
@@ -9746,102 +9602,34 @@
         {
           "id": "F1",
           "height": 3.6,
-          "floorLoad": 12,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 12
+            }
+          ],
+          "dead_load": 12,
+          "elevation": 0
         },
         {
           "id": "F2",
           "height": 3.6,
-          "floorLoad": 12,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 12
+            }
+          ],
+          "dead_load": 12,
+          "elevation": 3.6
         }
       ],
       "load_cases": [
         {
           "id": "D",
-          "type": "other",
-          "loads": [
-            {
-              "type": "distributed",
-              "element": "BX13",
-              "wz": -30,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX14",
-              "wz": -30,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX15",
-              "wz": -30,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX16",
-              "wz": -30,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX17",
-              "wz": -30,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX18",
-              "wz": -30,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX19",
-              "wz": -30,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX20",
-              "wz": -30,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            }
-          ]
+          "type": "dead",
+          "loads": [],
+          "description": "Dead floor loads from stories.floor_loads"
         }
       ],
       "load_combinations": [
@@ -10371,10 +10159,10 @@
             "tf": 19
           },
           "properties": {
-            "A": 0.017044,
-            "Iy": 0.00039506176133333296,
-            "Iz": 0.0001358157613333333,
-            "J": 0.000001780145333333333,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -10391,10 +10179,10 @@
             "tf": 16
           },
           "properties": {
-            "A": 0.01108,
-            "Iy": 0.00046036549333333356,
-            "Iz": 0.00002137233333333334,
-            "J": 7.021333333333334e-7,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -10403,102 +10191,34 @@
         {
           "id": "F1",
           "height": 3.6,
-          "floorLoad": 8,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 8
+            }
+          ],
+          "dead_load": 8,
+          "elevation": 0
         },
         {
           "id": "F2",
           "height": 3.6,
-          "floorLoad": 8,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 8
+            }
+          ],
+          "dead_load": 8,
+          "elevation": 3.6
         }
       ],
       "load_cases": [
         {
           "id": "D",
-          "type": "other",
-          "loads": [
-            {
-              "type": "distributed",
-              "element": "BX13",
-              "wz": -20,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX14",
-              "wz": -20,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX15",
-              "wz": -20,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX16",
-              "wz": -20,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX17",
-              "wz": -20,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX18",
-              "wz": -20,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX19",
-              "wz": -20,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX20",
-              "wz": -20,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            }
-          ]
+          "type": "dead",
+          "loads": [],
+          "description": "Dead floor loads from stories.floor_loads"
         }
       ],
       "load_combinations": [
@@ -11207,10 +10927,10 @@
             "tf": 19
           },
           "properties": {
-            "A": 0.017044,
-            "Iy": 0.00039506176133333296,
-            "Iz": 0.0001358157613333333,
-            "J": 0.000001780145333333333,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -11227,10 +10947,10 @@
             "tf": 16
           },
           "properties": {
-            "A": 0.01108,
-            "Iy": 0.00046036549333333356,
-            "Iz": 0.00002137233333333334,
-            "J": 7.021333333333334e-7,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -11239,118 +10959,46 @@
         {
           "id": "F1",
           "height": 3.3,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 10
+            }
+          ],
+          "dead_load": 10,
+          "elevation": 0
         },
         {
           "id": "F2",
           "height": 3.3,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 10
+            }
+          ],
+          "dead_load": 10,
+          "elevation": 3.3
         },
         {
           "id": "F3",
           "height": 3.3,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m2"
+          "floor_loads": [
+            {
+              "type": "dead",
+              "value": 10
+            }
+          ],
+          "dead_load": 10,
+          "elevation": 6.6
         }
       ],
       "load_cases": [
         {
           "id": "D",
-          "type": "other",
-          "loads": [
-            {
-              "type": "distributed",
-              "element": "BX19",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX20",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX21",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F1",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX22",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX23",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX24",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F2",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX25",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F3",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX26",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F3",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            },
-            {
-              "type": "distributed",
-              "element": "BX27",
-              "wz": -33.333333333333336,
-              "wy": 0,
-              "story": "F3",
-              "source": "story_floor_loads",
-              "load_kind": "dead",
-              "reference_frame": "global"
-            }
-          ]
+          "type": "dead",
+          "loads": [],
+          "description": "Dead floor loads from stories.floor_loads"
         }
       ],
       "load_combinations": [
@@ -11644,7 +11292,7 @@
   {
     "id": "column-steel-5m-700",
     "inferredType": "column",
-    "description": "独立钢柱，H300x300，高5m，轴压700kN",
+    "description": "独立钢柱，HW300x300，高5m，轴压700kN",
     "model": {
       "schema_version": "2.0.0",
       "unit_system": "SI",
@@ -11697,14 +11345,21 @@
       "sections": [
         {
           "id": "1",
-          "name": "H300x300",
+          "name": "HW300x300",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 300,
+            "B": 300,
+            "tw": 10,
+            "tf": 15
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01192,
+            "Iy": 0.000204,
+            "Iz": 0.0000675,
+            "J": 0.00000423,
             "G": 79000
           }
         }
@@ -11849,14 +11504,20 @@
       "sections": [
         {
           "id": "1",
-          "name": "H600x250",
+          "name": "H600x250x10x16",
           "type": "H",
-          "purpose": "other",
+          "shape": {
+            "kind": "H",
+            "H": 600,
+            "B": 250,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01368,
+            "Iy": 0.0008349913600000005,
+            "Iz": 0.000041714,
+            "J": 8.72e-7,
             "G": 79000
           }
         }
@@ -12043,14 +11704,20 @@
       "sections": [
         {
           "id": "1",
-          "name": "H700x300",
+          "name": "H700x300x12x20",
           "type": "H",
-          "purpose": "other",
+          "shape": {
+            "kind": "H",
+            "H": 700,
+            "B": 300,
+            "tw": 12,
+            "tf": 20
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01992,
+            "Iy": 0.001675096000000001,
+            "Iz": 0.00009009503999999997,
+            "J": 0.0000019801600000000003,
             "G": 79000
           }
         }
@@ -12242,14 +11909,20 @@
       "sections": [
         {
           "id": "1",
-          "name": "H600x250",
+          "name": "H600x250x10x16",
           "type": "H",
-          "purpose": "other",
+          "shape": {
+            "kind": "H",
+            "H": 600,
+            "B": 250,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01368,
+            "Iy": 0.0008349913600000005,
+            "Iz": 0.000041714,
+            "J": 8.72e-7,
             "G": 79000
           }
         }
@@ -12411,11 +12084,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -12424,11 +12104,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -12436,9 +12123,7 @@
       "stories": [
         {
           "id": "F1",
-          "height": 4,
-          "floorLoad": 0,
-          "floorLoadUnit": "kN/m"
+          "height": 4
         }
       ],
       "load_cases": [
@@ -13843,7 +13528,27 @@
           "section": "1"
         },
         {
-          "id": "WVTA",
+          "id": "WDLT2",
+          "type": "truss",
+          "nodes": [
+            "B1",
+            "T2"
+          ],
+          "material": "1",
+          "section": "1"
+        },
+        {
+          "id": "WDLTA",
+          "type": "truss",
+          "nodes": [
+            "B2",
+            "TA"
+          ],
+          "material": "1",
+          "section": "1"
+        },
+        {
+          "id": "WDRTA",
           "type": "truss",
           "nodes": [
             "B3",
@@ -13863,50 +13568,20 @@
           "section": "1"
         },
         {
-          "id": "WVT4",
+          "id": "WDRT3",
           "type": "truss",
           "nodes": [
             "B4",
-            "T4"
-          ],
-          "material": "1",
-          "section": "1"
-        },
-        {
-          "id": "WD1",
-          "type": "truss",
-          "nodes": [
-            "B1",
-            "T2"
-          ],
-          "material": "1",
-          "section": "1"
-        },
-        {
-          "id": "WD2",
-          "type": "truss",
-          "nodes": [
-            "B2",
-            "TA"
-          ],
-          "material": "1",
-          "section": "1"
-        },
-        {
-          "id": "WD3",
-          "type": "truss",
-          "nodes": [
-            "B3",
             "T3"
           ],
           "material": "1",
           "section": "1"
         },
         {
-          "id": "WD4",
+          "id": "WVT4",
           "type": "truss",
           "nodes": [
-            "B3",
+            "B4",
             "T4"
           ],
           "material": "1",
@@ -15293,7 +14968,7 @@
             "Iy": 0.005208333333333333,
             "Iz": 0.005208333333333333,
             "J": 0.008802083333333334,
-            "G": 12500
+            "G": 13541.666666666668
           }
         },
         {
@@ -15311,7 +14986,7 @@
             "Iy": 0.0053999999999999986,
             "Iz": 0.0013499999999999996,
             "J": 0.003707859374999999,
-            "G": 12500
+            "G": 13541.666666666668
           }
         }
       ],
@@ -15622,11 +15297,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -15635,11 +15317,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -15647,15 +15336,11 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         },
         {
           "id": "F2",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         }
       ],
       "load_cases": [
@@ -15955,11 +15640,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -15968,11 +15660,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -15980,15 +15679,11 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         },
         {
           "id": "F2",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         }
       ],
       "load_cases": [
@@ -16228,11 +15923,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -16241,11 +15943,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -16253,15 +15962,11 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         },
         {
           "id": "F2",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         }
       ],
       "load_cases": [
@@ -16476,11 +16181,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -16489,11 +16201,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -16501,15 +16220,11 @@
       "stories": [
         {
           "id": "F1",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         },
         {
           "id": "F2",
-          "height": 3.6,
-          "floorLoad": 10,
-          "floorLoadUnit": "kN/m"
+          "height": 3.6
         }
       ],
       "load_cases": [
@@ -16689,11 +16404,18 @@
           "name": "HW350x350",
           "type": "H",
           "purpose": "column",
+          "shape": {
+            "kind": "H",
+            "H": 350,
+            "B": 350,
+            "tw": 12,
+            "tf": 19
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01739,
+            "Iy": 0.000403,
+            "Iz": 0.000136,
+            "J": 0.00000863,
             "G": 79000
           }
         },
@@ -16702,11 +16424,18 @@
           "name": "HN500x200",
           "type": "H",
           "purpose": "beam",
+          "shape": {
+            "kind": "H",
+            "H": 500,
+            "B": 200,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01143,
+            "Iy": 0.000502,
+            "Iz": 0.0000214,
+            "J": 0.00000124,
             "G": 79000
           }
         }
@@ -16714,9 +16443,7 @@
       "stories": [
         {
           "id": "F1",
-          "height": 4,
-          "floorLoad": 0,
-          "floorLoadUnit": "kN/m"
+          "height": 4
         }
       ],
       "load_cases": [
@@ -16870,14 +16597,20 @@
       "sections": [
         {
           "id": "1",
-          "name": "H600x250",
+          "name": "H600x250x10x16",
           "type": "H",
-          "purpose": "other",
+          "shape": {
+            "kind": "H",
+            "H": 600,
+            "B": 250,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01368,
+            "Iy": 0.0008349913600000005,
+            "Iz": 0.000041714,
+            "J": 8.72e-7,
             "G": 79000
           }
         }
@@ -17024,14 +16757,20 @@
       "sections": [
         {
           "id": "1",
-          "name": "H600x250",
+          "name": "H600x250x10x16",
           "type": "H",
-          "purpose": "other",
+          "shape": {
+            "kind": "H",
+            "H": 600,
+            "B": 250,
+            "tw": 10,
+            "tf": 16
+          },
           "properties": {
-            "A": 0.012,
-            "Iy": 0.0003,
-            "Iz": 0.00008,
-            "J": 0.00001,
+            "A": 0.01368,
+            "Iy": 0.0008349913600000005,
+            "Iz": 0.000041714,
+            "J": 8.72e-7,
             "G": 79000
           }
         }
