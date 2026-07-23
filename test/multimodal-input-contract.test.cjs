@@ -29,6 +29,10 @@ test("agent input keeps image evidence, engineering specification, and task in s
   assert.match(message, /\[Benchmark vision attachment summaries\]/);
   assert.match(message, /\[Engineering specification\]\nMaterial Q345; section B1\./);
   assert.match(message, /\[User task\]\nBuild and analyze the model\./);
+  assert.ok(
+    message.indexOf("[User task]") < message.indexOf("[Engineering specification]"),
+    "the structural task must lead the engineering properties for robust routing",
+  );
   assert.doesNotMatch(message, /vision-model-not-for-agent|semantic-file-name/);
 });
 

@@ -23,6 +23,8 @@ const EXECUTION_MODES = ["web-stream", "full"];
 const DEFAULT_CASE_TIMEOUT_MS = 15 * 60 * 1000;
 const SUPERVISED_HARD_TIMEOUT_GRACE_MS = 3 * 60 * 1000;
 const DEFAULT_PROVIDER_RATE_LIMIT_RERUNS = 5;
+const DEFAULT_PROVIDER_RATE_LIMIT_BACKOFF_MS = 30 * 1000;
+const DEFAULT_PROVIDER_RATE_LIMIT_MAX_BACKOFF_MS = 2 * 60 * 1000;
 const BENCHMARK_UTILITY_SKILL_IDS = [
   "validation-structure-model",
   "report-export-builtin",
@@ -106,6 +108,7 @@ function inferEvaluationFocus(assertions = []) {
         break;
       case "has_interaction_questions":
       case "should_not_analyze":
+      case "safe_non_execution":
       case "no_bad_model":
         focus.add("interaction");
         break;
@@ -500,21 +503,43 @@ function benchmarkEngineeringSpecification(assertions, locale) {
   if (!model) return "";
 
   const coordinateSystem = model.coordinate_system || {};
-  const loadCases = (model.load_cases || []).map((loadCase) => ({
-    id: loadCase.id,
-    type: loadCase.type,
-  }));
-  const payload = {
-    coordinate_system: coordinateSystem,
-    materials: model.materials || [],
-    sections: model.sections || [],
-    load_cases: loadCases,
-    load_combinations: model.load_combinations || [],
-  };
+  const valueText = (value) => (value === undefined ? null : String(value));
+  const recordText = (record, keys) => keys
+    .map((key) => {
+      const value = record?.[key];
+      return value === undefined ? null : `${key}=${valueText(value)}`;
+    })
+    .filter(Boolean)
+    .join(", ");
+  const coordinateText = recordText(coordinateSystem, ["semantics", "version", "dimension", "plane", "dof_order"]);
+  const materialsText = (model.materials || []).map((material) => (
+    recordText(material, ["id", "name", "grade", "category", "E", "nu", "rho", "fy", "fc"])
+  )).join("; ");
+  const sectionsText = (model.sections || []).map((section) => {
+    const identity = recordText(section, ["id", "name", "type", "purpose", "standard_steel_name"]);
+    const shape = recordText(section.shape, ["kind", "H", "B", "tw", "tf", "D", "t"]);
+    const properties = recordText(section.properties, ["A", "Iy", "Iz", "J", "G"]);
+    const portalMember = model.metadata?.inferredType === "portal-frame"
+      && section.shape?.kind === "H"
+      && [section.shape.H, section.shape.B, section.shape.tw, section.shape.tf].every(Number.isFinite)
+      ? `member=H${section.shape.H}x${section.shape.B}x${section.shape.tw}x${section.shape.tf}`
+      : "";
+    return [portalMember, identity, shape && `shape(${shape})`, properties && `properties(${properties})`]
+      .filter(Boolean)
+      .join(", ");
+  }).join("; ");
   const instruction = locale === "en"
-    ? "Use the following benchmark analysis properties exactly in every mode; do not replace them with skill or template defaults. Apply only the loads stated in the user task, do not add member self-weight, and do not duplicate a converted physical load. Geometry, topology, supports, and load placement must still be reconstructed from the user input."
-    : "所有模式均须严格使用以下基准分析属性，不得替换为 skill 或模板默认值。仅施加用户任务声明的荷载，不附加构件自重，也不得重复施加同一个经折算的物理荷载。几何、拓扑、支座和荷载位置仍须根据用户输入自行建立。";
-  return `${instruction}\n${JSON.stringify(payload)}`;
+    ? "Use these analysis properties exactly in every mode. Use only the user task to classify the structure, but include these properties in parameter extraction. Do not add self-weight or duplicate a converted load; reconstruct geometry, topology, supports, and load placement from the task."
+    : "所有模式均须严格使用以下分析属性。结构分类只使用用户任务，参数提取须同时包含这些属性。不得附加构件自重或重复施加折算荷载；几何、拓扑、支座和荷载位置仍由用户任务确定。";
+  const labels = locale === "en"
+    ? ["Coordinate system", "Materials", "Sections"]
+    : ["坐标系", "材料", "截面"];
+  return [
+    instruction,
+    `${labels[0]}: ${coordinateText}`,
+    `${labels[1]}: ${materialsText}`,
+    `${labels[2]}: ${sectionsText}`,
+  ].join("\n");
 }
 
 function attachVisionSummariesToMessage(message, summaries, locale, engineeringSpecification = "") {
@@ -536,13 +561,12 @@ function attachVisionSummariesToMessage(message, summaries, locale, engineeringS
     sections.push(`${header}\n${instruction}\n\n${blocks.join("\n\n")}`);
   }
 
+  const taskHeader = locale === "en" ? "[User task]" : "[用户任务]";
+  sections.push(`${taskHeader}\n${message}`);
   if (specification) {
     const header = locale === "en" ? "[Engineering specification]" : "[工程说明]";
     sections.push(`${header}\n${specification}`);
   }
-
-  const taskHeader = locale === "en" ? "[User task]" : "[用户任务]";
-  sections.push(`${taskHeader}\n${message}`);
   return sections.join("\n\n");
 }
 
@@ -700,6 +724,9 @@ async function runAgentLikeWeb(service, input) {
     while (true) {
       const next = await raceWithSignal(iterator.next(), input.signal);
       if (next.done) break;
+      if (next.value?.type === "error") {
+        throw new Error(next.value.error || "agent stream failed");
+      }
       // Drain the stream exactly like the browser does; evaluation reads the
       // final graph state from the checkpoint below.
     }
@@ -820,7 +847,7 @@ function mergeTurnResults(scenario, turnResults, totalDurationMs) {
 function supervisedOutputPath(outputPath, scenario) {
   const safeId = safeConversationIdPart(scenario.id);
   const dir = outputPath
-    ? `${outputPath}.cases`
+    ? `${path.resolve(BENCH_ROOT, outputPath)}.cases`
     : path.join(BENCH_ROOT, "results", "supervised-cases");
   fs.mkdirSync(dir, { recursive: true });
   return path.join(dir, `${safeId}.json`);
@@ -905,6 +932,19 @@ function maxProviderRateLimitReruns() {
   return Number.isFinite(value) && value >= 0 ? Math.floor(value) : DEFAULT_PROVIDER_RATE_LIMIT_RERUNS;
 }
 
+function calculateProviderRateLimitBackoffMs(rerunNumber, baseMs, maxMs) {
+  const safeRerun = Math.max(1, Math.floor(Number(rerunNumber) || 1));
+  const safeBase = Math.max(0, Number(baseMs) || 0);
+  const safeMax = Math.max(safeBase, Number(maxMs) || safeBase);
+  return Math.min(safeMax, safeBase * (2 ** (safeRerun - 1)));
+}
+
+function providerRateLimitBackoffMs(rerunNumber) {
+  const baseMs = Number(process.env.LLM_BENCHMARK_RATE_LIMIT_BACKOFF_MS || DEFAULT_PROVIDER_RATE_LIMIT_BACKOFF_MS);
+  const maxMs = Number(process.env.LLM_BENCHMARK_RATE_LIMIT_MAX_BACKOFF_MS || DEFAULT_PROVIDER_RATE_LIMIT_MAX_BACKOFF_MS);
+  return calculateProviderRateLimitBackoffMs(rerunNumber, baseMs, maxMs);
+}
+
 function readSingleScenarioResult(outputPath) {
   if (!fs.existsSync(outputPath)) return null;
   const record = JSON.parse(fs.readFileSync(outputPath, "utf8"));
@@ -982,7 +1022,13 @@ async function runSupervisedBenchmark(options, sutRoot, scenarios) {
           `Provider rate limit persisted for ${scenario.id} after ${rateLimitRerunLimit} rerun(s); aborting without counting this case.`,
         );
       }
-      process.stdout.write("  provider rate limit detected; discarding this attempt and rerunning the case from scratch.\n");
+      const backoffMs = providerRateLimitBackoffMs(providerRateLimitReruns);
+      process.stdout.write(
+        `  provider rate limit detected; discarding this attempt and retrying after ${(backoffMs / 1000).toFixed(1)}s.\n`,
+      );
+      if (backoffMs > 0) {
+        await new Promise((resolve) => setTimeout(resolve, backoffMs));
+      }
     }
     evaluation.executionProfile = {
       ...(evaluation.executionProfile || {}),
@@ -1245,7 +1291,10 @@ module.exports = {
   attachVisionSummariesToMessage,
   benchmarkEngineeringSpecification,
   buildVisionPrompt,
+  calculateProviderRateLimitBackoffMs,
+  runAgentLikeWeb,
   runBenchmark,
+  supervisedOutputPath,
 };
 
 if (require.main === module) {
