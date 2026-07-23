@@ -26,6 +26,31 @@ test("all committed ground-truth models match themselves", () => {
   }
 });
 
+test("ground-truth models do not contain duplicate elements", () => {
+  for (const entry of fixtures) {
+    const endpoints = new Set();
+    for (const element of entry.model.elements) {
+      const key = [...element.nodes].sort().join("::");
+      assert.equal(endpoints.has(key), false, `${entry.id}: duplicate element at ${key}`);
+      endpoints.add(key);
+    }
+  }
+});
+
+test("concrete frame section shear modulus matches its material grade", () => {
+  for (const grade of ["c30", "c40"]) {
+    const model = fixture(`concrete-frame-2s2b-6m-10k-${grade}`);
+    const material = model.materials.find((item) => item.category === "concrete");
+    const expectedG = material.E / (2 * (1 + material.nu));
+    for (const section of model.sections) {
+      assert.ok(
+        Math.abs(section.properties.G - expectedG) <= 1e-9,
+        `${grade} ${section.id}: expected G=${expectedG}, got ${section.properties.G}`,
+      );
+    }
+  }
+});
+
 test("entity identifiers may differ when engineering relationships are preserved", () => {
   const expected = fixture();
   const actual = fixture();
@@ -146,6 +171,21 @@ test("load direction and member location are checked independently of total load
   assert.ok(compareStructuralModels(wrongLocation, expected).failures.includes("loads"));
 });
 
+test("equivalent nodal load components may be split or combined at the same target", () => {
+  const expected = fixture("column-concrete-4p2-600-30");
+  const actual = fixture("column-concrete-4p2-600-30");
+  actual.load_cases[0].type = "dead";
+  actual.load_cases[0].loads = [{
+    type: "nodal",
+    node: "N2",
+    fx: 30,
+    fz: -600,
+    reference_frame: "global",
+  }];
+
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+});
+
 test("load magnitudes use a unified five-percent default tolerance", () => {
   const expected = fixture();
   const withinTolerance = fixture();
@@ -164,6 +204,23 @@ test("load-combination factors are checked", () => {
   const comparison = compareStructuralModels(actual, expected);
   assert.equal(comparison.pass, false);
   assert.ok(comparison.failures.includes("load combinations"));
+});
+
+test("equivalent load-case partitions match when their factored physical loads are identical", () => {
+  const expected = fixture("frame-3s2b-6m-10k-wind");
+  const actual = fixture("frame-3s2b-6m-10k-wind");
+  const loads = actual.load_cases[0].loads;
+  actual.load_cases = [
+    { id: "LINE", type: "other", loads: loads.filter((load) => load.element) },
+    { id: "LAT", type: "other", loads: loads.filter((load) => load.node) },
+  ];
+  actual.load_combinations = [{ id: "ULS", factors: { LINE: 1, LAT: 1 } }];
+
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+
+  actual.load_combinations[0].factors.LAT = 1.2;
+  const mismatch = compareStructuralModels(actual, expected);
+  assert.ok(mismatch.failures.includes("load combinations"));
 });
 
 test("unspecified load categories are compatible without weakening explicit categories", () => {
@@ -185,13 +242,56 @@ test("canonical story loads match legacy fields and replace derived solver loads
   actual.stories = actual.stories.map((story) => ({
     id: story.id,
     height: story.height,
-    floor_loads: [{ type: "dead", value: story.floorLoad }],
-    dead_load: story.floorLoad,
+    floorLoad: story.floor_loads.find((load) => load.type === "dead").value,
+    floorLoadUnit: "kN/m2",
   }));
-  actual.load_cases[0].loads = [];
+  actual.load_cases[0].loads = [
+    { type: "distributed", element: "BX9", wz: -25, story: "F1", source: "story_floor_loads", load_kind: "dead", reference_frame: "global" },
+    { type: "distributed", element: "BX10", wz: -25, story: "F1", source: "story_floor_loads", load_kind: "dead", reference_frame: "global" },
+    { type: "distributed", element: "BX11", wz: -25, story: "F2", source: "story_floor_loads", load_kind: "dead", reference_frame: "global" },
+    { type: "distributed", element: "BX12", wz: -25, story: "F2", source: "story_floor_loads", load_kind: "dead", reference_frame: "global" },
+  ];
   assert.equal(compareStructuralModels(actual, expected).pass, true);
-  actual.stories[0].floor_loads[0].value *= 1.1;
+  actual.stories[0].floorLoad *= 1.1;
   assert.ok(compareStructuralModels(actual, expected).failures.includes("stories"));
+});
+
+test("unconstrained story metadata is ignored when ground truth declares no stories", () => {
+  const expected = fixture("portal-complex-ds");
+  const actual = fixture("portal-complex-ds");
+  actual.stories = [{ id: "F1", height: 9, elevation: 0 }];
+
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+
+  actual.stories[0].floor_loads = [{ type: "dead", value: 5 }];
+  assert.ok(compareStructuralModels(actual, expected).failures.includes("stories"));
+});
+
+test("2-D canonical story line loads match equivalent explicit beam loads", () => {
+  const expected = fixture("frame-2s1b-6m-10k");
+  const actual = fixture("frame-2s1b-6m-10k");
+  actual.load_cases[0].loads = [];
+  actual.stories = actual.stories.map((story, index) => ({
+    ...story,
+    elevation: index * story.height,
+    floor_loads: [{ type: "dead", value: 60 }],
+    dead_load: 60,
+  }));
+
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+  actual.stories[0].floor_loads[0].value = 50;
+  actual.stories[0].dead_load = 50;
+  assert.ok(compareStructuralModels(actual, expected).failures.includes("loads"));
+});
+
+test("explicit beam loads do not require duplicate story load metadata", () => {
+  const expected = fixture("frame-simple-1s1b");
+  const actual = fixture("frame-simple-1s1b");
+  actual.stories = actual.stories.map((story) => ({ id: story.id, height: story.height, elevation: 0 }));
+
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+  actual.load_cases[0].loads[0].wz = -40;
+  assert.ok(compareStructuralModels(actual, expected).failures.includes("loads"));
 });
 
 test("story definitions and entity assignments are checked", () => {
