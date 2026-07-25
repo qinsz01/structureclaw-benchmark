@@ -1,10 +1,13 @@
 const path = require("node:path");
 const fs = require("node:fs");
 const { pathToFileURL } = require("node:url");
-const { spawn } = require("node:child_process");
+const { spawn, spawnSync } = require("node:child_process");
+const { createHash, randomUUID } = require("node:crypto");
 
 const { evaluateScenario } = require("./lib/evaluate.cjs");
 const { printScenarioResult, printSummary, writeJsonOutput } = require("./lib/report.cjs");
+const { buildRunFingerprints } = require("./lib/run-fingerprint.cjs");
+const { installSolverGate } = require("./lib/solver-gate.cjs");
 
 // Resolve the System-Under-Test root (the structureclaw main repo).
 // Priority: SCLAW_ROOT env > parent-of-parent (works when this repo is checked
@@ -12,11 +15,6 @@ const { printScenarioResult, printSummary, writeJsonOutput } = require("./lib/re
 const BENCH_ROOT = __dirname;
 const SCLAW_ROOT = process.env.SCLAW_ROOT
   || path.resolve(BENCH_ROOT, "../..");
-const GROUND_TRUTH_MODELS = JSON.parse(fs.readFileSync(
-  path.join(BENCH_ROOT, "fixtures", "ground-truth-models.json"),
-  "utf8",
-));
-const GROUND_TRUTH_BY_ID = new Map(GROUND_TRUTH_MODELS.map((entry) => [entry.id, entry.model]));
 
 const BENCHMARK_MODES = ["auto", "oracle-specialist", "generic-only"];
 const EXECUTION_MODES = ["web-stream", "full"];
@@ -25,10 +23,22 @@ const SUPERVISED_HARD_TIMEOUT_GRACE_MS = 3 * 60 * 1000;
 const DEFAULT_PROVIDER_RATE_LIMIT_RERUNS = 5;
 const DEFAULT_PROVIDER_RATE_LIMIT_BACKOFF_MS = 30 * 1000;
 const DEFAULT_PROVIDER_RATE_LIMIT_MAX_BACKOFF_MS = 2 * 60 * 1000;
+const DEFAULT_BENCHMARK_MAX_TOKENS = 16_384;
 const BENCHMARK_UTILITY_SKILL_IDS = [
   "validation-structure-model",
   "report-export-builtin",
 ];
+const BENCHMARK_TOOL_ALLOWLIST = new Set([
+  "detect_structure_type",
+  "extract_draft_params",
+  "build_model",
+  "validate_model",
+  "run_analysis",
+  "generate_report",
+  "ask_user_clarification",
+  "set_session_config",
+  "analyze_file",
+]);
 const VISION_MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 if (process.env.YJK_CLOSE_AFTER_RUN === undefined) {
   process.env.YJK_CLOSE_AFTER_RUN = "1";
@@ -46,6 +56,11 @@ const DEFAULT_MODES_BY_TASK_FAMILY = {
   standard_workflow: BENCHMARK_MODES,
   interactive_robustness: ["auto"],
   multimodal_reverse_engineering: BENCHMARK_MODES,
+};
+const ANALYSIS_ENGINE_BY_SKILL = {
+  "opensees-static": "builtin-opensees",
+  "pkpm-static": "builtin-pkpm",
+  "yjk-static": "builtin-yjk",
 };
 
 const LEGACY_TASK_FAMILY = {
@@ -143,6 +158,10 @@ function normalizeScenarioMetadata(scenario) {
   const benchmarkStructureType = scenario.benchmarkStructureType || deriveBenchmarkStructureType(structureType);
   const split = scenario.split || (taskFamily === "multimodal_reverse_engineering" ? "auxiliary" : "core");
   const difficulty = scenario.difficulty || (taskFamily === "standard_workflow" ? "L1" : "L2");
+  const analysisSkillTarget = scenario.analysisSkillTarget || "opensees-static";
+  const analysisEngineTarget = scenario.analysisEngineTarget
+    || ANALYSIS_ENGINE_BY_SKILL[analysisSkillTarget]
+    || null;
   const evaluationFocus = Array.isArray(scenario.evaluationFocus) && scenario.evaluationFocus.length > 0
     ? scenario.evaluationFocus
     : inferEvaluationFocus(collectScenarioAssertions(scenario));
@@ -159,6 +178,8 @@ function normalizeScenarioMetadata(scenario) {
     benchmarkStructureType,
     difficulty,
     skillTarget,
+    analysisSkillTarget,
+    analysisEngineTarget,
     evaluationFocus,
   };
 }
@@ -227,6 +248,13 @@ function loadScenarios(options) {
   return all;
 }
 
+function orderScenarios(scenarios, seed) {
+  if (!seed || scenarios.length < 2) return [...scenarios];
+  const digest = createHash("sha256").update(String(seed)).digest();
+  const offset = digest.readUInt32BE(0) % scenarios.length;
+  return [...scenarios.slice(offset), ...scenarios.slice(0, offset)];
+}
+
 function parseBenchmarkOptions(args) {
   let scenarioId;
   let outputPath;
@@ -237,6 +265,9 @@ function parseBenchmarkOptions(args) {
   let taskFamily;
   let split;
   let supervise = false;
+  let formal = false;
+  let repeatId = null;
+  let scenarioOrderSeed = null;
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--scenario" && args[i + 1]) {
       scenarioId = args[++i];
@@ -250,12 +281,18 @@ function parseBenchmarkOptions(args) {
       execution = args[++i];
     } else if (args[i] === "--case-timeout-ms" && args[i + 1]) {
       caseTimeoutMs = Number(args[++i]);
+    } else if (args[i] === "--repeat-id" && args[i + 1]) {
+      repeatId = Number(args[++i]);
+    } else if (args[i] === "--scenario-order-seed" && args[i + 1]) {
+      scenarioOrderSeed = args[++i];
     } else if ((args[i] === "--family" || args[i] === "--task-family") && args[i + 1]) {
       taskFamily = args[++i];
     } else if (args[i] === "--split" && args[i + 1]) {
       split = args[++i];
     } else if (args[i] === "--supervise") {
       supervise = true;
+    } else if (args[i] === "--formal") {
+      formal = true;
     }
   }
   if (mode !== "all" && !BENCHMARK_MODES.includes(mode)) {
@@ -267,7 +304,311 @@ function parseBenchmarkOptions(args) {
   if (!Number.isFinite(caseTimeoutMs) || caseTimeoutMs <= 0) {
     throw new Error("--case-timeout-ms must be a positive number");
   }
-  return { scenarioId, outputPath, sutRoot, mode, execution, caseTimeoutMs, taskFamily, split, supervise };
+  return {
+    scenarioId,
+    outputPath,
+    sutRoot,
+    mode,
+    execution,
+    caseTimeoutMs,
+    taskFamily,
+    split,
+    supervise,
+    formal,
+    repeatId,
+    scenarioOrderSeed,
+  };
+}
+
+function safeEndpoint(value) {
+  if (!value) return null;
+  try {
+    const endpoint = new URL(value);
+    endpoint.username = "";
+    endpoint.password = "";
+    endpoint.search = "";
+    endpoint.hash = "";
+    return endpoint.toString().replace(/\/$/, "");
+  } catch {
+    return "(invalid URL)";
+  }
+}
+
+function gitMetadata(root) {
+  const runGit = (args) => spawnSync("git", args, {
+    cwd: root,
+    encoding: "utf8",
+    windowsHide: true,
+  });
+  const revision = runGit(["rev-parse", "HEAD"]);
+  const status = runGit(["status", "--porcelain"]);
+  return {
+    revision: revision.status === 0 ? revision.stdout.trim() : null,
+    dirty: status.status === 0 ? status.stdout.trim().length > 0 : null,
+  };
+}
+
+function formalRunViolations(options, scenarios, revisions) {
+  if (!options.formal) return [];
+  const violations = [];
+  if (options.scenarioId) {
+    violations.push("formal runs cannot select a single scenario");
+  }
+  if (!options.outputPath) {
+    violations.push("formal runs require --output");
+  }
+  if (!options.supervise) {
+    violations.push("formal runs require --supervise");
+  }
+  if (![1, 2, 3].includes(options.repeatId)) {
+    violations.push("formal runs require --repeat-id 1, 2, or 3");
+  }
+  if (!process.env.SCLAW_BENCHMARK_RUNTIME_ID) {
+    violations.push("formal runs require an isolated SCLAW_BENCHMARK_RUNTIME_ID");
+  }
+  if (!["per-engine", "global"].includes(process.env.SCLAW_BENCHMARK_SOLVER_GATE || "")) {
+    violations.push("formal runs require the benchmark solver gate");
+  }
+  if (!process.env.SCLAW_BENCHMARK_FORMAL_JOB_ID) {
+    violations.push("formal runs require SCLAW_BENCHMARK_FORMAL_JOB_ID");
+  }
+  if (!/^[a-f0-9]{64}$/i.test(process.env.SCLAW_BENCHMARK_FORMAL_MATRIX_SHA256 || "")) {
+    violations.push("formal runs require SCLAW_BENCHMARK_FORMAL_MATRIX_SHA256");
+  }
+  const yjkCooldownMs = Number(process.env.SCLAW_BENCHMARK_YJK_COOLDOWN_MS);
+  if (!Number.isSafeInteger(yjkCooldownMs) || yjkCooldownMs <= 0) {
+    violations.push("formal runs require a positive YJK solver cooldown");
+  }
+  if (scenarios.some((scenario) => Number(scenario.maxRetries || 0) !== 0)) {
+    violations.push("formal runs require maxRetries=0 for every scenario");
+  }
+  for (const [name, revision] of Object.entries(revisions)) {
+    if (!revision?.revision) {
+      violations.push(`${name} revision is unavailable`);
+    } else if (revision.dirty !== false) {
+      violations.push(`${name} worktree must be clean`);
+    }
+  }
+  return violations;
+}
+
+function assertFormalRunEligibility(options, sutRoot, scenarios) {
+  if (!options.formal) return;
+  const revisions = {
+    structureclaw: gitMetadata(sutRoot),
+    benchmark: gitMetadata(BENCH_ROOT),
+  };
+  const violations = formalRunViolations(options, scenarios, revisions);
+  if (violations.length > 0) {
+    throw new Error(
+      "Formal benchmark run rejected:\n"
+      + violations.map((violation) => `- ${violation}`).join("\n"),
+    );
+  }
+}
+
+function configuredCommercialVersions() {
+  const versions = {
+    yjkVersion: process.env.YJK_VERSION || null,
+    pkpmVersion: process.env.PKPM_VERSION || null,
+  };
+  const dataDir = process.env.SCLAW_DATA_DIR;
+  if ((!versions.yjkVersion || !versions.pkpmVersion) && dataDir) {
+    try {
+      const settings = JSON.parse(fs.readFileSync(path.join(dataDir, "settings.json"), "utf8"));
+      versions.yjkVersion ||= settings.yjk?.version || null;
+      const cyclePath = settings.pkpm?.cyclePath;
+      if (!versions.pkpmVersion && typeof cyclePath === "string" && cyclePath.trim()) {
+        versions.pkpmVersion = path.basename(path.dirname(path.dirname(cyclePath))) || null;
+      }
+    } catch {
+      // Runtime settings are optional; explicit environment values remain authoritative.
+    }
+  }
+  return versions;
+}
+
+function configuredAnalysisPython(sutRoot) {
+  const dataDir = process.env.SCLAW_DATA_DIR;
+  if (dataDir) {
+    try {
+      const settings = JSON.parse(fs.readFileSync(path.join(dataDir, "settings.json"), "utf8"));
+      if (typeof settings.analysis?.pythonBin === "string" && settings.analysis.pythonBin.trim()) {
+        return settings.analysis.pythonBin.trim();
+      }
+    } catch {
+      // Runtime settings are optional; fall through to the standard analysis runtime.
+    }
+  }
+  if (process.env.SCLAW_ANALYSIS_PYTHON) return process.env.SCLAW_ANALYSIS_PYTHON;
+  const executable = process.platform === "win32" ? "python.exe" : "python";
+  const candidates = [
+    path.join(sutRoot, "backend", ".venv", process.platform === "win32" ? "Scripts" : "bin", executable),
+    process.env.USERPROFILE
+      ? path.join(
+          process.env.USERPROFILE,
+          ".structureclaw",
+          ".venv",
+          process.platform === "win32" ? "Scripts" : "bin",
+          executable,
+        )
+      : null,
+  ].filter(Boolean);
+  return candidates.find((candidate) => fs.existsSync(candidate)) || null;
+}
+
+function detectOpenSeesRuntime(sutRoot, run = spawnSync) {
+  const pythonBin = configuredAnalysisPython(sutRoot);
+  if (!pythonBin) return null;
+  const script = [
+    "import importlib.metadata as metadata, json, sys",
+    "import openseespy.opensees as ops",
+    "runtime = 'openseespywin' if sys.platform == 'win32' else 'openseespylinux'",
+    "def version(name):",
+    "    try:",
+    "        return metadata.version(name)",
+    "    except metadata.PackageNotFoundError:",
+    "        return None",
+    "print(json.dumps({'packageVersion': version('openseespy'), 'runtimePackage': runtime, "
+      + "'runtimePackageVersion': version(runtime), 'engineVersion': str(ops.version())}))",
+  ].join("\n");
+  const probe = run(pythonBin, ["-c", script], {
+    encoding: "utf8",
+    windowsHide: true,
+    timeout: 30_000,
+  });
+  if (probe.status !== 0) return null;
+  try {
+    const payload = JSON.parse(probe.stdout.trim().split(/\r?\n/).at(-1));
+    return {
+      packageVersion: payload.packageVersion || null,
+      runtimePackage: payload.runtimePackage || null,
+      runtimePackageVersion: payload.runtimePackageVersion || null,
+      engineVersion: payload.engineVersion || null,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function buildRunMetadata(options, sutRoot, scenarios) {
+  const configuredProviderTimeout = Number(process.env.LLM_BENCHMARK_PROVIDER_REQUEST_TIMEOUT_MS);
+  const providerRequestTimeoutMs = Number.isFinite(configuredProviderTimeout)
+    && configuredProviderTimeout > 0
+    ? configuredProviderTimeout
+    : options.caseTimeoutMs;
+  const commercialVersions = configuredCommercialVersions();
+  const openSees = process.env.SCLAW_BENCHMARK_SUPERVISED_CHILD === "1"
+    ? null
+    : detectOpenSeesRuntime(sutRoot);
+  const metadata = {
+    schemaVersion: "structureclaw-benchmark-run/v3",
+    runId: process.env.LLM_BENCHMARK_RUN_ID || randomUUID(),
+    repeatId: options.repeatId || null,
+    startedAt: new Date().toISOString(),
+    plannedScenarioCount: scenarios.length,
+    selection: {
+      scenarioId: options.scenarioId || null,
+      taskFamily: options.taskFamily || null,
+      split: options.split || null,
+      mode: options.mode,
+      execution: options.execution,
+      supervised: options.supervise,
+      caseTimeoutMs: options.caseTimeoutMs,
+      repeatId: options.repeatId || null,
+      scenarioOrderSeed: options.scenarioOrderSeed || null,
+    },
+    models: {
+      primary: {
+        configId: process.env.LLM_BENCHMARK_PRIMARY_CONFIG_ID || null,
+        model: process.env.LLM_MODEL || null,
+        endpoint: safeEndpoint(process.env.LLM_BASE_URL),
+        temperature: 0,
+        maxTokens: benchmarkMaxTokens(),
+        providerMaxRetries: 0,
+        timeoutMs: providerRequestTimeoutMs,
+      },
+      judge: {
+        configId: process.env.LLM_BENCHMARK_JUDGE_CONFIG_ID || null,
+        model: process.env.LLM_JUDGE_MODEL || process.env.LLM_MODEL || null,
+        endpoint: safeEndpoint(process.env.LLM_JUDGE_BASE_URL || process.env.LLM_BASE_URL),
+        temperature: 0,
+        maxTokens: 4096,
+        maxAttempts: 3,
+        timeoutMs: 120000,
+      },
+      vision: process.env.LLM_VISION_MODEL
+        ? {
+            configId: process.env.LLM_BENCHMARK_VISION_CONFIG_ID || null,
+            model: process.env.LLM_VISION_MODEL,
+            endpoint: safeEndpoint(process.env.LLM_VISION_BASE_URL),
+            temperature: process.env.LLM_VISION_TEMPERATURE === undefined
+              || process.env.LLM_VISION_TEMPERATURE === ""
+              ? 0
+              : Number(process.env.LLM_VISION_TEMPERATURE),
+            maxTokens: benchmarkMaxTokens(),
+            providerMaxRetries: 0,
+            timeoutMs: providerRequestTimeoutMs,
+          }
+        : null,
+    },
+    revisions: {
+      structureclaw: gitMetadata(sutRoot),
+      benchmark: gitMetadata(BENCH_ROOT),
+    },
+    runtime: {
+      node: process.version,
+      platform: process.platform,
+      architecture: process.arch,
+      yjkVersion: commercialVersions.yjkVersion,
+      pkpmVersion: commercialVersions.pkpmVersion,
+      openSees,
+      llmRoutingAndExtractionOnly: process.env.SCLAW_BENCHMARK_LLM_ONLY === "1",
+      runtimeId: process.env.SCLAW_BENCHMARK_RUNTIME_ID || null,
+      backendPrebuilt: process.env.SCLAW_BENCHMARK_BACKEND_PREBUILT === "1",
+    },
+    measurement: {
+      duration: "vision preprocessing plus agent execution; excludes judge evaluation and setup",
+      primaryTokens: "provider usage attached to checkpointed agent and benchmark nested-call messages; includes nested routing and parameter extraction",
+      visionTokens: "provider usage from benchmark vision preprocessing, reported separately",
+      judgeTokens: "excluded from agent-efficiency metrics",
+      totalApiCostAvailable: false,
+    },
+    protocol: {
+      phase: options.formal ? "formal" : "development",
+      targeted: Boolean(options.scenarioId),
+      commonCoreComparison: true,
+      automaticModelRetries: 0,
+      solverGate: process.env.SCLAW_BENCHMARK_SOLVER_GATE || "off",
+      yjkCooldownMs: Number(process.env.SCLAW_BENCHMARK_YJK_COOLDOWN_MS || 0),
+      formalJobId: process.env.SCLAW_BENCHMARK_FORMAL_JOB_ID || null,
+      formalMatrixSha256: process.env.SCLAW_BENCHMARK_FORMAL_MATRIX_SHA256 || null,
+    },
+  };
+  const inheritedFingerprints = process.env.SCLAW_BENCHMARK_FINGERPRINTS_JSON;
+  if (inheritedFingerprints) {
+    metadata.fingerprints = JSON.parse(inheritedFingerprints);
+  } else {
+    metadata.fingerprints = buildRunFingerprints({
+      sutRoot,
+      benchRoot: BENCH_ROOT,
+      scenarios,
+      runtimeConfig: {
+        selection: metadata.selection,
+        models: metadata.models,
+        runtime: metadata.runtime,
+        protocol: metadata.protocol,
+      },
+    });
+  }
+  return metadata;
+}
+
+function benchmarkMaxTokens() {
+  const configured = Number(process.env.SCLAW_BENCHMARK_MAX_TOKENS);
+  return Number.isSafeInteger(configured) && configured > 0
+    ? configured
+    : DEFAULT_BENCHMARK_MAX_TOKENS;
 }
 
 function buildFeedbackFromEvaluation(evaluation, locale = "zh") {
@@ -305,6 +646,39 @@ function resolveAttachmentPaths(scenario) {
     resolved.turns = scenario.turns.map((t) => ({ ...t, attachments: resolve(t.attachments) }));
   }
   return resolved;
+}
+
+function attachSolverGateProfile(evaluation, solverGate) {
+  if (!evaluation || !solverGate) return evaluation;
+  const events = solverGate.snapshot();
+  const solverQueueWaitMs = events.reduce(
+    (total, event) => total + Number(event.queueWaitMs || 0),
+    0,
+  );
+  const solverExecutionMs = events.reduce(
+    (total, event) => total + Number(event.solverExecutionMs || 0),
+    0,
+  );
+  const cooldownMs = events.reduce(
+    (total, event) => total + Number(event.cooldownMs || 0),
+    0,
+  );
+  evaluation.executionProfile = {
+    ...(evaluation.executionProfile || {}),
+    solverGate: {
+      enabled: solverGate.enabled,
+      mode: solverGate.mode,
+      events,
+      solverQueueWaitMs,
+      solverExecutionMs,
+      cooldownMs,
+    },
+    effectiveDurationMs: Math.max(
+      0,
+      Number(evaluation.durationMs || 0) - solverQueueWaitMs - cooldownMs,
+    ),
+  };
+  return evaluation;
 }
 
 function runtimeUploadRoot() {
@@ -366,17 +740,27 @@ function visionConfig() {
   if (!Number.isFinite(temperature)) {
     throw new Error("LLM_VISION_TEMPERATURE must be a finite number when set");
   }
-  return { model, baseUrl, apiKey, temperature };
+  return { model, baseUrl, apiKey, temperature, maxTokens: benchmarkMaxTokens() };
 }
 
 function chatCompletionsUrl(baseUrl) {
   const trimmed = String(baseUrl || "").replace(/\/+$/, "");
-  return `${trimmed}/chat/completions`;
+  if (/\/chat\/completions$/i.test(trimmed)) return trimmed;
+  return /\/v\d+$/i.test(trimmed)
+    ? `${trimmed}/chat/completions`
+    : `${trimmed}/v1/chat/completions`;
 }
 
-async function fetchWithAbortSignal(url, init, signal) {
+async function fetchWithAbortSignal(url, init, signal, timeoutMs) {
   const controller = new AbortController();
   const onAbort = () => controller.abort(abortReason(signal));
+  const normalizedTimeoutMs = Number(timeoutMs);
+  const timeout = Number.isFinite(normalizedTimeoutMs) && normalizedTimeoutMs > 0
+    ? setTimeout(() => {
+        controller.abort(new Error(`provider request timed out after ${normalizedTimeoutMs}ms`));
+      }, normalizedTimeoutMs)
+    : null;
+  if (timeout && typeof timeout.unref === "function") timeout.unref();
   try {
     if (signal) {
       if (signal.aborted) throw abortReason(signal);
@@ -384,15 +768,17 @@ async function fetchWithAbortSignal(url, init, signal) {
     }
     return await fetch(url, { ...init, signal: controller.signal });
   } finally {
+    if (timeout) clearTimeout(timeout);
     if (signal) signal.removeEventListener("abort", onAbort);
   }
 }
 
 function contentTextFromOpenAiMessage(message) {
   const content = message?.content;
-  if (typeof content === "string") return content.trim();
+  let contentText = "";
+  if (typeof content === "string") contentText = content.trim();
   if (Array.isArray(content)) {
-    return content
+    contentText = content
       .map((item) => {
         if (typeof item === "string") return item;
         if (item && typeof item === "object" && typeof item.text === "string") return item.text;
@@ -402,8 +788,49 @@ function contentTextFromOpenAiMessage(message) {
       .join("\n")
       .trim();
   }
+  if (contentText) return contentText;
   const reasoning = message?.reasoning_content || message?.provider_specific_fields?.reasoning_content;
   return typeof reasoning === "string" ? reasoning.trim() : "";
+}
+
+function parseVisionSummary(message, finishReason) {
+  const contentText = contentTextFromOpenAiMessage(message);
+  const diagnostic = `finishReason=${finishReason || "unknown"}, contentLength=${contentText.length}`;
+  let parsed;
+  try {
+    parsed = JSON.parse(contentText);
+  } catch {
+    throw new Error(`VISION_MODEL_INVALID_OUTPUT: invalid JSON; ${diagnostic}`);
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error(`VISION_MODEL_INVALID_OUTPUT: schema requires an object; ${diagnostic}`);
+  }
+  if (
+    !(typeof parsed.structuralType === "string" || parsed.structuralType === null)
+    || !(typeof parsed.coordinateSystem === "string" || parsed.coordinateSystem === null)
+  ) {
+    throw new Error(
+      `VISION_MODEL_INVALID_OUTPUT: schema requires string|null structuralType and coordinateSystem; ${diagnostic}`,
+    );
+  }
+  const arrayFields = [
+    "nodes",
+    "members",
+    "geometry",
+    "loads",
+    "supports",
+    "materialsOrSections",
+    "missingOrUnclear",
+    "notes",
+  ];
+  if (arrayFields.some((field) => !Array.isArray(parsed[field]))) {
+    throw new Error(`VISION_MODEL_INVALID_OUTPUT: schema requires all declared array fields; ${diagnostic}`);
+  }
+  return JSON.stringify({
+    structuralType: parsed.structuralType,
+    coordinateSystem: parsed.coordinateSystem,
+    ...Object.fromEntries(arrayFields.map((field) => [field, parsed[field]])),
+  });
 }
 
 function buildVisionPrompt(locale) {
@@ -411,14 +838,22 @@ function buildVisionPrompt(locale) {
     ? [
       "You are the vision parser for a structural engineering benchmark.",
       "Extract only information visible in the image. Do not invent missing dimensions, loads, material grades, or supports.",
+      "Enumerate every visible structural node or joint and every visible member connectivity by endpoint. Use drawing labels when present; otherwise assign stable local labels such as N1 and N2.",
+      "For each support, report its node and constrained and free degrees of freedom when the symbol or annotation makes them visible. Distinguish supports from analysis nodes, dimension subdivisions, and ordinary joints.",
+      "For trusses, preserve the complete visible chord, vertical, and diagonal topology. If a member endpoint or crossing is occluded or ambiguous, record that in missingOrUnclear instead of inferring it.",
+      "If the drawing gives an area pressure and a tributary width used to derive an applied line load, report the derived line load exactly once. Keep the pressure and tributary width as source annotations in notes, not as an additional applied load, unless the drawing explicitly applies both.",
       "Return compact JSON only, without markdown fences.",
-      "Schema: {\"structuralType\": string|null, \"geometry\": string[], \"loads\": string[], \"supports\": string[], \"materialsOrSections\": string[], \"missingOrUnclear\": string[], \"notes\": string[]}.",
+      "Schema: {\"structuralType\": string|null, \"coordinateSystem\": string|null, \"nodes\": string[], \"members\": string[], \"geometry\": string[], \"loads\": string[], \"supports\": string[], \"materialsOrSections\": string[], \"missingOrUnclear\": string[], \"notes\": string[]}.",
     ]
     : [
       "你是结构工程 benchmark 的图片解析器。",
       "只提取图片中可见的文字、标注和几何关系；不要臆测缺失的尺寸、荷载、材料等级或边界条件。",
+      "逐一列出每个可见结构节点或连接点，并按端点列出每根可见构件的连接关系。优先使用图中节点编号；没有编号时使用 N1、N2 等稳定的局部编号。",
+      "对每个支座列出所在节点；当符号或标注足够明确时，同时列出受约束和自由的自由度。区分支座、分析节点、尺寸分段点和普通连接点。",
+      "对于桁架，完整保留图中可见的上下弦、竖杆和斜杆拓扑；若构件端点或交叉处被遮挡或含糊，应写入 missingOrUnclear，不能自行推断。",
+      "若图中给出面荷载及用于折算的受荷宽度，应只把折算后的线荷载作为一次实际施加荷载；面荷载和受荷宽度仅作为 notes 中的计算依据，除非图纸明确要求两者分别叠加。",
       "只返回紧凑 JSON，不要使用 markdown 代码块。",
-      "Schema: {\"structuralType\": string|null, \"geometry\": string[], \"loads\": string[], \"supports\": string[], \"materialsOrSections\": string[], \"missingOrUnclear\": string[], \"notes\": string[]}.",
+      "Schema: {\"structuralType\": string|null, \"coordinateSystem\": string|null, \"nodes\": string[], \"members\": string[], \"geometry\": string[], \"loads\": string[], \"supports\": string[], \"materialsOrSections\": string[], \"missingOrUnclear\": string[], \"notes\": string[]}.",
     ];
   return base.join("\n");
 }
@@ -438,6 +873,7 @@ async function parseImageAttachmentWithVision(attachment, locale, signal, imageI
   const body = {
     model: cfg.model,
     temperature: cfg.temperature,
+    max_tokens: cfg.maxTokens,
     messages: [
       {
         role: "user",
@@ -459,6 +895,7 @@ async function parseImageAttachmentWithVision(attachment, locale, signal, imageI
       body: JSON.stringify(body),
     },
     signal,
+    process.env.LLM_BENCHMARK_PROVIDER_REQUEST_TIMEOUT_MS,
   );
   const text = await response.text();
   if (!response.ok) {
@@ -470,14 +907,22 @@ async function parseImageAttachmentWithVision(attachment, locale, signal, imageI
   } catch {
     throw new Error(`Vision API returned non-JSON response: ${text.slice(0, 300)}`);
   }
-  const summary = contentTextFromOpenAiMessage(parsed.choices?.[0]?.message);
-  if (!summary) {
-    throw new Error("Vision API returned an empty summary");
-  }
+  const summary = parseVisionSummary(
+    parsed.choices?.[0]?.message,
+    parsed.choices?.[0]?.finish_reason,
+  );
+  const usage = parsed.usage && typeof parsed.usage === "object"
+    ? {
+        inputTokens: Number(parsed.usage.prompt_tokens),
+        outputTokens: Number(parsed.usage.completion_tokens),
+        totalTokens: Number(parsed.usage.total_tokens),
+      }
+    : null;
   return {
     imageIndex,
     model: cfg.model,
     summary,
+    usage,
   };
 }
 
@@ -490,56 +935,47 @@ async function buildVisionSummaries(attachments, locale, signal) {
   return summaries;
 }
 
-function engineeringSpecificationText(value) {
-  return typeof value === "string" ? value.trim() : "";
+function appendVisionUsageMetrics(evaluation, summaries) {
+  const usage = { inputTokens: 0, outputTokens: 0, totalTokens: 0, available: false };
+  for (const item of summaries) {
+    const input = Number(item.usage?.inputTokens);
+    const output = Number(item.usage?.outputTokens);
+    const total = Number(item.usage?.totalTokens);
+    const hasInput = Number.isFinite(input) && input >= 0;
+    const hasOutput = Number.isFinite(output) && output >= 0;
+    const hasTotal = Number.isFinite(total) && total >= 0;
+    if (!hasInput && !hasOutput && !hasTotal) continue;
+    usage.inputTokens += hasInput ? input : 0;
+    usage.outputTokens += hasOutput ? output : 0;
+    usage.totalTokens += hasTotal ? total : (hasInput ? input : 0) + (hasOutput ? output : 0);
+    usage.available = true;
+  }
+  if (!usage.available) return evaluation;
+  evaluation.metrics.push(
+    {
+      metric: "visionInputTokens",
+      pass: true,
+      expected: "(info, lower is better)",
+      actual: String(usage.inputTokens),
+    },
+    {
+      metric: "visionOutputTokens",
+      pass: true,
+      expected: "(info, lower is better)",
+      actual: String(usage.outputTokens),
+    },
+    {
+      metric: "visionTotalTokens",
+      pass: true,
+      expected: "(info, lower is better)",
+      actual: String(usage.totalTokens),
+    },
+  );
+  return evaluation;
 }
 
-function benchmarkEngineeringSpecification(assertions, locale) {
-  const assertion = (assertions || []).find((item) => (
-    (item?.type === "model_matches" || item?.type === "numerical_matches")
-    && typeof item.groundTruthId === "string"
-  ));
-  const model = assertion ? GROUND_TRUTH_BY_ID.get(assertion.groundTruthId) : null;
-  if (!model) return "";
-
-  const coordinateSystem = model.coordinate_system || {};
-  const valueText = (value) => (value === undefined ? null : String(value));
-  const recordText = (record, keys) => keys
-    .map((key) => {
-      const value = record?.[key];
-      return value === undefined ? null : `${key}=${valueText(value)}`;
-    })
-    .filter(Boolean)
-    .join(", ");
-  const coordinateText = recordText(coordinateSystem, ["semantics", "version", "dimension", "plane", "dof_order"]);
-  const materialsText = (model.materials || []).map((material) => (
-    recordText(material, ["id", "name", "grade", "category", "E", "nu", "rho", "fy", "fc"])
-  )).join("; ");
-  const sectionsText = (model.sections || []).map((section) => {
-    const identity = recordText(section, ["id", "name", "type", "purpose", "standard_steel_name"]);
-    const shape = recordText(section.shape, ["kind", "H", "B", "tw", "tf", "D", "t"]);
-    const properties = recordText(section.properties, ["A", "Iy", "Iz", "J", "G"]);
-    const portalMember = model.metadata?.inferredType === "portal-frame"
-      && section.shape?.kind === "H"
-      && [section.shape.H, section.shape.B, section.shape.tw, section.shape.tf].every(Number.isFinite)
-      ? `member=H${section.shape.H}x${section.shape.B}x${section.shape.tw}x${section.shape.tf}`
-      : "";
-    return [portalMember, identity, shape && `shape(${shape})`, properties && `properties(${properties})`]
-      .filter(Boolean)
-      .join(", ");
-  }).join("; ");
-  const instruction = locale === "en"
-    ? "Use these analysis properties exactly in every mode. Use only the user task to classify the structure, but include these properties in parameter extraction. Do not add self-weight or duplicate a converted load; reconstruct geometry, topology, supports, and load placement from the task."
-    : "所有模式均须严格使用以下分析属性。结构分类只使用用户任务，参数提取须同时包含这些属性。不得附加构件自重或重复施加折算荷载；几何、拓扑、支座和荷载位置仍由用户任务确定。";
-  const labels = locale === "en"
-    ? ["Coordinate system", "Materials", "Sections"]
-    : ["坐标系", "材料", "截面"];
-  return [
-    instruction,
-    `${labels[0]}: ${coordinateText}`,
-    `${labels[1]}: ${materialsText}`,
-    `${labels[2]}: ${sectionsText}`,
-  ].join("\n");
+function engineeringSpecificationText(value) {
+  return typeof value === "string" ? value.trim() : "";
 }
 
 function attachVisionSummariesToMessage(message, summaries, locale, engineeringSpecification = "") {
@@ -552,8 +988,8 @@ function attachVisionSummariesToMessage(message, summaries, locale, engineeringS
       ? "[Benchmark vision attachment summaries]"
       : "[Benchmark 多模态附件解析结果]";
     const instruction = locale === "en"
-      ? "The following information was extracted from the attached images before the agent run. Do not call analyze_file for these image attachments again."
-      : "以下信息已在 agent 运行前从附件图片中提取。不要再对这些图片附件调用 analyze_file。";
+      ? "The following information was extracted from the attached images before the agent run. Do not call analyze_file for these image attachments again. Preserve explicit node coordinates and member connectivity exactly in downstream tool calls; do not introduce conflicting story or bay counts when paraphrasing an internally consistent topology."
+      : "以下信息已在 agent 运行前从附件图片中提取。不要再对这些图片附件调用 analyze_file。后续工具调用必须准确保留明确给出的节点坐标和构件连接关系；当拓扑内部一致时，不要在转述中引入与其冲突的层数或跨数。";
     const blocks = summaries.map((item) => [
       `#${item.imageIndex}`,
       item.summary,
@@ -578,11 +1014,14 @@ function copyAttachmentsToRuntimeUploads(attachments, conversationId) {
     const sourcePath = path.isAbsolute(attachment.relPath)
       ? attachment.relPath
       : path.resolve(BENCH_ROOT, attachment.relPath.replace(/^tests\/llm-benchmark\//, ""));
-    const originalName = safeAttachmentName(attachment.originalName || path.basename(sourcePath), `attachment-${index}`);
-    const storedName = safeAttachmentName(`bench-${index}-${originalName}`, `bench-${index}${path.extname(sourcePath)}`);
+    const extension = path.extname(sourcePath).toLowerCase();
+    const originalName = safeAttachmentName(`attachment-${index + 1}${extension}`, `attachment-${index + 1}`);
+    const storedName = originalName;
     fs.copyFileSync(sourcePath, path.join(uploadDir, storedName));
     return {
       ...attachment,
+      fileId: `${conversationId}-file-${index}`,
+      originalName,
       relPath: path.join(".uploads", conversationId, storedName).replace(/\\/g, "/"),
     };
   });
@@ -621,6 +1060,10 @@ function normalizeScenario(scenario) {
 
 function safeConversationIdPart(value) {
   return String(value || "scenario").replace(/[^A-Za-z0-9_-]/g, "-");
+}
+
+function benchmarkConversationId() {
+  return `bench-${randomUUID()}`;
 }
 
 function modesForScenario(scenario) {
@@ -678,10 +1121,14 @@ function applyBenchmarkMode(scenario, mode) {
 async function buildBenchmarkCapabilityContext(runtime, LangGraphAgentService) {
   const manifests = await runtime.listSkillManifests();
   const protocol = LangGraphAgentService.getProtocol();
-  const enabledToolIds = protocol.tools
-    .filter((toolDef) => toolDef.defaultEnabled)
-    .map((toolDef) => toolDef.name);
+  const enabledToolIds = selectBenchmarkToolIds(protocol.tools);
   return { manifests, enabledToolIds };
+}
+
+function selectBenchmarkToolIds(toolDefinitions) {
+  return toolDefinitions
+    .filter((toolDef) => toolDef.defaultEnabled && BENCHMARK_TOOL_ALLOWLIST.has(toolDef.name))
+    .map((toolDef) => toolDef.name);
 }
 
 function uniqueStrings(values) {
@@ -709,17 +1156,25 @@ function resolveBenchmarkSkillIds(scenario, manifests) {
   ]).filter((skillId) => availableSkillIds.has(skillId));
 }
 
-function buildTurnContext({ scenario, turn, benchmarkContext, skillIds }) {
+function buildTurnContext({ scenario, turn, turnIndex, benchmarkContext, skillIds }) {
+  const attachments = turn.attachments !== undefined
+    ? turn.attachments
+    : turnIndex === 0 ? scenario.attachments : undefined;
   return {
     locale: scenario.locale || "zh",
     skillIds,
     enabledToolIds: benchmarkContext.enabledToolIds,
-    attachments: turn.attachments || scenario.attachments,
+    attachments,
+    restrictFileAccessToAttachments: true,
   };
 }
 
-async function runAgentLikeWeb(service, input) {
-  const iterator = service.runStream(input)[Symbol.asyncIterator]();
+async function runAgentWebTurn(service, input, options = {}) {
+  const stream = options.resume
+    ? service.resumeStream(input.conversationId, input.message)
+    : service.runStream(input);
+  const iterator = stream[Symbol.asyncIterator]();
+  let resumeRequired = false;
   try {
     while (true) {
       const next = await raceWithSignal(iterator.next(), input.signal);
@@ -727,11 +1182,18 @@ async function runAgentLikeWeb(service, input) {
       if (next.value?.type === "error") {
         throw new Error(next.value.error || "agent stream failed");
       }
+      const infrastructureError = findBenchmarkInfrastructureMarker(next.value);
+      if (infrastructureError) {
+        throw new Error(infrastructureError);
+      }
+      if (next.value?.type === "interaction_update" && next.value?.content?.resumeRequired === true) {
+        resumeRequired = true;
+      }
       // Drain the stream exactly like the browser does; evaluation reads the
       // final graph state from the checkpoint below.
     }
   } catch (err) {
-    if (input.signal?.aborted && typeof iterator.return === "function") {
+    if (typeof iterator.return === "function") {
       await iterator.return().catch(() => {});
     }
     throw err;
@@ -743,14 +1205,83 @@ async function runAgentLikeWeb(service, input) {
   if (!snapshot?.state) {
     throw new Error("web-stream execution did not produce a checkpoint state");
   }
-  return snapshot.state;
+  return { state: snapshot.state, resumeRequired };
 }
 
-async function runAgentForBenchmark(service, input, execution) {
+async function runAgentLikeWeb(service, input) {
+  const result = await runAgentWebTurn(service, input);
+  return result.state;
+}
+
+async function runAgentForBenchmark(service, input, execution, options = {}) {
   if (execution === "full") {
-    return raceWithSignal(service.runFull(input), input.signal);
+    return {
+      state: await raceWithSignal(service.runFull(input), input.signal),
+      resumeRequired: false,
+    };
   }
-  return runAgentLikeWeb(service, input);
+  return runAgentWebTurn(service, input, options);
+}
+
+function findBenchmarkInfrastructureMarker(value) {
+  const marker = /LLM_(?:PARAM_EXTRACTOR|STRUCTURAL_ROUTER)_INFRASTRUCTURE_ERROR/i;
+  const pending = [value];
+  const visited = new Set();
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (typeof current === "string") {
+      if (marker.test(current)) return current;
+      continue;
+    }
+    if (!current || typeof current !== "object" || visited.has(current)) continue;
+    visited.add(current);
+    if (Array.isArray(current)) {
+      pending.push(...current);
+    } else {
+      pending.push(...Object.values(current));
+    }
+  }
+  return null;
+}
+
+function findBenchmarkInfrastructureError(state) {
+  return findBenchmarkInfrastructureMarker(state?.messages);
+}
+
+function findBenchmarkPolicyViolation(state) {
+  const pending = [state?.messages];
+  const visited = new Set();
+  while (pending.length > 0) {
+    const value = pending.pop();
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      if (
+        (trimmed.startsWith("{") && trimmed.endsWith("}"))
+        || (trimmed.startsWith("[") && trimmed.endsWith("]"))
+      ) {
+        try {
+          pending.push(JSON.parse(trimmed));
+        } catch {
+          // Ordinary model text can resemble JSON without being a tool payload.
+        }
+      }
+      continue;
+    }
+    if (!value || typeof value !== "object" || visited.has(value)) continue;
+    visited.add(value);
+    if (Array.isArray(value)) {
+      pending.push(...value);
+      continue;
+    }
+    if (value.routingSource === "explicit-keyword" || value.routingSource === "generic-fallback") {
+      return `routingSource=${value.routingSource}`;
+    }
+    if (value.extractionMode === "deterministic") {
+      return "extractionMode=deterministic";
+    }
+    pending.push(...Object.values(value));
+  }
+  return null;
 }
 
 function abortReason(signal) {
@@ -802,12 +1333,51 @@ function mergeTurnResults(scenario, turnResults, totalDurationMs) {
 
   for (const { evaluation } of turnResults) {
     const coreMetrics = evaluation.metrics.filter(
-      (m) => m.metric !== "toolCalls" && m.metric !== "duration",
+      (m) => ![
+        "toolCalls",
+        "inputTokens",
+        "outputTokens",
+        "totalTokens",
+        "visionInputTokens",
+        "visionOutputTokens",
+        "visionTotalTokens",
+        "duration",
+      ].includes(m.metric),
     );
     allMetrics.push(...coreMetrics);
     passed += coreMetrics.filter((m) => m.pass).length;
     total += coreMetrics.length;
     if (!evaluation.allPassed) allPassed = false;
+  }
+
+  for (const metricName of ["toolCalls", "inputTokens", "outputTokens", "totalTokens"]) {
+    const values = turnResults
+      .map(({ evaluation }) => evaluation.metrics.find((metric) => metric.metric === metricName)?.actual)
+      .map(Number)
+      .filter((value) => Number.isFinite(value));
+    if (values.length > 0) {
+      allMetrics.push({
+        metric: metricName,
+        pass: true,
+        expected: "(info, lower is better)",
+        actual: String(Math.max(...values)),
+      });
+    }
+  }
+
+  for (const metricName of ["visionInputTokens", "visionOutputTokens", "visionTotalTokens"]) {
+    const values = turnResults
+      .map(({ evaluation }) => evaluation.metrics.find((metric) => metric.metric === metricName)?.actual)
+      .map(Number)
+      .filter((value) => Number.isFinite(value));
+    if (values.length > 0) {
+      allMetrics.push({
+        metric: metricName,
+        pass: true,
+        expected: "(info, lower is better)",
+        actual: String(values.reduce((sum, value) => sum + value, 0)),
+      });
+    }
   }
 
   allMetrics.push({
@@ -824,6 +1394,7 @@ function mergeTurnResults(scenario, turnResults, totalDurationMs) {
     split: scenario.split || "core",
     taskFamily: scenario.taskFamily || "standard_workflow",
     inputModality: scenario.inputModality || "text",
+    inputCompleteness: scenario.inputContract?.completeness || null,
     structureType: scenario.structureType || null,
     benchmarkStructureType: scenario.benchmarkStructureType || null,
     difficulty: scenario.difficulty || null,
@@ -835,8 +1406,8 @@ function mergeTurnResults(scenario, turnResults, totalDurationMs) {
     analysisEngineTarget: scenario.analysisEngineTarget || null,
     mode: scenario.mode || "auto",
     evaluationFocus: Array.isArray(scenario.evaluationFocus) ? scenario.evaluationFocus : [],
-    passed: passed + 1,
-    total: total + 1,
+    passed,
+    total,
     allPassed,
     metrics: allMetrics,
     durationMs: totalDurationMs,
@@ -890,6 +1461,7 @@ function failedSupervisedEvaluation(scenario, actual, durationMs, options) {
     split: scenario.split || "core",
     taskFamily: scenario.taskFamily || "standard_workflow",
     inputModality: scenario.inputModality || "text",
+    inputCompleteness: scenario.inputContract?.completeness || null,
     structureType: scenario.structureType || null,
     benchmarkStructureType: scenario.benchmarkStructureType || null,
     difficulty: scenario.difficulty || null,
@@ -904,7 +1476,12 @@ function failedSupervisedEvaluation(scenario, actual, durationMs, options) {
     passed: 0,
     total: 1,
     allPassed: false,
-    metrics: [{ metric: "execution", pass: false, expected: "supervised case completes", actual }],
+    metrics: [{
+      metric: "execution",
+      pass: false,
+      expected: options.supervise === false ? "case completes" : "supervised case completes",
+      actual,
+    }],
     durationMs,
     executionProfile: {
       execution: options.execution,
@@ -917,14 +1494,53 @@ function failedSupervisedEvaluation(scenario, actual, durationMs, options) {
       analysisSkillTarget: scenario.analysisSkillTarget || "opensees-static",
       caseTimeoutMs: options.caseTimeoutMs,
       yjkCloseAfterRun: process.env.YJK_CLOSE_AFTER_RUN || null,
-      supervised: true,
+      supervised: options.supervise !== false,
     },
   };
 }
 
-function isProviderRateLimitEvaluation(evaluation) {
-  const text = JSON.stringify(evaluation?.metrics || []);
-  return /(?:\b429\b|MODEL_RATE_LIMIT|rate\s*limit|rate[-_\s]?limited|访问量过大)/i.test(text);
+function classifyInfrastructureEvaluation(evaluation) {
+  const failedMetrics = (evaluation?.metrics || []).filter((metric) => metric?.pass === false);
+  const executionFailure = failedMetrics.find((metric) => metric.metric === "execution");
+  if (!executionFailure) return null;
+  const actualText = String(executionFailure.actual || "");
+  if (
+    /(?:HTTP|status(?:\s+code)?|MODEL_RATE_LIMIT)[_:\s-]*429\b/i.test(actualText)
+    || /\b429\s+status(?:\s+code)?\b/i.test(actualText)
+    || /(?:rate\s*limit|rate[-_\s]?limited|访问量过大)/i.test(actualText)
+  ) {
+    return { kind: "provider-rate-limit", retryable: true };
+  }
+  if (
+    /(?:HTTP|status(?:\s+code)?|MODEL_HTTP_ERROR)[_:\s-]*(?:401|403|404)\b/i.test(actualText)
+    || /\b(?:401|403|404)\s+status(?:\s+code)?\b/i.test(actualText)
+    || /(?:invalid api key|authentication failed|model not found|API key is required)/i.test(actualText)
+  ) {
+    return { kind: "provider-configuration", retryable: false };
+  }
+  if (/LLM_JUDGE_INFRASTRUCTURE_ERROR/i.test(actualText)) {
+    return { kind: "judge-infrastructure", retryable: true };
+  }
+  if (
+    /(?:LLM_(?:PARAM_EXTRACTOR|STRUCTURAL_ROUTER)|VISION_MODEL)_INVALID_OUTPUT/i.test(actualText)
+  ) {
+    return null;
+  }
+  if (
+    /LLM_(?:PARAM_EXTRACTOR|STRUCTURAL_ROUTER)_INFRASTRUCTURE_ERROR/i.test(actualText)
+    ||
+    /(?:HTTP|status(?:\s+code)?|MODEL_HTTP_ERROR)[_:\s-]*(?:500|502|503|504|524)\b/i.test(actualText)
+    || /\b(?:500|502|503|504|524)\s+status(?:\s+code)?\b/i.test(actualText)
+    || /(?:fetch failed|ECONNRESET|ETIMEDOUT|ECONNREFUSED|socket hang up|network error|request timed out|TimeoutError|AbortError|timeout exceeded)/i.test(actualText)
+  ) {
+    return { kind: "provider-transient", retryable: true };
+  }
+  if (
+    !/case(?: process)? timed out after \d+ms/i.test(String(executionFailure.actual || ""))
+  ) {
+    return { kind: "benchmark-execution", retryable: false };
+  }
+  return null;
 }
 
 function maxProviderRateLimitReruns() {
@@ -956,7 +1572,10 @@ function runChildScenario(args, timeoutMs, cwd) {
     const start = Date.now();
     const child = spawn(process.execPath, args, {
       cwd,
-      env: process.env,
+      env: {
+        ...process.env,
+        SCLAW_BENCHMARK_SUPERVISED_CHILD: "1",
+      },
       stdio: "inherit",
       detached: process.platform !== "win32",
     });
@@ -973,7 +1592,7 @@ function runChildScenario(args, timeoutMs, cwd) {
   });
 }
 
-async function runSupervisedBenchmark(options, sutRoot, scenarios) {
+async function runSupervisedBenchmark(options, sutRoot, scenarios, runMetadata) {
   process.stdout.write(`\n${"=".repeat(60)}\n`);
   process.stdout.write(`LangGraph Agent Benchmark: ${scenarios.length} supervised scenario run(s)\n`);
   process.stdout.write(`Mode: ${options.mode}\n`);
@@ -989,15 +1608,15 @@ async function runSupervisedBenchmark(options, sutRoot, scenarios) {
   );
   for (const scenario of scenarios) {
     const caseOutput = supervisedOutputPath(options.outputPath, scenario);
-    const rateLimitRerunLimit = maxProviderRateLimitReruns();
-    let providerRateLimitReruns = 0;
+    const infrastructureRerunLimit = maxProviderRateLimitReruns();
+    let infrastructureReruns = 0;
     let childResult = null;
     let evaluation = null;
     while (true) {
       fs.rmSync(caseOutput, { force: true });
       process.stdout.write(`\nSupervised running: ${scenario.id}`);
-      if (providerRateLimitReruns > 0) {
-        process.stdout.write(` (provider-rate-limit rerun ${providerRateLimitReruns}/${rateLimitRerunLimit})`);
+      if (infrastructureReruns > 0) {
+        process.stdout.write(` (infrastructure rerun ${infrastructureReruns}/${infrastructureRerunLimit})`);
       }
       process.stdout.write("\n");
       childResult = await runChildScenario(
@@ -1013,18 +1632,27 @@ async function runSupervisedBenchmark(options, sutRoot, scenarios) {
         evaluation = failedSupervisedEvaluation(scenario, actual, childResult.durationMs, options);
       }
 
-      if (!isProviderRateLimitEvaluation(evaluation)) break;
-
-      fs.rmSync(caseOutput, { force: true });
-      providerRateLimitReruns += 1;
-      if (providerRateLimitReruns > rateLimitRerunLimit) {
+      const infrastructureFailure = classifyInfrastructureEvaluation(evaluation);
+      if (!infrastructureFailure) break;
+      if (!infrastructureFailure.retryable) {
         throw new Error(
-          `Provider rate limit persisted for ${scenario.id} after ${rateLimitRerunLimit} rerun(s); aborting without counting this case.`,
+          `${infrastructureFailure.kind} failure for ${scenario.id}; aborting without counting this case: `
+          + JSON.stringify(evaluation.metrics || []),
         );
       }
-      const backoffMs = providerRateLimitBackoffMs(providerRateLimitReruns);
+
+      fs.rmSync(caseOutput, { force: true });
+      infrastructureReruns += 1;
+      if (infrastructureReruns > infrastructureRerunLimit) {
+        throw new Error(
+          `${infrastructureFailure.kind} persisted for ${scenario.id} after `
+          + `${infrastructureRerunLimit} rerun(s); aborting without counting this case.`,
+        );
+      }
+      const backoffMs = providerRateLimitBackoffMs(infrastructureReruns);
       process.stdout.write(
-        `  provider rate limit detected; discarding this attempt and retrying after ${(backoffMs / 1000).toFixed(1)}s.\n`,
+        `  ${infrastructureFailure.kind} detected; discarding this attempt and retrying after `
+        + `${(backoffMs / 1000).toFixed(1)}s.\n`,
       );
       if (backoffMs > 0) {
         await new Promise((resolve) => setTimeout(resolve, backoffMs));
@@ -1036,18 +1664,18 @@ async function runSupervisedBenchmark(options, sutRoot, scenarios) {
       processExitCode: childResult.code,
       processSignal: childResult.signal || null,
       processTimedOut: childResult.timedOut,
-      providerRateLimitReruns,
+      infrastructureReruns,
     };
     printScenarioResult(scenario, evaluation);
     results.push(evaluation);
     if (options.outputPath) {
-      writeJsonOutput(options.outputPath, results, { quiet: true });
+      writeJsonOutput(options.outputPath, results, { quiet: true, runMetadata, completed: false });
     }
   }
 
   printSummary(results);
   if (options.outputPath) {
-    writeJsonOutput(options.outputPath, results);
+    writeJsonOutput(options.outputPath, results, { runMetadata, completed: true });
   }
   if (results.some((r) => !r.allPassed)) {
     process.exitCode = 1;
@@ -1057,35 +1685,51 @@ async function runSupervisedBenchmark(options, sutRoot, scenarios) {
 async function runBenchmark(args) {
   const options = parseBenchmarkOptions(args);
   const sutRoot = resolveSutRoot(options.sutRoot);
-  const scenarios = resolveScenarioRuns(loadScenarios(options), options);
+  const scenarios = orderScenarios(
+    resolveScenarioRuns(loadScenarios(options), options),
+    options.scenarioOrderSeed,
+  );
   if (scenarios.length === 0) {
     process.stdout.write("No benchmark scenarios matched.\n");
     return;
   }
-  if (options.supervise) {
-    await runSupervisedBenchmark(options, sutRoot, scenarios);
-    return;
-  }
-
-  // Reuse SUT's regression helpers for env setup and backend build.
+  assertFormalRunEligibility(options, sutRoot, scenarios);
   const regressionSharedPath = path.join(sutRoot, "tests", "regression", "shared.js");
   const { resolveRegressionContext, runBackendBuildOnce } = require(regressionSharedPath);
   const context = resolveRegressionContext(sutRoot);
-
   for (const [k, v] of Object.entries(context.env)) {
     if (v !== undefined && v !== "") {
       process.env[k] = v;
     }
   }
+  // Benchmark runs measure the configured LLM path. Product fallbacks remain
+  // available outside this runner, but must not mask provider/model failures.
+  process.env.SCLAW_BENCHMARK_LLM_ONLY = "1";
 
-  await runBackendBuildOnce(context);
+  const prepareRuntime = async () => {
+    if (process.env.SCLAW_BENCHMARK_BACKEND_PREBUILT !== "1") {
+      await runBackendBuildOnce(context);
+    }
+    const { execSync } = require("node:child_process");
+    execSync("npx prisma db push --accept-data-loss", {
+      cwd: path.join(sutRoot, "backend"),
+      env: { ...process.env, ...context.env },
+      stdio: "pipe",
+    });
+  };
 
-  const { execSync } = require("node:child_process");
-  execSync("npx prisma db push --accept-data-loss", {
-    cwd: path.join(sutRoot, "backend"),
-    env: { ...process.env, ...context.env },
-    stdio: "pipe",
-  });
+  if (options.supervise) {
+    await prepareRuntime();
+    process.env.SCLAW_BENCHMARK_RUNTIME_PREPARED = "1";
+    const runMetadata = buildRunMetadata(options, sutRoot, scenarios);
+    process.env.SCLAW_BENCHMARK_FINGERPRINTS_JSON = JSON.stringify(runMetadata.fingerprints);
+    await runSupervisedBenchmark(options, sutRoot, scenarios, runMetadata);
+    return;
+  }
+
+  if (process.env.SCLAW_BENCHMARK_RUNTIME_PREPARED !== "1") {
+    await prepareRuntime();
+  }
 
   process.stdout.write(`\n${"=".repeat(60)}\n`);
   process.stdout.write(`LangGraph Agent Benchmark: ${scenarios.length} scenario run(s)\n`);
@@ -1100,7 +1744,9 @@ async function runBenchmark(args) {
   const { AgentSkillRuntime, LangGraphAgentService } = await importBackendModules(sutRoot);
   const runtime = new AgentSkillRuntime();
   const service = new LangGraphAgentService(runtime);
+  const solverGate = installSolverGate(service);
   const benchmarkContext = await buildBenchmarkCapabilityContext(runtime, LangGraphAgentService);
+  const runMetadata = buildRunMetadata(options, sutRoot, scenarios);
 
   const results = [];
 
@@ -1112,6 +1758,7 @@ async function runBenchmark(args) {
     let lastEvaluation = null;
     const attemptRounds = [];
     const caseTimeout = createCaseTimeout(options.caseTimeoutMs);
+    let lastConversationId = null;
 
     try {
       while (attempt <= maxRetries) {
@@ -1133,7 +1780,11 @@ async function runBenchmark(args) {
         let executionError = false;
         const turnResults = [];
         let currentTurnIndex = 0;
-        const conversationId = `bench-${safeConversationIdPart(scenario.id)}-${scenarioStart}-${attempt}`;
+        let currentTurnStart = scenarioStart;
+        let totalExecutionDurationMs = 0;
+        let resumeRequired = false;
+        const conversationId = benchmarkConversationId();
+        lastConversationId = conversationId;
         const runScenario = prepareScenarioAttachmentsForRun(scenario, conversationId);
 
         const prevLogLevel = process.env.LOG_LEVEL;
@@ -1144,11 +1795,18 @@ async function runBenchmark(args) {
             currentTurnIndex = i;
             const turn = runScenario.turns[i];
             const turnStart = Date.now();
+            currentTurnStart = turnStart;
 
             const messageWithFeedback = (i === 0 && feedbackPrefix)
               ? feedbackPrefix + "\n\n" + turn.message
               : turn.message;
-            const turnContext = buildTurnContext({ scenario: runScenario, turn, benchmarkContext, skillIds });
+            const turnContext = buildTurnContext({
+              scenario: runScenario,
+              turn,
+              turnIndex: i,
+              benchmarkContext,
+              skillIds,
+            });
             const visionSummaries = await buildVisionSummaries(
               turnContext.attachments,
               scenario.locale || "zh",
@@ -1162,23 +1820,36 @@ async function runBenchmark(args) {
               visionSummaries,
               scenario.locale || "zh",
               turn.engineeringSpecification
-                ?? runScenario.engineeringSpecification
-                ?? benchmarkEngineeringSpecification(turn.assertions, scenario.locale || "zh"),
+                ?? runScenario.engineeringSpecification,
             );
 
-            const state = await runAgentForBenchmark(service, {
+            const turnExecution = await runAgentForBenchmark(service, {
               message: messageWithVision,
               conversationId,
               signal: caseTimeout.signal,
               context: turnContext,
-            }, options.execution);
+            }, options.execution, { resume: resumeRequired });
+            const state = turnExecution.state;
+            resumeRequired = turnExecution.resumeRequired;
+            const infrastructureToolError = findBenchmarkInfrastructureError(state);
+            if (infrastructureToolError) {
+              throw new Error(infrastructureToolError);
+            }
+            if (process.env.SCLAW_BENCHMARK_LLM_ONLY === "1") {
+              const policyViolation = findBenchmarkPolicyViolation(state);
+              if (policyViolation) {
+                throw new Error(`BENCHMARK_POLICY_VIOLATION: ${policyViolation}`);
+              }
+            }
 
             const turnDurationMs = Date.now() - turnStart;
+            totalExecutionDurationMs += turnDurationMs;
 
             if (turn.assertions && turn.assertions.length > 0) {
               const turnScenario = { ...runScenario, expect: { assertions: turn.assertions } };
               const evaluation = await evaluateScenario(turnScenario, state, turnDurationMs);
-              turnResults.push({ turnIndex: i, evaluation });
+              appendVisionUsageMetrics(evaluation, visionSummaries);
+              turnResults.push({ turnIndex: i, evaluation, executionDurationMs: turnDurationMs });
             }
           }
         } catch (err) {
@@ -1187,18 +1858,18 @@ async function runBenchmark(args) {
           const message = caseTimeout.timedOut()
             ? `case timed out after ${options.caseTimeoutMs}ms`
             : errorMessage;
+          const failedTurnDurationMs = Date.now() - currentTurnStart;
+          totalExecutionDurationMs += failedTurnDurationMs;
           process.stdout.write(`  error: ${message}\n`);
           turnResults.push({
             turnIndex: currentTurnIndex,
-            evaluation: {
-              scenarioId: scenario.id,
-              description: scenario.description || "",
-              passed: 0,
-              total: 1,
-              allPassed: false,
-              metrics: [{ metric: "execution", pass: false, expected: "no error", actual: message }],
-              durationMs: Date.now() - scenarioStart,
-            },
+            evaluation: failedSupervisedEvaluation(
+              scenario,
+              message,
+              failedTurnDurationMs,
+              { ...options, supervise: false },
+            ),
+            executionDurationMs: failedTurnDurationMs,
           });
         } finally {
           if (prevLogLevel === undefined) {
@@ -1208,7 +1879,7 @@ async function runBenchmark(args) {
           }
         }
 
-        const totalDurationMs = Date.now() - scenarioStart;
+        const totalDurationMs = totalExecutionDurationMs;
 
         if (turnResults.length > 0) {
           if (scenario._multiTurn) {
@@ -1245,7 +1916,9 @@ async function runBenchmark(args) {
         analysisSkillTarget: scenario.analysisSkillTarget || "opensees-static",
         caseTimeoutMs: options.caseTimeoutMs,
         yjkCloseAfterRun: process.env.YJK_CLOSE_AFTER_RUN || null,
+        conversationId: lastConversationId,
       };
+      attachSolverGateProfile(lastEvaluation, solverGate);
       const attempts = attemptRounds.length;
       lastEvaluation.retries = {
         attempts,
@@ -1272,14 +1945,14 @@ async function runBenchmark(args) {
     printScenarioResult(rawScenario, lastEvaluation);
     results.push(lastEvaluation);
     if (options.outputPath) {
-      writeJsonOutput(options.outputPath, results, { quiet: true });
+      writeJsonOutput(options.outputPath, results, { quiet: true, runMetadata, completed: false });
     }
   }
 
   printSummary(results);
 
   if (options.outputPath) {
-    writeJsonOutput(options.outputPath, results);
+    writeJsonOutput(options.outputPath, results, { runMetadata, completed: true });
   }
 
   if (results.some((r) => !r.allPassed)) {
@@ -1289,11 +1962,29 @@ async function runBenchmark(args) {
 
 module.exports = {
   attachVisionSummariesToMessage,
-  benchmarkEngineeringSpecification,
+  attachSolverGateProfile,
+  appendVisionUsageMetrics,
+  benchmarkConversationId,
+  buildRunMetadata,
+  buildTurnContext,
   buildVisionPrompt,
   calculateProviderRateLimitBackoffMs,
+  chatCompletionsUrl,
+  classifyInfrastructureEvaluation,
+  contentTextFromOpenAiMessage,
+  copyAttachmentsToRuntimeUploads,
+  detectOpenSeesRuntime,
+  formalRunViolations,
+  fetchWithAbortSignal,
+  findBenchmarkInfrastructureError,
+  findBenchmarkPolicyViolation,
+  normalizeScenarioMetadata,
+  orderScenarios,
+  parseVisionSummary,
   runAgentLikeWeb,
+  runAgentWebTurn,
   runBenchmark,
+  selectBenchmarkToolIds,
   supervisedOutputPath,
 };
 

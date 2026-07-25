@@ -21,6 +21,7 @@ const RUNNER_VALUE_FLAGS = new Set([
 const RUNNER_BOOLEAN_FLAGS = new Set([
   "--supervise",
   "--no-supervise",
+  "--formal",
 ]);
 
 function usage() {
@@ -46,7 +47,7 @@ function usage() {
     "Runner flags passed through:",
     "  --scenario <id> --family <name> --split <name>",
     "  --execution <web-stream|full> --case-timeout-ms <milliseconds>",
-    "  --sut-root <path> --supervise --no-supervise",
+    "  --sut-root <path> --supervise --no-supervise --formal",
     "",
     "Additional run-llm-experiment.cjs runner flags can be appended after --.",
   ].join("\n");

@@ -8,6 +8,7 @@ const LOCAL_CONFIG_PATH = path.join(BENCH_ROOT, "experiments", "llm-experiments.
 const EXAMPLE_CONFIG_PATH = path.join(BENCH_ROOT, "experiments", "llm-experiments.example.json");
 const RUNTIME_ROOT = path.join(BENCH_ROOT, "runtime");
 const DEFAULT_CASE_TIMEOUT_MS = 15 * 60 * 1000;
+const DEFAULT_PROVIDER_REQUEST_TIMEOUT_MS = 5 * 60 * 1000;
 
 const DEFAULT_DEFAULTS = {
   suite: "smoke-text",
@@ -72,11 +73,14 @@ const RUNNER_VALUE_FLAGS = new Set([
   "--mode",
   "--execution",
   "--case-timeout-ms",
+  "--repeat-id",
+  "--scenario-order-seed",
   "--output",
   "--sut-root",
 ]);
 const RUNNER_BOOLEAN_FLAGS = new Set([
   "--supervise",
+  "--formal",
 ]);
 
 function usage() {
@@ -101,7 +105,8 @@ function usage() {
     "",
     "Runner flags passed through:",
     "  --scenario <id> --family <name> --split <name> --mode <auto|oracle-specialist|generic-only|all>",
-    "  --execution <web-stream|full> --case-timeout-ms <milliseconds> --supervise",
+    "  --execution <web-stream|full> --case-timeout-ms <milliseconds> --repeat-id <1|2|3>",
+    "  --scenario-order-seed <seed> --supervise --formal",
     "  --output <file> --sut-root <path>",
   ].join("\n");
 }
@@ -368,11 +373,27 @@ function resolveRunnerCaseTimeoutMs(runnerArgs) {
   return DEFAULT_CASE_TIMEOUT_MS;
 }
 
+function mergeRunnerArgs(suiteArgs, cliArgs) {
+  const overriddenFlags = new Set(
+    cliArgs.filter((arg) => RUNNER_VALUE_FLAGS.has(arg) || RUNNER_BOOLEAN_FLAGS.has(arg)),
+  );
+  const retainedSuiteArgs = [];
+  for (let index = 0; index < suiteArgs.length; index += 1) {
+    const arg = suiteArgs[index];
+    if (!overriddenFlags.has(arg)) {
+      retainedSuiteArgs.push(arg);
+      continue;
+    }
+    if (RUNNER_VALUE_FLAGS.has(arg)) index += 1;
+  }
+  return [...retainedSuiteArgs, ...cliArgs];
+}
+
 function buildRunnerArgs(config, suite, suiteName, primary, judge, vision, cliRunnerArgs, experimentOptions = {}) {
-  let runnerArgs = [
-    ...(Array.isArray(suite.runnerArgs) ? suite.runnerArgs : []),
-    ...cliRunnerArgs,
-  ];
+  let runnerArgs = mergeRunnerArgs(
+    Array.isArray(suite.runnerArgs) ? suite.runnerArgs : [],
+    cliRunnerArgs,
+  );
 
   if (experimentOptions.noSupervise) {
     runnerArgs = runnerArgs.filter((arg) => arg !== "--supervise");
@@ -402,14 +423,30 @@ function buildRunnerArgs(config, suite, suiteName, primary, judge, vision, cliRu
   return runnerArgs;
 }
 
+function benchmarkControlEnv() {
+  return {
+    SCLAW_BENCHMARK_LLM_ONLY: "1",
+    SCLAW_BENCHMARK_MAX_TOKENS: "16384",
+    SCLAW_BENCHMARK_SOLVER_GATE: process.env.SCLAW_BENCHMARK_SOLVER_GATE || "per-engine",
+    SCLAW_BENCHMARK_YJK_COOLDOWN_MS:
+      process.env.SCLAW_BENCHMARK_YJK_COOLDOWN_MS || "5000",
+  };
+}
+
 function buildExperimentEnv(config, suite, primary, judge, vision, runnerArgs) {
   const rootEnv = config.environment && typeof config.environment === "object" ? config.environment : {};
   const suiteEnv = suite.environment && typeof suite.environment === "object" ? suite.environment : {};
-  const runtimeDir = path.join(RUNTIME_ROOT, sanitizeFilePart(primary.key));
+  const runtimeId = process.env.SCLAW_BENCHMARK_RUNTIME_ID || primary.key;
+  const runtimeDir = path.join(RUNTIME_ROOT, sanitizeFilePart(runtimeId));
   fs.mkdirSync(runtimeDir, { recursive: true });
   const sourceDataDir = resolveBenchmarkSourceDataDir(rootEnv, suiteEnv);
   const caseTimeoutMs = resolveRunnerCaseTimeoutMs(runnerArgs);
-  syncRuntimeSettings(runtimeDir, sourceDataDir, primary, caseTimeoutMs);
+  const providerRequestTimeoutMs = syncRuntimeSettings(
+    runtimeDir,
+    sourceDataDir,
+    primary,
+    caseTimeoutMs,
+  );
   const env = {
     ...process.env,
     ...stringifyEnv(rootEnv),
@@ -420,6 +457,7 @@ function buildExperimentEnv(config, suite, primary, judge, vision, runnerArgs) {
     LLM_JUDGE_MODEL: judge.model,
     LLM_JUDGE_BASE_URL: judge.baseUrl,
     LLM_JUDGE_API_KEY: judge.apiKey,
+    LLM_BENCHMARK_PROVIDER_REQUEST_TIMEOUT_MS: String(providerRequestTimeoutMs),
     ...stringifyEnv(judge.extraEnv),
     ...(vision ? {
       ...stringifyEnv(vision.extraEnv),
@@ -428,7 +466,13 @@ function buildExperimentEnv(config, suite, primary, judge, vision, runnerArgs) {
       LLM_VISION_API_KEY: vision.apiKey,
     } : {}),
     ...stringifyEnv(suiteEnv),
+    ...benchmarkControlEnv(),
+    LLM_BENCHMARK_PRIMARY_CONFIG_ID: primary.key,
+    LLM_BENCHMARK_JUDGE_CONFIG_ID: judge.key,
+    ...(vision ? { LLM_BENCHMARK_VISION_CONFIG_ID: vision.key } : {}),
     SCLAW_DATA_DIR: runtimeDir,
+    DATABASE_URL: `file:${path.join(runtimeDir, "data", "structureclaw.db")}`,
+    SCLAW_BENCHMARK_SOLVER_LOCK_ROOT: path.join(RUNTIME_ROOT, "solver-locks"),
     ...(sourceDataDir ? { SCLAW_BENCHMARK_SOURCE_DATA_DIR: sourceDataDir } : {}),
   };
   return env;
@@ -442,7 +486,8 @@ function resolveBenchmarkSourceDataDir(rootEnv, suiteEnv) {
   return value ? path.resolve(String(value)) : null;
 }
 
-function syncRuntimeSettings(runtimeDir, sourceDataDir, primary, timeoutMs) {
+function syncRuntimeSettings(runtimeDir, sourceDataDir, primary, caseTimeoutMs) {
+  const timeoutMs = Math.min(caseTimeoutMs, DEFAULT_PROVIDER_REQUEST_TIMEOUT_MS);
   let settings = {};
   const sourceSettings = sourceDataDir ? path.join(sourceDataDir, "settings.json") : null;
   if (sourceSettings && fs.existsSync(sourceSettings)) {
@@ -457,13 +502,33 @@ function syncRuntimeSettings(runtimeDir, sourceDataDir, primary, timeoutMs) {
     model: primary.model,
     baseUrl: primary.baseUrl,
     timeoutMs,
+    maxRetries: 0,
   };
   delete settings.llm.apiKey;
+  settings.database = {
+    ...(settings.database && typeof settings.database === "object" && !Array.isArray(settings.database)
+      ? settings.database
+      : {}),
+    url: `file:${path.join(runtimeDir, "data", "structureclaw.db")}`,
+  };
+  settings.pkpm = {
+    ...(settings.pkpm && typeof settings.pkpm === "object" && !Array.isArray(settings.pkpm)
+      ? settings.pkpm
+      : {}),
+    workDir: path.join(runtimeDir, "analysis", "pkpm"),
+  };
+  settings.yjk = {
+    ...(settings.yjk && typeof settings.yjk === "object" && !Array.isArray(settings.yjk)
+      ? settings.yjk
+      : {}),
+    workDir: path.join(runtimeDir, "analysis", "yjk"),
+  };
   if (settings.vision && typeof settings.vision === "object" && !Array.isArray(settings.vision)) {
     settings.vision = {
       ...settings.vision,
       timeoutMs,
     };
+    delete settings.vision.apiKey;
   }
 
   const sourcePython = sourceDataDir
@@ -480,6 +545,7 @@ function syncRuntimeSettings(runtimeDir, sourceDataDir, primary, timeoutMs) {
     };
   }
   fs.writeFileSync(path.join(runtimeDir, "settings.json"), `${JSON.stringify(settings, null, 2)}\n`);
+  return timeoutMs;
 }
 
 function stringifyEnv(values) {
@@ -504,7 +570,8 @@ function printResolvedRun({ configPath, suiteName, suite, primary, judge, vision
   process.stdout.write(`Judge model: ${judge.key} -> ${judge.model} (${judge.baseUrl})\n`);
   process.stdout.write(`Judge key env: ${judge.apiKeyEnv} (${judge.apiKey ? "set" : "missing"})\n`);
   process.stdout.write(`Runner cwd: ${runnerCwd}\n`);
-  process.stdout.write(`Runtime data: ${path.join(RUNTIME_ROOT, sanitizeFilePart(primary.key))}\n`);
+  const runtimeId = process.env.SCLAW_BENCHMARK_RUNTIME_ID || primary.key;
+  process.stdout.write(`Runtime data: ${path.join(RUNTIME_ROOT, sanitizeFilePart(runtimeId))}\n`);
   process.stdout.write(`Source data: ${process.env.SCLAW_BENCHMARK_SOURCE_DATA_DIR || process.env.SCLAW_DATA_DIR || "(none)"}\n`);
   process.stdout.write(`Command: node ${path.relative(BENCH_ROOT, RUNNER_PATH)} ${runnerArgs.join(" ")}\n`);
 }
@@ -577,3 +644,5 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+
+module.exports = { benchmarkControlEnv, mergeRunnerArgs, syncRuntimeSettings };
