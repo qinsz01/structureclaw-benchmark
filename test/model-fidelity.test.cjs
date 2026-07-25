@@ -86,6 +86,19 @@ test("extra entities fail strict precision", () => {
   assert.ok(comparison.metrics.nodes.precision < 1);
 });
 
+test("model comparison summary distinguishes actual, expected, and matched entity counts", () => {
+  const expected = fixture("truss-pratt-15m-top10");
+  const actual = fixture("truss-pratt-15m-top10");
+  actual.elements[actual.elements.length - 1].nodes = ["B0", "T1"];
+
+  const comparison = compareStructuralModels(actual, expected);
+
+  assert.match(
+    comparison.summary,
+    /elements actual=\d+, expected=\d+, matched=\d+ \(P=/,
+  );
+});
+
 test("incorrect connectivity fails topology even when counts and spans agree", () => {
   const expected = fixture();
   const actual = fixture();
@@ -154,9 +167,53 @@ test("schema and unit contracts are part of engineering fidelity", () => {
   wrongSchema.schema_version = "1.0.0";
   const wrongUnits = fixture();
   wrongUnits.unit_system = "US";
+  const conflictingMetadata = fixture();
+  conflictingMetadata.metadata.frameDimension = "3d";
 
   assert.ok(compareStructuralModels(wrongSchema, expected).failures.includes("schema version"));
   assert.ok(compareStructuralModels(wrongUnits, expected).failures.includes("unit system"));
+  assert.match(compareStructuralModels(conflictingMetadata, expected).summary, /metadata dimension conflicts/);
+});
+
+test("artifact integrity rejects malformed ids, references, DOFs, restraints, and numeric fields", () => {
+  const expected = fixture();
+  const duplicateNode = fixture();
+  duplicateNode.nodes[1].id = duplicateNode.nodes[0].id;
+  const invalidElementReference = fixture();
+  invalidElementReference.elements[0].material = "missing-material";
+  const invalidLoadReference = fixture();
+  invalidLoadReference.load_cases[0].loads[0].element = "missing-element";
+  const extraDof = fixture();
+  extraDof.coordinate_system.dof_order.push("warp");
+  const stringCoordinate = fixture();
+  stringCoordinate.nodes[0].x = "0";
+  const stringRestraint = fixture();
+  stringRestraint.nodes[0].restraints[0] = "true";
+  const invalidLoadValue = fixture();
+  invalidLoadValue.load_cases[0].loads[0].wz = "not-a-number";
+  const invalidForceVector = fixture();
+  invalidForceVector.load_cases[0].loads[0].forces = [0, 0, -20];
+  const stringShape = fixture("frame-simple-1s1b");
+  stringShape.sections[0].shape.H = "300";
+  const stringStory = fixture("frame-simple-1s1b");
+  stringStory.stories[0].height = "4.5";
+
+  for (const actual of [
+    duplicateNode,
+    invalidElementReference,
+    invalidLoadReference,
+    stringCoordinate,
+    stringRestraint,
+    invalidLoadValue,
+    invalidForceVector,
+    stringShape,
+    stringStory,
+  ]) {
+    const comparison = compareStructuralModels(actual, expected);
+    assert.equal(comparison.pass, false);
+    assert.ok(comparison.failures.includes("artifact integrity"));
+  }
+  assert.equal(compareStructuralModels(extraDof, expected).pass, false);
 });
 
 test("load direction and member location are checked independently of total load", () => {
@@ -209,18 +266,32 @@ test("load-combination factors are checked", () => {
 test("equivalent load-case partitions match when their factored physical loads are identical", () => {
   const expected = fixture("frame-3s2b-6m-10k-wind");
   const actual = fixture("frame-3s2b-6m-10k-wind");
-  const loads = actual.load_cases[0].loads;
-  actual.load_cases = [
-    { id: "LINE", type: "other", loads: loads.filter((load) => load.element) },
-    { id: "LAT", type: "other", loads: loads.filter((load) => load.node) },
-  ];
-  actual.load_combinations = [{ id: "ULS", factors: { LINE: 1, LAT: 1 } }];
+  const originalFactors = actual.load_combinations[0].factors;
+  const splitFactors = {};
+  actual.load_cases = actual.load_cases.flatMap((loadCase) => loadCase.loads.map((load, index) => {
+    const id = `${loadCase.id}_${index}`;
+    splitFactors[id] = originalFactors[loadCase.id];
+    return { id, type: loadCase.type, loads: [load] };
+  }));
+  actual.load_combinations = [{ id: "ULS", factors: splitFactors }];
 
   assert.equal(compareStructuralModels(actual, expected).pass, true);
 
-  actual.load_combinations[0].factors.LAT = 1.2;
+  const windCase = actual.load_cases.find((loadCase) => loadCase.type === "wind");
+  actual.load_combinations[0].factors[windCase.id] = 1.2;
   const mismatch = compareStructuralModels(actual, expected);
   assert.ok(mismatch.failures.includes("load combinations"));
+});
+
+test("load-combination matching is independent of load-case ordering", () => {
+  const expected = fixture("frame-3s2b-6m-10k-wind");
+  const actual = fixture("frame-3s2b-6m-10k-wind");
+  actual.load_cases.reverse();
+  actual.load_combinations[0].factors = Object.fromEntries(
+    Object.entries(actual.load_combinations[0].factors).reverse(),
+  );
+
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
 });
 
 test("unspecified load categories are compatible without weakening explicit categories", () => {
@@ -242,6 +313,7 @@ test("canonical story loads match legacy fields and replace derived solver loads
   actual.stories = actual.stories.map((story) => ({
     id: story.id,
     height: story.height,
+    elevation: story.elevation,
     floorLoad: story.floor_loads.find((load) => load.type === "dead").value,
     floorLoadUnit: "kN/m2",
   }));
@@ -295,15 +367,33 @@ test("explicit beam loads do not require duplicate story load metadata", () => {
 });
 
 test("story definitions and entity assignments are checked", () => {
-  const expected = fixture("frame-simple-1s1b");
-  const wrongDefinition = fixture("frame-simple-1s1b");
+  const expected = fixture("frame3d-simple");
+  const wrongDefinition = fixture("frame3d-simple");
   wrongDefinition.stories[0].height += 1;
-  const wrongAssignment = fixture("frame-simple-1s1b");
-  const assignedElement = wrongAssignment.elements.find((element) => element.story);
-  assignedElement.story = "wrong-story";
+  const wrongAssignment = fixture("frame3d-simple");
+  const assignedElement = wrongAssignment.elements.find((element) => element.story === "F1");
+  assignedElement.story = "F2";
 
   assert.ok(compareStructuralModels(wrongDefinition, expected).failures.includes("stories"));
   assert.ok(compareStructuralModels(wrongAssignment, expected).failures.includes("stories"));
+});
+
+test("story array ordering is not treated as engineering semantics", () => {
+  const expected = fixture("frame3d-simple");
+  const actual = fixture("frame3d-simple");
+  actual.stories.reverse();
+
+  assert.equal(compareStructuralModels(actual, expected).pass, true);
+});
+
+test("declared story elevations are checked", () => {
+  const expected = fixture("frame3d-simple");
+  const actual = fixture("frame3d-simple");
+  actual.stories[1].elevation += 0.5;
+
+  const mismatch = compareStructuralModels(actual, expected);
+  assert.ok(mismatch.failures.includes("stories"));
+  assert.match(mismatch.diagnostics.storyFailures.join(" "), /F2: elevation/);
 });
 
 test("coordinate tolerance is explicit and does not weaken entity precision", () => {

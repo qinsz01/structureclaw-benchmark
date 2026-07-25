@@ -87,6 +87,19 @@ test("relative numerical tolerance is explicit", () => {
   assert.equal(compareAnalysisResults(actual, expected, mappings, { numeric: 0.01 }).pass, false);
 });
 
+test("near-zero ground truth uses the absolute tolerance", () => {
+  const expected = { displacements: { N1: { ux: 0, uz: 1e-10 } } };
+  const actual = { displacements: { "node-a": { ux: 0.01, uz: 0.02 } } };
+  const comparison = compareAnalysisResults(actual, expected, mappings, {
+    numeric: 0.05,
+    numericAbsolute: 1e-8,
+  });
+
+  assert.equal(comparison.pass, false);
+  assert.ok(comparison.failures.some((failure) => failure.includes("displacements.N1.ux")));
+  assert.ok(comparison.failures.some((failure) => failure.includes("displacements.N1.uz")));
+});
+
 test("legacy OpenSees 2-D frame responses are normalized to global X-Y-Z signs", () => {
   const expected = {
     analysisMode: "opensees_2d_frame",

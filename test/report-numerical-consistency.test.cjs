@@ -8,6 +8,44 @@ const scenario = {
   expect: { assertions: [{ type: "report_numerical_consistency" }] },
 };
 
+const presenceScenario = {
+  id: "report-presence",
+  expect: { assertions: [{ type: "has_report" }] },
+};
+
+test("report presence requires a typed trace-grounded report artifact", async () => {
+  const analysisResult = {
+    success: true,
+    displacements: { N1: { ux: 0.001 } },
+  };
+  const result = await evaluateScenario(presenceScenario, {
+    analysisResult,
+    report: {
+      summary: "Static analysis completed.",
+      json: {
+        reportSchemaVersion: "1.0.0",
+        summary: "Static analysis completed.",
+        analysis: structuredClone(analysisResult),
+      },
+      markdown: `# Calculation Report\n\n${"Trace-grounded engineering result. ".repeat(5)}`,
+    },
+    messages: [],
+  }, 0);
+  const metric = result.metrics.find((item) => item.metric === "has_report");
+  assert.equal(metric.pass, true, metric.actual);
+});
+
+test("report presence rejects long unstructured text", async () => {
+  const result = await evaluateScenario(presenceScenario, {
+    report: { markdown: "plausible prose ".repeat(20) },
+    messages: [],
+  }, 0);
+  const metric = result.metrics.find((item) => item.metric === "has_report");
+  assert.equal(metric.pass, false);
+  assert.match(metric.actual, /schema/);
+  assert.match(metric.actual, /analysis provenance/);
+});
+
 test("report consistency accepts the exact current analysis artifact", async () => {
   const analysisResult = {
     success: true,
