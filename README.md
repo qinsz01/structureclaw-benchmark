@@ -342,7 +342,32 @@ Results are written under `results/` by default, with the suite, primary model,
 judge model, and timestamp in the file name. Use `--output <file>` to override
 the path.
 
-For sequential multi-model comparisons, use the batch wrapper. It expands
+Paper runs must use the executable matrix in `experiments/formal-matrix.json`.
+The controller launches isolated model batches concurrently while the benchmark
+solver gate serializes calls to the same analysis engine. It records the matrix
+hash, both repository revisions, repeat ID, scenario and attachment hashes, and
+runtime configuration in every output. The checked-in matrix contains 5,400
+atomic runs: three repeats, ten text models, and six multimodal configurations.
+The GLM text configuration is the nighttime Paratera
+`glm-5.2-paratera` endpoint.
+
+```bash
+npm run experiment:smoke-models -- --output results/preflight/model-smoke.json
+npm run experiment:formal -- --run-id aaai27-final --repeats 1,2,3 --resume
+npm run experiment:aggregate -- \
+  --input-dir results/formal/aaai27-final \
+  --output results/formal/aaai27-final-summary.json
+```
+
+Formal execution requires the ignored local configuration to set
+`environment.SCLAW_BENCHMARK_SOURCE_DATA_DIR` to a data directory containing
+`settings.json` and the configured OpenSees, PKPM, and YJK runtimes. Preflight
+rejects missing solver installations. Formal mode also rejects dirty
+StructureClaw or benchmark worktrees, targeted execution, missing repeat or
+matrix identity, unsupervised execution, and nonzero scenario retries. Outputs
+from ordinary `npm run experiment` commands remain development-only.
+
+For sequential development comparisons, use the batch wrapper. It expands
 `models × modes`, calls the normal experiment wrapper for each pair, writes one
 UTF-8 log, and updates a summary JSON after each pair completes:
 
