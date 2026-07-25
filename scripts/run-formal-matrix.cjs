@@ -253,6 +253,13 @@ function assertMatrix(matrix, config) {
   if (!Number.isSafeInteger(matrix.yjkCooldownMs) || matrix.yjkCooldownMs <= 0) {
     throw new Error("Formal matrix requires a positive yjkCooldownMs");
   }
+  if (
+    matrix.multimodalConfigurations.some(
+      (configuration) => ![null, 0, 1].includes(configuration.visionTemperature),
+    )
+  ) {
+    throw new Error("Every multimodal configuration requires visionTemperature null, 0, or 1");
+  }
 }
 
 function selectedRepeats(options, matrix) {
@@ -301,6 +308,7 @@ function buildJobs(options, matrix) {
           suite: "multimodal",
           model: configuration.agentModel,
           visionModel: configuration.visionModel,
+          visionTemperature: configuration.visionTemperature,
           configurationId: configuration.id,
           mode: "auto",
           repeat,
@@ -437,6 +445,13 @@ function runJob(options, matrix, outputDir, job, logDir, freeze, signal) {
         SCLAW_BENCHMARK_RUNTIME_ID: runtimeId,
         SCLAW_BENCHMARK_SOLVER_GATE: matrix.solverGate,
         SCLAW_BENCHMARK_YJK_COOLDOWN_MS: String(matrix.yjkCooldownMs),
+        ...(job.visionModel
+          ? {
+              LLM_VISION_OMIT_TEMPERATURE: job.visionTemperature === null ? "1" : "0",
+              LLM_VISION_TEMPERATURE:
+                job.visionTemperature === null ? "" : String(job.visionTemperature),
+            }
+          : {}),
         SCLAW_BENCHMARK_FORMAL_JOB_ID: job.id,
         SCLAW_BENCHMARK_FORMAL_MATRIX_SHA256: freeze.matrixSha256,
         SCLAW_BENCHMARK_BACKEND_PREBUILT: options.dryRun ? "0" : "1",

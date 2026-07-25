@@ -282,7 +282,7 @@ edit only these three selectors in `experiments/llm-experiments.local.json`:
 {
   "testModel": "glm-5-turbo",
   "multimodalModel": "glm-4.5V",
-  "judgeModel": "DeepSeek-V4-Pro"
+  "judgeModel": "glm-5.2-paratera"
 }
 ```
 
@@ -290,10 +290,11 @@ edit only these three selectors in `experiments/llm-experiments.local.json`:
 - `multimodal` — the vision parser used only before image/drawing scenarios. Its
   output is injected as an attachment summary, then the `test` model runs the
   normal StructureClaw agent/tool workflow. This role maps to `LLM_VISION_MODEL`,
-  `LLM_VISION_BASE_URL`, and `LLM_VISION_API_KEY`. Model-specific `extraEnv` may
-  also set `LLM_VISION_TEMPERATURE` for providers that require a fixed vision
-  request temperature. Vision parsing uses the scenario case timeout; it does
-  not apply a separate shorter request timeout.
+  `LLM_VISION_BASE_URL`, and `LLM_VISION_API_KEY`. Benchmark vision requests use
+  temperature `0`, except Kimi-K2.6, whose API requires temperature `1`.
+  Claude Opus rejects this parameter, so its request omits the field.
+  Vision parsing uses the scenario case timeout; it does not apply a separate
+  shorter request timeout.
 - `judge` — the LLM-as-Judge model, mapped to `LLM_JUDGE_MODEL`,
   `LLM_JUDGE_BASE_URL`, and `LLM_JUDGE_API_KEY`.
 
@@ -323,9 +324,9 @@ export OPENAI_API_KEY=...
 npm run experiment:list
 npm run experiment -- --suite smoke-text --dry-run
 npm run experiment -- --suite smoke-text
-npm run experiment -- --suite smoke-multimodal --multimodal-model glm-4.5V --judge-model DeepSeek-V4-Pro
-npm run experiment -- --suite standard --test-model glm-5-turbo --judge-model DeepSeek-V4-Pro
-npm run experiment -- --suite multimodal --multimodal-model glm-4.5V --judge-model DeepSeek-V4-Pro
+npm run experiment -- --suite smoke-multimodal --multimodal-model glm-4.5V --judge-model glm-5.2-paratera
+npm run experiment -- --suite standard --test-model glm-5-turbo --judge-model glm-5.2-paratera
+npm run experiment -- --suite multimodal --multimodal-model glm-4.5V --judge-model glm-5.2-paratera
 ```
 
 Available suite names in the example config are `smoke-text`,
@@ -348,8 +349,10 @@ solver gate serializes calls to the same analysis engine. It records the matrix
 hash, both repository revisions, repeat ID, scenario and attachment hashes, and
 runtime configuration in every output. The checked-in matrix contains 5,400
 atomic runs: three repeats, ten text models, and six multimodal configurations.
-The GLM text configuration is the nighttime Paratera
-`glm-5.2-paratera` endpoint.
+The GLM text configuration and the unified judge use the nighttime Paratera
+`glm-5.2-paratera` endpoint. Vision temperature is `0` for GPT, Gemini, MiniMax,
+and GLM, `1` for Kimi-K2.6, and omitted for Claude Opus because its API rejects
+the parameter.
 
 ```bash
 npm run experiment:smoke-models -- --output results/preflight/model-smoke.json

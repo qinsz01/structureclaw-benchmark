@@ -93,6 +93,7 @@ function buildSmokeJobs(matrix) {
       modelId: configuration.visionModel,
       agentModelId: configuration.agentModel,
       configurationId: configuration.id,
+      temperature: configuration.visionTemperature,
     })),
     {
       id: `judge:${matrix.judgeModel}`,
@@ -128,7 +129,11 @@ function requestBody(job, model, imageDataUri) {
     .split(",")
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
-  if (job.kind === "vision" && model.extraEnv?.LLM_VISION_TEMPERATURE !== undefined) {
+  if (job.kind === "vision" && job.temperature === null) {
+    // Some providers reject the temperature field even when it is zero.
+  } else if (job.kind === "vision" && Number.isFinite(job.temperature)) {
+    body.temperature = job.temperature;
+  } else if (job.kind === "vision" && model.extraEnv?.LLM_VISION_TEMPERATURE !== undefined) {
     body.temperature = Number(model.extraEnv.LLM_VISION_TEMPERATURE);
   } else if (!omittedTemperatureModels.includes(String(model.model).toLowerCase())) {
     body.temperature = 0;

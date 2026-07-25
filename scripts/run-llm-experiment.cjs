@@ -89,7 +89,7 @@ function usage() {
     "  node scripts/run-llm-experiment.cjs --init",
     "  node scripts/run-llm-experiment.cjs --list",
     "  node scripts/run-llm-experiment.cjs --suite smoke-text",
-    "  node scripts/run-llm-experiment.cjs --suite smoke-multimodal --multimodal-model glm-4.5V --judge-model DeepSeek-V4-Pro",
+    "  node scripts/run-llm-experiment.cjs --suite smoke-multimodal --multimodal-model glm-4.5V --judge-model glm-5.2-paratera",
     "",
     "Experiment flags:",
     "  --init                      Create experiments/llm-experiments.local.json from the example.",
@@ -427,6 +427,12 @@ function benchmarkControlEnv() {
   return {
     SCLAW_BENCHMARK_LLM_ONLY: "1",
     SCLAW_BENCHMARK_MAX_TOKENS: "16384",
+    ...(process.env.LLM_VISION_OMIT_TEMPERATURE !== undefined
+      ? { LLM_VISION_OMIT_TEMPERATURE: process.env.LLM_VISION_OMIT_TEMPERATURE }
+      : {}),
+    ...(process.env.LLM_VISION_TEMPERATURE !== undefined
+      ? { LLM_VISION_TEMPERATURE: process.env.LLM_VISION_TEMPERATURE }
+      : {}),
     SCLAW_BENCHMARK_SOLVER_GATE: process.env.SCLAW_BENCHMARK_SOLVER_GATE || "per-engine",
     SCLAW_BENCHMARK_YJK_COOLDOWN_MS:
       process.env.SCLAW_BENCHMARK_YJK_COOLDOWN_MS || "5000",

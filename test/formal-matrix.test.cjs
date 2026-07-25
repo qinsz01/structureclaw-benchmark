@@ -40,6 +40,24 @@ test("formal matrix contains exactly 5,400 runs without oracle mode", () => {
   assert.ok(jobs.every((job) => job.mode !== "oracle-specialist"));
   assert.ok(matrix.textModels.includes("glm-5.2-paratera"));
   assert.ok(!matrix.textModels.includes("glm-5.2-mine"));
+  assert.equal(matrix.judgeModel, "glm-5.2-paratera");
+  assert.equal(
+    matrix.multimodalConfigurations.find((item) => item.id === "kimi-k2.6-native")
+      .visionTemperature,
+    1,
+  );
+  assert.equal(
+    matrix.multimodalConfigurations.find((item) => item.id === "claude-opus-4-8-native")
+      .visionTemperature,
+    null,
+  );
+  assert.ok(
+    matrix.multimodalConfigurations
+      .filter(
+        (item) => !["kimi-k2.6-native", "claude-opus-4-8-native"].includes(item.id),
+      )
+      .every((item) => item.visionTemperature === 0),
+  );
 });
 
 test("formal jobs use 60 standard, 30 interactive, and 18 multimodal batches", () => {

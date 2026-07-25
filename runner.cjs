@@ -542,10 +542,12 @@ function buildRunMetadata(options, sutRoot, scenarios) {
             configId: process.env.LLM_BENCHMARK_VISION_CONFIG_ID || null,
             model: process.env.LLM_VISION_MODEL,
             endpoint: safeEndpoint(process.env.LLM_VISION_BASE_URL),
-            temperature: process.env.LLM_VISION_TEMPERATURE === undefined
-              || process.env.LLM_VISION_TEMPERATURE === ""
-              ? 0
-              : Number(process.env.LLM_VISION_TEMPERATURE),
+            temperature: process.env.LLM_VISION_OMIT_TEMPERATURE === "1"
+              ? null
+              : process.env.LLM_VISION_TEMPERATURE === undefined
+                || process.env.LLM_VISION_TEMPERATURE === ""
+                ? 0
+                : Number(process.env.LLM_VISION_TEMPERATURE),
             maxTokens: benchmarkMaxTokens(),
             providerMaxRetries: 0,
             timeoutMs: providerRequestTimeoutMs,
@@ -730,14 +732,17 @@ function visionConfig() {
   const baseUrl = process.env.LLM_VISION_BASE_URL;
   const apiKey = process.env.LLM_VISION_API_KEY;
   const temperatureText = process.env.LLM_VISION_TEMPERATURE;
+  const omitTemperature = process.env.LLM_VISION_OMIT_TEMPERATURE === "1";
   if (!model && !baseUrl && !apiKey) return null;
   if (!model || !baseUrl || !apiKey) {
     throw new Error("LLM_VISION_MODEL, LLM_VISION_BASE_URL, and LLM_VISION_API_KEY must be set together");
   }
-  const temperature = temperatureText === undefined || temperatureText === ""
+  const temperature = omitTemperature
+    ? null
+    : temperatureText === undefined || temperatureText === ""
     ? 0
     : Number(temperatureText);
-  if (!Number.isFinite(temperature)) {
+  if (temperature !== null && !Number.isFinite(temperature)) {
     throw new Error("LLM_VISION_TEMPERATURE must be a finite number when set");
   }
   return { model, baseUrl, apiKey, temperature, maxTokens: benchmarkMaxTokens() };
@@ -872,7 +877,7 @@ async function parseImageAttachmentWithVision(attachment, locale, signal, imageI
   const dataUri = `data:${imageMimeType(attachment, filePath)};base64,${fs.readFileSync(filePath).toString("base64")}`;
   const body = {
     model: cfg.model,
-    temperature: cfg.temperature,
+    ...(cfg.temperature === null ? {} : { temperature: cfg.temperature }),
     max_tokens: cfg.maxTokens,
     messages: [
       {

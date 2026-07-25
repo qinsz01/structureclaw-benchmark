@@ -22,6 +22,24 @@ test("formal smoke covers ten text models, six vision combinations, and one judg
   assert.equal(jobs.filter((job) => job.kind === "vision").length, 6);
   assert.equal(jobs.filter((job) => job.kind === "judge").length, 1);
   assert.ok(jobs.some((job) => job.id === "text:glm-5.2-paratera"));
+  assert.ok(jobs.some((job) => job.id === "judge:glm-5.2-paratera"));
+  assert.equal(
+    jobs.find((job) => job.id === "vision:kimi-k2.6-native").temperature,
+    1,
+  );
+  assert.equal(
+    jobs.find((job) => job.id === "vision:claude-opus-4-8-native").temperature,
+    null,
+  );
+  assert.ok(
+    jobs
+      .filter(
+        (job) =>
+          job.kind === "vision"
+          && !["vision:kimi-k2.6-native", "vision:claude-opus-4-8-native"].includes(job.id),
+      )
+      .every((job) => job.temperature === 0),
+  );
   assert.ok(!jobs.some((job) => job.modelId === "glm-5.2-mine"));
 });
 
@@ -63,7 +81,7 @@ test("chat completion URLs and multimodal request bodies match the production co
   assert.deepEqual(body.thinking, { type: "disabled" });
 });
 
-test("formal smoke honors provider-specific temperature requirements", () => {
+test("formal smoke omits incompatible text temperature and honors vision configuration", () => {
   const model = {
     model: "kimi-k2.6",
     extraEnv: {
@@ -73,7 +91,18 @@ test("formal smoke honors provider-specific temperature requirements", () => {
   };
 
   const textBody = requestBody({ kind: "text" }, model, null);
-  const visionBody = requestBody({ kind: "vision" }, model, "data:image/png;base64,abc");
+  const visionBody = requestBody(
+    { kind: "vision", temperature: 1 },
+    model,
+    "data:image/png;base64,abc",
+  );
   assert.equal(Object.hasOwn(textBody, "temperature"), false);
   assert.equal(visionBody.temperature, 1);
+
+  const claudeVisionBody = requestBody(
+    { kind: "vision", temperature: null },
+    { model: "claude-opus-4-8" },
+    "data:image/png;base64,abc",
+  );
+  assert.equal(Object.hasOwn(claudeVisionBody, "temperature"), false);
 });
