@@ -195,16 +195,13 @@ models.push({
         shape: { kind: "H", H: 400, B: 200, tw: 8, tf: 13 },
         properties: { A: 0.00842, Iy: 2.37e-4, Iz: 1.74e-5, J: 8.44e-7, G: 79000 } },
     ],
-    stories: [{ id: "F1", height: 4.5, floorLoad: 8, floorLoadUnit: "kN/m2", tributaryWidthM: 6, equivalentLineLoad: 48 }],
+    stories: [{ id: "F1", height: 4.5, elevation: 0 }],
     load_cases: [
       { id: "D", type: "dead", loads: [{ type: "distributed", element: "B1", wz: -48, wy: 0 }] },
     ],
     load_combinations: [{ id: "ULS", factors: { D: 1.0 } }],
     metadata: {
       source: "ground-truth", inferredType: "frame", frameDimension: "2d",
-      floorLoadUnit: "kN/m2",
-      tributaryWidthM: 6,
-      equivalentLineLoad: 48,
       storyCount: 1, bayCount: 1,
       geometry: { storyHeightsM: [4.5], bayWidthsM: [6] },
     },
@@ -320,7 +317,7 @@ models.push({
   });
 })();
 
-// 5b. truss-pratt-15m-top10: Pratt-like truss, top chord nodal loads
+// 5b. truss-pratt-15m-top10: Pratt truss, top chord nodal loads
 (() => {
   const L = 15, H = 2.5, panels = 5;
   const dx = L / panels;
@@ -336,7 +333,7 @@ models.push({
     elements.push({ id: `WV${i}`, type: "truss", nodes: [`B${i}`, `T${i}`], material: "1", section: "1" });
   }
   for (let i = 0; i < panels; i++) {
-    const diagonalNodes = i < panels / 2 ? [`B${i}`, `T${i + 1}`] : [`T${i}`, `B${i + 1}`];
+    const diagonalNodes = i < panels / 2 ? [`T${i}`, `B${i + 1}`] : [`B${i}`, `T${i + 1}`];
     elements.push({ id: `WD${i}`, type: "truss", nodes: diagonalNodes, material: "1", section: "1" });
   }
   models.push({
@@ -953,7 +950,15 @@ function build2dFrame(id, description, opts) {
   );
   const nodes = [];
   const elements = [];
-  const loads = [];
+  const loadCases = new Map();
+  const addLoad = (caseId, caseType, load) => {
+    const existing = loadCases.get(caseId);
+    if (existing) {
+      existing.loads.push(load);
+      return;
+    }
+    loadCases.set(caseId, { id: caseId, type: caseType, loads: [load] });
+  };
 
   for (let si = 0; si < zCoords.length; si++) {
     for (let xi = 0; xi < xCoords.length; xi++) {
@@ -985,13 +990,24 @@ function build2dFrame(id, description, opts) {
       };
       elements.push(beam);
       const floorLoad = floorLoads[si - 1] ?? 0;
-      if (floorLoad > 0) loads.push({ type: "distributed", element: beam.id, wz: -toEquivalentLineLoad(floorLoad), wy: 0 });
+      if (floorLoad > 0) {
+        addLoad("D", "dead", {
+          type: "distributed",
+          element: beam.id,
+          wz: -toEquivalentLineLoad(floorLoad),
+          wy: 0,
+        });
+      }
     }
   }
 
   for (const load of lateralLoads) {
     for (const xi of load.xIndices || [xCoords.length - 1]) {
-      loads.push({ node: `N${load.storyIndex}_${xi}`, fx: load.fx });
+      addLoad(
+        load.caseId ?? "W",
+        load.caseType ?? "wind",
+        { node: `N${load.storyIndex}_${xi}`, fx: load.fx },
+      );
     }
   }
   for (const load of pointLoads) {
@@ -999,7 +1015,7 @@ function build2dFrame(id, description, opts) {
     for (const key of ["fx", "fy", "fz"]) {
       if (Number.isFinite(Number(load[key]))) nodeLoad[key] = load[key];
     }
-    loads.push(nodeLoad);
+    addLoad(load.caseId ?? "L", load.caseType ?? "live", nodeLoad);
   }
 
   const stories = storyHeights.map((height, index) => {
@@ -1016,6 +1032,10 @@ function build2dFrame(id, description, opts) {
       } : {}),
     };
   });
+  const loadCaseRecords = Array.from(loadCases.values());
+  const loadCombinationFactors = Object.fromEntries(
+    loadCaseRecords.map((loadCase) => [loadCase.id, 1.0]),
+  );
 
   return {
     id,
@@ -1029,8 +1049,8 @@ function build2dFrame(id, description, opts) {
       materials: [material],
       sections,
       stories,
-      load_cases: [{ id: "D", type: "dead", loads }],
-      load_combinations: [{ id: "ULS", factors: { D: 1.0 } }],
+      load_cases: loadCaseRecords,
+      load_combinations: [{ id: "ULS", factors: loadCombinationFactors }],
       metadata: {
         source: "ground-truth",
         inferredType,
@@ -1462,8 +1482,8 @@ models.push(build2dFrame("frame-industrial-24m-12m-crane10t", "单层工业重�
   storyHeights: [12],
   floorLoads: [1.5],
   floorLoadUnit: "area",
-  lateralLoads: [{ storyIndex: 1, xIndices: [1], fx: 10 }],
-  pointLoads: [{ storyIndex: 1, xIndex: 1, fz: -98 }],
+  lateralLoads: [{ storyIndex: 1, xIndices: [1], fx: 10, caseId: "C", caseType: "other" }],
+  pointLoads: [{ storyIndex: 1, xIndex: 1, fz: -98, caseId: "C", caseType: "other" }],
 }));
 
 models.push(build2dFrame("concrete-frame-2s1b-6m-12k", "2层混凝土框架，层高3.6m，跨度6m，楼面荷载12kN/m2", {
@@ -1586,7 +1606,7 @@ models.push(build2dFrame("generic-single-bay-6m-4m-lateral50", "单层单跨平�
   inferredType: "generic",
   bayWidths: [6],
   storyHeights: [4],
-  lateralLoads: [{ storyIndex: 1, xIndices: [1], fx: 50 }],
+  lateralLoads: [{ storyIndex: 1, xIndices: [1], fx: 50, caseId: "H", caseType: "other" }],
 }));
 
 models.push(buildTrapezoidTruss("truss-complex-trap-12k", "梯形屋架，跨度18m，高2.5m，6节间，上弦节点荷载12kN", {
@@ -1691,7 +1711,7 @@ models.push(build2dFrame("generic-single-bay-6m-4m-lateral80", "单层单跨平�
   inferredType: "generic",
   bayWidths: [6],
   storyHeights: [4],
-  lateralLoads: [{ storyIndex: 1, xIndices: [1], fx: 80 }],
+  lateralLoads: [{ storyIndex: 1, xIndices: [1], fx: 80, caseId: "H", caseType: "other" }],
 }));
 models.push(buildPortalSingle("portal-simple-18m-7m-6k", "门式刚架跨度18m，柱高7m，屋面荷载6kN/m", {
   span: 18,

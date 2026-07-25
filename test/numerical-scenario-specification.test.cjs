@@ -3,8 +3,6 @@ const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
 
-const { benchmarkEngineeringSpecification } = require("../runner.cjs");
-
 const SCENARIO_DIR = path.join(__dirname, "..", "scenarios", "standard_workflow");
 const MULTIMODAL_DIR = path.join(__dirname, "..", "scenarios", "multimodal_reverse_engineering");
 const INTERACTIVE_DIR = path.join(__dirname, "..", "scenarios", "interactive_robustness");
@@ -26,6 +24,27 @@ test("numerically scored concrete frames declare a unique analysis model", () =>
       assert.match(message, /(?:仅施加|apply only)/iu, `${scenario.id}: converted load is not exclusive`);
       assert.match(message, /(?:不重复|do not also apply)/iu, `${scenario.id}: duplicate load is not prohibited`);
     }
+  }
+});
+
+test("converted-load tasks apply exactly one load representation", () => {
+  const scenarios = fs.readdirSync(SCENARIO_DIR)
+    .filter((name) => name.endsWith(".json"))
+    .map((name) => JSON.parse(fs.readFileSync(path.join(SCENARIO_DIR, name), "utf8")))
+    .filter((scenario) => /(?:折算|convert|derived from)/iu.test(scenario.message));
+
+  assert.ok(scenarios.length > 0);
+  for (const scenario of scenarios) {
+    assert.match(
+      scenario.message,
+      /(?:仅施加|apply only)/iu,
+      `${scenario.id}: converted load is not declared as the sole applied representation`,
+    );
+    assert.match(
+      scenario.message,
+      /(?:不再?重复|do not also apply)/iu,
+      `${scenario.id}: source and converted loads may be applied twice`,
+    );
   }
 });
 
@@ -89,6 +108,165 @@ test("interactive frame nodal-load revision specifies the loaded node", () => {
   for (const turn of scenario.turns) {
     assert.match(turn.message, /右上节点/u, `${scenario.id}: ambiguous nodal-load location`);
   }
+});
+
+test("missing-parameter criteria do not ask users to reconfirm an explicit support type", () => {
+  const scenario = JSON.parse(fs.readFileSync(
+    path.join(INTERACTIVE_DIR, "robust-beam-missing-span-load.json"),
+    "utf8",
+  ));
+  const criterion = scenario.expect.assertions.find((item) => item.type === "natural_language");
+
+  assert.match(scenario.message, /简支梁/u);
+  assert.match(criterion.description, /does not need to be reconfirmed/u);
+  assert.doesNotMatch(criterion.description, /ask for .*support parameters/iu);
+});
+
+test("overhanging-beam load extent is explicit", () => {
+  const scenario = JSON.parse(fs.readFileSync(
+    path.join(SCENARIO_DIR, "beam-overhanging-static.json"),
+    "utf8",
+  ));
+
+  assert.match(scenario.message, /结构全长施加.*均布荷载/u);
+});
+
+test("numerically scored text workflows state the applied load direction", () => {
+  const scenarios = fs.readdirSync(SCENARIO_DIR)
+    .filter((name) => name.endsWith(".json"))
+    .map((name) => JSON.parse(fs.readFileSync(path.join(SCENARIO_DIR, name), "utf8")))
+    .filter((scenario) => scenario.expect?.assertions?.some((item) => item.type === "model_matches"));
+
+  assert.ok(scenarios.length > 0);
+  for (const scenario of scenarios) {
+    assert.match(
+      scenario.message,
+      /(?:downward|upward|global[- ]?[XYZ].*(?:positive|negative)|向下|向上|全局[XYZ].*(?:正向|负向))/iu,
+      `${scenario.id}: applied load direction is implicit`,
+    );
+  }
+});
+
+test("numerically scored interaction turns state the applied load direction", () => {
+  const scenarios = fs.readdirSync(INTERACTIVE_DIR)
+    .filter((name) => name.endsWith(".json"))
+    .map((name) => JSON.parse(fs.readFileSync(path.join(INTERACTIVE_DIR, name), "utf8")));
+
+  for (const scenario of scenarios) {
+    const history = [];
+    for (const turn of scenario.turns || []) {
+      history.push(turn.message);
+      if (!(turn.assertions || []).some((item) => item.type === "model_matches")) continue;
+      assert.match(
+        history.join("\n"),
+        /(?:downward|upward|global[- ]?[XYZ].*(?:positive|negative)|向下|向上|全局[XYZ].*(?:正向|负向))/iu,
+        `${scenario.id}: applied load direction is implicit at a numerically scored turn`,
+      );
+    }
+  }
+});
+
+test("negative-dimension interaction tasks state that the value is explicitly negative", () => {
+  const scenarioIds = [
+    "beam-error-contradictory-params",
+    "error-frame-negative-dimensions",
+    "robust-beam-negative-span",
+    "robust-dspan-negative-span",
+    "robust-frame-negative-story-height",
+  ];
+
+  for (const scenarioId of scenarioIds) {
+    const scenario = JSON.parse(fs.readFileSync(
+      path.join(INTERACTIVE_DIR, `${scenarioId}.json`),
+      "utf8",
+    ));
+    assert.match(
+      scenario.message,
+      /(?:数值为负|负数|negative value)/iu,
+      `${scenario.id}: a hyphen alone is ambiguous punctuation rather than an explicit negative value`,
+    );
+  }
+});
+
+test("the concrete-frame dimension-conflict task contains mutually exclusive requirements", () => {
+  const scenario = JSON.parse(fs.readFileSync(
+    path.join(INTERACTIVE_DIR, "robust-concrete-conflicting-dimension.json"),
+    "utf8",
+  ));
+
+  assert.match(scenario.message, /同时要求.*2D.*3D/u);
+  assert.match(scenario.message, /未提供.*Y向.*(?:跨度|宽度)/u);
+});
+
+test("objectively unsafe interaction tasks require issue-specific semantic evaluation", () => {
+  const issueCategories = new Set([
+    "error-recovery",
+    "invalid-values",
+    "conflicting-requirements",
+    "unit-ambiguity",
+    "unsupported",
+  ]);
+  const scenarios = fs.readdirSync(INTERACTIVE_DIR)
+    .filter((name) => name.endsWith(".json"))
+    .map((name) => JSON.parse(fs.readFileSync(path.join(INTERACTIVE_DIR, name), "utf8")))
+    .filter((scenario) => issueCategories.has(scenario.category));
+
+  assert.ok(scenarios.length > 0);
+  for (const scenario of scenarios) {
+    const assertions = scenario.expect?.assertions || [];
+    assert.ok(
+      assertions.some((item) => item.type === "natural_language"),
+      `${scenario.id}: unsafe-input handling can pass without identifying the stated issue`,
+    );
+  }
+});
+
+test("requested numerical responses are checked against the current analysis artifact", () => {
+  const requestsNumericalResponse = (message) => (
+    /(?:report|output|include|给出|输出|报告)[^.\n]{0,120}(?:deflection|displacement|挠度|位移)/iu.test(message)
+    || /(?:deflection|displacement|挠度|位移)[^.\n]{0,120}(?:report|output|给出|输出|报告)/iu.test(message)
+  );
+  const isGroundedCriterion = (assertion) => (
+    assertion.type === "natural_language"
+    && /(?:current (?:analysis )?artifacts?|当前.*分析工件)/iu.test(assertion.description)
+    && /(?:consistent|一致|忠实)/iu.test(assertion.description)
+  );
+  let checked = 0;
+
+  for (const scenarioDir of [SCENARIO_DIR, MULTIMODAL_DIR]) {
+    const singleTurnScenarios = fs.readdirSync(scenarioDir)
+      .filter((name) => name.endsWith(".json"))
+      .map((name) => JSON.parse(fs.readFileSync(path.join(scenarioDir, name), "utf8")));
+    for (const scenario of singleTurnScenarios) {
+      const assertions = scenario.expect?.assertions || [];
+      if (!assertions.some((item) => item.type === "numerical_matches")) continue;
+      if (!requestsNumericalResponse(scenario.message)) continue;
+      checked += 1;
+      assert.ok(
+        assertions.some(isGroundedCriterion),
+        `${scenario.id}: numerical response is not checked against the analysis artifact`,
+      );
+    }
+  }
+
+  const interactiveScenarios = fs.readdirSync(INTERACTIVE_DIR)
+    .filter((name) => name.endsWith(".json"))
+    .map((name) => JSON.parse(fs.readFileSync(path.join(INTERACTIVE_DIR, name), "utf8")));
+  for (const scenario of interactiveScenarios) {
+    const history = [];
+    for (const turn of scenario.turns || []) {
+      history.push(turn.message);
+      if (!(turn.assertions || []).some((item) => item.type === "numerical_matches")) continue;
+      if (!requestsNumericalResponse(history.join("\n"))) continue;
+      checked += 1;
+      assert.ok(
+        (turn.assertions || []).some(isGroundedCriterion),
+        `${scenario.id}: numerical response is not checked against the analysis artifact`,
+      );
+    }
+  }
+
+  assert.ok(checked >= 13);
 });
 
 test("numerical beam targets expose observation nodes required only for response comparison", () => {
@@ -186,10 +364,23 @@ test("response-specific semantic checks are stated in the scenario input", () =>
       /(?:层间位移|inter-story displacement)/iu,
       `${scenario.id}: hidden story-response requirement`,
     );
+    assert.match(
+      scenario.message,
+      /(?:左右两个梁柱节点|both left and right beam-column joints)/iu,
+      `${scenario.id}: floor displacement is not tied to explicit response locations`,
+    );
+    const criterion = scenario.expect.assertions.find((item) => (
+      item.type === "natural_language" && /(?:story drift|inter-story displacement)/iu.test(item.description)
+    )).description;
+    assert.match(
+      criterion,
+      /(?:柱列|节点|column line|node)/iu,
+      `${scenario.id}: story-response criterion is not tied to an identifiable result location`,
+    );
   }
 });
 
-test("every strict model target receives common analysis properties without answer leakage", () => {
+test("every strict model target declares common analysis properties without answer leakage", () => {
   const scenariosRoot = path.join(__dirname, "..", "scenarios");
   const scenarioFiles = fs.readdirSync(scenariosRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
@@ -201,25 +392,60 @@ test("every strict model target receives common analysis properties without answ
   for (const file of scenarioFiles) {
     const scenario = JSON.parse(fs.readFileSync(file, "utf8"));
     const assertionGroups = [
-      scenario.expect?.assertions,
-      ...(scenario.turns || []).map((turn) => turn.assertions),
-    ].filter(Array.isArray);
-    for (const assertions of assertionGroups) {
+      {
+        assertions: scenario.expect?.assertions,
+        specification: scenario.engineeringSpecification,
+      },
+      ...(scenario.turns || []).map((turn) => ({
+        assertions: turn.assertions,
+        specification: turn.engineeringSpecification ?? scenario.engineeringSpecification,
+      })),
+    ].filter((group) => Array.isArray(group.assertions));
+    for (const { assertions, specification } of assertionGroups) {
       if (!assertions.some((item) => item.type === "model_matches")) continue;
       targetCount += 1;
-      const specification = benchmarkEngineeringSpecification(assertions, scenario.locale || "zh");
-      assert.match(specification, /(?:Coordinate system|坐标系):/u, `${scenario.id}: missing coordinate specification`);
-      assert.match(specification, /(?:Materials|材料):/u, `${scenario.id}: missing material specification`);
-      assert.match(specification, /(?:Sections|截面):/u, `${scenario.id}: missing section specification`);
+      assert.equal(typeof specification, "string", `${scenario.id}: missing frozen engineering specification`);
       assert.match(
         specification,
-        /(?:extract_draft_params|parameter extraction|参数提取)/u,
-        `${scenario.id}: engineering properties are not explicitly propagated to parameter extraction`,
+        /(?:(?:Coordinate system|坐标系):|(?:SI units|SI单位).*(?:global-z-up|全局Z轴向上))/iu,
+        `${scenario.id}: missing coordinate specification`,
+      );
+      assert.match(
+        specification,
+        /(?:Materials?(?::|\s)|材料[:：]?)/iu,
+        `${scenario.id}: missing material specification`,
+      );
+      assert.match(
+        specification,
+        /(?:Sections?\b|截面|(?:柱|梁|所有|全部).*构件采用|所有杆件采用)/iu,
+        `${scenario.id}: missing section specification`,
+      );
+      assert.match(
+        specification,
+        /(?:Analysis load combinations?|load combination|分析荷载组合|荷载组合)/iu,
+        `${scenario.id}: missing analysis load-combination specification`,
       );
       assert.doesNotMatch(specification, /(?:Nodes|节点|Elements|构件|Loads|荷载)\s*:/u, `${scenario.id}: leaked target model answer`);
+      assert.doesNotMatch(specification, /groundTruthId/u, `${scenario.id}: leaked evaluator identity`);
     }
   }
   assert.ok(targetCount >= 100);
+});
+
+test("benchmark runtime does not derive agent inputs from ground truth", () => {
+  const runnerSource = fs.readFileSync(path.join(__dirname, "..", "runner.cjs"), "utf8");
+  assert.doesNotMatch(runnerSource, /ground-truth-models|GROUND_TRUTH_BY_ID/u);
+});
+
+test("nontrivial load-combination factors are exposed as analysis inputs", () => {
+  const scenario = JSON.parse(fs.readFileSync(
+    path.join(MULTIMODAL_DIR, "re-dxf-frame-complex-2s2b.json"),
+    "utf8",
+  ));
+  assert.match(
+    scenario.engineeringSpecification,
+    /id=ULS,\s*factors=\{D=1\.2,\s*L=1\.4\}/u,
+  );
 });
 
 test("portal-frame analysis properties expose a parseable complete H-section name", () => {
@@ -227,8 +453,7 @@ test("portal-frame analysis properties expose a parseable complete H-section nam
     path.join(SCENARIO_DIR, "portal-frame-static-18m.json"),
     "utf8",
   ));
-  const specification = benchmarkEngineeringSpecification(scenario.expect.assertions, scenario.locale);
-  assert.match(specification, /member=H600x250x10x16/u);
+  assert.match(scenario.engineeringSpecification, /member=H600x250x10x16/u);
 });
 
 test("portal-frame ground truth uses complete and geometrically consistent H-sections", () => {
@@ -309,9 +534,11 @@ test("steel column benchmark declares a complete executable catalog section", ()
       G: 79000,
     },
   });
-  const specification = benchmarkEngineeringSpecification(scenario.expect.assertions, scenario.locale);
-  assert.match(specification, /name=HW300x300/u);
-  assert.match(specification, /shape\(kind=H, H=300, B=300, tw=10, tf=15\)/u);
+  assert.match(scenario.engineeringSpecification, /name=HW300x300/u);
+  assert.match(
+    scenario.engineeringSpecification,
+    /shape\(kind=H, H=300, B=300, tw=10, tf=15\)/u,
+  );
 });
 
 test("steel frame ground truth uses executable catalog sections without duplicate load metadata", () => {

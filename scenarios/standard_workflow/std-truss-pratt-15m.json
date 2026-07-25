@@ -22,7 +22,7 @@
     "zh",
     "l2"
   ],
-  "message": "Pratt桁架，跨度15m，高2.5m，5个节间，4个上弦内部节点各作用竖向荷载10kN，请分析",
+  "message": "平行弦Pratt桁架，跨度15m、高2.5m、5个等长节间；上下弦在x=0、3、6、9、12、15m处均设节点并设置竖杆，斜杆依次连接上弦0m至下弦3m、上弦3m至下弦6m、上弦6m至下弦9m、下弦9m至上弦12m、下弦12m至上弦15m。左下节点铰支，右下节点为沿全局X向可滑动的滚动支座；4个上弦内部节点各施加向下10kN荷载，请分析",
   "locale": "zh",
   "maxRetries": 0,
   "expect": {
@@ -71,5 +71,6 @@
         "type": "has_analysis"
       }
     ]
-  }
+  },
+  "engineeringSpecification": "所有模式均须严格使用以下完整分析属性；这些记录不是占位符，无需要求补充。结构分类只使用用户任务，参数提取须同时包含这些属性。不得显式创建构件自重荷载或重复施加折算荷载；分析后端可按自身配置在内部计入构件自重。几何、拓扑、支座和荷载位置仍由用户任务确定。\n单位制: SI\n坐标系: semantics=global-z-up, version=1, dimension=2d, plane=xz, dof_order=ux,uy,uz,rx,ry,rz\n材料: id=1, name=steel, E=205000, nu=0.3, rho=7850\n截面: id=1, name=T1, type=rod, properties(A=0.01)\n分析荷载组合: id=ULS, factors={LC1=1}"
 }

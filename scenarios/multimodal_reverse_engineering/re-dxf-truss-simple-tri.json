@@ -1,6 +1,6 @@
 {
   "id": "re-dxf-truss-simple-tri",
-  "description": "DXF reverse engineering: triangular truss",
+  "description": "DXF reverse engineering: parallel-chord triangulated truss",
   "split": "auxiliary",
   "taskFamily": "multimodal_reverse_engineering",
   "inputModality": "dxf",
@@ -22,13 +22,27 @@
     "dxf",
     "en"
   ],
-  "message": "Use this DXF structural drawing of the triangular truss to build the calculation model and run analysis. Use a pinned support at the left end, a roller support at the right end, and 10 kN downward nodal loads at the loaded lower chord panel points shown in the drawing.",
+  "message": "Build a calculation model from the attached structural DXF and engineering specification, then run static analysis. Read geometry, topology, supports, and nodal loads from the DXF instead of assuming them.",
+  "inputContract": {
+    "dxfProvides": [
+      "topology",
+      "dimensions",
+      "supports",
+      "loads"
+    ],
+    "specificationProvides": [
+      "materials",
+      "sections",
+      "analysis-settings"
+    ],
+    "completeness": "complete"
+  },
   "locale": "en",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "re-dxf-truss-simple",
-      "originalName": "truss-simple-tri.dxf",
+      "originalName": "drawing-050.dxf",
       "relPath": "fixtures/drawings/truss-simple-tri.dxf",
       "mimeType": "application/dxf"
     }
@@ -74,5 +88,6 @@
         "type": "has_analysis"
       }
     ]
-  }
+  },
+  "engineeringSpecification": "Use these complete analysis-property records exactly in every mode; they are not placeholders and need no clarification. Use only the user task to classify the structure, but include these properties in parameter extraction. Do not create an explicit self-weight load or duplicate a converted load; an analysis provider may apply its configured member self-weight internally. Reconstruct geometry, topology, supports, and load placement from the task.\nUnit system: SI\nCoordinate system: semantics=global-z-up, version=1, dimension=2d, plane=xz, dof_order=ux,uy,uz,rx,ry,rz\nMaterials: id=1, name=steel, E=205000, nu=0.3, rho=7850\nSections: id=1, name=T1, type=rod, properties(A=0.01)\nAnalysis load combinations: id=ULS, factors={LC1=1}"
 }

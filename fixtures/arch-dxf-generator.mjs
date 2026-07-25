@@ -33,6 +33,7 @@ function dxfHeader() {
   return [
     "0", "SECTION", "2", "HEADER",
     "9", "$ACADVER", "1", "AC1009",
+    "9", "$INSUNITS", "70", "6",
     "9", "$EXTMIN", "10", "-60", "20", "-60", "30", "0",
     "9", "$EXTMAX", "10", "60", "20", "60", "30", "0",
     "0", "ENDSEC",
@@ -259,13 +260,13 @@ function render2dArchitecturalElevation(entry, title, options = {}) {
       addRect(e, cx - width / 2, cz - 0.55, width, 1.1, "WINDOW");
     }
     e.push(dxfLine(x0, zMin - 1.2, x1, zMin - 1.2, "DIM"));
-    e.push(dxfText(cx, zMin - 1.7, 0.35, String(Math.round((x1 - x0) * 1000)), "DIM", 1));
+    e.push(dxfText(cx, zMin - 1.7, 0.35, `${fmt(x1 - x0)}m`, "DIM", 1));
   }
 
   for (let s = 0; s < zCoords.length - 1; s++) {
     const z0 = zCoords[s], z1 = zCoords[s + 1];
     e.push(dxfLine(xMin - 1.2, z0, xMin - 1.2, z1, "DIM"));
-    e.push(dxfText(xMin - 1.8, (z0 + z1) / 2, 0.35, String(Math.round((z1 - z0) * 1000)), "DIM", 1));
+    e.push(dxfText(xMin - 1.8, (z0 + z1) / 2, 0.35, `${fmt(z1 - z0)}m`, "DIM", 1));
   }
 
   for (const x of xCoords) {
@@ -289,6 +290,11 @@ function render2dArchitecturalElevation(entry, title, options = {}) {
 
   e.push(dxfText((xMin + xMax) / 2, zMax + 2.8, 0.5, title, "DIM", 1));
   return e;
+}
+
+function fmt(value) {
+  const rounded = Math.round(Number(value) * 1000) / 1000;
+  return String(rounded);
 }
 
 function renderFrame1s1bFloor(entry) {
@@ -573,7 +579,7 @@ function render3dFloorPlan(entry) {
   for (const w of bxM) {
     const x0 = xAcc;
     e.push(dxfLine(x0, -2, x0 + w, -2, "DIM"));
-    e.push(dxfText(x0 + w / 2, -2.5, 0.35, String(Math.round(w * 1000)), "DIM", 1));
+    e.push(dxfText(x0 + w / 2, -2.5, 0.35, `${fmt(w)}m`, "DIM", 1));
     xAcc += w;
   }
 

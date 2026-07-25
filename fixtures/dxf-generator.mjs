@@ -23,6 +23,8 @@ function dxfHeader() {
     "2", "HEADER",
     "9", "$ACADVER",
     "1", "AC1009",
+    "9", "$INSUNITS",
+    "70", "6",
     "9", "$EXTMIN",
     "10", "-50",
     "20", "-50",
@@ -54,7 +56,7 @@ function dxfTables() {
     // LAYER table
     "0", "TABLE",
     "2", "LAYER",
-    "70", "5",
+    "70", "6",
     // Layer: 0 (default)
     "0", "LAYER",
     "2", "0",
@@ -84,6 +86,12 @@ function dxfTables() {
     "2", "LOAD",
     "70", "0",
     "62", "1",
+    "6", "CONTINUOUS",
+    // Layer: SUPPORT
+    "0", "LAYER",
+    "2", "SUPPORT",
+    "70", "0",
+    "62", "3",
     "6", "CONTINUOUS",
     "0", "ENDTAB",
     // STYLE table
@@ -226,11 +234,31 @@ function equivalentLineLoadForStory(model, storyId) {
 }
 
 function storyLoadLabel(model, story) {
-  const areaLoad = Math.abs(Number(story.floorLoad) || 0);
+  const declaredAreaLoads = Array.isArray(story.floor_loads)
+    ? story.floor_loads
+      .filter((load) => Number.isFinite(Number(load?.value)) && Math.abs(Number(load.value)) > 0)
+      .map((load) => `${String(load.type || "load").toUpperCase()}=${fmt(Math.abs(Number(load.value)))}`)
+    : [];
+  if (declaredAreaLoads.length > 0) {
+    return `${story.id} global -Z floor load ${declaredAreaLoads.join(" + ")} kN/m2`;
+  }
+  const areaLoad = Math.abs(Number(story.floorLoad ?? story.dead_load) || 0);
   const lineLoad = equivalentLineLoadForStory(model, story.id);
-  if (areaLoad > 0) return `${story.id} floor load ${fmt(areaLoad)} kN/m2`;
-  if (lineLoad > 0) return `${story.id} X-beam UDL ${fmt(lineLoad)} kN/m`;
+  if (areaLoad > 0) return `${story.id} global -Z floor load D=${fmt(areaLoad)} kN/m2`;
+  if (lineLoad > 0) return `${story.id} global -Z X-beam UDL ${fmt(lineLoad)} kN/m`;
   return "";
+}
+
+function distributedLoadComponent(load) {
+  for (const [field, direction] of [
+    ["wx", "global X"],
+    ["wy", "global Y"],
+    ["wz", "global Z"],
+  ]) {
+    const value = Number(load?.[field]);
+    if (Number.isFinite(value) && Math.abs(value) > 0) return { value, direction };
+  }
+  return null;
 }
 
 function groupedDistributedLoads(model) {
@@ -239,18 +267,36 @@ function groupedDistributedLoads(model) {
     for (const load of lc.loads || []) {
       if (load.type !== "distributed") continue;
       const elementId = load.element;
-      const w = Math.abs(load.wz || load.wy || 0);
-      if (!elementId || w <= 0) continue;
+      const component = distributedLoadComponent(load);
+      if (!elementId || !component) continue;
       if (!groups.has(elementId)) groups.set(elementId, { elementId, loads: [] });
-      groups.get(elementId).loads.push({ caseId: lc.id, w });
+      groups.get(elementId).loads.push({
+        caseId: lc.id,
+        value: component.value,
+        direction: component.direction,
+      });
     }
   }
   return [...groups.values()];
 }
 
 function distributedLoadLabel(loads) {
-  if (loads.length === 1) return `${fmt(loads[0].w)} kN/m`;
-  return `${fmt(loads.reduce((sum, load) => sum + load.w, 0))} kN/m`;
+  return loads
+    .map((load) => `${load.caseId}: ${load.direction} q=${fmt(load.value)} kN/m`)
+    .join(" + ");
+}
+
+const DOF_NAMES = ["UX", "UY", "UZ", "RX", "RY", "RZ"];
+
+function supportLabel(restraints) {
+  if (!Array.isArray(restraints) || restraints.length !== DOF_NAMES.length) return null;
+  const constrained = DOF_NAMES.filter((_, index) => restraints[index] === true);
+  if (constrained.length === 0) return null;
+  const signature = restraints.map(Boolean).join(",");
+  if (signature === "true,true,true,true,true,true") return "FIXED [UX UY UZ RX RY RZ]";
+  if (signature === "true,true,true,false,false,false") return "PIN [UX UY UZ]";
+  if (signature === "false,true,true,false,false,false") return "ROLLER FREE X [UY UZ]";
+  return `RESTRAINT [${constrained.join(" ")}]`;
 }
 
 // --- Render 2D models to DXF ---
@@ -302,6 +348,19 @@ function render2dDxf(entry) {
     entities.push(dxfText((xs[0] + xs[xs.length - 1]) / 2, -(maxZ > 0 ? 4 : 3), 0.6, `Total: ${fmt(totalSpan)}m`, "DIM"));
   }
 
+  // Support annotations retain the exact canonical DOF meaning.
+  for (const node of nodes) {
+    const label = supportLabel(node.restraints);
+    if (!label) continue;
+    entities.push(dxfText(
+      node.x,
+      node.z - 0.8,
+      0.35,
+      `Support at (x=${fmt(node.x)}m,z=${fmt(node.z)}m): ${label}`,
+      "SUPPORT",
+    ));
+  }
+
   // Load annotations
   for (const group of groupedDistributedLoads(model)) {
     const el = model.elements.find(e => e.id === group.elementId);
@@ -317,17 +376,27 @@ function render2dDxf(entry) {
       if (load.node) {
         const n = nodeMap.get(load.node);
         if (!n) continue;
-        const fz = Math.abs(load.fz || 0);
-        if (fz > 0) {
-          entities.push(dxfText(n.x + 0.3, n.z + 1, 0.5, `${fmt(fz)} kN`, "LOAD"));
+        const components = [
+          ["FX", Number(load.fx)],
+          ["FY", Number(load.fy)],
+          ["FZ", Number(load.fz)],
+        ].filter(([, value]) => Number.isFinite(value) && Math.abs(value) > 0);
+        if (components.length > 0) {
+          const values = components.map(([name, value]) => `${name}=${fmt(value)} kN`).join(", ");
+          entities.push(dxfText(
+            n.x + 0.3,
+            n.z + 1,
+            0.5,
+            `${lc.id}: global ${values} at (x=${fmt(n.x)}m,z=${fmt(n.z)}m)`,
+            "LOAD",
+          ));
         }
       }
     }
   }
 
   // Title (ASCII-safe)
-  const matName = model.materials?.[0]?.name || "steel";
-  const titleEn = `Span ${fmt(xs[xs.length - 1] - xs[0])}m | ${matName}`;
+  const titleEn = `Overall extent X=${fmt(xs[xs.length - 1] - xs[0])}m`;
   entities.push(dxfText(0, maxZ + 3, 0.8, titleEn, "TEXT"));
 
   return buildDxf(entities);
@@ -372,6 +441,19 @@ function render3dDxf(entry) {
   const yMax = Math.max(...ys);
   const zMax = Math.max(...zs);
 
+  const baseNodes = nodes.filter((node) => Math.abs(Number(node.z)) <= 1e-9);
+  const baseSupportLabels = [...new Set(baseNodes.map((node) => supportLabel(node.restraints)).filter(Boolean))];
+  if (baseNodes.length > 0 && baseSupportLabels.length === 1) {
+    const p = isoProject(0, 0, 0);
+    entities.push(dxfText(
+      p.ix,
+      p.iy - 2.5,
+      0.45,
+      `All structural nodes at z=0m: ${baseSupportLabels[0]}`,
+      "SUPPORT",
+    ));
+  }
+
   for (const y of ys) {
     const p1 = isoProject(0, y, 0);
     const p2 = isoProject(xMax, y, 0);
@@ -413,8 +495,7 @@ function render3dDxf(entry) {
   }
 
   // Title (ASCII-safe)
-  const matName3d = model.materials?.[0]?.name || "steel";
-  const title3d = `3D Frame | X ${fmt(xMax)}m x Y ${fmt(yMax)}m x H ${fmt(zMax)}m | ${matName3d}`;
+  const title3d = `Isometric view | X ${fmt(xMax)}m x Y ${fmt(yMax)}m x H ${fmt(zMax)}m`;
   const ct = isoProject(xMax / 2, yMax / 2, zMax);
   entities.push(dxfText(ct.ix, ct.iy + 3, 0.8, title3d, "TEXT"));
 

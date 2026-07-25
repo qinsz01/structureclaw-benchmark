@@ -23,13 +23,13 @@
     "dxf",
     "zh"
   ],
-  "message": "请根据这个DXF空间混凝土框架图建立2层3D计算模型并进行分析。柱脚按固定支座处理；楼面面荷载第一层12kN/m²、第二层10kN/m²。",
+  "message": "请根据所附结构DXF及工程说明建立计算模型并进行静力分析。几何、拓扑、支座及各层荷载均须从DXF读取，无法可靠识别时应询问，不得自行假设。",
   "locale": "zh",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "re-dxf-frame3d-concrete",
-      "originalName": "frame3d-concrete.dxf",
+      "originalName": "drawing-047.dxf",
       "relPath": "fixtures/drawings/frame3d-concrete.dxf",
       "mimeType": "application/dxf"
     }
@@ -78,17 +78,17 @@
       }
     ]
   },
-  "engineeringSpecification": "材料 C30：E=30000 MPa，ν=0.2，密度=2500 kg/m3，fc=14.3 MPa。柱构件采用 C30 500x500（H=500 mm，B=500 mm；A=0.25 m2，Iy=0.0052 m4，Iz=0.0052 m4，J=0.0088021 m4，G=12500 MPa）。梁构件采用 C30 300x600（H=600 mm，B=300 mm；A=0.18 m2，Iy=0.0054 m4，Iz=0.00135 m4，J=0.00370786 m4，G=12500 MPa）。采用SI单位和全局Z轴向上的坐标约定。仅使用题目声明的楼面荷载，不附加构件自重。分析荷载组合：ULS = 1 × D。",
+  "engineeringSpecification": "材料 C30：E=30000 MPa，ν=0.2，密度=2500 kg/m3，fc=14.3 MPa。柱构件采用 C30 500x500（H=500 mm，B=500 mm；A=0.25 m2，Iy=0.0052 m4，Iz=0.0052 m4，J=0.0088021 m4，G=12500 MPa）。梁构件采用 C30 300x600（H=600 mm，B=300 mm；A=0.18 m2，Iy=0.0054 m4，Iz=0.00135 m4，J=0.00370786 m4，G=12500 MPa）。采用SI单位和全局Z轴向上的坐标约定。仅使用DXF标注的楼面荷载，不附加构件自重。分析荷载组合：ULS = 1 × D。",
   "inputContract": {
     "dxfProvides": [
       "topology",
-      "dimensions"
+      "dimensions",
+      "supports",
+      "loads"
     ],
     "specificationProvides": [
       "materials",
       "sections",
-      "supports",
-      "loads",
       "analysis-settings"
     ],
     "completeness": "complete"

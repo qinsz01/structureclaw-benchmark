@@ -24,13 +24,13 @@
     "dxf",
     "en"
   ],
-  "message": "Use this architectural DXF to build a 2-story 3D reinforced concrete frame calculation model and run analysis, filtering out non-structural building elements. Use 3.6 m story height for both stories and fixed column bases; apply floor area loads of 12 kN/m² on the first story and 10 kN/m² on the second story.",
+  "message": "Extract the structural grid and beam connectivity from the attached architectural floor-plan DXF and engineering specification, filter out non-structural building elements, build the spatial calculation model, and run static analysis. Use visible plan dimensions and topology; do not infer missing engineering information.",
   "locale": "en",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "re-arch-frame3d-concrete",
-      "originalName": "arch-frame3d-concrete.dxf",
+      "originalName": "drawing-039.dxf",
       "relPath": "fixtures/drawings/arch-frame3d-concrete.dxf",
       "mimeType": "application/dxf"
     }
@@ -79,13 +79,14 @@
       }
     ]
   },
-  "engineeringSpecification": "Material C30: E=30000 MPa, ν=0.2, density=2500 kg/m3, and fc=14.3 MPa. Columns use C30 500x500 sections (H=500 mm, B=500 mm; A=0.25 m2, Iy=0.0052 m4, Iz=0.0052 m4, J=0.0088021 m4, G=12500 MPa). Beams use C30 300x600 sections (H=600 mm, B=300 mm; A=0.18 m2, Iy=0.0054 m4, Iz=0.00135 m4, J=0.00370786 m4, G=12500 MPa). Use SI units and the global-Z-up coordinate convention. Use only the declared floor loads and do not add member self-weight. Analysis combination: ULS = 1 × D.",
+  "engineeringSpecification": "Material C30: E=30000 MPa, ν=0.2, density=2500 kg/m3, and fc=14.3 MPa. Columns use C30 500x500 sections (H=500 mm, B=500 mm; A=0.25 m2, Iy=0.0052 m4, Iz=0.0052 m4, J=0.0088021 m4, G=12500 MPa). Beams use C30 300x600 sections (H=600 mm, B=300 mm; A=0.18 m2, Iy=0.0054 m4, Iz=0.00135 m4, J=0.00370786 m4, G=12500 MPa). Map the floor plan's source X/Y axes to global X/Y; create two stories in global Z, each 3.6 m high. Use fixed column bases and apply global-Z downward floor loads of 12 kN/m2 on the first story and 10 kN/m2 on the second story. Use SI units and the global-Z-up coordinate convention, do not add member self-weight, and analyze load combination ULS = 1 × D.",
   "inputContract": {
     "dxfProvides": [
       "topology",
       "dimensions"
     ],
     "specificationProvides": [
+      "vertical-geometry",
       "materials",
       "sections",
       "supports",

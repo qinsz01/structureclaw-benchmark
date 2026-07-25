@@ -12,7 +12,8 @@
   "analysisEngineTarget": "builtin-yjk",
   "evaluationFocus": [
     "routing",
-    "interaction"
+    "interaction",
+    "semantic"
   ],
   "category": "adapter-boundary",
   "tags": [
@@ -22,7 +23,7 @@
     "en",
     "unsupported-2d-commercial-adapter"
   ],
-  "message": "Use YJK to run static analysis for a single-story single-bay steel frame with a 6m span, 4.5m height, and 8kN/m2 roof load converted with a 6m tributary width to a 48kN/m roof beam line load.",
+  "message": "Use YJK to run static analysis for a single-story single-bay steel frame with a 6m span and 4.5m height. Apply only a 48kN/m roof beam line load, derived from an 8kN/m2 roof load over a 6m tributary width; do not also apply the source area load.",
   "locale": "en",
   "maxRetries": 0,
   "expect": {
@@ -45,7 +46,11 @@
         ]
       },
       { "type": "has_interaction_questions" },
-      { "type": "safe_non_execution", "reasonIncludes": "canonical 3-D" }
+      { "type": "safe_non_execution" },
+      {
+        "type": "natural_language",
+        "description": "The agent must clearly explain that the requested commercial adapter cannot execute the supplied canonical 2-D model and request a genuine 3-D model or an explicitly supported alternative, without reporting numerical results."
+      }
     ]
   }
 }

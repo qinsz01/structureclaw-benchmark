@@ -150,11 +150,19 @@ function classifyPlanarSupport(restraints) {
 function renderPlanarSupport(restraints, cx, cy) {
   const kind = classifyPlanarSupport(restraints);
   if (kind === "none") return "";
-  if (kind === "fixed") return fixedSupport(cx, cy);
-  if (kind === "pinned") return pinSupport(cx, cy);
-  if (kind === "roller-x") return rollerSupport(cx, cy, "x");
-  if (kind === "roller-z") return rollerSupport(cx, cy, "z");
-  throw new Error(`The plan renderer cannot represent partial support restraints ${JSON.stringify(restraints)}`);
+  const labels = {
+    fixed: "FIXED [UX UZ RY]",
+    pinned: "PIN [UX UZ]",
+    "roller-x": "ROLLER-X [UZ]",
+    "roller-z": "ROLLER-Z [UX]",
+  };
+  let symbol = "";
+  if (kind === "fixed") symbol = fixedSupport(cx, cy);
+  else if (kind === "pinned") symbol = pinSupport(cx, cy);
+  else if (kind === "roller-x") symbol = rollerSupport(cx, cy, "x");
+  else if (kind === "roller-z") symbol = rollerSupport(cx, cy, "z");
+  else throw new Error(`The plan renderer cannot represent partial support restraints ${JSON.stringify(restraints)}`);
+  return `${symbol}<text x="${cx + 17}" y="${cy + 29}" font-size="9" fill="${COLORS.support}" font-weight="bold" paint-order="stroke" stroke="#fff" stroke-width="3">${labels[kind]}</text>`;
 }
 
 function validateFixed3dSupport(restraints) {
@@ -196,15 +204,30 @@ function distributedLoadLabel(loads, element, model) {
   return loads.map((load) => `${load.caseId}: q = ${fmt(load.w)} kN/m`).join(" + ");
 }
 
-function pointLoadMarkup(caseId, magnitude, cx, cy, structureTopY) {
-  const arrowTop = Math.min(cy - 58, structureTopY - 18);
+function pointLoadMarkup(caseId, magnitude, cx, cy, structureTopY, placeBelow = false) {
   const label = `${caseId}: P = ${fmt(magnitude)} kN`;
   const labelWidth = Math.max(96, label.length * 7);
+  if (placeBelow) {
+    const boxY = cy + 58;
+    return `<line x1="${cx}" y1="${cy + 3}" x2="${cx}" y2="${cy + 45}" stroke="${COLORS.loadArrow}" stroke-width="3"/>
+      <polygon points="${cx - 5},${cy + 39} ${cx + 5},${cy + 39} ${cx},${cy + 51}" fill="${COLORS.loadArrow}"/>
+      <rect x="${cx - labelWidth / 2}" y="${boxY}" width="${labelWidth}" height="21" fill="#fff" stroke="${COLORS.loadArrow}" stroke-width="1.2" rx="3"/>
+      <text x="${cx}" y="${boxY + 15}" text-anchor="middle" font-size="11" fill="${COLORS.load}" font-weight="bold">${label}</text>`;
+  }
+  const arrowTop = Math.min(cy - 58, structureTopY - 18);
   const boxY = arrowTop - 30;
   return `<rect x="${cx - labelWidth / 2}" y="${boxY}" width="${labelWidth}" height="21" fill="#fff" stroke="${COLORS.loadArrow}" stroke-width="1.2" rx="3"/>
     <text x="${cx}" y="${boxY + 15}" text-anchor="middle" font-size="11" fill="${COLORS.load}" font-weight="bold">${label}</text>
     <line x1="${cx}" y1="${arrowTop}" x2="${cx}" y2="${cy - 6}" stroke="${COLORS.loadArrow}" stroke-width="3"/>
     <polygon points="${cx - 5},${cy - 12} ${cx + 5},${cy - 12} ${cx},${cy - 2}" fill="${COLORS.loadArrow}"/>`;
+}
+
+function trussTopElevationLabels(entry, transform) {
+  if (entry.id !== "truss-complex-trap") return "";
+  return entry.model.nodes
+    .filter((node) => node.id.startsWith("T"))
+    .map((node) => `<text x="${transform.tx(node.x)}" y="${transform.tz(node.z) + 19}" text-anchor="middle" font-size="10" fill="${COLORS.dim}" font-weight="bold" paint-order="stroke" stroke="#fff" stroke-width="3">z=${fmt(node.z)}m</text>`)
+    .join("");
 }
 
 // --- Style A: Construction Plan ---
@@ -215,6 +238,7 @@ function renderConstructionPlan(entry) {
   const t = makeTransform(nodes, { l: 140, r: 140, t: 55, b: 140 }, 960, 620);
   const nodeMap = new Map(nodes.map(n => [n.id, n]));
   const structureTopY = Math.min(...nodes.map((node) => t.tz(node.z)));
+  const placePointLoadsBelow = model.elements.some((element) => element.type === "truss");
 
   let body = "";
 
@@ -270,7 +294,8 @@ function renderConstructionPlan(entry) {
     body += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12" fill="${COLORS.load}" font-weight="bold">${distributedLoadLabel(group.loads, el, model)}</text>`;
   }
 
-  // Point loads
+  // Point loads are appended after dimensions so their straight vectors remain unobstructed.
+  let pointLoadBody = "";
   for (const lc of model.load_cases || []) {
     for (const load of lc.loads || []) {
       if (load.node) {
@@ -279,7 +304,7 @@ function renderConstructionPlan(entry) {
         const sx = t.tx(n.x), sy = t.tz(n.z);
         const fz = Math.abs(load.fz || 0);
         if (fz > 0) {
-          body += pointLoadMarkup(lc.id, fz, sx, sy, structureTopY);
+          pointLoadBody += pointLoadMarkup(lc.id, fz, sx, sy, structureTopY, placePointLoadsBelow);
         }
       }
     }
@@ -289,7 +314,8 @@ function renderConstructionPlan(entry) {
   if (xs.length >= 2) {
     for (let i = 0; i < xs.length - 1; i++) {
       const span = xs[i + 1] - xs[i];
-      if (span > 0) body += dimLine(t.tx(xs[i]), t.tz(Math.min(...zs)), t.tx(xs[i + 1]), t.tz(Math.min(...zs)), `${fmt(span)}m`, 35 + (xs.length - 2) * 12);
+      const offset = placePointLoadsBelow ? 110 : 35 + (xs.length - 2) * 12;
+      if (span > 0) body += dimLine(t.tx(xs[i]), t.tz(Math.min(...zs)), t.tx(xs[i + 1]), t.tz(Math.min(...zs)), `${fmt(span)}m`, offset);
     }
   }
   if (zs.length >= 2) {
@@ -299,6 +325,8 @@ function renderConstructionPlan(entry) {
     }
   }
 
+  body += pointLoadBody;
+  body += trussTopElevationLabels(entry, t);
   return svgWrap(t.w, t.h, body);
 }
 
@@ -310,6 +338,7 @@ function renderMechanicsDiagram(entry) {
   const t = makeTransform(nodes, { l: 120, r: 140, t: 55, b: 130 }, 920, 550);
   const nodeMap = new Map(nodes.map(n => [n.id, n]));
   const structureTopY = Math.min(...nodes.map((node) => t.tz(node.z)));
+  const placePointLoadsBelow = model.elements.some((element) => element.type === "truss");
 
   let body = "";
 
@@ -356,7 +385,8 @@ function renderMechanicsDiagram(entry) {
     body += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12" fill="${COLORS.load}" font-weight="bold">${distributedLoadLabel(group.loads, el, model)}</text>`;
   }
 
-  // Point loads
+  // Point loads are appended after dimensions so their straight vectors remain unobstructed.
+  let pointLoadBody = "";
   for (const lc of model.load_cases || []) {
     for (const load of lc.loads || []) {
       if (load.node) {
@@ -365,7 +395,7 @@ function renderMechanicsDiagram(entry) {
         const sx = t.tx(n.x), sy = t.tz(n.z);
         const fz = Math.abs(load.fz || 0);
         if (fz > 0) {
-          body += pointLoadMarkup(lc.id, fz, sx, sy, structureTopY);
+          pointLoadBody += pointLoadMarkup(lc.id, fz, sx, sy, structureTopY, placePointLoadsBelow);
         }
       }
     }
@@ -376,7 +406,7 @@ function renderMechanicsDiagram(entry) {
   const zs = [...new Set(nodes.map(n => n.z))].sort((a, b) => a - b);
   if (xs.length >= 2) {
     for (let i = 0; i < xs.length - 1; i++) {
-      body += dimLine(t.tx(xs[i]), t.tz(Math.min(...zs)), t.tx(xs[i + 1]), t.tz(Math.min(...zs)), `${fmt(xs[i + 1] - xs[i])}m`, 35);
+      body += dimLine(t.tx(xs[i]), t.tz(Math.min(...zs)), t.tx(xs[i + 1]), t.tz(Math.min(...zs)), `${fmt(xs[i + 1] - xs[i])}m`, placePointLoadsBelow ? 110 : 35);
     }
   }
   if (zs.length >= 2) {
@@ -385,6 +415,8 @@ function renderMechanicsDiagram(entry) {
     }
   }
 
+  body += pointLoadBody;
+  body += trussTopElevationLabels(entry, t);
   return svgWrap(t.w, t.h, body);
 }
 
@@ -423,11 +455,14 @@ function equivalentLineLoadForStory(model, storyId) {
 }
 
 function storyLoadLabel(model, story) {
-  const areaLoad = Math.abs(Number(story.floorLoad) || 0);
+  const declaredFloorLoad = Array.isArray(story.floor_loads)
+    ? story.floor_loads.find((load) => Number(load?.value) > 0)
+    : null;
+  const areaLoad = Math.abs(Number(story.floorLoad ?? declaredFloorLoad?.value ?? story.dead_load) || 0);
   const lineLoad = equivalentLineLoadForStory(model, story.id);
   const loadCase = (model.load_cases || []).find((candidate) => (
     (candidate.loads || []).some((load) => load.story === story.id)
-  ));
+  )) || (model.load_cases || []).find((candidate) => candidate.type === declaredFloorLoad?.type);
   const prefix = loadCase ? `${story.id} ${loadCase.id}` : story.id;
   if (areaLoad > 0) return `${prefix}: p = ${fmt(areaLoad)} kN/m2`;
   if (lineLoad > 0) return `${prefix}: q = ${fmt(lineLoad)} kN/m`;
@@ -706,9 +741,11 @@ function validate3dDrawingEvidence(entry) {
     }
   }
   for (const story of storyTops(model)) {
-    if (story.floorLoadUnit !== "kN/m2"
-      || Number(story.floorLoad) <= 0
-      || !loadedStories.has(story.id)
+    const declaredFloorLoads = Array.isArray(story.floor_loads) ? story.floor_loads : [];
+    const hasCanonicalAreaLoad = story.floorLoadUnit === "kN/m2" && Number(story.floorLoad) > 0;
+    const hasDeclaredAreaLoad = declaredFloorLoads.some((load) => Number(load?.value) > 0);
+    if ((!hasCanonicalAreaLoad && !hasDeclaredAreaLoad)
+      || (!loadedStories.has(story.id) && !hasDeclaredAreaLoad)
       || !nodeElevations.some((value) => Math.abs(value - story.topZ) <= 1e-9)) {
       throw new Error(`${entry.id}: story ${story.id} lacks complete visible area-load evidence`);
     }

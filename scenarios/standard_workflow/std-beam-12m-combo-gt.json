@@ -22,7 +22,7 @@
     "l2",
     "en"
   ],
-  "message": "A simply supported beam spans 12m, carries a 15kN/m UDL, and has a 50kN point load 4m from the left support. In addition to the load node, discretize the beam at midspan with a connected analysis node and report the midspan vertical deflection. Run static analysis.",
+  "message": "A simply supported beam spans 12m, carries a 15kN/m downward UDL over the full span, and has a 50kN downward point load 4m from the left support. In addition to the load node, discretize the beam at midspan with a connected analysis node and report the midspan vertical deflection. Run static analysis.",
   "locale": "en",
   "maxRetries": 0,
   "expect": {
@@ -69,7 +69,12 @@
       },
       {
         "type": "has_analysis"
+      },
+      {
+        "type": "natural_language",
+        "description": "The final response must report the requested midspan vertical deflection with its value, sign, unit, and location consistent with the current analysis artifact; no independently invented or contradictory value is acceptable."
       }
     ]
-  }
+  },
+  "engineeringSpecification": "Use these complete analysis-property records exactly in every mode; they are not placeholders and need no clarification. Use only the user task to classify the structure, but include these properties in parameter extraction. Do not create an explicit self-weight load or duplicate a converted load; an analysis provider may apply its configured member self-weight internally. Reconstruct geometry, topology, supports, and load placement from the task.\nUnit system: SI\nCoordinate system: semantics=global-z-up, version=1, dimension=2d, plane=xz, dof_order=ux,uy,uz,rx,ry,rz\nMaterials: id=1, name=steel, E=205000, nu=0.3, rho=7850\nSections: id=1, name=B1, type=beam, properties(A=0.01, Iy=0.0001, Iz=0.0001, J=0.0001, G=79000)\nAnalysis load combinations: id=ULS, factors={LC1=1}"
 }

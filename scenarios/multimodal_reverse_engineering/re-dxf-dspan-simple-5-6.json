@@ -22,13 +22,27 @@
     "dxf",
     "zh"
   ],
-  "message": "请根据这个DXF结构图纸建立5m+6m两跨连续梁计算模型并进行分析。采用左端铰支座、中间支座、右端滚支座，并按图中标注施加向下均布荷载12kN/m。",
+  "message": "请根据所附结构DXF及工程说明建立计算模型并进行静力分析。几何、拓扑、支座与荷载均须从DXF读取，无法可靠识别时应询问，不得自行假设。",
+  "inputContract": {
+    "dxfProvides": [
+      "topology",
+      "dimensions",
+      "supports",
+      "loads"
+    ],
+    "specificationProvides": [
+      "materials",
+      "sections",
+      "analysis-settings"
+    ],
+    "completeness": "complete"
+  },
   "locale": "zh",
   "maxRetries": 0,
   "attachments": [
     {
       "fileId": "re-dxf-dspan-simple",
-      "originalName": "dspan-simple-5-6.dxf",
+      "originalName": "drawing-043.dxf",
       "relPath": "fixtures/drawings/dspan-simple-5-6.dxf",
       "mimeType": "application/dxf"
     }
@@ -76,5 +90,6 @@
         "type": "has_analysis"
       }
     ]
-  }
+  },
+  "engineeringSpecification": "所有模式均须严格使用以下完整分析属性；这些记录不是占位符，无需要求补充。结构分类只使用用户任务，参数提取须同时包含这些属性。不得显式创建构件自重荷载或重复施加折算荷载；分析后端可按自身配置在内部计入构件自重。几何、拓扑、支座和荷载位置仍由用户任务确定。\n单位制: SI\n坐标系: semantics=global-z-up, version=1, dimension=2d, plane=xz, dof_order=ux,uy,uz,rx,ry,rz\n材料: id=1, name=steel, E=205000, nu=0.3, rho=7850\n截面: id=1, name=B1, type=beam, properties(A=0.01, Iy=0.0001, Iz=0.0001, J=0.0001, G=79000)\n分析荷载组合: id=ULS, factors={LC1=1}"
 }

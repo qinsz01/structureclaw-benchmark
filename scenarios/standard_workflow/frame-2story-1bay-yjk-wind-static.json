@@ -12,7 +12,8 @@
   "analysisEngineTarget": "builtin-yjk",
   "evaluationFocus": [
     "routing",
-    "interaction"
+    "interaction",
+    "semantic"
   ],
   "category": "adapter-boundary",
   "tags": [
@@ -22,7 +23,7 @@
     "wind",
     "unsupported-2d-commercial-adapter"
   ],
-  "message": "2层单跨钢框架，层高3.6m，跨度6m，每层楼面荷载10kN/m2按6m等效受荷宽度折算为梁线荷载60kN/m；右侧一、二层节点分别施加等效水平风荷载10kN、15kN，请使用YJK进行静力分析",
+  "message": "2层单跨钢框架，层高3.6m，跨度6m；每层仅施加由10kN/m2楼面荷载按6m等效受荷宽度折算得到的60kN/m梁线荷载，不再重复施加原面荷载；右侧一、二层节点分别施加等效水平风荷载10kN、15kN，请使用YJK进行静力分析",
   "locale": "zh",
   "maxRetries": 0,
   "expect": {
@@ -45,7 +46,11 @@
         ]
       },
       { "type": "has_interaction_questions" },
-      { "type": "safe_non_execution", "reasonIncludes": "canonical 3-D" }
+      { "type": "safe_non_execution" },
+      {
+        "type": "natural_language",
+        "description": "智能体必须明确说明所请求的商业适配器无法执行当前规范化二维模型，并要求用户提供真实三维模型或选择明确支持的替代方案，且不得返回数值分析结果。"
+      }
     ]
   }
 }

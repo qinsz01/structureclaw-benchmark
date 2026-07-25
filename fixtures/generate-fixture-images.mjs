@@ -55,6 +55,12 @@ function rollerSupport(cx, cy, size = 14) {
     <line x1="${cx - size - 4}" y1="${baseY + 11}" x2="${cx + size + 4}" y2="${baseY + 11}" stroke="#666" stroke-width="2"/>`;
 }
 
+function fixedSupport(cx, cy) {
+  return `<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy + 18}" stroke="#333" stroke-width="3"/>
+    <line x1="${cx - 15}" y1="${cy + 18}" x2="${cx + 15}" y2="${cy + 18}" stroke="#333" stroke-width="3"/>
+    ${[0, 1, 2, 3, 4].map((index) => `<line x1="${cx - 13 + index * 7}" y1="${cy + 18}" x2="${cx - 18 + index * 7}" y2="${cy + 25}" stroke="#666" stroke-width="1.5"/>`).join("\n    ")}`;
+}
+
 // 1. beam-sketch.png — simply supported beam with UDL
 const beamSketch = svg(`
   <!-- beam line -->
@@ -88,10 +94,10 @@ const frameSketch = svg(`
   <line x1="160" y1="210" x2="440" y2="210" class="member"/>
   <line x1="160" y1="100" x2="440" y2="100" class="member"/>
   <!-- fixed supports -->
-  <line x1="145" y1="322" x2="175" y2="322" stroke="#333" stroke-width="3"/>
-  <line x1="425" y1="322" x2="455" y2="322" stroke="#333" stroke-width="3"/>
-  <line x1="160" y1="320" x2="160" y2="322" stroke="#333" stroke-width="2.5"/>
-  <line x1="440" y1="320" x2="440" y2="322" stroke="#333" stroke-width="2.5"/>
+  ${fixedSupport(160, 320)}
+  ${fixedSupport(440, 320)}
+  <text x="160" y="382" text-anchor="middle" class="label" font-weight="bold">FIXED [UX UZ RY]</text>
+  <text x="440" y="382" text-anchor="middle" class="label" font-weight="bold">FIXED [UX UZ RY]</text>
   <!-- floor area load arrows -->
   ${[200, 280, 360].map(x => `<line x1="${x}" y1="72" x2="${x}" y2="95" class="load-arrow"/>`).join("\n  ")}
   <text x="300" y="55" text-anchor="middle" class="dim">D: p = 10 kN/m2; bt = 6m</text>
@@ -116,7 +122,7 @@ const trussDiagram = svg(`
   <!-- web members -->
   <line x1="210" y1="180" x2="320" y2="260" class="member"/>
   <line x1="210" y1="180" x2="430" y2="180" class="member"/>
-  <line x1="320" y1="100" x2="320" y2="260" class="member" stroke-dasharray="6,3"/>
+  <line x1="320" y1="100" x2="320" y2="260" class="member"/>
   <line x1="430" y1="180" x2="320" y2="260" class="member"/>
   <!-- supports -->
   ${triangleSupport(100, 260)}
@@ -147,8 +153,10 @@ const portalFrame = svg(`
   <!-- roof beam -->
   <line x1="120" y1="120" x2="520" y2="120" class="member"/>
   <!-- fixed supports -->
-  <line x1="105" y1="312" x2="135" y2="312" stroke="#333" stroke-width="3"/>
-  <line x1="505" y1="312" x2="535" y2="312" stroke="#333" stroke-width="3"/>
+  ${fixedSupport(120, 310)}
+  ${fixedSupport(520, 310)}
+  <text x="120" y="370" text-anchor="middle" class="label" font-weight="bold">FIXED [UX UZ RY]</text>
+  <text x="520" y="370" text-anchor="middle" class="label" font-weight="bold">FIXED [UX UZ RY]</text>
   <!-- UDL on roof -->
   ${Array.from({ length: 9 }, (_, i) => {
     const x = 150 + i * 42;
@@ -204,7 +212,7 @@ const fixtures = [
   {
     name: "frame-sketch.png",
     svg: frameSketch,
-    textCounts: { "D: p = 10 kN/m2; bt = 6m": 2, "3.6m": 2, "6m": 1 },
+    textCounts: { "D: p = 10 kN/m2; bt = 6m": 2, "3.6m": 2, "6m": 1, "FIXED [UX UZ RY]": 2 },
   },
   {
     name: "truss-diagram.png",
@@ -214,7 +222,7 @@ const fixtures = [
   {
     name: "portal-frame-diagram.png",
     svg: portalFrame,
-    textCounts: { "LC1: q = 6 kN/m": 1, "18m": 1, "7m": 1 },
+    textCounts: { "LC1: q = 6 kN/m": 1, "18m": 1, "7m": 1, "FIXED [UX UZ RY]": 2 },
   },
   { name: "incomplete-dimensions.png", svg: incompleteDimensions },
   { name: "cropped-frame-sketch.png", svg: croppedFrameSketch },
