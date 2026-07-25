@@ -173,6 +173,27 @@ test("surfaces benchmark-only routing and extraction infrastructure errors wrapp
   );
 });
 
+test("surfaces analysis worker and commercial solver timeouts as infrastructure errors", () => {
+  assert.equal(
+    findBenchmarkInfrastructureError({
+      messages: [{
+        type: "tool",
+        content: "Error: ANALYSIS_WORKER_INFRASTRUCTURE_ERROR: Python worker timed out after 630000ms",
+      }],
+    }),
+    "Error: ANALYSIS_WORKER_INFRASTRUCTURE_ERROR: Python worker timed out after 630000ms",
+  );
+  assert.equal(
+    findBenchmarkInfrastructureError({
+      messages: [{
+        type: "tool",
+        content: "Error: YJK analysis timed out after 600s",
+      }],
+    }),
+    "Error: YJK analysis timed out after 600s",
+  );
+});
+
 test("rejects deterministic routing and extraction payloads in LLM-only benchmark runs", () => {
   assert.equal(
     findBenchmarkPolicyViolation({

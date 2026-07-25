@@ -1229,7 +1229,7 @@ async function runAgentForBenchmark(service, input, execution, options = {}) {
 }
 
 function findBenchmarkInfrastructureMarker(value) {
-  const marker = /LLM_(?:PARAM_EXTRACTOR|STRUCTURAL_ROUTER)_INFRASTRUCTURE_ERROR/i;
+  const marker = /LLM_(?:PARAM_EXTRACTOR|STRUCTURAL_ROUTER)_INFRASTRUCTURE_ERROR|ANALYSIS_WORKER_INFRASTRUCTURE_ERROR|(?:YJK|PKPM) analysis timed out after \d+s/i;
   const pending = [value];
   const visited = new Set();
   while (pending.length > 0) {
