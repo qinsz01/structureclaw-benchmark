@@ -21,7 +21,7 @@ test("every analyzable model target is numerically scored", () => {
     assertions.some((assertion) => assertion.type === "has_analysis")
       && assertions.some((assertion) => assertion.type === "model_matches")
   ));
-  assert.equal(targets.length, 107);
+  assert.equal(targets.length, 114);
   assert.equal(
     targets.filter((assertions) => assertions.some(
       (assertion) => assertion.type === "numerical_matches",
@@ -30,6 +30,6 @@ test("every analyzable model target is numerically scored", () => {
   );
   assert.equal(
     scenarios.filter((scenario) => scenario.tags?.includes("unsupported-2d-commercial-adapter")).length,
-    7,
+    0,
   );
 });
