@@ -231,11 +231,10 @@ engine. PKPM compares every available non-base-node displacement and member-forc
 component; YJK additionally compares every node reaction. Entity coverage must be
 exact and every frozen response value uses a 1% tolerance. OpenSees remains an
 independent cross-engine validation reference; its values are not substituted for
-an engine's own numerical ground truth. The current benchmark has 107 analyzable
-model targets and all 107 carry `numerical_matches`. Seven planar requests that
-cannot be represented losslessly by the current 3-D PKPM/YJK adapters are explicit
-adapter-boundary cases: they require clarification and safe non-execution, and are
-not included in the numerical denominator.
+an engine's own numerical ground truth. The current benchmark has 114 analyzable
+model targets and all 114 carry `numerical_matches`. The standard-workflow suite
+contains only executable numerical targets; its PKPM and YJK cases use genuine
+spatial models with frozen same-engine responses.
 
 Validation is deliberately tiered. `equilibrium` covers total vertical action and
 the bottom-column axial sum. `response` additionally covers load distribution,
