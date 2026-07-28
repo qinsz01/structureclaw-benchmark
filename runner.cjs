@@ -13,6 +13,9 @@ const { installSolverGate } = require("./lib/solver-gate.cjs");
 // Priority: SCLAW_ROOT env > parent-of-parent (works when this repo is checked
 // out as a submodule under <main>/tests/llm-benchmark).
 const BENCH_ROOT = __dirname;
+const WORK_ROOT = process.env.SCLAW_BENCHMARK_WORK_ROOT
+  ? path.resolve(process.env.SCLAW_BENCHMARK_WORK_ROOT)
+  : BENCH_ROOT;
 const SCLAW_ROOT = process.env.SCLAW_ROOT
   || path.resolve(BENCH_ROOT, "../..");
 
@@ -1423,8 +1426,8 @@ function mergeTurnResults(scenario, turnResults, totalDurationMs) {
 function supervisedOutputPath(outputPath, scenario) {
   const safeId = safeConversationIdPart(scenario.id);
   const dir = outputPath
-    ? `${path.resolve(BENCH_ROOT, outputPath)}.cases`
-    : path.join(BENCH_ROOT, "results", "supervised-cases");
+    ? `${path.resolve(WORK_ROOT, outputPath)}.cases`
+    : path.join(WORK_ROOT, "results", "supervised-cases");
   fs.mkdirSync(dir, { recursive: true });
   return path.join(dir, `${safeId}.json`);
 }
