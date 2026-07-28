@@ -2,6 +2,6 @@
 
 ## Unreleased / 未发布
 
-- Separate the public corpus, runner, and scoring runtime from private
-  generation, validation, testing, and experiment infrastructure.
-- 将公开评测集、运行器及评分运行时与私有生成、审计、测试和实验基础设施分离。
+- Publish a standalone corpus, runner, scoring runtime, schemas, and bilingual
+  documentation.
+- 发布可独立使用的评测集、运行器、评分运行时、数据合同和双语文档。

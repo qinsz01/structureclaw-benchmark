@@ -25,11 +25,6 @@ benchmark:
 - the runner and its scoring implementation;
 - corpus and result schemas.
 
-Fixture generators, independent truth-generation tools, infrastructure tests,
-formal experiment matrices, provider batch orchestration, raw results, and
-runtime data are maintained separately in the private StructureClaw benchmark
-lab.
-
 ## Layout
 
 ```text
