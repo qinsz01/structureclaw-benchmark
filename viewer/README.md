@@ -60,6 +60,20 @@ The Chinese/English UI preserves the original task language. The library support
 
 ### 参考计算与论文图版 / Reference calculations and paper figures
 
+#### 单元内部响应 v1 / Member interior response v1
+
+新增展示组件遍历全部 53 个冻结参考模型，不运行 OpenSees、不改网格、不改标答或评分。梁、连续梁、柱、二维框架、混凝土框架和门式刚架按 Euler–Bernoulli 平衡方程恢复单元内曲线；支持完整已知均布单元荷载以及节点集中力，包括混合荷载。端部位移、转角、轴向应变与内力平衡独立校核失败时降级，不使用 benchmark 的评分阈值。
+
+桁架显示冻结轴力和保持直杆的节点变形，不生成弯矩。旧 SI 桁架记录没有单位字段时，仅对 `opensees_2d_truss` 沿用原求解契约 m/kN。三维梁使用冻结 `localAxes` 变换双向位移和转角；本语料的 6 个三维模型包含未完整归档的楼板传递荷载，因此显示明确标注的 Hermite 运动插值（紫色虚线），不提供缺少依据的内部内力曲线。商业引擎缺少恢复契约时继续提供原始结果表，并在新面板说明不可恢复，不借用其他引擎。
+
+恢复数据采用 `viewer-member-response-v1` 独立标识，可导出 JSON、SVG、PNG，均注明派生展示来源。D3 Shape 3.2 生成采样路径（线性连接已计算采样点，不做装饰性平滑），复用原图版导出及 Three.js。未引入需要运行中 OpenSees 模型的 Python opsvis；后处理公式为独立实现。参考接口：[D3 line](https://d3js.org/d3-shape/line)、[opsvis](https://opsvis.readthedocs.io/en/latest/)。
+
+The component visits all 53 frozen references without running OpenSees or changing meshes, references or scoring. Euler–Bernoulli equilibrium recovers member curves for beams, continuous beams, columns, planar frames and portals with known uniform member loads and nodal forces, including combinations. Independent end displacement/rotation, axial strain and force-balance checks fail closed; benchmark scoring thresholds are not reused.
+
+Trusses show frozen axial forces and straight-member deformation, never bending moments. Legacy SI `opensees_2d_truss` records without units retain the original m/kN solver contract. Spatial beams transform both bending directions through frozen local axes. All six spatial references currently contain incompletely archived expanded floor loads, so their purple dashed Hermite curves are explicitly kinematic interpolation, with interior forces withheld. Unsupported commercial response contracts are reported rather than replaced with another engine's values.
+
+Derived exports carry `viewer-member-response-v1` in JSON/SVG/PNG. D3 Shape 3.2 connects computed samples without cosmetic smoothing; existing figure exports and Three.js are reused. Python opsvis is not embedded in the static browser. Formulas are independently implemented. Regression checks cover analytical interior displacement, UDL plus point-load shear jumps, spatial-axis mapping, every reference's endpoint agreement, and byte-identical corpus preservation.
+
 - 数值表和最大平移分量可点击定位，在三维模型与矢量结果图中高亮。结果图支持 ux/uy/uz、完整三分量位移模长、两端完整局部 M 的绝对值最大值着色；缺失值为灰色，不补零。色标、单位、引擎与工况随图导出。
 - 变形示意按冻结节点位移乘指定倍率，仅连接具备完整三分量位移的节点；直线不是单元内部挠曲形状。仅米制兼容数据可叠加变形。结果图不叠加其他荷载工况；三维查看器的荷载选择仍独立于冻结响应工况。
 - 辅助解析计算仅支持通过几何、连接、截面、支座、荷载和工况检查的等截面水平 XZ 简支均布荷载梁、端点集中力悬臂梁。展示 E 的 MPa→kN/m² 换算、公式与代入、带符号位移和反力对比、绝对/相对误差、ΣFz 与左端点 ΣMy；不使用或修改评分容差。位移、弯矩、剪力曲线来自 Euler–Bernoulli 解析解；局部端力符号和正弯矩约定明确区分。

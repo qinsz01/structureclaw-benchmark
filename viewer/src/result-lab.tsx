@@ -4,6 +4,7 @@ import { beamCheck, memberMoment, referenceResult, resultUnit } from './referenc
 import type { Pick } from './reference-math';
 import { formatNumber as f } from './data';
 import { PaperFigure, SvgText } from './paper-figures';
+import { MemberView } from './member-view';
 
 function ResultPlot({
   reference,
@@ -348,6 +349,13 @@ export function ResultLab({
   };
   return (
     <section className="result-lab">
+      <MemberView
+        reference={reference}
+        result={selected.result}
+        engine={selected.engine}
+        caseName={selected.caseName}
+        locale={locale}
+      />
       <div className="section-kicker">REFERENCE LAB</div>
       <h2>{zh ? '参考结果与计算校核' : 'Reference results and calculation checks'}</h2>
       <p className="muted">
