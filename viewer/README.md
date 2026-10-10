@@ -39,7 +39,7 @@ Serve the entire `dist/` directory over HTTP. Subdirectory deployments work with
 - 数值单位读取参考结果元数据，显示值适当舍入，悬停查看原始精度。完整 JSON 保留全部原始数值。未提供单位显示 `—`，不猜测。
 - 结构查看器展示几何、约束和选定荷载工况，不进行结构求解或数值插值。箭头长度用于示意方向，不代表不同荷载间的比例。点击约束节点可查看完整受约束自由度。
 - 材料、截面、荷载等参数保持原始记录；单位应以案例工程说明与参考元数据为准，不能仅根据 `SI` 标签推断材料属性单位。
-- 图片支持放大；DXF 提供 XY 二维预览、缩放、平移、图层开关及原文件下载。预览支持冻结附件中的 LINE、TEXT、ARC、CIRCLE，遇到未支持实体会显示提示，不自动对应或补建结构构件。没有变形云图或内力曲线功能。
+- 图片支持放大；DXF 提供 XY 二维预览、缩放、平移、图层开关及原文件下载。预览支持冻结附件中的 LINE、TEXT、ARC、CIRCLE，遇到未支持实体会显示提示，不自动对应或补建结构构件。参考结果图支持离散节点变形和限定条件下的梁解析曲线，不生成连续应力云图。
 
 - The exporter only reads `benchmark.json`, `scenarios/`, and required `fixtures/` from the parent repository. `npm run data` regenerates ignored `public/data/`; development and production builds do this automatically.
 - Original case content and attachment bytes are preserved. Source SHA-256 hashes appear in the provenance panel. Generated data is not committed; the original corpus remains authoritative.
@@ -48,7 +48,7 @@ Serve the entire `dist/` directory over HTTP. Subdirectory deployments work with
 - Units come from result metadata. Displayed values are rounded; hover for full precision or inspect complete JSON. Missing units display `—`.
 - Geometry, constraints, and the selected load case are visualized without analysis or interpolation. Arrow lengths are illustrative, not proportional magnitudes. Select a restrained node to inspect exact DOFs.
 - Model properties retain source values; use the engineering specification and reference metadata to interpret units rather than assuming material units from the `SI` label.
-- Images can be enlarged. DXF previews support XY projection, zoom/pan, layer toggles, and original downloads. LINE, TEXT, ARC, and CIRCLE cover the frozen attachments; unsupported entities are reported. No member correspondence or geometry is inferred. Deformation contours and internal-force diagrams remain out of scope.
+- Images can be enlarged. DXF previews support XY projection, zoom/pan, layer toggles, and original downloads. LINE, TEXT, ARC, and CIRCLE cover the frozen attachments; unsupported entities are reported. No member correspondence or geometry is inferred. Result figures show discrete nodal deformation and eligible analytical beam curves, never a continuous stress field.
 
 ## 界面 / Interface
 
@@ -57,6 +57,22 @@ Serve the entire `dist/` directory over HTTP. Subdirectory deployments work with
 The Chinese/English UI preserves the original task language. The library supports full-text search, family/language/structure filters, pagination, and shareable filter links. Details include turn navigation, front/isometric views, zoom/orbit/pan, node/member inspection, load and label toggles, fullscreen, PNG export, reference tables, and original JSON downloads. Narrow screens use a stacked layout; browsers without WebGL receive a static geometry fallback.
 
 ## 验证 / Verification
+
+### 参考计算与论文图版 / Reference calculations and paper figures
+
+- 数值表和最大平移分量可点击定位，在三维模型与矢量结果图中高亮。结果图支持 ux/uy/uz、完整三分量位移模长、两端完整局部 M 的绝对值最大值着色；缺失值为灰色，不补零。色标、单位、引擎与工况随图导出。
+- 变形示意按冻结节点位移乘指定倍率，仅连接具备完整三分量位移的节点；直线不是单元内部挠曲形状。仅米制兼容数据可叠加变形。结果图不叠加其他荷载工况；三维查看器的荷载选择仍独立于冻结响应工况。
+- 辅助解析计算仅支持通过几何、连接、截面、支座、荷载和工况检查的等截面水平 XZ 简支均布荷载梁、端点集中力悬臂梁。展示 E 的 MPa→kN/m² 换算、公式与代入、带符号位移和反力对比、绝对/相对误差、ΣFz 与左端点 ΣMy；不使用或修改评分容差。位移、弯矩、剪力曲线来自 Euler–Bernoulli 解析解；局部端力符号和正弯矩约定明确区分。
+- 复杂结构展示冻结文件内的平衡校核记录及完整来源；“归档通过”不是本次重新求解的结果。未指定数值断言的轮次和缺失商业引擎数据不会借用 OpenSees 响应。
+- 案例库的“论文图版”可为每个任务类别选择代表案例。详情页提供完整输入/预期约束流程、输入→几何→条件→标答四面板图、结果图和适用时的解析校核图。流程不是实验执行轨迹；覆盖统计不是性能统计。
+- 各图支持自包含 SVG 和三倍尺寸 PNG（1000 单位宽的 SVG 对应 3000 像素 PNG）。结果图选项与代表案例选择不写入分享链接。原图/结构配对导出仍在原有三维“出图模式”中。
+
+- Numerical cells and translation extrema locate/highlight entities in the 3-D model and vector result figure. Color ux/uy/uz, complete three-component displacement magnitude, or maximum absolute local M from both member ends. Missing values remain gray. Legends, units, engine and case are exported.
+- Deformation connects only nodes with complete frozen translation vectors at the selected scale; straight segments are not within-element curvature. Only compatible metre units enable deformation. Result plots do not mix in other load cases; the 3-D load selector remains independent of the frozen response case.
+- Analytical calculations require validated prismatic horizontal XZ geometry, connectivity, supports, sections and selected loads: simply supported/full-span uniform loading or a cantilever/tip force. They show the repository's MPa→kN/m² E conversion, formulas and substitutions, signed reference comparisons, absolute/relative errors, force and left-end moment residuals. Scoring tolerances are unchanged. Curves use Euler–Bernoulli theory and explicitly distinguish sagging-positive moments from local end-force signs.
+- Complex models expose archived equilibrium records and full verification JSON, not a new solver run. Turns without numerical assertions and missing commercial responses never borrow OpenSees results.
+- The library offers selectable family representatives. Case pages provide original-input/expected-criteria flow, input→geometry→conditions→reference panels, result maps and eligible analytical check figures. Task flow is not an experimental execution trace; coverage is not performance.
+- Figures export self-contained SVG and 3× PNG (1000 SVG units becomes 3000 pixels). Result options and representative selections are not stored in share links. Existing drawing/structure paired exports remain in the 3-D figure mode.
 
 ### 查看与出图增强 / Viewing and figure tools
 

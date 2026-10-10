@@ -7,17 +7,22 @@ import { exportFigure } from './figure';
 import { formatNumber } from './data';
 import { words } from './i18n';
 import { Thumbnail } from './thumbnail';
+import type { Pick } from './reference-math';
 
 export default function Scene({
   model,
   locale,
   name,
   attachment,
+  resultPick,
+  resultContext,
 }: {
   model: Model;
   locale: Locale;
   name: string;
   attachment?: Attachment;
+  resultPick?: Pick | null;
+  resultContext?: string;
 }) {
   const t = words[locale];
   const host = useRef<HTMLDivElement>(null);
@@ -156,7 +161,7 @@ export default function Scene({
       ctx.font = '34px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillStyle = color;
-      ctx.fillText(value, 256, 43);
+      ctx.fillText(value, 256, 43, 500);
       const texture = new THREE.CanvasTexture(canvas);
       texture.colorSpace = THREE.SRGBColorSpace;
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthTest: false }));
@@ -168,7 +173,18 @@ export default function Scene({
       const a = positions[e.nodes[0]],
         b = positions[e.nodes[1]];
       if (!a || !b) continue;
-      const mesh = line(a, b, span * 0.0045, '#4775b9');
+      const active = resultPick?.kind === 'member' && resultPick.entity === e.id;
+      const mesh = line(a, b, span * (active ? 0.007 : 0.0045), active ? '#e07820' : '#4775b9');
+      if (active)
+        text(
+          `${resultContext || ''} · ${e.id}: ${resultPick.component}=${formatNumber(resultPick.value)} ${resultPick.unit}`,
+          a
+            .clone()
+            .add(b)
+            .multiplyScalar(0.5)
+            .add(new THREE.Vector3(0, 0, span * 0.075)),
+          '#aa4e16',
+        );
       mesh.userData.details = {
         [t.elements]: e.id,
         ...e,
@@ -191,9 +207,15 @@ export default function Scene({
       const p = positions[n.id];
       const mesh = new THREE.Mesh(
         new THREE.SphereGeometry(span * 0.009, 14, 10),
-        material('#2358df'),
+        material(resultPick?.kind === 'node' && resultPick.entity === n.id ? '#e07820' : '#2358df'),
       );
       mesh.position.copy(p);
+      if (resultPick?.kind === 'node' && resultPick.entity === n.id)
+        text(
+          `${resultContext || ''} · ${n.id}: ${resultPick.component}=${formatNumber(resultPick.value)} ${resultPick.unit}`,
+          p.clone().add(new THREE.Vector3(0, 0, span * 0.075)),
+          '#aa4e16',
+        );
       scene.add(mesh);
       mesh.userData.details = {
         [t.nodes]: n.id,
@@ -513,6 +535,8 @@ export default function Scene({
     fontScale,
     lineScale,
     attachment,
+    resultPick,
+    resultContext,
   ]);
   return (
     <div className="scene-panel" ref={panel}>

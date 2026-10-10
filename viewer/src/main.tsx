@@ -17,6 +17,10 @@ import { Thumbnail } from './thumbnail';
 import DrawingPreview from './drawing';
 import { initialIndex, readViewState, saveViewState } from './view-state';
 import './styles.css';
+import { ResultLab } from './result-lab';
+import { PaperOverview, TaskFlow, EvidenceFigure } from './paper-figures';
+import { referenceResult, resultUnit } from './reference-math';
+import type { Pick } from './reference-math';
 const Scene = lazy(() => import('./scene'));
 
 function useData<T>(path: string | null): { data?: T; error?: boolean } {
@@ -128,6 +132,7 @@ function Library({
   const hero = Object.values(thumbnails).find((m) => m.coordinate_system.dimension === '3d');
   return (
     <>
+      <PaperOverview index={index} thumbnails={thumbnails} locale={locale} />
       <section className="hero">
         <div className="hero-copy">
           <div className="eyebrow">
@@ -314,10 +319,14 @@ function NumericTable({
   result,
   kind,
   locale,
+  onPick,
+  pick,
 }: {
   result: Result;
   kind: 'displacements' | 'reactions' | 'forces';
   locale: Locale;
+  onPick: (pick: Pick) => void;
+  pick: Pick | null;
 }) {
   const t = words[locale],
     units = result.meta?.units || result.units || {};
@@ -366,10 +375,27 @@ function NumericTable({
                   <td
                     key={c}
                     data-component={c}
-                    className="number"
+                    className={`number ${pick?.kind === 'node' && pick.entity === id && pick.component === c ? 'is-selected' : ''}`}
                     title={row[c] == null ? t.unavailable : String(row[c])}
                   >
-                    {row[c] == null ? '—' : formatNumber(row[c])}
+                    {row[c] == null ? (
+                      '—'
+                    ) : (
+                      <button
+                        className="numeric-pick"
+                        onClick={() =>
+                          onPick({
+                            entity: id,
+                            kind: 'node',
+                            component: c,
+                            value: row[c],
+                            unit: resultUnit(result, kind, c),
+                          })
+                        }
+                      >
+                        {formatNumber(row[c])}
+                      </button>
+                    )}
                   </td>
                 ))}
               </tr>
@@ -410,8 +436,24 @@ function NumericTable({
                 <code>{row.entity}</code>
               </td>
               <td>{row.component}</td>
-              <td className="number" title={String(row.value)}>
-                {formatNumber(row.value)}
+              <td
+                className={`number ${pick?.kind === 'member' && pick.entity === row.entity && (pick.component === row.component || pick.component.startsWith('max(')) ? 'is-selected' : ''}`}
+                title={String(row.value)}
+              >
+                <button
+                  className="numeric-pick"
+                  onClick={() =>
+                    onPick({
+                      entity: row.entity,
+                      kind: 'member',
+                      component: row.component,
+                      value: row.value,
+                      unit: row.unit,
+                    })
+                  }
+                >
+                  {formatNumber(row.value)}
+                </button>
               </td>
               <td>{row.unit}</td>
             </tr>
@@ -426,11 +468,15 @@ function Numbers({
   assertions,
   engineTarget,
   locale,
+  onPick,
+  pick,
 }: {
   reference: Reference;
   assertions: Assertion[];
   engineTarget?: string;
   locale: Locale;
+  onPick: (pick: Pick) => void;
+  pick: Pick | null;
 }) {
   const t = words[locale];
   const [kind, setKind] = useState<'displacements' | 'reactions' | 'forces'>('displacements');
@@ -478,13 +524,25 @@ function Numbers({
         {max && (
           <span>
             {locale === 'zh' ? '最大绝对平移分量' : 'Largest absolute translation component'}
-            <b title={String(max.value)}>
+            <button
+              className="numeric-pick"
+              title={String(max.value)}
+              onClick={() =>
+                onPick({
+                  entity: max.node,
+                  kind: 'node',
+                  component: max.component,
+                  value: max.value,
+                  unit: resultUnit(result, 'displacements', max.component),
+                })
+              }
+            >
               {formatNumber(max.value)}{' '}
               <small>
                 {(result.meta?.units || result.units)?.displacement || ''} · {max.node}/
                 {max.component}
               </small>
-            </b>
+            </button>
           </span>
         )}
       </div>
@@ -496,7 +554,7 @@ function Numbers({
           </button>
         ))}
       </div>
-      <NumericTable result={result} kind={kind} locale={locale} />
+      <NumericTable result={result} kind={kind} locale={locale} onPick={onPick} pick={pick} />
       <details>
         <summary>{t.more}</summary>
         <Json value={engine === 'opensees' ? reference.numerical : commercial} />
@@ -539,6 +597,7 @@ function ImagePreview({ src, name, locale }: { src: string; name: string; locale
   );
 }
 function ReferencePanel({
+  input,
   id,
   assertions,
   locale,
@@ -546,14 +605,17 @@ function ReferencePanel({
   attachment,
 }: {
   id: string;
+  input: string;
   assertions: Assertion[];
   locale: Locale;
   engineTarget?: string;
   attachment?: Attachment;
 }) {
   const { data, error } = useData<Reference>(`models/${id}.json`);
+  const [pick, setPick] = useState<Pick | null>(null);
   const t = words[locale];
   if (!data) return <Loading locale={locale} error={error} />;
+  const numericalContext = referenceResult(data, assertions, engineTarget);
   return (
     <>
       <div className="reference-heading">
@@ -567,7 +629,15 @@ function ReferencePanel({
         </span>
       </div>
       <Suspense fallback={<Loading locale={locale} />}>
-        <Scene key={id} model={data.model} locale={locale} name={id} attachment={attachment} />
+        <Scene
+          key={id}
+          model={data.model}
+          locale={locale}
+          name={id}
+          attachment={attachment}
+          resultPick={pick}
+          resultContext={`${numericalContext.engine} / ${numericalContext.caseName || '—'}`}
+        />
       </Suspense>
       <div className="reference-caption">
         <code>{id}</code>
@@ -618,8 +688,30 @@ function ReferencePanel({
           assertions={assertions}
           engineTarget={engineTarget}
           locale={locale}
+          onPick={setPick}
+          pick={pick}
         />
       </section>
+      <ResultLab
+        reference={data}
+        assertions={assertions}
+        engineTarget={engineTarget}
+        locale={locale}
+        pick={pick}
+        onPick={setPick}
+      />
+      <details className="paper-workbench">
+        <summary>
+          {locale === 'zh' ? '论文图版 · 建模证据链' : 'Paper figures · Modeling evidence chain'}
+        </summary>
+        <EvidenceFigure
+          reference={data}
+          locale={locale}
+          input={input}
+          assertions={assertions}
+          engineTarget={engineTarget}
+        />
+      </details>
       <details className="wide-details">
         <summary>{t.parameters}</summary>
         <p className="note">{t.unitNote}</p>
@@ -728,6 +820,7 @@ function Detail({ item, index, locale }: { item: CaseSummary; index: Index; loca
           ))}
         </div>
       )}
+      <TaskFlow data={data} locale={locale} />
       <div className={`detail-layout ${data.scenario.attachments?.length ? 'with-drawing' : ''}`}>
         <aside className="input-panel">
           <div className="panel-title">
@@ -797,6 +890,7 @@ function Detail({ item, index, locale }: { item: CaseSummary; index: Index; loca
           )}
           {references.length ? (
             <ReferencePanel
+              input={turn.message}
               key={`${turnIndex}-${references[selectedModel]}`}
               id={references[selectedModel]}
               assertions={turn.assertions}
