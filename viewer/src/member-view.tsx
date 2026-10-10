@@ -108,19 +108,15 @@ export function MemberView({
   ];
   return (
     <section className="member-view">
-      <h2>{zh ? '单元内部响应 · 展示层' : 'Member interior response · Presentation layer'}</h2>
-      <p>
-        {zh
-          ? '蓝色实线：已校核恢复；紫色虚线：仅端部位移／转角插值；桁架保持直杆。恢复值不参与评分，不替换冻结标答。'
-          : 'Solid blue: checked recovery; dashed purple: end displacement/rotation interpolation only; trusses remain straight. Derived values never replace frozen references or affect scoring.'}
-      </p>
       <div className="member-summary">
-        {(['recovered', 'interpolated', 'truss', 'unavailable'] as const).map((s) => (
-          <div key={s}>
-            <span>{names[s]}</span>
-            <strong>{rows.filter((r) => r.state === s).length}</strong>
-          </div>
-        ))}
+        {(['recovered', 'interpolated', 'truss', 'unavailable'] as const)
+          .filter((s) => rows.some((r) => r.state === s))
+          .map((s) => (
+            <div key={s} data-state={s}>
+              <span>{names[s]}</span>
+              <strong>{rows.filter((r) => r.state === s).length}</strong>
+            </div>
+          ))}
       </div>
       <div className="lab-controls">
         <label>
@@ -282,6 +278,11 @@ export function MemberView({
       </PaperFigure>
       <details>
         <summary>{zh ? '逐构件覆盖与限制' : 'Per-member coverage and limitations'}</summary>
+        <p>
+          {zh
+            ? '实线表示荷载修正恢复或桁架直杆；虚线仅为端部运动插值。所有派生值只用于展示，不替换标答或参与评分。'
+            : 'Solid curves represent load-corrected recovery or straight trusses; dashed curves are end-kinematic interpolation only. Derived values are for presentation, not reference replacement or scoring.'}
+        </p>
         <table>
           <thead>
             <tr>

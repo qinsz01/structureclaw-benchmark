@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Assertion, Locale, Reference, Result } from './types';
 import { beamCheck, memberMoment, referenceResult, resultUnit } from './reference-math';
 import type { Pick } from './reference-math';
@@ -325,6 +325,10 @@ export function ResultLab({
 }) {
   const zh = locale === 'zh',
     selected = referenceResult(reference, assertions, engineTarget);
+  const [view, setView] = useState<'curves' | 'values'>('curves');
+  useEffect(() => {
+    if (pick) setView('values');
+  }, [pick]);
   const check = selected.engine === 'opensees' && selected.result ? beamCheck(reference) : null;
   const archived =
     selected.engine === 'opensees' && selected.result
@@ -349,32 +353,64 @@ export function ResultLab({
   };
   return (
     <section className="result-lab">
-      <MemberView
-        reference={reference}
-        result={selected.result}
-        engine={selected.engine}
-        caseName={selected.caseName}
-        locale={locale}
-      />
-      <div className="section-kicker">REFERENCE LAB</div>
-      <h2>{zh ? '参考结果与计算校核' : 'Reference results and calculation checks'}</h2>
-      <p className="muted">
-        {zh
-          ? '点击数值表或图中节点／构件定位。所选分量、全局最大值与任务要求分别展示；辅助计算不会修改标答或评分。'
-          : 'Click numerical cells or plotted entities to locate values. Selected components, global extrema and task requirements are distinct; auxiliary calculations do not change references or scoring.'}
-      </p>
-      <ResultPlot
-        reference={reference}
-        result={selected.result}
-        caseName={selected.caseName}
-        engine={selected.engine}
-        locale={locale}
-        pick={pick}
-        onPick={onPick}
-      />
+      <div className="response-heading">
+        <div>
+          <div className="section-kicker">STRUCTURAL RESPONSE</div>
+          <h2>{zh ? '结构响应' : 'Structural response'}</h2>
+        </div>
+        <span className="response-context">
+          {selected.engine} · {selected.caseName || '—'}
+        </span>
+      </div>
+      <div className="response-switch" role="group" aria-label={zh ? '响应视图' : 'Response view'}>
+        <button aria-pressed={view === 'curves'} onClick={() => setView('curves')}>
+          {zh ? '变形与构件曲线' : 'Deformation & member curves'}
+        </button>
+        <button aria-pressed={view === 'values'} onClick={() => setView('values')}>
+          {zh ? '冻结值与着色' : 'Frozen values & color'}
+        </button>
+      </div>
+      <div className="response-curves" hidden={view !== 'curves'}>
+        <MemberView
+          reference={reference}
+          result={selected.result}
+          engine={selected.engine}
+          caseName={selected.caseName}
+          locale={locale}
+        />
+      </div>
+      <div className="response-values" hidden={view !== 'values'}>
+        <p className="muted small">
+          {zh
+            ? '冻结节点与端部数值。点击数值表或图中对象定位；此视图的变形仅为节点连线。'
+            : 'Frozen node and end values. Click a table cell or entity to locate it; deformation here connects nodes only.'}
+        </p>
+        <ResultPlot
+          reference={reference}
+          result={selected.result}
+          caseName={selected.caseName}
+          engine={selected.engine}
+          locale={locale}
+          pick={pick}
+          onPick={onPick}
+        />
+      </div>
       <details className="calculation-panel">
         <summary>
-          {zh ? '辅助解析计算与校核' : 'Auxiliary analytical calculations and checks'}
+          <span>{zh ? '计算校核' : 'Calculation checks'}</span>
+          <small>
+            {check
+              ? zh
+                ? '解析对照 · 平衡记录'
+                : 'Analytical comparison · equilibrium'
+              : archived
+                ? zh
+                  ? '归档校核记录'
+                  : 'Archived verification'
+                : zh
+                  ? '适用条件与数据说明'
+                  : 'Scope and data availability'}
+          </small>
         </summary>
         {!check ? (
           <p>

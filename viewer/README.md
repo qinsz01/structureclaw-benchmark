@@ -52,6 +52,10 @@ Serve the entire `dist/` directory over HTTP. Subdirectory deployments work with
 
 ## 界面 / Interface
 
+结构响应统一为一个查看区域：“变形与构件曲线”和“冻结值与着色”互斥显示，切换时保留控件状态。点击冻结数值自动切到定位视图。数值表、计算校核和逐构件限制默认折叠；精度状态与来源仍在屏幕和导出图中保留。
+
+Structural response uses one viewing area with mutually exclusive “Deformation & member curves” and “Frozen values & color” views. Controls persist across switches; selecting a frozen value opens the location view. Numerical tables, calculation checks and per-member limitations are collapsed initially, while precision status and provenance remain visible and exported.
+
 中英文界面切换不会翻译原始题目。案例库支持全文搜索、类别/语言/结构筛选、分页和可分享筛选链接。详情页提供逐轮切换、正视/轴测视图、缩放/旋转/平移、节点与构件属性、荷载与编号开关、全屏、PNG 导出、参考数值和原始数据下载。窄屏下采用上下布局；WebGL 不可用时回退到静态结构图。
 
 The Chinese/English UI preserves the original task language. The library supports full-text search, family/language/structure filters, pagination, and shareable filter links. Details include turn navigation, front/isometric views, zoom/orbit/pan, node/member inspection, load and label toggles, fullscreen, PNG export, reference tables, and original JSON downloads. Narrow screens use a stacked layout; browsers without WebGL receive a static geometry fallback.

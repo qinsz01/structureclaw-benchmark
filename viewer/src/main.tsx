@@ -547,14 +547,17 @@ function Numbers({
         )}
       </div>
       <p className="muted small">{t.numericalNote}</p>
-      <div className="result-tabs">
-        {(['displacements', 'reactions', 'forces'] as const).map((k) => (
-          <button key={k} aria-pressed={kind === k} onClick={() => setKind(k)}>
-            {k === 'displacements' ? t.displacement : k === 'reactions' ? t.reactions : t.forces}
-          </button>
-        ))}
-      </div>
-      <NumericTable result={result} kind={kind} locale={locale} onPick={onPick} pick={pick} />
+      <details className="reference-table">
+        <summary>{locale === 'zh' ? '冻结数值表' : 'Frozen numerical tables'}</summary>
+        <div className="result-tabs">
+          {(['displacements', 'reactions', 'forces'] as const).map((k) => (
+            <button key={k} aria-pressed={kind === k} onClick={() => setKind(k)}>
+              {k === 'displacements' ? t.displacement : k === 'reactions' ? t.reactions : t.forces}
+            </button>
+          ))}
+        </div>
+        <NumericTable result={result} kind={kind} locale={locale} onPick={onPick} pick={pick} />
+      </details>
       <details>
         <summary>{t.more}</summary>
         <Json value={engine === 'opensees' ? reference.numerical : commercial} />

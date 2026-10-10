@@ -4,17 +4,22 @@ import fs from 'node:fs';
 test('linked values, deformation, analytical checks and publication exports', async ({ page }) => {
   await page.goto('/#/case/beam-multi-turn-incomplete?turn=1');
   await expect(page.locator('.result-lab')).toBeVisible();
+  await expect(page.locator('.response-curves')).toBeVisible();
+  await expect(page.locator('.response-values')).toBeHidden();
+  await page.locator('.reference-table > summary').click();
   await page
     .locator('.reference-results tbody tr')
     .filter({ has: page.locator('td code', { hasText: /^2$/ }) })
     .locator('[data-component="uz"] button')
     .click();
-  await expect(page.locator('.result-lab > .paper-figure svg')).toContainText(
+  await expect(page.locator('.response-values')).toBeVisible();
+  await expect(page.locator('.response-curves')).toBeHidden();
+  await expect(page.locator('.response-values > .paper-figure svg')).toContainText(
     '2 · uz = -0.0164634 m',
   );
   await page.getByLabel('叠加节点变形').check();
   await page.getByLabel('变形倍率').fill('30');
-  await expect(page.locator('.result-lab > .paper-figure svg')).toContainText('变形 ×30');
+  await expect(page.locator('.response-values > .paper-figure svg')).toContainText('变形 ×30');
   await page.locator('.calculation-panel > summary').click();
   await expect(page.locator('.calculation-panel')).toContainText('u_z(L/2) = −5qL⁴/(384EI)');
   await expect(page.locator('.calculation-panel')).toContainText('60 kN');
@@ -38,14 +43,14 @@ test('linked values, deformation, analytical checks and publication exports', as
   await figure.screenshot({ path: 'test-results/calculation-panel.png' });
   await page.getByLabel('着色指标').selectOption('moment');
   await page.locator('.result-lab svg [role="button"]').first().click();
-  await expect(page.locator('.result-lab > .paper-figure svg')).toContainText(
+  await expect(page.locator('.response-values > .paper-figure svg')).toContainText(
     'max(|n1.M|, |n2.M|)',
   );
   await page.getByRole('button', { name: 'EN', exact: true }).click();
-  await expect(page.locator('.result-lab')).toContainText('Auxiliary analytical calculations');
+  await expect(page.locator('.result-lab')).toContainText('Calculation checks');
   await page.getByLabel('Color metric').selectOption('norm');
   await page
-    .locator('.result-lab > .paper-figure')
+    .locator('.response-values > .paper-figure')
     .screenshot({ path: 'test-results/results-en.png' });
 });
 
