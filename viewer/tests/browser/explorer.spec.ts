@@ -73,7 +73,7 @@ test('images, DXF, commercial reference, raw downloads and mobile layouts', asyn
   const index = await (await page.request.get('/data/index.json')).json();
   const dxf = index.cases.find((c: { modality: string }) => c.modality === 'dxf');
   await page.goto(`/#/case/${dxf.id}`);
-  await expect(page.locator('.drawing-icon')).toBeVisible();
+  await expect(page.locator('.dxf-svg')).toBeVisible();
   const download = page.waitForEvent('download');
   await page.locator('.attachment-label a').click();
   expect((await download).suggestedFilename()).toMatch(/\.dxf$/);

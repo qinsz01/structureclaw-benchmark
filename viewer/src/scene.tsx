@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import type { Locale, Model, Raw } from './types';
+import type { Locale, Model, Raw, Attachment } from './types';
+import { readViewState, saveViewState } from './view-state';
+import { exportFigure } from './figure';
+import { formatNumber } from './data';
 import { words } from './i18n';
 import { Thumbnail } from './thumbnail';
 
@@ -9,18 +12,39 @@ export default function Scene({
   model,
   locale,
   name,
+  attachment,
 }: {
   model: Model;
   locale: Locale;
   name: string;
+  attachment?: Attachment;
 }) {
   const t = words[locale];
   const host = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
-  const [labels, setLabels] = useState(false),
-    [loads, setLoads] = useState(true);
-  const [loadCase, setLoadCase] = useState(model.load_cases[0]?.id || '');
-  const [iso, setIso] = useState(model.coordinate_system.dimension === '3d');
+  const [labels, setLabels] = useState(readViewState().get('labels') === '1'),
+    [loads, setLoads] = useState(readViewState().get('loads') !== '0');
+  const [loadCase, setLoadCase] = useState(
+    () =>
+      model.load_cases.find((c) => c.id === readViewState().get('load'))?.id ||
+      model.load_cases[0]?.id ||
+      '',
+  );
+  const [iso, setIso] = useState(
+    readViewState().has('view')
+      ? readViewState().get('view') === '3d'
+      : model.coordinate_system.dimension === '3d',
+  );
+  const [dimensions, setDimensions] = useState(readViewState().get('dims') === '1');
+  const [paper, setPaper] = useState(false),
+    [fontScale, setFontScale] = useState(1),
+    [lineScale, setLineScale] = useState(1);
+  const [exportError, setExportError] = useState(false),
+    [exporting, setExporting] = useState(false);
+  const savedPose = useRef<{ name: string; iso: boolean; reset: number; values: number[] } | null>(
+    null,
+  );
+  const selectedObject = useRef<THREE.Object3D | null>(null);
   const [reset, setReset] = useState(0),
     [fallback, setFallback] = useState(false);
   const [selected, setSelected] = useState<Raw | null>(null);
@@ -36,6 +60,16 @@ export default function Scene({
       })),
   );
   const exporter = useRef<() => void>(() => {});
+  const figureExporter = useRef<() => Promise<void>>(async () => {});
+  useEffect(() => {
+    saveViewState({
+      load: loadCase,
+      view: iso ? '3d' : '2d',
+      labels: labels ? 1 : 0,
+      loads: loads ? 1 : 0,
+      dims: dimensions ? 1 : 0,
+    });
+  }, [loadCase, iso, labels, loads, dimensions]);
   useEffect(() => {
     const fn = () => setFull(document.fullscreenElement === panel.current);
     document.addEventListener('fullscreenchange', fn);
@@ -53,7 +87,7 @@ export default function Scene({
     }
     setFallback(false);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor('#f6f9fd');
+    renderer.setClearColor(paper ? '#ffffff' : '#f6f9fd');
     container.appendChild(renderer.domElement);
     renderer.domElement.setAttribute('aria-label', t.reference);
     const scene = new THREE.Scene();
@@ -83,6 +117,19 @@ export default function Scene({
     controls.enableDamping = false;
     controls.minZoom = 0.15;
     controls.maxZoom = 15;
+    const encoded = readViewState().get('camera')?.split(',').map(Number);
+    const stored = savedPose.current;
+    const pose =
+      stored && stored.name === name && stored.iso === iso && stored.reset === reset
+        ? stored.values
+        : !stored &&
+            encoded?.length === 10 &&
+            encoded.every(Number.isFinite) &&
+            encoded[9] >= 0.15 &&
+            encoded[9] <= 15
+          ? encoded
+          : null;
+    selectedObject.current = null;
     scene.add(new THREE.AmbientLight(0xffffff, 2.4));
     const light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(span, -span, span * 3);
@@ -93,7 +140,7 @@ export default function Scene({
     const line = (a: THREE.Vector3, b: THREE.Vector3, radius: number, color: string) => {
       const d = b.clone().sub(a);
       const mesh = new THREE.Mesh(
-        new THREE.CylinderGeometry(radius, radius, d.length(), 10),
+        new THREE.CylinderGeometry(radius * lineScale, radius * lineScale, d.length(), 10),
         material(color),
       );
       mesh.position.copy(a).add(b).multiplyScalar(0.5);
@@ -106,7 +153,7 @@ export default function Scene({
       canvas.width = 512;
       canvas.height = 64;
       const ctx = canvas.getContext('2d')!;
-      ctx.font = '28px sans-serif';
+      ctx.font = '34px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillStyle = color;
       ctx.fillText(value, 256, 43);
@@ -114,7 +161,7 @@ export default function Scene({
       texture.colorSpace = THREE.SRGBColorSpace;
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthTest: false }));
       sprite.position.copy(at);
-      sprite.scale.set(span * 0.55 * scale, span * 0.069 * scale, 1);
+      sprite.scale.set(span * 0.65 * scale * fontScale, span * 0.081 * scale * fontScale, 1);
       scene.add(sprite);
     };
     for (const e of model.elements) {
@@ -235,7 +282,7 @@ export default function Scene({
               .map(([key, value]) => `${key}=${value}`)
               .join(' ');
             text(
-              components,
+              `${components}${model.unit_system === 'SI' ? (distributed ? ' kN/m' : ' kN') : ''}`,
               points[Math.floor(points.length / 2)].clone().addScaledVector(dir, -length * 1.25),
               '#a56824',
             );
@@ -271,10 +318,44 @@ export default function Scene({
           1.2,
         );
       }
+    if (dimensions) {
+      const unit = model.unit_system === 'SI' ? ' m' : '';
+      for (const axis of [0, 1, 2]) {
+        if (size.getComponent(axis) < 1e-8) continue;
+        const a = box.min.clone().add(new THREE.Vector3(-span * 0.08, -span * 0.08, -span * 0.08));
+        const b = a.clone();
+        b.setComponent(axis, a.getComponent(axis) + size.getComponent(axis));
+        line(a, b, span * 0.001, '#91a3bc');
+        text(
+          `${['X', 'Y', 'Z'][axis]} = ${formatNumber(size.getComponent(axis))}${unit}`,
+          a
+            .clone()
+            .add(b)
+            .multiplyScalar(0.5)
+            .add(new THREE.Vector3(0, 0, -span * 0.04)),
+          '#71859f',
+          1.1,
+        );
+      }
+      let storyBase = box.min.z;
+      for (const story of model.stories || []) {
+        const base = story.elevation ?? storyBase;
+        if (
+          model.nodes.some((n) => Math.abs(n.z - base) < 1e-6) &&
+          model.nodes.some((n) => Math.abs(n.z - base - story.height) < 1e-6)
+        )
+          text(
+            `${story.id}: h=${formatNumber(story.height)}${unit}`,
+            new THREE.Vector3(box.max.x + span * 0.14, box.min.y, base + story.height / 2),
+            '#71859f',
+          );
+        storyBase = base + story.height;
+      }
+    }
     const grid = new THREE.GridHelper(span * 2.2, 20, '#dbe4ef', '#e9eef5');
     grid.rotation.x = Math.PI / 2;
     grid.position.set(center.x, center.y, box.min.z - span * 0.06);
-    scene.add(grid);
+    if (!paper) scene.add(grid);
     const axisOrigin = new THREE.Vector3(
       box.min.x - span * 0.14,
       box.min.y,
@@ -309,6 +390,13 @@ export default function Scene({
     );
     const fitWidth = Math.max(...projected.map((p) => Math.abs(p.x))) + span * 0.18;
     const fitHeight = Math.max(...projected.map((p) => Math.abs(p.y))) + span * 0.18;
+    if (pose) {
+      camera.position.fromArray(pose);
+      controls.target.fromArray(pose, 3);
+      camera.up.fromArray(pose, 6);
+      camera.zoom = pose[9];
+      camera.lookAt(controls.target);
+    }
     const resize = () => {
       const w = container.clientWidth,
         h = container.clientHeight;
@@ -342,12 +430,33 @@ export default function Scene({
         camera,
       );
       const hit = raycaster.intersectObjects(pickable)[0];
+      if (selectedObject.current) {
+        const material = (selectedObject.current as THREE.Mesh)
+          .material as THREE.MeshStandardMaterial;
+        material.color.setHex(selectedObject.current.userData.originalColor);
+      }
+      selectedObject.current = hit?.object || null;
+      if (hit) {
+        const material = (hit.object as THREE.Mesh).material as THREE.MeshStandardMaterial;
+        hit.object.userData.originalColor = material.color.getHex();
+        material.color.set('#eea141');
+      }
       setSelected(hit?.object.userData.details || null);
+      renderer.render(scene, camera);
     };
     renderer.domElement.addEventListener('pointerdown', pointerDown);
     renderer.domElement.addEventListener('pointerup', pointerUp);
     const render = () => {
       renderer.render(scene, camera);
+      const values = [
+        ...camera.position.toArray(),
+        ...controls.target.toArray(),
+        ...camera.up.toArray(),
+        camera.zoom,
+      ];
+      savedPose.current = { name, iso, reset, values };
+      renderer.domElement.dataset.camera = values.join(',');
+      saveViewState({ camera: values.map((n) => Number(n.toPrecision(8))).join(',') });
     };
     controls.addEventListener('change', render);
     controls.update();
@@ -358,6 +467,17 @@ export default function Scene({
       a.download = `${name}-reference.png`;
       a.href = renderer.domElement.toDataURL('image/png');
       a.click();
+    };
+    figureExporter.current = async () => {
+      const ratio = renderer.getPixelRatio();
+      try {
+        renderer.setPixelRatio(3);
+        renderer.render(scene, camera);
+        await exportFigure(renderer.domElement, name, locale, attachment);
+      } finally {
+        renderer.setPixelRatio(ratio);
+        renderer.render(scene, camera);
+      }
     };
     return () => {
       observer.disconnect();
@@ -378,7 +498,22 @@ export default function Scene({
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [model, locale, labels, loads, loadCase, iso, reset, name, t]);
+  }, [
+    model,
+    locale,
+    labels,
+    loads,
+    loadCase,
+    iso,
+    reset,
+    name,
+    t,
+    dimensions,
+    paper,
+    fontScale,
+    lineScale,
+    attachment,
+  ]);
   return (
     <div className="scene-panel" ref={panel}>
       <div className="scene-toolbar">
@@ -396,6 +531,12 @@ export default function Scene({
           </button>
           <button aria-pressed={labels} onClick={() => setLabels(!labels)}>
             {t.labels}
+          </button>
+          <button aria-pressed={dimensions} onClick={() => setDimensions(!dimensions)}>
+            {locale === 'zh' ? '尺寸' : 'Dimensions'}
+          </button>
+          <button aria-pressed={paper} onClick={() => setPaper(!paper)}>
+            {locale === 'zh' ? '出图模式' : 'Figure mode'}
           </button>
           <button
             onClick={() => {
@@ -415,6 +556,66 @@ export default function Scene({
           </button>
         </div>
       </div>
+      {paper && (
+        <div className="figure-tools">
+          <span>{locale === 'zh' ? '白底 · 当前视角' : 'White background · Current view'}</span>
+          <label>
+            {locale === 'zh' ? '字号' : 'Text'}{' '}
+            <input
+              aria-label={locale === 'zh' ? '出图字号' : 'Figure text size'}
+              type="range"
+              min=".8"
+              max="2"
+              step=".1"
+              value={fontScale}
+              onChange={(e) => setFontScale(Number(e.target.value))}
+            />
+          </label>
+          <label>
+            {locale === 'zh' ? '线宽' : 'Lines'}{' '}
+            <input
+              aria-label={locale === 'zh' ? '出图线宽' : 'Figure line width'}
+              type="range"
+              min=".7"
+              max="2.5"
+              step=".1"
+              value={lineScale}
+              onChange={(e) => setLineScale(Number(e.target.value))}
+            />
+          </label>
+          <button
+            disabled={fallback || exporting}
+            onClick={async () => {
+              setExporting(true);
+              setExportError(false);
+              try {
+                await figureExporter.current();
+              } catch {
+                setExportError(true);
+              } finally {
+                setExporting(false);
+              }
+            }}
+          >
+            {exporting
+              ? '…'
+              : locale === 'zh'
+                ? attachment
+                  ? '导出原图 + 结构图'
+                  : '导出排版图片'
+                : attachment
+                  ? 'Export input + structure'
+                  : 'Export figure'}
+          </button>
+          {exportError && (
+            <span role="alert">
+              {locale === 'zh'
+                ? '导出失败，请等待图纸加载后重试。'
+                : 'Export failed; wait for the drawing to load and retry.'}
+            </span>
+          )}
+        </div>
+      )}
       <div className="scene-canvas" ref={host}>
         {fallback && (
           <div className="fallback">
@@ -471,9 +672,43 @@ export default function Scene({
           >
             ×
           </button>
-          <pre>{JSON.stringify(selected, null, 2)}</pre>
+          <h3>{locale === 'zh' ? '选中对象' : 'Selected object'}</h3>
+          <dl className="property-card">
+            {Object.entries(selected).map(([key, value]) => (
+              <ReactProperty key={key} name={key} value={value} />
+            ))}
+          </dl>
+          <p className="note">{t.unitNote}</p>
+          <details>
+            <summary>{t.raw}</summary>
+            <pre>{JSON.stringify(selected, null, 2)}</pre>
+          </details>
         </div>
       )}
     </div>
+  );
+}
+
+function ReactProperty({ name, value }: { name: string; value: unknown }) {
+  if (value == null) return null;
+  return (
+    <>
+      <dt>{name}</dt>
+      <dd>
+        {typeof value === 'object' && !Array.isArray(value) ? (
+          <dl>
+            {Object.entries(value).map(([k, v]) => (
+              <ReactProperty key={k} name={k} value={v} />
+            ))}
+          </dl>
+        ) : Array.isArray(value) ? (
+          value.join(' · ')
+        ) : typeof value === 'number' ? (
+          formatNumber(value)
+        ) : (
+          String(value)
+        )}
+      </dd>
+    </>
   );
 }

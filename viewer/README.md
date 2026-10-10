@@ -39,7 +39,7 @@ Serve the entire `dist/` directory over HTTP. Subdirectory deployments work with
 - 数值单位读取参考结果元数据，显示值适当舍入，悬停查看原始精度。完整 JSON 保留全部原始数值。未提供单位显示 `—`，不猜测。
 - 结构查看器展示几何、约束和选定荷载工况，不进行结构求解或数值插值。箭头长度用于示意方向，不代表不同荷载间的比例。点击约束节点可查看完整受约束自由度。
 - 材料、截面、荷载等参数保持原始记录；单位应以案例工程说明与参考元数据为准，不能仅根据 `SI` 标签推断材料属性单位。
-- 图片支持放大，DXF 提供原文件下载；首版没有 CAD 解析、变形云图或内力曲线功能。
+- 图片支持放大；DXF 提供 XY 二维预览、缩放、平移、图层开关及原文件下载。预览支持冻结附件中的 LINE、TEXT、ARC、CIRCLE，遇到未支持实体会显示提示，不自动对应或补建结构构件。没有变形云图或内力曲线功能。
 
 - The exporter only reads `benchmark.json`, `scenarios/`, and required `fixtures/` from the parent repository. `npm run data` regenerates ignored `public/data/`; development and production builds do this automatically.
 - Original case content and attachment bytes are preserved. Source SHA-256 hashes appear in the provenance panel. Generated data is not committed; the original corpus remains authoritative.
@@ -48,7 +48,7 @@ Serve the entire `dist/` directory over HTTP. Subdirectory deployments work with
 - Units come from result metadata. Displayed values are rounded; hover for full precision or inspect complete JSON. Missing units display `—`.
 - Geometry, constraints, and the selected load case are visualized without analysis or interpolation. Arrow lengths are illustrative, not proportional magnitudes. Select a restrained node to inspect exact DOFs.
 - Model properties retain source values; use the engineering specification and reference metadata to interpret units rather than assuming material units from the `SI` label.
-- Images can be enlarged; DXF files can be downloaded. CAD parsing, deformation contours, and internal-force diagrams are outside this version.
+- Images can be enlarged. DXF previews support XY projection, zoom/pan, layer toggles, and original downloads. LINE, TEXT, ARC, and CIRCLE cover the frozen attachments; unsupported entities are reported. No member correspondence or geometry is inferred. Deformation contours and internal-force diagrams remain out of scope.
 
 ## 界面 / Interface
 
@@ -57,6 +57,20 @@ Serve the entire `dist/` directory over HTTP. Subdirectory deployments work with
 The Chinese/English UI preserves the original task language. The library supports full-text search, family/language/structure filters, pagination, and shareable filter links. Details include turn navigation, front/isometric views, zoom/orbit/pan, node/member inspection, load and label toggles, fullscreen, PNG export, reference tables, and original JSON downloads. Narrow screens use a stacked layout; browsers without WebGL receive a static geometry fallback.
 
 ## 验证 / Verification
+
+### 查看与出图增强 / Viewing and figure tools
+
+- 标答摘要直接提取节点/构件数量、约束节点、模型外包尺寸和荷载工况。主要数值仍显示指定引擎冻结响应中的分量、对象、单位与工况，不生成工程结论。
+- “尺寸”显示模型 X/Y/Z 外包尺寸，以及可由现有楼层和节点标高核实的层高；不把所有节点间距当成真实跨度。
+- 节点或构件被选中后高亮，属性卡片展示坐标、约束、材料、截面等原始值；原始 JSON 仍可展开。
+- 切换编号、荷载、语言和出图选项保留视角。“分享当前查看状态”记录轮次、参考模型、荷载工况、编号/荷载/尺寸开关及相机位置；图纸图层和出图字号不写入分享链接。
+- “出图模式”使用白底，提供字号、线宽调整与正视/轴测预设。可导出 1800×1500 的单结构排版图，或 2800×1500 的原图与参考结构组合图。组合图使用当前图纸视图与可见图层，三维部分按较高像素密度重新渲染；未建立输入实体和模型构件的自动对应。
+
+- The summary derives model counts, restrained nodes, extents, and load cases from frozen data. Numerical highlights retain their source engine, component, entity, unit, and case; no engineering conclusions are generated.
+- Dimensions label overall X/Y/Z extents and story heights verified against existing node elevations, not assumed spans between arbitrary nodes.
+- Selected nodes/members are highlighted and inspected in property cards; original JSON remains available.
+- Camera position survives display and language changes. Shared links preserve the turn, reference model, load case, labels/loads/dimensions, and camera; drawing layers and figure typography are not included.
+- Figure mode offers a white background, font and line sizing, and front/isometric presets. Export a 1800×1500 structure figure or 2800×1500 input/reference comparison. The drawing uses its current viewport and visible layers, and the structure is re-rendered at higher pixel density. No automatic entity correspondence is implied.
 
 ```powershell
 npm test

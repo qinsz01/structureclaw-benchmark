@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { parseDxf } from './dxf.mjs';
 
 export const viewerRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const corpusRoot = path.resolve(viewerRoot, '..');
@@ -34,6 +35,8 @@ export function exportData(output = path.join(viewerRoot, 'public/data')) {
     const target = path.join(output, p);
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.copyFileSync(absolute, target);
+    if (p.toLowerCase().endsWith('.dxf'))
+      write(`${p}.json`, parseDxf(fs.readFileSync(absolute, 'utf8')));
     sources.add(p);
   };
   const cases = [];

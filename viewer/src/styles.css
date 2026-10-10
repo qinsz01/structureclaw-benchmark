@@ -1483,3 +1483,206 @@ dialog p {
 .floor-loads strong {
   font-weight: 500;
 }
+.drawing-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 9px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fafc;
+}
+.drawing-toolbar > span {
+  font-size: 10px;
+  color: #8092ac;
+  margin-right: auto;
+}
+.drawing-toolbar button {
+  font-size: 10px;
+  padding: 5px 7px;
+}
+.dxf-svg {
+  display: block;
+  width: 100%;
+  height: 310px;
+  cursor: grab;
+}
+.dxf-svg:active {
+  cursor: grabbing;
+}
+.drawing-layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  font-size: 10px;
+  max-height: 130px;
+  overflow: auto;
+  border-bottom: 1px solid var(--line);
+}
+.drawing-layers label {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.drawing-layers input {
+  padding: 0;
+}
+.drawing-note {
+  font-size: 10px;
+  color: #91a1b7;
+  padding: 9px;
+  line-height: 1.8;
+}
+.drawing-note strong {
+  display: block;
+  color: #bd8741;
+}
+.expanded-drawing {
+  position: fixed;
+  inset: 4vh 4vw;
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 0 0 100vmax #162a46a6;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.expanded-drawing .dxf-svg {
+  flex: 1;
+  min-height: 0;
+}
+.expanded-drawing .drawing-toolbar {
+  padding: 15px;
+}
+.answer-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding: 0 0 18px;
+  margin-bottom: 20px;
+}
+.answer-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.answer-summary span {
+  font-size: 10px;
+  color: #8b9bb2;
+}
+.answer-summary strong {
+  font-weight: 500;
+  font-size: 12px;
+  color: #4d678c;
+}
+.property-card,
+.property-card dl {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 8px;
+  font-size: 11px;
+}
+.property-card dt {
+  color: #8a9ab0;
+  overflow-wrap: anywhere;
+}
+.property-card dd {
+  margin: 0;
+  color: #3a587f;
+  overflow-wrap: anywhere;
+}
+.property-card dd dl {
+  display: block;
+}
+.property-card dd dl dt {
+  margin-top: 8px;
+}
+.selection h3 {
+  font-size: 13px;
+}
+.selection {
+  max-height: 340px;
+  max-width: 330px;
+  min-width: 245px;
+}
+.selection .note {
+  font-size: 9px;
+}
+.share-view {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--blue);
+  background: white;
+}
+.share-status {
+  font-size: 11px;
+  color: #578771;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+.figure-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+  color: #7f91ab;
+}
+.figure-tools label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.figure-tools input {
+  width: 75px;
+  padding: 0;
+}
+.figure-tools button {
+  font-size: 10px;
+}
+.with-drawing {
+  grid-template-columns: minmax(330px, 1fr) minmax(0, 1.4fr);
+}
+.with-drawing .scene-toolbar {
+  gap: 10px;
+}
+.with-drawing .attachment-image img {
+  max-height: 340px;
+}
+@media (max-width: 1050px) {
+  .with-drawing {
+    grid-template-columns: 1fr;
+  }
+  .with-drawing .attachments {
+    display: block;
+  }
+  .with-drawing .dxf-svg {
+    height: 390px;
+  }
+}
+@media (max-width: 760px) {
+  .share-view {
+    margin-left: 0;
+  }
+  .dxf-svg {
+    height: 320px;
+  }
+  .figure-tools {
+    gap: 10px;
+  }
+  .answer-summary {
+    gap: 12px;
+  }
+  .selection {
+    max-width: 85%;
+  }
+  .with-drawing .dxf-svg {
+    height: 300px;
+  }
+}

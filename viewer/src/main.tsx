@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type {
   Assertion,
+  Attachment,
   CaseDetail,
   CaseSummary,
   Geometry,
@@ -13,6 +14,8 @@ import type {
 import { assertionNames, familyNames, label, structureNames, words } from './i18n';
 import { dataUrl, downloadJson, fetchData, formatNumber } from './data';
 import { Thumbnail } from './thumbnail';
+import DrawingPreview from './drawing';
+import { initialIndex, readViewState, saveViewState } from './view-state';
 import './styles.css';
 const Scene = lazy(() => import('./scene'));
 
@@ -540,11 +543,13 @@ function ReferencePanel({
   assertions,
   locale,
   engineTarget,
+  attachment,
 }: {
   id: string;
   assertions: Assertion[];
   locale: Locale;
   engineTarget?: string;
+  attachment?: Attachment;
 }) {
   const { data, error } = useData<Reference>(`models/${id}.json`);
   const t = words[locale];
@@ -562,7 +567,7 @@ function ReferencePanel({
         </span>
       </div>
       <Suspense fallback={<Loading locale={locale} />}>
-        <Scene key={id} model={data.model} locale={locale} name={id} />
+        <Scene key={id} model={data.model} locale={locale} name={id} attachment={attachment} />
       </Suspense>
       <div className="reference-caption">
         <code>{id}</code>
@@ -573,6 +578,41 @@ function ReferencePanel({
       </div>
       <section className="reference-results">
         <h2>{t.results}</h2>
+        <div
+          className="answer-summary"
+          aria-label={locale === 'zh' ? '标答摘要' : 'Reference summary'}
+        >
+          <div>
+            <span>{locale === 'zh' ? '模型规模' : 'Model size'}</span>
+            <strong>
+              {data.model.nodes.length} {t.nodes} / {data.model.elements.length} {t.elements}
+            </strong>
+          </div>
+          <div>
+            <span>{locale === 'zh' ? '约束节点' : 'Restrained nodes'}</span>
+            <strong>{data.model.nodes.filter((n) => n.restraints?.some(Boolean)).length}</strong>
+          </div>
+          <div>
+            <span>{t.loadCase}</span>
+            <strong>{data.model.load_cases.map((c) => c.id).join(' · ')}</strong>
+          </div>
+          <div>
+            <span>
+              {locale === 'zh' ? '模型外包尺寸（X × Y × Z）' : 'Model extents (X × Y × Z)'}
+            </span>
+            <strong>
+              {(['x', 'y', 'z'] as const)
+                .map((axis) =>
+                  formatNumber(
+                    Math.max(...data.model.nodes.map((n) => n[axis])) -
+                      Math.min(...data.model.nodes.map((n) => n[axis])),
+                  ),
+                )
+                .join(' × ')}{' '}
+              {data.model.unit_system === 'SI' ? 'm' : ''}
+            </strong>
+          </div>
+        </div>
         <Numbers
           reference={data}
           assertions={assertions}
@@ -615,12 +655,16 @@ function ReferencePanel({
 function Detail({ item, index, locale }: { item: CaseSummary; index: Index; locale: Locale }) {
   const { data, error } = useData<CaseDetail>(`cases/${item.id}.json`);
   const t = words[locale];
-  const [turnIndex, setTurnIndex] = useState(0),
-    [modelIndex, setModelIndex] = useState(0);
+  const [turnIndex, setTurnIndex] = useState(() => initialIndex('turn', item.turnCount)),
+    [modelIndex, setModelIndex] = useState(() =>
+      initialIndex('model', item.referenceIds.length || 1),
+    );
+  const [share, setShare] = useState('');
   const position = index.cases.findIndex((c) => c.id === item.id);
   if (!data) return <Loading locale={locale} error={error} />;
   const turn = data.turns[turnIndex],
     references = data.references[turnIndex];
+  const selectedModel = Math.min(modelIndex, Math.max(0, references.length - 1));
   const originalSpec = turn.engineeringSpecification || data.scenario.engineeringSpecification;
   return (
     <article className="detail">
@@ -648,6 +692,21 @@ function Detail({ item, index, locale }: { item: CaseSummary; index: Index; loca
         <div className="detail-meta">
           <code>{item.id}</code>
           <Tags item={item} locale={locale} />
+          <button
+            className="share-view"
+            onClick={async () => {
+              saveViewState({ turn: turnIndex, model: selectedModel });
+              try {
+                await navigator.clipboard.writeText(location.href);
+                setShare(locale === 'zh' ? '链接已复制' : 'Link copied');
+              } catch {
+                setShare(location.href);
+              }
+            }}
+          >
+            {locale === 'zh' ? '分享当前查看状态 ↗' : 'Share this view ↗'}
+          </button>
+          {share && <output className="share-status">{share}</output>}
         </div>
       </header>
       {data.turns.length > 1 && (
@@ -659,6 +718,8 @@ function Detail({ item, index, locale }: { item: CaseSummary; index: Index; loca
               onClick={() => {
                 setTurnIndex(i);
                 setModelIndex(0);
+                saveViewState({ turn: i, model: 0, camera: null, load: null });
+                setShare('');
               }}
             >
               <span>{String(i + 1).padStart(2, '0')}</span>
@@ -667,7 +728,7 @@ function Detail({ item, index, locale }: { item: CaseSummary; index: Index; loca
           ))}
         </div>
       )}
-      <div className="detail-layout">
+      <div className={`detail-layout ${data.scenario.attachments?.length ? 'with-drawing' : ''}`}>
         <aside className="input-panel">
           <div className="panel-title">
             <span className="section-kicker">{t.native}</span>
@@ -694,9 +755,7 @@ function Detail({ item, index, locale }: { item: CaseSummary; index: Index; loca
                   {a.mimeType.startsWith('image/') ? (
                     <ImagePreview src={dataUrl(a.relPath)} name={a.originalName} locale={locale} />
                   ) : (
-                    <div className="drawing-icon">
-                      ⌑ <span>DXF</span>
-                    </div>
+                    <DrawingPreview path={a.relPath} locale={locale} />
                   )}
                   <div className="attachment-label">
                     <span>{a.originalName}</span>
@@ -720,7 +779,14 @@ function Detail({ item, index, locale }: { item: CaseSummary; index: Index; loca
           {references.length > 1 && (
             <label>
               {t.chooseModel}
-              <select value={modelIndex} onChange={(e) => setModelIndex(Number(e.target.value))}>
+              <select
+                value={selectedModel}
+                onChange={(e) => {
+                  setModelIndex(Number(e.target.value));
+                  saveViewState({ model: Number(e.target.value), camera: null, load: null });
+                  setShare('');
+                }}
+              >
                 {references.map((id, i) => (
                   <option key={id} value={i}>
                     {id}
@@ -731,11 +797,12 @@ function Detail({ item, index, locale }: { item: CaseSummary; index: Index; loca
           )}
           {references.length ? (
             <ReferencePanel
-              key={`${turnIndex}-${references[modelIndex]}`}
-              id={references[modelIndex]}
+              key={`${turnIndex}-${references[selectedModel]}`}
+              id={references[selectedModel]}
               assertions={turn.assertions}
               engineTarget={data.scenario.analysisEngineTarget}
               locale={locale}
+              attachment={data.scenario.attachments?.[0]}
             />
           ) : (
             <div className="behavior-answer">
