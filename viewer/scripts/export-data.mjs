@@ -23,6 +23,8 @@ export function exportData(output = path.join(viewerRoot, 'public/data')) {
   const models = read('fixtures/ground-truth-models.json');
   const numerical = read('fixtures/opensees-ground-truth.json');
   const commercial = read('fixtures/cross-engine-ground-truth-validation.json');
+  const derived = read('viewer/derived/member-responses.json');
+  sources.add('viewer/derived/member-responses.json');
   const write = (p, value) => {
     const target = path.join(output, p);
     fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -96,10 +98,25 @@ export function exportData(output = path.join(viewerRoot, 'public/data')) {
   const referenced = new Set(cases.flatMap((c) => c.referenceIds));
   for (const model of models.filter((m) => referenced.has(m.id))) {
     const cross = commercial.cases.find((c) => c.provenance.sourceModelId === model.id);
-    write(`models/${model.id}.json`, {
+    const reference = {
       ...model,
       numerical: numerical.models.find((n) => n.modelId === model.id) || null,
       commercial: cross || null,
+    };
+    const sourceSnapshot = JSON.stringify({
+      model: reference.model,
+      result: reference.numerical?.result,
+      factors: reference.numerical?.analysisSelection?.factors,
+    });
+    const inputSha256 = crypto.createHash('sha256').update(sourceSnapshot).digest('hex');
+    const response = derived.entries[model.id];
+    if (!response || response.inputSha256 !== inputSha256)
+      throw new Error(
+        `Stale or missing derived member responses: ${model.id}. Refresh with the StructureClaw offline exporter; reference files are never modified.`,
+      );
+    write(`models/${model.id}.json`, {
+      ...reference,
+      derivedMemberResponses: { ...response, sourceSnapshot, algorithm: derived.algorithm },
     });
   }
   write(

@@ -33,6 +33,7 @@ export function MemberView({
     unavailable: zh ? '数据不足' : 'Unavailable',
   };
   const reasons: Record<string, string> = {
+    'derived-data': zh ? '预计算响应缺失或与模型、结果不匹配；请重新离线导出。' : 'Derived responses are absent or do not match the model/results; refresh the offline export.',
     checked: zh
       ? '端部内力平衡、位移及转角一致性检查通过。'
       : 'End-force equilibrium and displacement/rotation consistency checks passed.',

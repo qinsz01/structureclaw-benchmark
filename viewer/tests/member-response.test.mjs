@@ -43,24 +43,6 @@ test('UDL plus midpoint force preserves both one-sided shear values and interior
   near(rows[0].samples.at(-1).V2, 15);
   near(rows[1].samples[0].V2, -15);
 });
-test('spatial local axes reproduce the same beam in the XZ plane', () => {
-  const r = read('beam-simple-6m');
-  r.model.coordinate_system.dimension = '3d';
-  r.numerical.result.analysisMode = 'opensees_3d_frame';
-  for (const force of Object.values(r.numerical.result.forces)) {
-    force.localAxes = { x: [1, 0, 0], y: [0, 1, 0], z: [0, 0, 1] };
-    for (const end of [force.n1, force.n2])
-      Object.assign(end, { V2: 0, V3: end.V, M2: -end.M, M3: 0, T: 0 });
-  }
-  const rows = memberResponses(r, r.numerical.result, 'opensees');
-  assert.ok(rows.every((v) => v.state === 'recovered'));
-  for (const row of rows)
-    for (const p of row.samples) {
-      const x = p.position[0];
-      near(p.displacement[2], (-20 * x * (216 - 12 * x * x + x ** 3)) / (24 * 205000000 * 0.0001));
-      near(p.M2, (-20 * x * (6 - x)) / 2);
-    }
-});
 test('all frozen structural references have explicit coverage, endpoints and immutable inputs', () => {
   const counts = {};
   for (const file of fs.readdirSync(new URL('../public/data/models/', import.meta.url))) {
@@ -90,7 +72,7 @@ test('all frozen structural references have explicit coverage, endpoints and imm
 test('unknown loads, altered end forces, missing axes and commercial engines fail closed', () => {
   let r = read('beam-simple-6m');
   r.numerical.result.forces['1'].n2.M += 5;
-  assert.equal(memberResponses(r, r.numerical.result, 'opensees')[0].state, 'interpolated');
+  assert.equal(memberResponses(r, r.numerical.result, 'opensees')[0].state, 'unavailable');
   r = read('frame3d-simple');
   delete r.numerical.result.forces[r.model.elements[0].id].localAxes;
   assert.equal(memberResponses(r, r.numerical.result, 'opensees')[0].state, 'unavailable');

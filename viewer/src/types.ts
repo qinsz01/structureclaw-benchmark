@@ -88,6 +88,12 @@ export type Result = {
   [key: string]: unknown;
 };
 export type Reference = {
+  derivedMemberResponses?: {
+    inputSha256: string;
+    sourceSnapshot: string;
+    responses: import('./member-response').MemberResponse[];
+    algorithm: { name: string; version: number; source: string; sha256: string };
+  };
   id: string;
   description: string;
   model: Model;
