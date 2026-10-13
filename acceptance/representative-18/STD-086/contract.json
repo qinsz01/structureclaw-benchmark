@@ -1,0 +1,56 @@
+{
+  "id": "STD-086",
+  "modelId": "M-STD-086",
+  "plannedEngine": "PKPM",
+  "family": "standard_workflow",
+  "language": "英文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "2乘2网格删去一个角部单元区域，两层3.6m，全部实际梁柱按表给出；完整属性按公共契约随题给出。 基本网格X=0/6/12m、Y=0/5/10m；右上角格区缺失，实际构件表为准，各存留梁8kN/m。",
+    "task.modelingFocus": "不能补齐缺失角区与虚构楼面",
+    "task.expectedOutput": "两层外角/内凹角节点三向位移、实际柱列层间位移差、各柱脚反力。",
+    "task.gradingFocus": "不能补齐缺失角区与虚构楼面；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "不规则楼面荷载映射需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "空间两层L形平面；右上角格区不存在",
+    "model.boundaryKey": "全部实际柱脚六自由度固定",
+    "model.loadKey": "仅全部实际梁同值直接线载",
+    "model.propertyKey": "单钢材料；梁柱分组截面及局部轴",
+    "engine.analysisContract": "保留题定几何、材料截面、边界、全部目标输出及一阶线弹性静力；自重关闭，不新增刚性楼板、刚域或默认组合。梁线载/单向受荷宽度严格按题，禁止自动双向传载或面线载叠加；原生 DL/LL、坐标轴、单位、工况/组合须有显式对应。",
+    "engine.executionRequirement": "拟要求真实 PKPM 原生建模和求解，并交付关联本题的项目、计算日志及原始结果；OpenSees 替代或仅生成兼容文件不能计作原生计算完成。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：PKPM 版本、独立模型/项目标识、节点构件属性及荷载审计表、原生计算日志、原始结果文件；位移/端力/反力逐项关联模型、构件、工况与单位。",
+    "engine.adapterGap": "重复楼层模板内的 L 形节点/连接表须逐项验收；仅楼面 DL/LL 的入口需补本题实际梁 8 kN/m 加载映射，结果读取器缺各柱脚节点反力。另须验收自重关闭、无刚性楼板、轴系/单位及题定工况到原生设置的映射；未实际运行。",
+    "engine.truthPlan": "拟在 PKPM 中独立建模并人工审定输入、版本和分析设置，生成本题全部要求的位移/内力/反力同引擎标答；审查缺角实际连接图、刚度秩和真实受载梁，再以独立杆系解与空间平衡复核。旧值仅作线索，不直接继承；跨引擎仅校核，不以 OpenSees 唯一判卷。尚未生成。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "两层外角/内凹角节点三向位移、实际柱列层间位移差、各柱脚反力。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "native-commercial-reference-required",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "Analyze the two-story L-shaped space frame in the actual member table. Grid X = 0, 6, 12 m; Y = 0, 5, 10 m; story heights 3.6 m. The upper-right plan corner cell is absent. All actual column bases are fixed in six degrees of freedom. Apply 8 kN/m downward to each existing beam only.\nReport the outer and re-entrant corner node displacements in all three directions on each floor, interstory displacement differences along each actual column line, and all base reactions.\nUse the explicit node/member tables for text tasks and the drawings for image tasks. First-order linear elasticity; self-weight, rigid diaphragms, rigid offsets, P-delta and construction stages are OFF. Use only the stated loads and combinations. Units: m, kN, kN.m, MPa. Report signed values with location, component, case/combination and run ID."
+    }
+  ]
+}

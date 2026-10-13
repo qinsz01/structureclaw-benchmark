@@ -1,0 +1,56 @@
+{
+  "id": "MM-081",
+  "modelId": "M-MM-081",
+  "plannedEngine": "PKPM",
+  "family": "multimodal_reverse_engineering",
+  "language": "中文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "structure.dxf"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "新结构DXF的实体、尺寸及连接符号给本题几何/拓扑/支座；荷载标注或区域标签关联载荷表；完整属性另附，源单位与坐标映射显式给定。所有新附件待制作、盲审与验证。面载仅传给X梁，受荷宽度为实际相邻楼面Y向半跨之和；Y梁不重复加载，无默认刚性楼板。",
+    "task.scenario": "几何：X网格0、6m，Y网格0、5、10m；首两层z=3.3、6.6m完整1×2跨，第三层z=9.9m仅保留Y=0、5m一跨，Y=10m柱止于第二层；实际楼层四周和网格设梁；边界：六底柱脚固定；荷载：每层实际完整矩形楼面10kN/m²按X梁单向分配；属性：钢M1、柱C1、X梁B1、Y梁B2，无刚性楼板。（本栏是编题规格，实际用户输入按图/表分工呈现。）",
+    "task.modelingFocus": "第三层实际范围不同，不能由低层平面整层拉伸复制。",
+    "task.expectedOutput": "第三层(6,5,9.9)m节点Uz、第二层后侧节点Uz；附与数值一致的模型/结果图。",
+    "task.gradingFocus": "模型核对：三层规则1×2跨改为顶层1×1跨退台，取消两根上层柱段及对应梁。；数值/表述核对：第三层(6,5,9.9)m节点Uz、第二层后侧节点Uz，位置、方向、单位须一致。",
+    "task.prerequisite": "按本题拟定 PKPM 独立重算并核验；本题新增几何/属性与真值均待独立核验；材料截面代号须在本题附录定值。按实际保留矩形楼面逐层分配面载，关闭自重与默认刚性楼板。",
+    "model.topologyKey": "X网格0、6m，Y网格0、5、10m；首两层z=3.3、6.6m完整1×2跨，第三层z=9.9m仅保留Y=0、5m一跨，Y=10m柱止于第二层；实际楼层四周和网格设梁",
+    "model.boundaryKey": "六底柱脚固定",
+    "model.loadKey": "每层实际完整矩形楼面10kN/m²按X梁单向分配",
+    "model.propertyKey": "钢M1、柱C1、X梁B1、Y梁B2，无刚性楼板。",
+    "engine.analysisContract": "一阶线弹性；自重OFF并保存配置；按附录实际E/A/I/J，不套默认刚度折减；无默认刚性楼板。原生工程须显式关闭自重、自动组合/地震及影响该契约的默认设置，导出配置核对。采用题定右手全局Z向上，核对构件局部轴与结果分量。面载仅传给实际X梁，受荷宽度为相邻实际楼面Y向半跨之和，Y梁不重复加载；等效线/节点载须同时保持合力和力矩。荷载契约：每层实际完整矩形楼面10kN/m²按X梁单向分配；未指定组合时仅算题定基本荷载，指定组合逐组执行，不能用软件默认包络替换。",
+    "engine.executionRequirement": "原生项目第三层只留实际退台一跨，不以重复标准层补回后侧柱梁；逐层荷载/节点回读验证后再执行；执行后按原题完整输出：第三层(6,5,9.9)m节点Uz、第二层后侧节点Uz；附与数值一致的模型/结果图。本轮仅规划，不运行。",
+    "engine.requiredEvidence": "计划保存输入PNG/DXF及图中构件/标签→计算节点/构件ID映射、PKPM原生工程及接口导入/回读差异、引擎版本与设置快照、实际运行日志、原始结果表/观测点索引、可视图所用数据。",
+    "engine.adapterGap": "现有PKPM要求各层相同平面节点/拓扑/属性，不能表达第三层退台及停柱；须增加逐层建模并核对实际楼面X向分配及节点位移回读。不得补回退台梁柱。",
+    "engine.truthPlan": "由独立审阅的PKPM原生工程形成同版本、同参数的参考结果；核对实际楼层/构件属性、题定荷载合力及力矩平衡，并保存第三层(6,5,9.9)m节点Uz、第二层后侧节点Uz的原始索引。原生人工参考模型不代表当前自动接口已接通。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "第三层(6,5,9.9)m节点Uz、第二层后侧节点Uz；附与数值一致的模型/结果图。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "native-commercial-reference-required",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "structure.dxf"
+      ],
+      "instruction": "请从图纸与标签表重建模型，不猜测缺失支座。\n第三层(6,5,9.9)m节点Uz、第二层后侧节点Uz；附与数值一致的模型/结果图。\n按显式节点/构件输入表或图纸建立模型。一阶线弹性；关闭自重、刚性楼板、刚域、二阶与施工阶段；只用题定荷载和组合。单位m、kN、kN.m、MPa；输出附位置、分量、工况/组合与runId。"
+    }
+  ]
+}

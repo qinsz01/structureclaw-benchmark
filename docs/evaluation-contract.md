@@ -62,4 +62,43 @@ Known unaccepted features include end releases, nonzero offsets, second-order/co
 
 ## Local verification / 本地检查
 
+### Current requested-output contract / 新版指定输出契约
+
+New `engineering-v2.2` cases require an `execution_evidence` assertion for every
+numerically asserted case/combination. `numerical_matches.quantities` accepts
+independently frozen records with `id`, exact `selection`, `location`, `component`,
+explicit `unit`, reference `value` and absolute/relative `tolerance`. Unit conversion
+accepts m/mm, kN/N and kN.m/N.m within their own dimensions; missing historical source
+unit metadata uses the established canonical contract, never magnitude guessing.
+Member locations include `positionM` and `side`; missing exact stations and
+display-only interpolation fail. Node IDs and reviewed member subdivisions use
+the same physical matcher. Reversed internal action stations remain rejected
+until their axis/sign transformation is independently accepted.
+
+新版逐工况要求真实运行证据。指定构件位置不能用最近绘图点替代，点力两侧必须分别检查。
+新增报告数量断言核对正文表格行：`id | case:D | beam@2:left | V3 | 0.25 | kN`；
+节点位置只写节点ID。报告中的符号、位置、工况和单位必须逐项一致，隐藏参考值不传给被测工具。
+
+`acceptance/representative-18` is an authored **candidate** acceptance pack, separate
+from frozen scenarios/fixtures. It contains 18 case inputs and state snapshots,
+tagged drawings/tables, explicit quantities and an independent direct-stiffness
+cross-check. Commercial references remain diagnostics until same-engine native
+truth is independently accepted. No claim of image recognition or full-300
+acceptance follows from deterministic tool execution.
+
+18题候选包与历史题库隔离。独立矩阵参考不导入生产求解与恢复算法，不能替代商业软件原生标答。
+输入盲审、真实模型识图及完整交付尚需单独验收；各状态和附件的哈希在候选运行前冻结。
+
+The requirement projection now distinguishes required/forbidden/output clauses.
+The 300-case plan does not request full shells, general nonlinear, P-delta or
+unlimited rigid arms. All 12,566 original clause references still need case review;
+the `unmappedClauses` count means no candidate link, not the complete unknown count.
+当前300题不因“不要启用刚臂”等否定句被错误扩成二阶或非线性题；真实弹性短臂、柱脚铰约束与
+构件端释放明确区分。能力表中的旧错误示例已移除。
+
+OpenClaw exports tool schemas from the current backend registry on each run.
+It exposes edit/undo/model/result queries, case collections and PDF pagination;
+PDF vision uses the same injected parser as the web agent. The historical tag
+retains its original tool surface; new runner results must record the new revisions.
+
 `npm run test:evaluation --prefix tests/llm-benchmark` exercises physical equivalence, exact signed case results, stale-run rejection, commercial-case selection and evaluator integration without paid model calls. Set `SCLAW_TEST_PYTHON` to an OpenSees-enabled Python to include the real solver-to-evidence positive test (otherwise that test explicitly skips). `node tests/llm-benchmark/lib/validate-corpus.cjs` validates the existing 150 scenario files. Real OpenSees mechanics tests live under each analysis skill's `__tests__`; protocol regression tests additionally cover conversion and minor-version compatibility.

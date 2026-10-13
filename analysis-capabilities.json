@@ -1,25 +1,179 @@
 {
   "schemaVersion": 1,
-  "modelProtocol": "2.1.0",
-  "compatibleInputProtocols": ["2.0.0", "2.1.0"],
+  "modelProtocol": "2.2.0",
+  "compatibleInputProtocols": [
+    "2.0.0",
+    "2.1.0",
+    "2.2.0"
+  ],
   "evaluationVersion": "physical-v1",
   "meaning": "Feature-level implementation evidence, not acceptance of the 300 planned tasks. 特征级证据，不等于300题已验收。",
   "features": [
-    {"id":"elastic.frame.2d-3d","engine":"OpenSees","status":"mechanics-tested","examples":["STD-001","STD-002","STD-079","STD-090"],"evidence":"backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py","limits":"First-order elastic beam/column elements; explicit E/A/I/J and axes. 一阶弹性杆系。"},
-    {"id":"elastic.truss-and-frame-brace","engine":"OpenSees","status":"mechanics-tested","examples":["STD-027","STD-040","STD-063","STD-093"],"evidence":"backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py","limits":"Axial truss/brace plus elastic frames; distributed loads on axial-only members rejected. 桁架杆仅接受节点载荷。"},
-    {"id":"member.partial-point-and-piecewise-load","engine":"OpenSees","status":"mechanics-tested","examples":["STD-005","STD-008","STD-014","STD-077"],"evidence":"backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py","limits":"Deterministic solver subdivision; point/start/end in metres, piecewise positions retain fractional convention. 保留物理杆件映射。"},
-    {"id":"boundary.prescribed-displacement","engine":"OpenSees","status":"mechanics-tested","examples":[],"evidence":"backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py","limits":"Explicit global active DOF prescribed motions; no implicit node settlement aliases. 仅显式全局活动自由度。"},
-    {"id":"selection.cases-and-linear-combinations","engine":"OpenSees","status":"mechanics-tested","examples":["STD-026","STD-060","STD-098"],"evidence":"backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py","limits":"One selected load state per run; no implicit sum/default when multiple cases exist. 多工况逐一执行。"},
-    {"id":"gravity.explicit-self-weight","engine":"OpenSees","status":"mechanics-tested","examples":["STD-001"],"evidence":"backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py","limits":"ON requires one explicit dead case for factors; OFF is an actual mapped setting; undeclared legacy defaults recorded. 显式绑定自重工况。"},
-    {"id":"diaphragm.rigid-floor","engine":"OpenSees","status":"implemented-needs-dedicated-acceptance","examples":[],"evidence":"backend/src/agent-skills/analysis/runtime/opensees_shared/model.py","limits":"Horizontal floor with identifiable story nodes; story overrides global; 3D needs frame rotational DOFs. 楼层独立验收仍需补充。"},
-    {"id":"modal.explicit-mass","engine":"OpenSees","status":"mechanics-tested","examples":[],"evidence":"backend/src/agent-skills/analysis/opensees-dynamic/__tests__/test_coordinate_contract.py","limits":"Scalar nodal tonnes OR member-density mass, never implicit addition. 节点质量与构件密度质量互斥。"},
-    {"id":"dynamic.actual-ground-motion","engine":"OpenSees","status":"mechanics-tested","examples":[],"evidence":"backend/src/agent-skills/analysis/opensees-dynamic/__tests__/test_coordinate_contract.py","limits":"Explicit accelerations m/s2 or g; no synthetic record; no nonlinear material claim. 不以线性时程冒充非线性。"},
-    {"id":"seismic.existing-methods","engine":"OpenSees","status":"regression-tested-bounded","examples":[],"evidence":"backend/src/agent-skills/analysis/opensees-seismic/__tests__/test_china_seismic_workflow.py","limits":"Explicit mass basis; actual eigen extraction; existing methods retain their own capability status; equivalent line wall is not shell analysis. 墙等效杆不能声称墙壳。"},
-    {"id":"member.release-offset-pdelta","engine":"OpenSees","status":"explicitly-unsupported","examples":["STD-020","STD-059","STD-066","STD-069","STD-100"],"evidence":"backend/src/agent-skills/analysis/runtime/opensees_shared/model.py","limits":"Requested releases, nonzero offsets, P-delta/construction stages reject. These planned tasks are not accepted. 对应规划题仍有实现缺口。"},
-    {"id":"full-member-nonlinear","engine":"OpenSees","status":"explicitly-partial","examples":[],"evidence":"backend/src/agent-skills/analysis/opensees-nonlinear/runtime.py","limits":"No full nonlinear computation is claimed; partial cannot satisfy formal success. 不计正式计算成功。"},
-    {"id":"commercial.building-native","engine":"YJK/PKPM","status":"native-sdk-acceptance-required","examples":["STD-080","STD-081","STD-082","STD-083","STD-084","STD-086","STD-087"],"evidence":"backend/src/agent-skills/analysis/yjk-static; backend/src/agent-skills/analysis/pkpm-static","limits":"Preflight tests do not prove native SDK settings/readback. Irregular topology, explicit self weight/diaphragm/combination mapping need actual native evidence. 未完成native验收不得标可用。"},
-    {"id":"evaluation.physical-equivalence","engine":"all","status":"contract-tested","examples":["STD-001","STD-005","STD-036","STD-074"],"evidence":"tests/llm-benchmark/lib/physical-model-fidelity.test.cjs","limits":"Reviewed straight-member subdivision and IDs allowed; wrong connectivity/support/sign/position/case fails. Release/offset refinement is not yet reviewed. 不按视觉相似判对。"},
-    {"id":"evaluation.signed-case-results","engine":"all","status":"contract-tested","examples":["STD-026","STD-051","STD-078"],"evidence":"tests/llm-benchmark/lib/analysis-fidelity.test.cjs; tests/llm-benchmark/lib/cross-engine-ground-truth.test.cjs","limits":"Signed endpoints and exact case/combination; commercial envelope station/reversal transform unverified and rejected. 不用绝对值掩盖反号。"},
-    {"id":"evaluation.execution-freshness","engine":"all","status":"contract-tested","examples":[],"evidence":"tests/llm-benchmark/lib/analysis-evidence.test.cjs","limits":"Opt-in for new tasks: current model hash, immutable run ID, executed solver/version, pending/partial rejection. Raw artifact audit remains part of corpus acceptance. 新题启用，旧fixture不重写。"}
+    {
+      "id": "elastic.frame.2d-3d",
+      "engine": "OpenSees",
+      "status": "mechanics-tested",
+      "examples": [
+        "STD-001",
+        "STD-002",
+        "STD-079",
+        "STD-090"
+      ],
+      "evidence": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py",
+      "limits": "First-order elastic beam/column elements; explicit E/A/I/J and axes. 一阶弹性杆系。"
+    },
+    {
+      "id": "elastic.truss-and-frame-brace",
+      "engine": "OpenSees",
+      "status": "mechanics-tested",
+      "examples": [
+        "STD-027",
+        "STD-040",
+        "STD-063",
+        "STD-093"
+      ],
+      "evidence": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py",
+      "limits": "Axial truss/brace plus elastic frames; distributed loads on axial-only members rejected. 桁架杆仅接受节点载荷。"
+    },
+    {
+      "id": "member.partial-point-and-piecewise-load",
+      "engine": "OpenSees",
+      "status": "mechanics-tested",
+      "examples": [
+        "STD-005",
+        "STD-008",
+        "STD-014",
+        "STD-077"
+      ],
+      "evidence": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py",
+      "limits": "Deterministic solver subdivision; point/start/end in metres, piecewise positions retain fractional convention. 保留物理杆件映射。"
+    },
+    {
+      "id": "boundary.prescribed-displacement",
+      "engine": "OpenSees",
+      "status": "mechanics-tested",
+      "examples": [],
+      "evidence": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py",
+      "limits": "Explicit global active DOF prescribed motions; no implicit node settlement aliases. 仅显式全局活动自由度。"
+    },
+    {
+      "id": "selection.cases-and-linear-combinations",
+      "engine": "OpenSees",
+      "status": "mechanics-tested",
+      "examples": [
+        "STD-026",
+        "STD-060",
+        "STD-098"
+      ],
+      "evidence": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py",
+      "limits": "One selected load state per run; no implicit sum/default when multiple cases exist. 多工况逐一执行。"
+    },
+    {
+      "id": "gravity.explicit-self-weight",
+      "engine": "OpenSees",
+      "status": "mechanics-tested",
+      "examples": [
+        "STD-001"
+      ],
+      "evidence": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py",
+      "limits": "ON requires one explicit dead case for factors; OFF is an actual mapped setting; undeclared legacy defaults recorded. 显式绑定自重工况。"
+    },
+    {
+      "id": "diaphragm.rigid-floor",
+      "engine": "OpenSees",
+      "status": "implemented-needs-dedicated-acceptance",
+      "examples": [],
+      "evidence": "backend/src/agent-skills/analysis/runtime/opensees_shared/model.py",
+      "limits": "Horizontal floor with identifiable story nodes; story overrides global; 3D needs frame rotational DOFs. 楼层独立验收仍需补充。"
+    },
+    {
+      "id": "modal.explicit-mass",
+      "engine": "OpenSees",
+      "status": "mechanics-tested",
+      "examples": [],
+      "evidence": "backend/src/agent-skills/analysis/opensees-dynamic/__tests__/test_coordinate_contract.py",
+      "limits": "Scalar nodal tonnes OR member-density mass, never implicit addition. 节点质量与构件密度质量互斥。"
+    },
+    {
+      "id": "dynamic.actual-ground-motion",
+      "engine": "OpenSees",
+      "status": "mechanics-tested",
+      "examples": [],
+      "evidence": "backend/src/agent-skills/analysis/opensees-dynamic/__tests__/test_coordinate_contract.py",
+      "limits": "Explicit accelerations m/s2 or g; no synthetic record; no nonlinear material claim. 不以线性时程冒充非线性。"
+    },
+    {
+      "id": "seismic.existing-methods",
+      "engine": "OpenSees",
+      "status": "regression-tested-bounded",
+      "examples": [],
+      "evidence": "backend/src/agent-skills/analysis/opensees-seismic/__tests__/test_china_seismic_workflow.py",
+      "limits": "Explicit mass basis; actual eigen extraction; existing methods retain their own capability status; equivalent line wall is not shell analysis. 墙等效杆不能声称墙壳。"
+    },
+    {
+      "id": "member.release-offset-pdelta",
+      "engine": "OpenSees",
+      "status": "explicitly-unsupported",
+      "examples": [],
+      "evidence": "backend/src/agent-skills/analysis/runtime/opensees_shared/model.py",
+      "limits": "Not required by the current 300-task one-order elastic plan. Actual elastic short arms and nodal pins are not member releases or rigid offsets. 当前300题没有确认要求端释放、刚臂、二阶或施工阶段；能力状态以新原生验收为准。"
+    },
+    {
+      "id": "full-member-nonlinear",
+      "engine": "OpenSees",
+      "status": "explicitly-partial",
+      "examples": [],
+      "evidence": "backend/src/agent-skills/analysis/opensees-nonlinear/runtime.py",
+      "limits": "No full nonlinear computation is claimed; partial cannot satisfy formal success. 不计正式计算成功。"
+    },
+    {
+      "id": "commercial.building-native",
+      "engine": "YJK/PKPM",
+      "status": "native-sdk-acceptance-required",
+      "examples": [
+        "STD-080",
+        "STD-081",
+        "STD-082",
+        "STD-083",
+        "STD-084",
+        "STD-086",
+        "STD-087"
+      ],
+      "evidence": "backend/src/agent-skills/analysis/yjk-static; backend/src/agent-skills/analysis/pkpm-static",
+      "limits": "Preflight tests do not prove native SDK settings/readback. Irregular topology, explicit self weight/diaphragm/combination mapping need actual native evidence. 未完成native验收不得标可用。"
+    },
+    {
+      "id": "evaluation.physical-equivalence",
+      "engine": "all",
+      "status": "contract-tested",
+      "examples": [
+        "STD-001",
+        "STD-005",
+        "STD-036",
+        "STD-074"
+      ],
+      "evidence": "tests/llm-benchmark/lib/physical-model-fidelity.test.cjs",
+      "limits": "Reviewed straight-member subdivision and IDs allowed; wrong connectivity/support/sign/position/case fails. Release/offset refinement is not yet reviewed. 不按视觉相似判对。"
+    },
+    {
+      "id": "evaluation.signed-case-results",
+      "engine": "all",
+      "status": "contract-tested",
+      "examples": [
+        "STD-026",
+        "STD-051",
+        "STD-078"
+      ],
+      "evidence": "tests/llm-benchmark/lib/analysis-fidelity.test.cjs; tests/llm-benchmark/lib/cross-engine-ground-truth.test.cjs",
+      "limits": "Signed endpoints and exact case/combination; commercial envelope station/reversal transform unverified and rejected. 不用绝对值掩盖反号。"
+    },
+    {
+      "id": "evaluation.execution-freshness",
+      "engine": "all",
+      "status": "contract-tested",
+      "examples": [],
+      "evidence": "tests/llm-benchmark/lib/analysis-evidence.test.cjs",
+      "limits": "Opt-in for new tasks: current model hash, immutable run ID, executed solver/version, pending/partial rejection. Raw artifact audit remains part of corpus acceptance. 新题启用，旧fixture不重写。"
+    }
   ]
 }

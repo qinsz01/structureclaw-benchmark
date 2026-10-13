@@ -1,0 +1,185 @@
+{
+  "units": {
+    "E": "MPa",
+    "G": "MPa",
+    "rho": "kg/m3",
+    "shape": "mm",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4"
+  },
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "C35",
+      "type": "concrete",
+      "E": 31500,
+      "G": 13125.0,
+      "nu": 0.2,
+      "rho": 2500
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "B2",
+      "name": "B2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 700.0
+      },
+      "properties": {
+        "A": 0.21,
+        "Iy": 0.008574999999999998,
+        "Iz": 0.0015749999999999998,
+        "J": 0.004603782069970844
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    },
+    {
+      "id": "C2",
+      "name": "C2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 350.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.175,
+        "Iy": 0.003645833333333333,
+        "Iz": 0.0017864583333333328,
+        "J": 0.0040575733442708315
+      }
+    },
+    {
+      "id": "A1",
+      "name": "A1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 100.0,
+        "H": 100.0
+      },
+      "properties": {
+        "A": 0.010000000000000002,
+        "Iy": 8.333333333333335e-06,
+        "Iz": 8.333333333333335e-06,
+        "J": 1.4083333333333338e-05
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "load_combinations": [],
+  "memberAssignments": [
+    {
+      "id": "c0-1",
+      "type": "column",
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "c1-1",
+      "type": "column",
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "b0-1",
+      "type": "beam",
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c0-2",
+      "type": "column",
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "c1-2",
+      "type": "column",
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "b0-2",
+      "type": "beam",
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c0-3",
+      "type": "column",
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "c1-3",
+      "type": "column",
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "b0-3",
+      "type": "beam",
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "localAxes": {},
+  "sectionRollConvention": "ey_new=cos(theta)*ey+sin(theta)*ez; ez_new=-sin(theta)*ey+cos(theta)*ez; positive theta in degrees about member i-to-j axis"
+}

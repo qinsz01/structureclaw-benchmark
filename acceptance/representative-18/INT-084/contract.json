@@ -1,0 +1,62 @@
+{
+  "id": "INT-084",
+  "modelId": "M-INT-084",
+  "plannedEngine": "YJK",
+  "family": "interactive_robustness",
+  "language": "英文",
+  "modelStates": [
+    "model-state-1.json",
+    "model-state-2.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-084（屋面外缘设备点力的空间混凝土框架）。T1建立M-INT-084；T2所有梁柱换成附件C35完整弹性记录。",
+    "task.modelingFocus": "材料截面与楼层荷载联合映射；荷载工况的独立状态保持",
+    "task.expectedOutput": "最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "一层12、二层10kN/m²保持；截面及共通X梁受荷规则不变；以新材料重算；面载只传X梁，Y梁不重复加载；设备30kN与一层12/二层10kN/m²保持；材料更新不改变荷载。",
+    "task.prerequisite": "按本题拟定 YJK 独立重算并核验；多工况执行契约需验证；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "空间框架；X向6+6m、Y向5m",
+    "model.boundaryKey": "所有柱脚六自由度固定",
+    "model.loadKey": "X向6+6m、Y向5m，两层3.6m，一层12二层10kN/m²；屋面节点(x=6,y=5,z=7.2)m另向下30kN，作为独立设备恒载D_eq；楼面面载单向传给X梁，受荷宽度为相邻Y半跨之和；Y梁不重复承接面载；不设默认刚性楼板；关闭自重。",
+    "model.propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 楼面面载仅按相邻Y半跨受荷宽度传给X梁，Y梁不重复加载；保留三维六自由度/轴力单元各自约束和题定局部轴；各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "软件指定题，必须实际调用YJK完成每个可计算模型状态并取得当次结果；禁止用OpenSees结果冒充。仅显示设置/启动窗口不算完成；纯查询或单位变更可复用与未变模型一致的已验证结果。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz。 保存YJK原生工程及可复查模型导出/参数检查记录；模型改变后的新run须绑定更新后的工程，截屏只作辅助。",
+    "engine.adapterGap": "当前仅楼面恒活载，不能保留设备节点30kN及独立D_eq工况；须补节点载和自定义工况并验证仅X梁受荷；现接口对关闭自重、无刚性楼板及完整弹性/截面属性的逐字段映射未证明，须显式设置并核验，禁止静默采用软件默认。节点反力虽有抽取路径，仍须验证本题节点/楼层ID对应与符号。",
+    "engine.truthPlan": "每个可计算轮次由独立复核者在YJK创建参考模型并保存状态；模型改变后独立新算，纯结果查询沿用有效状态；核对力/矩平衡及适用解析结果，可用同假设OpenSees交叉校核；差异先追溯荷载分配/支座/轴向/楼板设置，不直接强求跨软件逐值相等。"
+  },
+  "stateCount": 2,
+  "requiredOutput": "最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "native-commercial-reference-required",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "Build the two-story concrete space frame from the input tables: X spans 6 + 6 m, Y span 5 m, story heights 3.6 m. All column bases are fully fixed. Floor pressures are 12 and 10 kN/m2, carried only by X beams using half the adjacent Y span. The roof node (6,5,7.2) m also carries 30 kN downward in separate equipment case D_eq. Initially use the explicit C30 record. Evaluate the supplied cases and TOTAL combination.\nReport the upper-right rear node Ux/Uy/Uz and the left base My/Rz in each turn; retain the different floor loads and separate equipment case.\nUse the explicit node/member tables for text tasks and the drawings for image tasks. First-order linear elasticity; self-weight, rigid diaphragms, rigid offsets, P-delta and construction stages are OFF. Use only the stated loads and combinations. Units: m, kN, kN.m, MPa. Report signed values with location, component, case/combination and run ID."
+    },
+    {
+      "state": 2,
+      "attachments": [],
+      "instruction": "Replace the material record for every beam and column with C35: E = 31500 MPa, G = 13125 MPa, nu = 0.2, rho = 2500 kg/m3. Keep geometry, supports, all floor loads, D_eq and combinations unchanged. Recompute.\nReport the upper-right rear node Ux/Uy/Uz and the left base My/Rz in each turn; retain the different floor loads and separate equipment case."
+    }
+  ]
+}

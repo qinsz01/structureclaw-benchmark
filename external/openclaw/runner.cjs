@@ -1199,6 +1199,10 @@ async function runOpenClawBenchmark(argv) {
   if (!options.dryRun) {
     await prepareDatabase(options.sutRoot, sharedRuntime.env);
   }
+  const { exportToolContracts } = require("./lib/tool-contracts.cjs");
+  sharedRuntime.env.SCLAW_OPENCLAW_TOOL_CONTRACTS = await exportToolContracts(
+    options.sutRoot, path.join(sharedRuntime.runtimeRoot, "public-tool-contracts.json"), BENCHMARK_TOOL_IDS,
+  );
   const manifests = await loadSkillManifests(options.sutRoot);
   const scenarios = resolveExternalScenarioRuns(loadScenarios({
     scenarioId: options.scenarioId,
@@ -1257,7 +1261,7 @@ async function runOpenClawBenchmark(argv) {
     });
     process.stdout.write(`Pinned OpenClaw preflight passed: ${version}\n`);
     process.stdout.write("OpenClaw config validation passed.\n");
-    process.stdout.write("OpenClaw plugin validation passed with all 9 frozen tools.\n");
+    process.stdout.write(`OpenClaw plugin validation passed with all ${BENCHMARK_TOOL_IDS.length} shared tools.\n`);
     process.stdout.write(`Runtime prepared at: ${sharedRuntime.runtimeRoot}\n`);
     return;
   }

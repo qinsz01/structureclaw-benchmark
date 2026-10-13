@@ -1,0 +1,56 @@
+{
+  "id": "STD-026",
+  "modelId": "M-STD-026",
+  "plannedEngine": "OpenSees",
+  "family": "standard_workflow",
+  "language": "英文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "跨度4、6、5、4m，中间两跨B2其余B1，D全跨、L仅第二第四跨，题定组合；完整属性按公共契约随题给出。 D为全梁8kN/m；L在第二、四跨各10kN/m；C0=D、C1=1.2D+1.4L。",
+    "task.modelingFocus": "几何、截面组、工况映射同时存在",
+    "task.expectedOutput": "两组合各支反力、四跨中位移及中支座弯矩；标出对应跨和组合。",
+    "task.gradingFocus": "几何、截面组、工况映射同时存在；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "多组合执行契约需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "四跨连续梁；不等跨",
+    "model.boundaryKey": "左铰其余四支座竖向滚支",
+    "model.loadKey": "D全跨；L仅第二及第四跨；两组合",
+    "model.propertyKey": "中间两跨B2；其余跨B1",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。 荷载与观测位置可合理分段，但不改变支承/连续条件；跨内响应须含荷载项。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "多跨度/截面/工况交叉映射及 1.2D+1.4L 组合索引须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立分段梁刚度法；逐工况与组合叠加验证，再做网格敏感性检查。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "两组合各支反力、四跨中位移及中支座弯矩；标出对应跨和组合。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "Analyze the four-span continuous beam (4, 6, 5, 4 m). The left support is pinned and the other four supports are vertical rollers. Middle spans use B2, outer spans B1. D = 8 kN/m over all spans; L = 10 kN/m over spans 2 and 4 only. Use C0 = D and C1 = 1.2D + 1.4L.\nFor both combinations, report every support reaction, all four midspan vertical displacements and the three interior support moments. Identify each span, support and combination.\nUse the explicit node/member tables for text tasks and the drawings for image tasks. First-order linear elasticity; self-weight, rigid diaphragms, rigid offsets, P-delta and construction stages are OFF. Use only the stated loads and combinations. Units: m, kN, kN.m, MPa. Report signed values with location, component, case/combination and run ID."
+    }
+  ]
+}

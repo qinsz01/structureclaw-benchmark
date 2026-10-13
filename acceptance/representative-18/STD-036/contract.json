@@ -1,0 +1,56 @@
+{
+  "id": "STD-036",
+  "modelId": "M-STD-036",
+  "plannedEngine": "OpenSees",
+  "family": "standard_workflow",
+  "language": "英文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "跨度12m、高2.5m、4节间，各格X腹杆交叉处明确不连接，三个内部上弦节点各10kN；完整属性按公共契约随题给出。 各格X形腹杆交叉处明确没有节点；每个内部顶点向下10kN，保留轴力杆属性。",
+    "task.modelingFocus": "交叉线不自动成结构节点",
+    "task.expectedOutput": "顶点位移、两组交叉斜杆轴力、支反力；附交叉点不连接说明。",
+    "task.gradingFocus": "交叉线不自动成结构节点；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "平行弦X腹杆桁架；四节间；交叉处不连接",
+    "model.boundaryKey": "左下铰右下X向自由滚支",
+    "model.loadKey": "内部上弦节点同值竖载",
+    "model.propertyKey": "单材料单面积；全部轴力杆",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。 采用仅轴力杆件，交叉是否连接按端点表；不把铰接杆改为刚接梁。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "交叉杆端点不相同则不生成交点；须核验无额外节点或刚接。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；按端点表独立组装；检查交叉点无新增自由度，逐节点与整体平衡复核。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "顶点位移、两组交叉斜杆轴力、支反力；附交叉点不连接说明。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "Analyze the 12 m long, 2.5 m high, four-panel pin-jointed truss. Both diagonal bars in every panel cross without a connection at the crossing. The left bottom support is pinned; the right bottom support is a vertical roller. Apply 10 kN downward at each of the three interior upper nodes. Use the explicit member table and properties.\nReport upper-node displacements, forces in both sets of diagonal bars and support reactions. Explain that diagonal crossings are not connected.\nUse the explicit node/member tables for text tasks and the drawings for image tasks. First-order linear elasticity; self-weight, rigid diaphragms, rigid offsets, P-delta and construction stages are OFF. Use only the stated loads and combinations. Units: m, kN, kN.m, MPa. Report signed values with location, component, case/combination and run ID."
+    }
+  ]
+}

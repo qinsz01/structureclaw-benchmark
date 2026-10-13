@@ -1,0 +1,60 @@
+{
+  "id": "MM-085",
+  "modelId": "M-MM-085",
+  "plannedEngine": "YJK",
+  "family": "multimodal_reverse_engineering",
+  "language": "中文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "drawing-xz.png",
+    "drawing-yz.png",
+    "drawing-xy.png"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "新平面及正交立面/局部截面PNG共同给本题空间几何、连接与朝向；附录给明确约束、荷载向量、完整属性和视图轴约定，不直接给完整节点坐标答案。所有新附件待制作、盲审与验证。",
+    "task.scenario": "几何：下层X网格0、4、11m，Y网格0、3、9m，z=3.4m；上层z=7.5m除原(0,0)角节点移为(1,1)外其余节点不变，层间对应连柱且各层按网格相邻连接梁；边界：九底柱脚固定；荷载：所有实际梁按长度向下8kN/m，移位顶角加Fx=10kN；属性：钢M1、柱C1、梁B1，无刚性楼板。（本栏是编题规格，实际用户输入按图/表分工呈现。）",
+    "task.modelingFocus": "角部斜柱与两根非正交梁须从两立面和平面联合恢复。",
+    "task.expectedOutput": "移位顶角Ux/Uz、该角底柱弯矩；附与数值一致的模型/结果图。",
+    "task.gradingFocus": "模型核对：不等网格规则直柱改为一个顶角偏移及非正交连接。；数值/表述核对：移位顶角Ux/Uz、该角底柱弯矩，位置、方向、单位须一致。",
+    "task.prerequisite": "基础工具；本题新增几何/属性与真值均待独立核验；材料截面代号须在本题附录定值。斜杆全局荷载和局部轴适配待验证。",
+    "model.topologyKey": "下层X网格0、4、11m，Y网格0、3、9m，z=3.4m；上层z=7.5m除原(0,0)角节点移为(1,1)外其余节点不变，层间对应连柱且各层按网格相邻连接梁",
+    "model.boundaryKey": "九底柱脚固定",
+    "model.loadKey": "所有实际梁按长度向下8kN/m，移位顶角加Fx=10kN",
+    "model.propertyKey": "钢M1、柱C1、梁B1，无刚性楼板。",
+    "engine.analysisContract": "一阶线弹性；自重OFF并保存配置；按附录实际E/A/I/J，不套默认刚度折减；无默认刚性楼板。原生工程须显式关闭自重、自动组合/地震及影响该契约的默认设置，导出配置核对。采用题定右手全局Z向上，核对构件局部轴与结果分量。题给线载/点力/力矩按原位映射；如作等效节点加载，须保留原始分布荷载并采用与单元插值一致的等效荷载，核验跨内响应及合力/力矩，不用统一楼面载替代。荷载契约：所有实际梁按长度向下8kN/m，移位顶角加Fx=10kN；未指定组合时仅算题定基本荷载，指定组合逐组执行，不能用软件默认包络替换。",
+    "engine.executionRequirement": "原生项目保留移位角节点、斜柱与非正交梁，不投影回规则柱网；保留梁线载和角点力；执行后按原题完整输出：移位顶角Ux/Uz、该角底柱弯矩；附与数值一致的模型/结果图。本轮仅规划，不运行。",
+    "engine.requiredEvidence": "计划保存输入PNG/DXF及图中构件/标签→计算节点/构件ID映射、YJK原生工程及接口导入/回读差异、引擎版本与设置快照、实际运行日志、原始结果表/观测点索引、可视图所用数据。",
+    "engine.adapterGap": "当前YJK完整笛卡尔柱网不支持单个顶角偏移、斜柱及非正交梁；梁线载与角点Fx也不能直接由现有DL/LL楼面接口忠实表达。",
+    "engine.truthPlan": "由独立审阅的YJK原生工程形成同版本、同参数的参考结果；核对实际楼层/构件属性、题定荷载合力及力矩平衡，并保存移位顶角Ux/Uz、该角底柱弯矩的原始索引。原生人工参考模型不代表当前自动接口已接通。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "移位顶角Ux/Uz、该角底柱弯矩；附与数值一致的模型/结果图。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "native-commercial-reference-required",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "drawing-xz.png",
+        "drawing-yz.png",
+        "drawing-xy.png"
+      ],
+      "instruction": "请从图纸与标签表重建模型，不猜测缺失支座。\n移位顶角Ux/Uz、该角底柱弯矩；附与数值一致的模型/结果图。\n按显式节点/构件输入表或图纸建立模型。一阶线弹性；关闭自重、刚性楼板、刚域、二阶与施工阶段；只用题定荷载和组合。单位m、kN、kN.m、MPa；输出附位置、分量、工况/组合与runId。"
+    }
+  ]
+}

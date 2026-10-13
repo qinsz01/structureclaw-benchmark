@@ -1,0 +1,68 @@
+{
+  "id": "INT-019",
+  "modelId": "M-INT-019",
+  "plannedEngine": "OpenSees",
+  "family": "interactive_robustness",
+  "language": "中文",
+  "modelStates": [
+    "model-state-1.json",
+    "model-state-2.json",
+    "model-state-3.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "文本3轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-019（交替活载梁附加恒载点力）。T1建立M-INT-019，C2初值D+L1，另两组合按附件；T2仅将C2中L1系数改1.4；T3将C2中D系数改1.2。",
+    "task.modelingFocus": "工况独立保存和组合系数正确；荷载分布的独立状态保持",
+    "task.expectedOutput": "中跨中点x=7m的Uz及x=4m支座Rz，逐组合；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "最终C2=1.2D+1.4L1，其余组合不变；原始载荷强度不乘系数覆盖；中跨D点力20kN保留，不能计入L1或L2。",
+    "task.prerequisite": "多组合执行契约需验证；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "连续梁；跨度4、6、4m",
+    "model.boundaryKey": "x=0铰、x=4/10/14m滚支",
+    "model.loadKey": "跨度4、6、4m，D全跨8kN/m，L1仅中跨、L2仅两边跨各10kN/m，题定三个组合；D工况在中跨跨中x=7m另有向下20kN节点力，随D组合系数缩放；D全跨8kN/m加中点20kN，L1中跨10、L2两边跨10kN/m；C1=D，C2=D+L1，C3=D+L2。",
+    "model.propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 保留独立原始工况及题定组合系数，修改组合不得覆盖原工况；各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：中跨中点x=7m的Uz及x=4m支座Rz，逐组合。",
+    "engine.adapterGap": "未逐题验收；前置检查项：多组合执行契约需验证，并核对多工况组合更新后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+    "engine.truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。"
+  },
+  "stateCount": 3,
+  "requiredOutput": "中跨中点x=7m的Uz及x=4m支座Rz，逐组合；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "T1所用独立模型为M-INT-019（交替活载梁附加恒载点力）。T1建立M-INT-019，C2初值D+L1，另两组合按附件；T2仅将C2中L1系数改1.4；T3将C2中D系数改1.2。\n中跨中点x=7m的Uz及x=4m支座Rz，逐组合；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。\n按显式节点/构件输入表或图纸建立模型。一阶线弹性；关闭自重、刚性楼板、刚域、二阶与施工阶段；只用题定荷载和组合。单位m、kN、kN.m、MPa；输出附位置、分量、工况/组合与runId。"
+    },
+    {
+      "state": 2,
+      "attachments": [],
+      "instruction": "仅将C2中的L1系数改为1.4；保持D系数与其他组合不变并重算。\n中跨中点x=7m的Uz及x=4m支座Rz，逐组合；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。"
+    },
+    {
+      "state": 3,
+      "attachments": [],
+      "instruction": "仅将C2中的D系数改为1.2；保持L1=1.4与其他组合不变并重算。\n中跨中点x=7m的Uz及x=4m支座Rz，逐组合；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。"
+    }
+  ]
+}

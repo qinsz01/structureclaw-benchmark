@@ -1,0 +1,62 @@
+{
+  "id": "INT-079",
+  "modelId": "M-INT-079",
+  "plannedEngine": "PKPM",
+  "family": "interactive_robustness",
+  "language": "中文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-079（一个角柱铰脚的双向空间框架）。T1给M-INT-079的X向6m及两层高与角柱铰脚，但Y向一跨长度空缺；T2确认Y=5m。",
+    "task.modelingFocus": "两个水平轴与真实空间连接；边界的独立状态保持",
+    "task.expectedOutput": "最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "保留3D，不降为2D；两层各3.6m、楼面作用与双向连梁完整；面载只传X梁，Y梁不重复加载；补Y跨后该角铰脚仍保留，其他三柱脚固定；若已有信息可唯一推得缺项，接受说明依据后直接完成，否则再澄清。",
+    "task.prerequisite": "基础工具；空间铰脚约束输入需验证；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "空间框架；X向6m一跨、Y向5m一跨、两层各3.6m",
+    "model.boundaryKey": "(0,0,0)柱脚三平移固定/三转动自由；其余柱脚六自由度固定",
+    "model.loadKey": "X向6m一跨、Y向5m一跨、两层各3.6m，每层10kN/m²；楼面面载单向传给X梁，受荷宽度为相邻Y半跨之和；Y梁不重复承接面载；不设默认刚性楼板；关闭自重。",
+    "model.propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 楼面面载仅按相邻Y半跨受荷宽度传给X梁，Y梁不重复加载；保留三维六自由度/轴力单元各自约束和题定局部轴；各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "软件指定题，必须实际调用PKPM完成每个可计算模型状态并取得当次结果；禁止用OpenSees结果冒充。仅显示设置/启动窗口不算完成；纯查询或单位变更可复用与未变模型一致的已验证结果。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz。 保存PKPM原生工程及可复查模型导出/参数检查记录；模型改变后的新run须绑定更新后的工程，截屏只作辅助。",
+    "engine.adapterGap": "面载必须只传X梁，现接口仅支持整层恒活面载，不能直接证明这条荷载路径；需验证单角柱铰脚映射；现接口对关闭自重、无刚性楼板及完整弹性/截面属性的逐字段映射未证明，须显式设置并核验，禁止静默采用软件默认。PKPM现结果接口缺节点反力；本题Rz要求保留，须补原生反力结果读取路径并独立校核，不能删除目标项或用OpenSees反力冒充。",
+    "engine.truthPlan": "每个可计算轮次由独立复核者在PKPM创建参考模型并保存状态；模型改变后独立新算，纯结果查询沿用有效状态；核对力/矩平衡及适用解析结果，可用同假设OpenSees交叉校核；差异先追溯荷载分配/支座/轴向/楼板设置，不直接强求跨软件逐值相等。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "native-commercial-reference-required",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": null,
+      "mustNotAnalyze": true,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "Y span is unspecified; do not infer it. / Y向跨度暂未给出，不得推测。"
+    },
+    {
+      "state": 1,
+      "attachments": [],
+      "instruction": "The missing Y span is 5 m. / Y向跨度为5米。"
+    }
+  ]
+}

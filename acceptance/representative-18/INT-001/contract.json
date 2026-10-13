@@ -1,0 +1,68 @@
+{
+  "id": "INT-001",
+  "modelId": "M-INT-001",
+  "plannedEngine": "OpenSees",
+  "family": "interactive_robustness",
+  "language": "中文",
+  "modelStates": [
+    "model-state-1.json",
+    "model-state-2.json",
+    "model-state-3.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "文本3轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-001（均布加近支座点力梁）。T1建立M-INT-001；T2跨中追加向下30kN；T3只撤销这项30kN并重算。",
+    "task.modelingFocus": "梁边界和均布荷载覆盖；荷载分布的独立状态保持",
+    "task.expectedOutput": "x=3m的Uz及左支座Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "20kN/m始终保留；最终恢复M-INT-001，不能清空工况；跨中节点仍连接两侧单元；保持x=1.5m的12kN力。",
+    "task.prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "梁；跨度6m",
+    "model.boundaryKey": "x=0铰、x=6m竖向滚支",
+    "model.loadKey": "跨度6m，左铰右滚，全跨向下20kN/m，跨中观测点；x=1.5m另有向下12kN点力，跨中追加/撤销操作不触及该点力",
+    "model.propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：x=3m的Uz及左支座Rz。",
+    "engine.adapterGap": "未逐题验收；前置检查项：基础工具，并核对追加与撤销后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+    "engine.truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。"
+  },
+  "stateCount": 3,
+  "requiredOutput": "x=3m的Uz及左支座Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "T1所用独立模型为M-INT-001（均布加近支座点力梁）。T1建立M-INT-001；T2跨中追加向下30kN；T3只撤销这项30kN并重算。\nx=3m的Uz及左支座Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。\n按显式节点/构件输入表或图纸建立模型。一阶线弹性；关闭自重、刚性楼板、刚域、二阶与施工阶段；只用题定荷载和组合。单位m、kN、kN.m、MPa；输出附位置、分量、工况/组合与runId。"
+    },
+    {
+      "state": 2,
+      "attachments": [],
+      "instruction": "在跨中 x=3m 追加向下30kN点力，保留原x=1.5m的12kN。重算并报告。\nx=3m的Uz及左支座Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。"
+    },
+    {
+      "state": 3,
+      "attachments": [],
+      "instruction": "只撤销上轮追加的30kN点力；保留其余全部荷载并重算。\nx=3m的Uz及左支座Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。"
+    }
+  ]
+}

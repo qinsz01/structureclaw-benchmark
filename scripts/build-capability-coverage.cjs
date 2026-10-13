@@ -3,6 +3,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const {createHash}=require('node:crypto');
 const registry=require('../analysis-capabilities.json');
+const {annotateCoverage}=require('../lib/requirement-semantics.cjs');
 const sha=value=>createHash('sha256').update(value).digest('hex');
 
 const supplementalFeatures=[
@@ -121,7 +122,7 @@ function buildCoverage(tasks,models,sources={}) {
         unmappedRequirementIds:requirements.flatMap((x,i)=>x.candidateFeatures.length?[]:[i+1])}};
   });
   const counts=key=>cases.reduce((a,x)=>(a[x[key]]=(a[x[key]]||0)+1,a),{});
-  return {schemaVersion:1,modelProtocol:'2.1.0',evaluationVersion:'physical-v1',sources,
+  return annotateCoverage({schemaVersion:1,modelProtocol:'2.2.0',evaluationVersion:'physical-v1',sources,
     featureDefinitions:[...definitions.values()],candidateLinkRules:ruleDefinitions,
     policy:{wholeCaseAcceptanceNeverInferred:true,keywordMatchesAreCandidateLinksOnly:true,
       unknownIsNotUnsupported:true,featureTestIsNotCasePass:true,frozenCorpusUnchanged:true,
@@ -130,7 +131,7 @@ function buildCoverage(tasks,models,sources={}) {
       description:'Every original requirement is retained. No workbook or task was edited. Candidate links need review; all 300 cases still require acceptance.'},
     summary:{cases:cases.length,byFamily:counts('family'),byEngine:counts('plannedEngine'),acceptedCases:0,unknownCases:300,
       requirementClauses:cases.reduce((n,c)=>n+c.requirements.length,0),
-      unmappedClauses:cases.reduce((n,c)=>n+c.requirements.filter(r=>!r.candidateFeatures.length).length,0)},cases};
+      unmappedClauses:cases.reduce((n,c)=>n+c.requirements.filter(r=>!r.candidateFeatures.length).length,0)},cases});
 }
 
 if(require.main===module) {

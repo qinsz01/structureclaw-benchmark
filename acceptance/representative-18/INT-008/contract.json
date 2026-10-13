@@ -1,0 +1,62 @@
+{
+  "id": "INT-008",
+  "modelId": "M-INT-008",
+  "plannedEngine": "OpenSees",
+  "family": "interactive_robustness",
+  "language": "英文",
+  "modelStates": [
+    "model-state-1.json",
+    "model-state-2.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-008（局部加载的左固右撑梁）。T1建立M-INT-008；T2将加载区间从x=2～7m改为x=3～8m，强度不变。",
+    "task.modelingFocus": "加载区间端点必须正确分段；边界的独立状态保持",
+    "task.expectedOutput": "x=4.5m的Uz及左固端My；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "跨度和支承不变；只在新5m区间加载12kN/m；旧区间不得残留；左固定右竖向滚支保持，不恢复为两端简支。",
+    "task.prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "梁；跨度9m",
+    "model.boundaryKey": "x=0固支、x=9m竖向滚支",
+    "model.loadKey": "跨度9m，左固支右竖向滚支，仅x=2至7m向下12kN/m",
+    "model.propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：x=4.5m的Uz及左固端My。",
+    "engine.adapterGap": "未逐题验收；前置检查项：基础工具，并核对荷载作用区更新后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+    "engine.truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。"
+  },
+  "stateCount": 2,
+  "requiredOutput": "x=4.5m的Uz及左固端My；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "Build and analyze the 9 m beam, left end fixed and right end a vertical roller. Apply 12 kN/m downward only between x = 2 and 7 m.\nReport vertical displacement Uz at x = 4.5 m and the left fixed-end reaction moment My for each turn.\nUse the explicit node/member tables for text tasks and the drawings for image tasks. First-order linear elasticity; self-weight, rigid diaphragms, rigid offsets, P-delta and construction stages are OFF. Use only the stated loads and combinations. Units: m, kN, kN.m, MPa. Report signed values with location, component, case/combination and run ID."
+    },
+    {
+      "state": 2,
+      "attachments": [],
+      "instruction": "Change only the loaded interval from x = 2–7 m to x = 3–8 m, retaining its intensity and load ID. Recompute the two requested values.\nReport vertical displacement Uz at x = 4.5 m and the left fixed-end reaction moment My for each turn."
+    }
+  ]
+}

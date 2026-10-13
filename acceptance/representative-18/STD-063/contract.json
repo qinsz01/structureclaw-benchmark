@@ -1,0 +1,56 @@
+{
+  "id": "STD-063",
+  "modelId": "M-STD-063",
+  "plannedEngine": "OpenSees",
+  "family": "standard_workflow",
+  "language": "中文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "两层单跨6m，各3.6m，第一层设两根轴力支撑，其余刚接梁柱；完整属性按公共契约随题给出。 一层两斜撑交叉不相连且两端铰接；各梁10kN/m，顶层右节点X向30kN。",
+    "task.modelingFocus": "梁柱与桁架杆混合类型及交叉语义",
+    "task.expectedOutput": "两层柱顶侧移、两支撑轴力、梁柱端力及柱脚反力。",
+    "task.gradingFocus": "梁柱与桁架杆混合类型及交叉语义；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "混合单元工具链需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "平面两层单跨刚架加首层交叉斜撑",
+    "model.boundaryKey": "柱脚固定；支撑两端铰接且交叉不连接",
+    "model.loadKey": "梁均布竖载加顶右节点侧力",
+    "model.propertyKey": "弯曲梁柱与轴力支撑混合单元",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。 梁柱与仅轴力斜撑分别建模，交叉及端铰按题。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "梁柱与轴力支撑混合单元、斜撑交叉不连接及秩检查须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立混合杆/梁刚度组装；先验刚度秩，逐节点平衡与无弯曲支撑响应核查。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "两层柱顶侧移、两支撑轴力、梁柱端力及柱脚反力。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "两层单跨6m，各3.6m，第一层设两根轴力支撑，其余刚接梁柱；完整属性按公共契约随题给出。 一层两斜撑交叉不相连且两端铰接；各梁10kN/m，顶层右节点X向30kN。\n两层柱顶侧移、两支撑轴力、梁柱端力及柱脚反力。\n按显式节点/构件输入表或图纸建立模型。一阶线弹性；关闭自重、刚性楼板、刚域、二阶与施工阶段；只用题定荷载和组合。单位m、kN、kN.m、MPa；输出附位置、分量、工况/组合与runId。"
+    }
+  ]
+}

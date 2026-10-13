@@ -1,0 +1,12 @@
+const fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto');
+const {annotateCoverage}=require('../lib/requirement-semantics.cjs');
+const file=path.join(__dirname,'../planning/capability-coverage-300.json');
+const registry=path.join(__dirname,'../analysis-capabilities.json');
+const coverage=JSON.parse(fs.readFileSync(file,'utf8')),definitions=JSON.parse(fs.readFileSync(registry,'utf8'));
+coverage.modelProtocol=definitions.modelProtocol;
+coverage.featureDefinitions=coverage.featureDefinitions.map(f=>definitions.features.find(d=>d.id===f.id)||f);
+coverage.sources.capabilityRegistry.sha256=createHash('sha256').update(fs.readFileSync(registry)).digest('hex');
+annotateCoverage(coverage);
+const {cases,...header}=coverage;
+fs.writeFileSync(file,JSON.stringify(header,null,2).slice(0,-2)+',\n  "cases": [\n'+cases.map(c=>'    '+JSON.stringify(c)).join(',\n')+'\n  ]\n}\n');
+console.log(JSON.stringify(coverage.summary));

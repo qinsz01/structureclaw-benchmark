@@ -1,0 +1,68 @@
+{
+  "id": "INT-074",
+  "modelId": "M-INT-074",
+  "plannedEngine": "OpenSees",
+  "family": "interactive_robustness",
+  "language": "英文",
+  "modelStates": [
+    "model-state-1.json",
+    "model-state-2.json",
+    "model-state-3.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "geometry-input.json"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "文本3轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-074（矩形柱框架新增梁端力矩）。T1建立M-INT-074；T2只旋转左侧两层柱组的局部截面轴90°，按附件变换定义；T3撤销这次旋转。",
+    "task.modelingFocus": "矩形尺寸次序与实际弯曲刚度；荷载类型的独立状态保持",
+    "task.expectedOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "右侧两层柱所有轮次不变；左侧两层柱最终恢复原方向；不能只交换显示宽高而保留旧刚度；右端12kN·m不随左柱轴向旋转改变。",
+    "task.prerequisite": "局部轴输入与适配需验证；节点力矩及局部轴需验证；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "柱线x=0/7m，楼层z=0/3.6/7.2m；左右柱分别500×350及350×500mm，面内弯曲轴显式给定；梁10kN/m，屋面右点X向20kN。",
+    "model.boundaryKey": "所有柱脚面内三自由度固定",
+    "model.loadKey": "两层单跨7m，左右矩形柱强弱轴安排不同，完整惯性矩与局部轴显式提供；屋面右端节点另施加全局Y正向12kN·m，主水平及竖向荷载按附件",
+    "model.propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz。",
+    "engine.adapterGap": "未逐题验收；前置检查项：局部轴输入与适配需验证；节点力矩及局部轴需验证，并核对局部轴修改与撤销后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+    "engine.truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。"
+  },
+  "stateCount": 3,
+  "requiredOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "geometry-input.json"
+      ],
+      "instruction": "Build the two-story concrete frame from the input tables: columns at X = 0 and 7 m; levels Z = 0, 3.6, 7.2 m. Both bases are fixed in the XZ plane. Left columns are 500 x 350 mm; right columns 350 x 500 mm, with section axes defined in the appendix. Beams carry 10 kN/m downward. The upper-right node carries +X 20 kN and global +Y moment 12 kN.m.\nReport upper-right-node Ux/Uz and the left base My/Rz with the current turn, case and units. Preserve every non-target field during edits.\nUse the explicit node/member tables for text tasks and the drawings for image tasks. First-order linear elasticity; self-weight, rigid diaphragms, rigid offsets, P-delta and construction stages are OFF. Use only the stated loads and combinations. Units: m, kN, kN.m, MPa. Report signed values with location, component, case/combination and run ID."
+    },
+    {
+      "state": 2,
+      "attachments": [],
+      "instruction": "Rotate only the two left-column section axes +90 degrees about their local member axes, using the appendix roll convention. Keep the right columns, all loads and the +Y 12 kN.m nodal moment unchanged. Recompute.\nReport upper-right-node Ux/Uz and the left base My/Rz with the current turn, case and units. Preserve every non-target field during edits."
+    },
+    {
+      "state": 3,
+      "attachments": [],
+      "instruction": "Undo only the previous left-column section-axis rotation and recompute.\nReport upper-right-node Ux/Uz and the left base My/Rz with the current turn, case and units. Preserve every non-target field during edits."
+    }
+  ]
+}

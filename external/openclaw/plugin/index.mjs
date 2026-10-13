@@ -6,137 +6,15 @@ import { pathToFileURL } from "node:url";
 
 const require = createRequire(import.meta.url);
 
-const TOOL_DEFINITIONS = [
-  {
-    name: "detect_structure_type",
-    label: "Detect Structure Type",
-    description: "Detect the structural type from the current user request.",
-    parameters: objectSchema({
-      message: stringSchema("The user message describing the structure"),
-      locale: enumSchema(["zh", "en"], "User locale"),
-    }),
-  },
-  {
-    name: "extract_draft_params",
-    label: "Extract Draft Parameters",
-    description: "Extract structural parameters and merge them into the current draft.",
-    parameters: objectSchema({
-      message: stringSchema("The user message to extract parameters from"),
-      locale: enumSchema(["zh", "en"], "User locale"),
-    }),
-  },
-  {
-    name: "build_model",
-    label: "Build Model",
-    description: "Build a computable structural model from the current draft.",
-    parameters: objectSchema({}),
-  },
-  {
-    name: "validate_model",
-    label: "Validate Model",
-    description: "Validate the current structural model.",
-    parameters: objectSchema({
-      engineId: stringSchema("Optional analysis engine ID"),
-    }),
-  },
-  {
-    name: "run_analysis",
-    label: "Run Analysis",
-    description: "Execute structural analysis with the selected StructureClaw analysis skill.",
-    parameters: objectSchema({
-      analysisType: enumSchema(
-        ["static", "dynamic", "seismic", "nonlinear"],
-        "Type of analysis to perform",
-      ),
-      analysisSkillId: enumSchema(
-        [
-          "opensees-static",
-          "opensees-dynamic",
-          "opensees-seismic",
-          "opensees-nonlinear",
-          "pkpm-static",
-          "yjk-static",
-        ],
-        "Selected analysis skill ID",
-      ),
-      loadCombinationId: stringSchema("Optional load-combination ID"),
-      floorLoadTransferMode: enumSchema(
-        ["auto_code_cn", "node_tributary", "one_way_slab", "two_way_slab"],
-        "Optional floor-load transfer mode",
-      ),
-      seismicWorkflowJson: stringSchema("Structured China seismic workflow JSON"),
-    }, ["analysisType"]),
-  },
-  {
-    name: "generate_report",
-    label: "Generate Report",
-    description: "Generate a report from the current model and analysis result.",
-    parameters: objectSchema({
-      message: stringSchema("Original user request"),
-      analysisType: enumSchema(
-        ["static", "dynamic", "seismic", "nonlinear"],
-        "Analysis type that was performed",
-      ),
-      locale: enumSchema(["zh", "en"], "Report language"),
-    }, ["message", "analysisType"]),
-  },
-  {
-    name: "ask_user_clarification",
-    label: "Ask User Clarification",
-    description: "Ask one clarification question when critical input is missing.",
-    parameters: objectSchema({
-      question: stringSchema("Question to ask the user"),
-      optionsJson: stringSchema("Optional JSON array of suggested answers"),
-    }, ["question"]),
-  },
-  {
-    name: "set_session_config",
-    label: "Set Session Config",
-    description: "Set analysis type, design code, or selected skill IDs for this session.",
-    parameters: objectSchema({
-      analysisType: enumSchema(
-        ["static", "dynamic", "seismic", "nonlinear"],
-        "Analysis type",
-      ),
-      designCode: stringSchema("Design code"),
-      skillIdsJson: stringSchema("JSON array of skill IDs"),
-    }),
-  },
-  {
-    name: "analyze_file",
-    label: "Analyze File",
-    description: "Read one of the benchmark attachments and extract its content.",
-    parameters: objectSchema({
-      filePath: stringSchema("Path to a supplied benchmark attachment"),
-      maxRows: {
-        type: "integer",
-        minimum: 1,
-        maximum: 500,
-        description: "Maximum rows to return",
-      },
-    }, ["filePath"]),
-  },
-];
+function readToolDefinitions() {
+  const filePath = requireEnvironmentPath("SCLAW_OPENCLAW_TOOL_CONTRACTS");
+  const definitions = readJson(filePath);
+  if (!Array.isArray(definitions) || !definitions.length) throw new Error("Public tool contracts are missing");
+  return definitions;
+}
 
 let runtimePromise;
 let toolQueue = Promise.resolve();
-
-function stringSchema(description) {
-  return { type: "string", description };
-}
-
-function enumSchema(values, description) {
-  return { type: "string", enum: values, description };
-}
-
-function objectSchema(properties, required = []) {
-  return {
-    type: "object",
-    properties,
-    required,
-    additionalProperties: false,
-  };
-}
 
 function requireEnvironmentPath(name) {
   const value = process.env[name];
@@ -188,14 +66,9 @@ function toolContent(result, update) {
   return JSON.stringify(result ?? null);
 }
 
-function applyStateUpdate(state, update) {
+function applyStateUpdate(state, update, applyPublicToolStateUpdate) {
   if (!update) return;
-  for (const [key, value] of Object.entries(update)) {
-    if (key === "messages") continue;
-    state[key] = key === "artifacts" && value && typeof value === "object"
-      ? { ...(state.artifacts || {}), ...value }
-      : value;
-  }
+  Object.assign(state, applyPublicToolStateUpdate(state, update));
   if (Array.isArray(update.messages)) {
     state.messages.push(...update.messages.map(plainMessage));
   }
@@ -265,11 +138,13 @@ async function initializeRuntime() {
     "agent-langgraph",
     "tool-registry.js",
   );
-  const [{ AgentSkillRuntime }, { LangGraphAgentService }, { createRegisteredTools }] =
+  const [{ AgentSkillRuntime }, { LangGraphAgentService }, { createRegisteredTools }, { summarizeFileImages }, { applyPublicToolStateUpdate }] =
     await Promise.all([
       import(pathToFileURL(runtimeModulePath).href),
       import(pathToFileURL(serviceModulePath).href),
       import(pathToFileURL(registryModulePath).href),
+      import(pathToFileURL(path.join(sutRoot, "backend", "dist", "agent-langgraph", "attachment-vision.js")).href),
+      import(pathToFileURL(path.join(sutRoot, "backend", "dist", "agent-langgraph", "public-tool-contracts.js")).href),
     ]);
 
   const skillRuntime = new AgentSkillRuntime();
@@ -283,7 +158,7 @@ async function initializeRuntime() {
   const toolByName = new Map(registeredTools.map((tool) => [tool.name, tool]));
   const enabledToolIds = Array.isArray(runConfig.enabledToolIds)
     ? runConfig.enabledToolIds
-    : TOOL_DEFINITIONS.map((definition) => definition.name);
+    : readToolDefinitions().map((definition) => definition.name);
   for (const toolId of enabledToolIds) {
     if (toolId !== "ask_user_clarification" && !toolByName.has(toolId)) {
       throw new Error(`StructureClaw tool is unavailable: ${toolId}`);
@@ -296,6 +171,8 @@ async function initializeRuntime() {
     solverGate,
     toolByName,
     enabledToolIds,
+    summarizeFileImages,
+    applyPublicToolStateUpdate,
   };
 }
 
@@ -343,11 +220,14 @@ async function executeTool(name, params) {
         maxToolCallsPerTurn: runtime.runConfig.maxToolCallsPerTurn || 32,
         skillScope: runtime.runConfig.skillIds,
         agentState: state,
+        summarizeFileImages: (analysis, filePath, signal) => runtime.summarizeFileImages(
+          analysis, filePath, state.locale || "zh", state.lastUserMessage || "", signal,
+        ),
       },
       toolCall: { id: toolCallId },
     });
     const update = commandUpdate(result);
-    applyStateUpdate(state, update);
+    applyStateUpdate(state, update, runtime.applyPublicToolStateUpdate);
     constrainSelectedSkills(state, runtime.runConfig.skillIds);
     const content = toolContent(result, update);
     if (!update?.messages) {
@@ -395,9 +275,9 @@ function queuedToolExecution(name, params) {
 export default {
   id: "structureclaw-benchmark",
   name: "StructureClaw Benchmark Tools",
-  description: "Frozen StructureClaw engineering tools for the OpenClaw benchmark.",
+  description: "Current StructureClaw engineering tools for the OpenClaw benchmark.",
   register(api) {
-    for (const definition of TOOL_DEFINITIONS) {
+    for (const definition of readToolDefinitions()) {
       api.registerTool({
         ...definition,
         execute(_toolCallId, params) {

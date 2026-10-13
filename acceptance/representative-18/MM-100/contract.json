@@ -1,0 +1,60 @@
+{
+  "id": "MM-100",
+  "modelId": "M-MM-100",
+  "plannedEngine": "OpenSees",
+  "family": "multimodal_reverse_engineering",
+  "language": "英文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "drawing-xz.png",
+    "drawing-yz.png",
+    "drawing-xy.png"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "新平面及正交立面/局部截面PNG共同给本题空间几何、连接与朝向；附录给明确约束、荷载向量、完整属性和视图轴约定，不直接给完整节点坐标答案。所有新附件待制作、盲审与验证。",
+    "task.scenario": "几何：5m竖柱，柱顶刚接两短梁，分别沿+X伸2m、沿-Y伸1.5m；边界：柱底六自由度固定，两短梁端自由；荷载：X臂端Fz=-200kN，Y臂端Fx=10、Fz=-100kN；属性：钢M1、柱C1、X臂B1、Y臂B2，全部真实弹性梁柱而非刚臂。（本栏是编题规格，实际用户输入按图/表分工呈现。）",
+    "task.modelingFocus": "两正交短臂在不同投影中显形，端荷载不能都归到柱顶。",
+    "task.expectedOutput": "两短臂端Uz、柱底Mx/My/Mz；附与数值一致的模型/结果图。",
+    "task.gradingFocus": "模型核对：单一短臂柱改为双正交短臂及两端不同加载，形成更一般空间扭弯。；数值/表述核对：两短臂端Uz、柱底Mx/My/Mz，位置、方向、单位须一致。",
+    "task.prerequisite": "空间梁柱连接需验证；本题新增几何/属性与真值均待独立核验；材料截面代号须在本题附录定值。",
+    "model.topologyKey": "5m竖柱，柱顶刚接两短梁，分别沿+X伸2m、沿-Y伸1.5m",
+    "model.boundaryKey": "柱底六自由度固定，两短梁端自由",
+    "model.loadKey": "X臂端Fz=-200kN，Y臂端Fx=10、Fz=-100kN",
+    "model.propertyKey": "钢M1、柱C1、X臂B1、Y臂B2，全部真实弹性梁柱而非刚臂。",
+    "engine.analysisContract": "一阶线弹性；自重OFF并保存配置；按附录实际E/A/I/J，不套默认刚度折减；无默认刚性楼板。采用题定右手全局Z向上，核对构件局部轴与结果分量。题给线载/点力/力矩按原位映射；如作等效节点加载，须保留原始分布荷载并采用与单元插值一致的等效荷载，核验跨内响应及合力/力矩，不用统一楼面载替代。荷载契约：X臂端Fz=-200kN，Y臂端Fx=10、Fz=-100kN；未指定组合时仅算题定基本荷载，指定组合逐组执行，不能用软件默认包络替换。",
+    "engine.executionRequirement": "两正交短臂均为真实弹性梁，分别赋截面与端力；核对柱底三向力矩；执行后按原题完整输出：两短臂端Uz、柱底Mx/My/Mz；附与数值一致的模型/结果图。本轮仅规划，不运行。",
+    "engine.requiredEvidence": "计划保存输入PNG/DXF及图中构件/标签→计算节点/构件ID映射、可复现OpenSees输入模型、引擎版本与设置快照、实际运行日志、原始结果表/观测点索引、可视图所用数据。",
+    "engine.adapterGap": "尚未确认本题可通过；接口/求解/读回预检重点：两正交短臂均为真实弹性梁，分别赋截面与端力；核对柱底三向力矩。特殊单元、轴向、边界及组合均不因OpenSees原生支持而视作已接通。",
+    "engine.truthPlan": "独立建立并复核OpenSees参考模型，固定版本/求解设置及观测位置；以适用解析解或独立刚度法交叉校核位移、内力和整体平衡。不把展示层插值或图像读数直接当数值真值。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "两短臂端Uz、柱底Mx/My/Mz；附与数值一致的模型/结果图。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": 1,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "drawing-xz.png",
+        "drawing-yz.png",
+        "drawing-xy.png"
+      ],
+      "instruction": "Reconstruct the three-dimensional support from all supplied projections and tables. Both short arms are actual elastic beam members. Retain their different lengths, directions and section properties.\nReport Uz at each free arm tip and Mx/My/Mz at the column base. Include consistent model/result figures.\nUse the explicit node/member tables for text tasks and the drawings for image tasks. First-order linear elasticity; self-weight, rigid diaphragms, rigid offsets, P-delta and construction stages are OFF. Use only the stated loads and combinations. Units: m, kN, kN.m, MPa. Report signed values with location, component, case/combination and run ID."
+    }
+  ]
+}

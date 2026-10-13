@@ -1,0 +1,64 @@
+{
+  "id": "MM-058",
+  "modelId": "M-MM-058",
+  "plannedEngine": "OpenSees",
+  "family": "multimodal_reverse_engineering",
+  "language": "英文",
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "properties.json",
+    "loads.csv",
+    "drawing-incomplete.png"
+  ],
+  "sourcePlan": {
+    "task.inputForm": "第1轮裁切PNG只丢失两柱脚约束符号，附录不重复给支承；第2轮补全图确认两柱脚均固定。材料截面与其余求解设置完整另附。所有新附件待制作、盲审与验证。",
+    "task.scenario": "几何：柱线x=0、6m、高4m，顶梁从x=0延伸至8m，右侧2m自由外伸；边界：两柱脚固定；荷载：梁全长向下8kN/m，右自由端Fx=50kN；属性：钢材M1、柱C1、梁B1；首轮图裁去两柱脚符号，第二轮补全。（本栏是编题规格，实际用户输入按图/表分工呈现。）",
+    "task.modelingFocus": "先确认裁去的支承，再辨认柱顶之外的自由梁端。",
+    "task.expectedOutput": "补图后右自由端Ux/Uz、右柱脚弯矩；附与数值一致的模型/结果图。",
+    "task.gradingFocus": "模型核对：单跨框架增加顶梁外伸，水平力由柱顶移到外伸端。；数值/表述核对：补图后右自由端Ux/Uz、右柱脚弯矩，位置、方向、单位须一致。首轮另查澄清是否针对指定缺项；允许有证据的正确推导。",
+    "task.prerequisite": "基础工具；本题新增几何/属性与真值均待独立核验；材料截面代号须在本题附录定值。",
+    "model.topologyKey": "柱线x=0、6m、高4m，顶梁从x=0延伸至8m，右侧2m自由外伸",
+    "model.boundaryKey": "两柱脚固定",
+    "model.loadKey": "梁全长向下8kN/m，右自由端Fx=50kN",
+    "model.propertyKey": "钢材M1、柱C1、梁B1；首轮图裁去两柱脚符号，第二轮补全。",
+    "engine.analysisContract": "一阶线弹性；自重OFF并保存配置；按附录实际E/A/I/J，不套默认刚度折减；无默认刚性楼板。全局Z向上，核对XZ到求解器平面的映射及Ry符号。题给线载/点力/力矩按原位映射；如作等效节点加载，须保留原始分布荷载并采用与单元插值一致的等效荷载，核验跨内响应及合力/力矩，不用统一楼面载替代。荷载契约：梁全长向下8kN/m，右自由端Fx=50kN；未指定组合时仅算题定基本荷载，指定组合逐组执行，不能用软件默认包络替换。",
+    "engine.executionRequirement": "补全柱脚后再算；右自由梁端施水平力，悬段不加支座；执行后按原题完整输出：补图后右自由端Ux/Uz、右柱脚弯矩；附与数值一致的模型/结果图。本轮仅规划，不运行。",
+    "engine.requiredEvidence": "计划保存输入PNG/DXF及图中构件/标签→计算节点/构件ID映射、可复现OpenSees输入模型、引擎版本与设置快照、实际运行日志、原始结果表/观测点索引、可视图所用数据。",
+    "engine.adapterGap": "尚未确认本题可通过；接口/求解/读回预检重点：补全柱脚后再算；右自由梁端施水平力，悬段不加支座。特殊单元、轴向、边界及组合均不因OpenSees原生支持而视作已接通。",
+    "engine.truthPlan": "独立建立并复核OpenSees参考模型，固定版本/求解设置及观测位置；以独立模型审阅、整体平衡及构件端力/节点结果一致性校核。不把展示层插值或图像读数直接当数值真值。首轮缺项/冲突仍只评价澄清；信息补齐后才执行最终模型并比对同一引擎参考。"
+  },
+  "stateCount": 1,
+  "requiredOutput": "补图后右自由端Ux/Uz、右柱脚弯矩；附与数值一致的模型/结果图。",
+  "status": "candidate-inputs-frozen-needs-independent-review",
+  "sameEngineTruthStatus": "matrix-reference-ready-native-comparison-pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "numericalReference": "independent-reference.json",
+  "mandatoryAssertions": [
+    "physical_model",
+    "requested_quantities",
+    "execution_evidence_every_selection",
+    "report_body_quantities"
+  ],
+  "turns": [
+    {
+      "state": null,
+      "mustNotAnalyze": true,
+      "attachments": [
+        "properties.json",
+        "loads.csv",
+        "drawing-incomplete.png"
+      ],
+      "instruction": "Please analyze the supplied incomplete drawing. / 请分析这张不完整图纸。"
+    },
+    {
+      "state": 1,
+      "attachments": [
+        "drawing-xz.png"
+      ],
+      "instruction": "The complete drawing is now supplied. / 已补充完整图纸。"
+    }
+  ]
+}
