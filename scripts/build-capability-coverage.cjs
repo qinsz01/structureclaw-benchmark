@@ -88,7 +88,7 @@ function buildCoverage(tasks,models,sources={}) {
       ['report.requested-quantities','task.expectedOutput is retained without reduction'],
     ];
     if(engine==='OpenSees') direct.push([model.structure==='桁架'?'elastic.truss-and-frame-brace':'elastic.frame.2d-3d',`Exact model.structure=${model.structure}; enginePlan.plannedEngine=${engine}`]);
-    else direct.push(['commercial.building-native',`Exact enginePlan.plannedEngine=${engine}; native acceptance has not been supplied`]);
+    else direct.push(['commercial.building-native',`Exact enginePlan.plannedEngine=${engine}; feature evidence is recorded separately and does not accept this planned case`]);
     if(task.family==='interactive_robustness') direct.push(['interaction.state-updates','Exact task.family=interactive_robustness'],['interaction.clarification','Each planned turn must be independently reviewed for missing-input behavior']);
     if(task.family==='multimodal_reverse_engineering') {
       const feature={'结构DXF':'input.dxf-topology','建筑DXF':'input.dxf-topology','多视图重建':'input.multiview-reconstruction'}[task.subcategory]||'input.multimodal-source-binding';
