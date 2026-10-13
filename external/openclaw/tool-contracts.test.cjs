@@ -12,6 +12,7 @@ test('OpenClaw consumes actual current backend schemas, including edits and exac
     for(const name of ['query_model','review_input','edit_model','undo_model','query_results'])assert.ok(defs.some(d=>d.name===name));
     assert.ok(properties('edit_model').baseRevision);assert.ok(properties('run_analysis').loadCaseIds);assert.ok(properties('run_analysis').loadCombinationIds);
     assert.ok(properties('analyze_file').pageStart);assert.ok(properties('analyze_file').pageCount);assert.ok(properties('query_results').positionM);
+    assert.equal(properties('review_input').resolutions.items.properties.modelField.type,'string');
   } finally {fs.unlinkSync(file);fs.rmdirSync(dir);}
 });
 test('external tools apply canonical reducers and retain all incremental run and quantity records',async()=>{

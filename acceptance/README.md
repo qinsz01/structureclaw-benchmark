@@ -86,3 +86,14 @@ correctness were not assessed by this deterministic tool run.
 历史150题校验通过。实际OpenClaw 2026.6.33 dry-run完成配置和插件载入校验，14个工具均注册；
 未发出付费模型请求。结果记录对应冻结manifest
 `245dc8b655caff319d5debc751e6c0da10304d3c3ac58e0ac61356e0d708c92a`。
+
+The final replay against SUT `bded4a2a14693c1df47ef46f58b23d17f8bafd43` is retained
+separately in `records/tool-mechanics-2026-10-13-bded4a2.json`. It again passed all
+19 states, 37 selections and 3,240 numerical/report quantities with unchanged input
+and reference hashes. Production mechanics and compiled tool hashes were identical
+before and after the replay. The 15 OpenClaw contract tests also passed against this
+build, including the actual exported `review_input.resolutions[].modelField` schema.
+The earlier `230ac7d` record remains available as history; neither record certifies
+image understanding or native commercial case truth.
+
+最终版本回放单独保存，原记录不覆盖。模型、标答与容差均未改动，未调用付费模型。
