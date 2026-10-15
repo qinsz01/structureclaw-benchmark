@@ -15,6 +15,14 @@ The benchmark contains 150 bilingual structural-engineering scenarios:
 
 Each family contains 25 English and 25 Chinese scenarios.
 
+## Next 300-scenario plan
+
+[Download the 300-scenario planning workbook with solver assignments](planning/StructureClaw_Bench_300题规划_求解器补充版_20261013.xlsx).
+
+The workbook plans 100 scenarios per task family. It is the unchanged October 13,
+2026 planning artifact referenced by [the capability coverage map](planning/capability-coverage-300.json).
+The executable corpus currently contains the 150 scenarios described above.
+
 ## Public scope
 
 This repository contains only what is required to inspect and run the
