@@ -1,0 +1,15 @@
+上层双翼中央缺梁混凝土框架：建筑DXF
+
+从建筑图 input.dxf 识别几何与连接关系，读取 S-* 结构线及编号，筛除 A-* 墙线、柱轮廓及设备干扰；按 properties.json 的 dxfMapping 合并各正投影视图。支承按 properties.json 的 boundaryConditions 及CAD标注读取，利用编号对应 assignments.json 与 loads.json；截面详图仅说明截面属性和转角，不提供结构几何图。构件局部方向按 properties.json 说明取DXF LINE起点至终点。采用OpenSees作一阶线弹性计算，保存自重关闭、无刚性楼板的设置，使用明示完整材料与截面刚度。全局右手坐标Z向上，保留真实分布荷载及作用位置。
+
+逐项输出以下带符号、单位和荷载选择的结果：
+- 顶层左外跨中点Uz [case-D-obsL-uz]
+- 顶层右外跨中点Uz [case-D-obsR-uz]
+- 内侧底柱脚n1-0的Fx [case-D-n1-0-Fx]
+- 内侧底柱脚n1-0的Fz [case-D-n1-0-Fz]
+- 内侧底柱脚n1-0的My [case-D-n1-0-My]
+- 内侧底柱脚n2-0的Fx [case-D-n2-0-Fx]
+- 内侧底柱脚n2-0的Fz [case-D-n2-0-Fz]
+- 内侧底柱脚n2-0的My [case-D-n2-0-My]
+
+附带编号模型图及与数值一致的结果图，保存图纸编号到计算模型的映射、引擎版本及设置、当前执行日志、原始结果表和绘图数据。必要信息缺失时先针对缺项询问。

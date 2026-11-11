@@ -1,0 +1,1661 @@
+{
+  "schemaVersion": 1,
+  "categories": [
+    {
+      "key": "std_boundary_connectivity",
+      "family": "standard_workflow",
+      "zh": "边界与连接语义",
+      "en": "Boundary and connectivity semantics",
+      "description": "主考点为支座自由度、真实共节点、转角连续/释放、交叉是否连接或梁柱/轴力杆的连接语义；几何外形与构件存在性归几何与拓扑。"
+    },
+    {
+      "key": "std_geometry_topology",
+      "family": "standard_workflow",
+      "zh": "几何与拓扑建模",
+      "en": "Geometry and topology modeling",
+      "description": "主考点为跨层网格、非规则外形、实际构件存在性、端点表、外伸/退台及真实偏心几何；已明确的连接自由度不在此重复计数。"
+    },
+    {
+      "key": "std_units_coordinates",
+      "family": "standard_workflow",
+      "zh": "单位与坐标解释",
+      "en": "Units and coordinate interpretation",
+      "description": "主考点为字段单位换算、源/全局/局部轴、位置原点、截面朝向或按实际长度定义荷载的坐标解释；单纯不同力值或加载区归荷载与组合。"
+    },
+    {
+      "key": "std_materials_sections",
+      "family": "standard_workflow",
+      "zh": "材料与截面映射",
+      "en": "Material and section assignment",
+      "description": "主考点为材料实体属性、截面/刚度分段及按楼层、角色、空间位置分组指派；仅改变局部轴解释的任务归单位与坐标。"
+    },
+    {
+      "key": "std_loads_combinations",
+      "family": "standard_workflow",
+      "zh": "荷载与工况组合",
+      "en": "Loads, cases and combinations",
+      "description": "主考点为力/力矩分量、加载位置和区间、面载一次折算、独立工况、带符号荷载及明示组合系数；完整建模仍为共同前提。"
+    },
+    {
+      "key": "std_results_reporting",
+      "family": "standard_workflow",
+      "zh": "结果查询与报告",
+      "en": "Result queries and reporting",
+      "description": "以结果交付形式或多种表达的一致性为显式区分点；普通题要求输出位移/反力并不因此都归本类。"
+    },
+    {
+      "key": "int_missing_invalid_input",
+      "family": "interactive_robustness",
+      "zh": "缺项与无效输入处理",
+      "en": "Missing and invalid input handling",
+      "description": "初始物理模型的必要数值、边界、单元类型或连接字段缺失/不可用，须补齐或纠错；单位/坐标意义不清与相互矛盾记录分别归专类，合法负载及负绝对坐标不属无效值。"
+    },
+    {
+      "key": "int_conflict_clarification",
+      "family": "interactive_robustness",
+      "zh": "冲突信息澄清",
+      "en": "Conflicting information clarification",
+      "description": "同一物理字段、映射或分析维度存在不兼容记录，须确认唯一依据；有后续更新仍以先解决源冲突为主类。"
+    },
+    {
+      "key": "int_units_coordinates_clarification",
+      "family": "interactive_robustness",
+      "zh": "单位、坐标与荷载基准澄清",
+      "en": "Unit, coordinate and load-basis clarification",
+      "description": "初始输入的单位、全局方向、测距原点、轴变换或线载长度/折算基准未明确；已建立有效模型后的编辑目标消歧随编辑对象分类。"
+    },
+    {
+      "key": "int_targeted_parameter_update",
+      "family": "interactive_robustness",
+      "zh": "材料截面与成员组定向更新",
+      "en": "Targeted property and member-group updates",
+      "description": "有效模型上的材料、截面、局部截面轴或成员组属性更新，含版本和目标组确认；混合属性与荷载更新而无几何更新时归本类。"
+    },
+    {
+      "key": "int_geometry_topology_update",
+      "family": "interactive_robustness",
+      "zh": "几何与拓扑更新",
+      "en": "Geometry and topology updates",
+      "description": "有效模型上的坐标、长度、分段界面、连接端点或构件存在性更改，并维护连带荷载/观测；混合几何与属性/荷载更新归本类。"
+    },
+    {
+      "key": "int_loads_combinations_update",
+      "family": "interactive_robustness",
+      "zh": "荷载、工况与组合更新",
+      "en": "Load, case and combination updates",
+      "description": "有效模型上的荷载替换/追加、分量/位置/区域变更或工况/组合更新，含编辑对象或范围的必要确认；几何及属性更改按各自优先规则归类。"
+    },
+    {
+      "key": "int_undo_recovery",
+      "family": "interactive_robustness",
+      "zh": "撤销与状态恢复",
+      "en": "Undo and state recovery",
+      "description": "明确撤回对话中已经执行的一项修改，并验证其他轮修改仍保持；移除初始模型已有轴旋转本身不构成历史撤销。"
+    },
+    {
+      "key": "int_result_query_revision",
+      "family": "interactive_robustness",
+      "zh": "结果查询与表达修订",
+      "en": "Result query and presentation revision",
+      "description": "物理模型及荷载有效且不变，只修订观测位置、查询集合/极值定义或输出单位；不将输出语义不明确当作物理模型不可计算。"
+    },
+    {
+      "key": "int_complete_input_execution",
+      "family": "interactive_robustness",
+      "zh": "完整合法输入直接执行",
+      "en": "Direct execution of complete valid input",
+      "description": "完整且语义明确的对照任务，不含待确认输入或后续物理修改；保留零荷载区域、合法符号、显式不连接/缺失区域及分组材料。"
+    },
+    {
+      "key": "mm_mechanics_schematic",
+      "family": "multimodal_reverse_engineering",
+      "zh": "力学简图",
+      "en": "Mechanics schematics",
+      "description": "沿用原定子类型：从简化力学图识别实际杆系、支座与载荷，属性按随题信息；不再叠加STD技能作为第二主类。"
+    },
+    {
+      "key": "mm_annotated_engineering_drawing",
+      "family": "multimodal_reverse_engineering",
+      "zh": "工程标注图",
+      "en": "Annotated engineering drawings",
+      "description": "沿用原定子类型：联合读取工程尺寸、标高、构件标注及力学符号，重建实际模型。"
+    },
+    {
+      "key": "mm_diagram_table_fusion",
+      "family": "multimodal_reverse_engineering",
+      "zh": "图表联合",
+      "en": "Diagram and table fusion",
+      "description": "沿用原定子类型：将图形对象与材料、截面、荷载或分组表对应；clean-v3将图表合并为一份附件不改变本子类型。"
+    },
+    {
+      "key": "mm_multiview_reconstruction",
+      "family": "multimodal_reverse_engineering",
+      "zh": "多视图重建",
+      "en": "Multiview reconstruction",
+      "description": "沿用原定子类型：综合多个视图/方向或截面朝向重建几何和连接，不将本标签等同于所有题都是三维空间模型。"
+    },
+    {
+      "key": "mm_structural_dxf",
+      "family": "multimodal_reverse_engineering",
+      "zh": "结构DXF",
+      "en": "Structural DXF interpretation",
+      "description": "沿用原定子类型：解析结构DXF中的实际线段、节点、分组与标注，区分几何图元和结构连接。"
+    },
+    {
+      "key": "mm_architectural_dxf",
+      "family": "multimodal_reverse_engineering",
+      "zh": "建筑DXF",
+      "en": "Architectural DXF interpretation",
+      "description": "沿用原定子类型：从建筑DXF与明确的分析补充信息识别实际承重构件、缺失区域、标高与荷载，不自动补猜物理假设。"
+    },
+    {
+      "key": "mm_missing_quality_clarification",
+      "family": "multimodal_reverse_engineering",
+      "zh": "缺失/质量澄清",
+      "en": "Missing or low-quality visual input clarification",
+      "description": "沿用原定子类型：首轮视觉输入确有遮蔽、裁切、模糊、缺尺寸或图表冲突，须先澄清，再使用按轮次释放的补图/确认信息。"
+    }
+  ],
+  "cases": [
+    {
+      "id": "STD-001",
+      "category": "std_boundary_connectivity",
+      "rationale": "左铰右滚的约束与跨中共享观测节点是本题的基础建模区分点。"
+    },
+    {
+      "id": "STD-002",
+      "category": "std_boundary_connectivity",
+      "rationale": "左固右自由及自由端转角释放决定悬臂响应，不能交换端部约束。"
+    },
+    {
+      "id": "STD-003",
+      "category": "std_geometry_topology",
+      "rationale": "右支座位于梁内，须保留外伸段并区分全长中点与支承跨中。"
+    },
+    {
+      "id": "STD-004",
+      "category": "std_loads_combinations",
+      "rationale": "非对称点载与全跨均布载独立叠加，力点x=4m与观测点x=6m不能串用。"
+    },
+    {
+      "id": "STD-005",
+      "category": "std_boundary_connectivity",
+      "rationale": "跨中集中力必须施加在两侧梁段共用的真实节点。"
+    },
+    {
+      "id": "STD-006",
+      "category": "std_results_reporting",
+      "rationale": "显式要求一页摘要，摘要与结构化结果的符号、单位、位置和工况须一致。"
+    },
+    {
+      "id": "STD-007",
+      "category": "std_units_coordinates",
+      "rationale": "长度、线载、节点力、截面及弹性模量采用混合单位，须逐字段换算并按指定单位报告。"
+    },
+    {
+      "id": "STD-008",
+      "category": "std_loads_combinations",
+      "rationale": "只在x=2至7m加载，两端无载段保留，加载区间不能扩展为全跨。"
+    },
+    {
+      "id": "STD-009",
+      "category": "std_loads_combinations",
+      "rationale": "两处不对称集中力的大小和节点对应关系必须分别保留。"
+    },
+    {
+      "id": "STD-010",
+      "category": "std_loads_combinations",
+      "rationale": "D全跨与L半跨为独立工况，须分别求解并核对显式D+L叠加。"
+    },
+    {
+      "id": "STD-011",
+      "category": "std_boundary_connectivity",
+      "rationale": "左固定、右仅竖向约束构成撑杆梁，右端水平和转角自由。"
+    },
+    {
+      "id": "STD-012",
+      "category": "std_units_coordinates",
+      "rationale": "倾斜杆上的全局竖向力需与局部轴向/横向分量及水平投影位置区分。"
+    },
+    {
+      "id": "STD-013",
+      "category": "std_materials_sections",
+      "rationale": "B1/B2/B3三段截面分别指派，材料相同且截面分界保持连续。"
+    },
+    {
+      "id": "STD-014",
+      "category": "std_materials_sections",
+      "rationale": "材料界面与加载边界错开，须按实际区段指派M1/M2并给出分配表。"
+    },
+    {
+      "id": "STD-015",
+      "category": "std_boundary_connectivity",
+      "rationale": "中支座只限制竖向位移，两跨共享节点和转角而无内铰。"
+    },
+    {
+      "id": "STD-016",
+      "category": "std_units_coordinates",
+      "rationale": "长跨中点须由该跨局部位置换算为全局x=7.5m，不能使用整梁中点。"
+    },
+    {
+      "id": "STD-017",
+      "category": "std_geometry_topology",
+      "rationale": "按x=0/4/9/13m建立三跨四支座图，保留每一跨和两个内部支点。"
+    },
+    {
+      "id": "STD-018",
+      "category": "std_loads_combinations",
+      "rationale": "仅第一跨受外载，第二跨不补载且保留其由连续性产生的响应。"
+    },
+    {
+      "id": "STD-019",
+      "category": "std_loads_combinations",
+      "rationale": "D、L1、L2独立保存，逐位置比较明示组合并标识带符号控制组合。"
+    },
+    {
+      "id": "STD-020",
+      "category": "std_loads_combinations",
+      "rationale": "跨长与8/10/12kN/m逐跨荷载按给定序号配对，不能排序重排。"
+    },
+    {
+      "id": "STD-021",
+      "category": "std_materials_sections",
+      "rationale": "两跨分别采用独立B1/B2刚度，中支座共节点不把属性差异误作端释放。"
+    },
+    {
+      "id": "STD-022",
+      "category": "std_geometry_topology",
+      "rationale": "两跨连续梁后保留真实2m外伸段，x=10m支座不是梁端。"
+    },
+    {
+      "id": "STD-023",
+      "category": "std_loads_combinations",
+      "rationale": "中支座30kN与跨内20kN是不同节点荷载，支座力须正确进入反力平衡。"
+    },
+    {
+      "id": "STD-024",
+      "category": "std_loads_combinations",
+      "rationale": "向下D和中跨向上W为合法独立载荷，按D与D+W保留负反力和符号。"
+    },
+    {
+      "id": "STD-025",
+      "category": "std_loads_combinations",
+      "rationale": "右端节点力矩与均布力叠加，不能把kN·m当作集中力或额外约束。"
+    },
+    {
+      "id": "STD-026",
+      "category": "std_materials_sections",
+      "rationale": "中间两跨B2与首末跨B1的截面分组不随第二、四跨的活载分组混用。"
+    },
+    {
+      "id": "STD-027",
+      "category": "std_geometry_topology",
+      "rationale": "Pratt名称不替代逐杆端点表，须保留给定全部弦杆、竖杆与斜杆。"
+    },
+    {
+      "id": "STD-028",
+      "category": "std_geometry_topology",
+      "rationale": "双坡梯形变高度与六节间完整连接须按坐标和端点表重建。"
+    },
+    {
+      "id": "STD-029",
+      "category": "std_geometry_topology",
+      "rationale": "六节点十杆的特殊水平连杆是实际构件，不能用常见三角桁架模板替换。"
+    },
+    {
+      "id": "STD-030",
+      "category": "std_geometry_topology",
+      "rationale": "完整竖杆与交替斜杆序列定义本题杆系，不能按Warren名称删改。"
+    },
+    {
+      "id": "STD-031",
+      "category": "std_geometry_topology",
+      "rationale": "规则平行弦屋架仍须保留两端竖杆和全部交替腹杆。"
+    },
+    {
+      "id": "STD-032",
+      "category": "std_geometry_topology",
+      "rationale": "屋脊x=7.5m独立于3m下弦网格，须保留非整节间顶点及真实腹杆端点。"
+    },
+    {
+      "id": "STD-033",
+      "category": "std_geometry_topology",
+      "rationale": "三角腹杆描述腹杆布置，实际外轮廓仍为12节点21杆的平行弦桁架。"
+    },
+    {
+      "id": "STD-034",
+      "category": "std_geometry_topology",
+      "rationale": "Howe类斜杆采用明示反向端点，不能套用Pratt连接模板。"
+    },
+    {
+      "id": "STD-035",
+      "category": "std_boundary_connectivity",
+      "rationale": "K腹杆与竖杆中点为真实共节点，须分段连接并维护节点平衡。"
+    },
+    {
+      "id": "STD-036",
+      "category": "std_boundary_connectivity",
+      "rationale": "X腹杆几何相交处没有结构连接，不能擅自分杆或共享自由度。"
+    },
+    {
+      "id": "STD-037",
+      "category": "std_geometry_topology",
+      "rationale": "不等节间按累计坐标0/2/5/9/12m建模，并保留对应节点标签。"
+    },
+    {
+      "id": "STD-038",
+      "category": "std_geometry_topology",
+      "rationale": "单坡上弦和非对称腹杆端点按实表构造，不能镜像补成对称模板。"
+    },
+    {
+      "id": "STD-039",
+      "category": "std_materials_sections",
+      "rationale": "上弦、下弦、腹杆分别采用A1/A2/A3，逐杆属性组和代表杆索引须一致。"
+    },
+    {
+      "id": "STD-040",
+      "category": "std_boundary_connectivity",
+      "rationale": "A/B/C的逐方向平移约束不同，须消除刚体运动而不额外锁定自由方向。"
+    },
+    {
+      "id": "STD-041",
+      "category": "std_geometry_topology",
+      "rationale": "方锥顶点偏离底面中心，四斜杆及底边杆须采用实际空间坐标。"
+    },
+    {
+      "id": "STD-042",
+      "category": "std_geometry_topology",
+      "rationale": "两层三角柱空间桁架按跨层端点表构造，不能漏掉层间杆组。"
+    },
+    {
+      "id": "STD-043",
+      "category": "std_geometry_topology",
+      "rationale": "平屋面门架必须保持水平屋面，不能根据门架名称自动生成屋脊。"
+    },
+    {
+      "id": "STD-044",
+      "category": "std_boundary_connectivity",
+      "rationale": "双跨只共用一根中柱和一个中柱顶刚接节点，不能重复建柱或断开屋面。"
+    },
+    {
+      "id": "STD-045",
+      "category": "std_loads_combinations",
+      "rationale": "屋面60kN设备点载是全跨8kN/m之外的独立荷载，力点剪力跳跃须对应。"
+    },
+    {
+      "id": "STD-046",
+      "category": "std_loads_combinations",
+      "rationale": "中柱顶49kN竖力与4.9kN水平力共同作用，不能移到外柱或屋面跨中。"
+    },
+    {
+      "id": "STD-047",
+      "category": "std_geometry_topology",
+      "rationale": "左柱中高真实接入6m悬挑夹层，夹层端不增设支座或虚构落地柱。"
+    },
+    {
+      "id": "STD-048",
+      "category": "std_units_coordinates",
+      "rationale": "坡梁线载按实际杆长且保持全局竖向，不能当作局部横载或重复投影。"
+    },
+    {
+      "id": "STD-049",
+      "category": "std_geometry_topology",
+      "rationale": "偏置屋脊使两坡长度和几何不对称，须采用屋脊真实坐标。"
+    },
+    {
+      "id": "STD-050",
+      "category": "std_geometry_topology",
+      "rationale": "两跨不同屋面标高要求中柱保留z=6m与8m两接入点及其间柱段。"
+    },
+    {
+      "id": "STD-051",
+      "category": "std_loads_combinations",
+      "rationale": "D全屋面向下、W仅右坡向上，按明示D与D+W分别保留加载范围和符号。"
+    },
+    {
+      "id": "STD-052",
+      "category": "std_materials_sections",
+      "rationale": "屋面三段采用给定常截面B1/B2/B3，不能擅换成连续变截面单元。"
+    },
+    {
+      "id": "STD-053",
+      "category": "std_boundary_connectivity",
+      "rationale": "左铰右固柱脚的转动约束不同，不能复制同一套边界。"
+    },
+    {
+      "id": "STD-054",
+      "category": "std_materials_sections",
+      "rationale": "外柱、中柱和梁三组截面按角色映射，不能因共用工况而全局覆盖属性。"
+    },
+    {
+      "id": "STD-055",
+      "category": "std_loads_combinations",
+      "rationale": "楼面面载已折为60kN/m，只施加一次梁线载并保留节点各自响应。"
+    },
+    {
+      "id": "STD-056",
+      "category": "std_loads_combinations",
+      "rationale": "屋面36kN/m已折算，吊车两分量另加于右柱顶，原面载只作来源说明。"
+    },
+    {
+      "id": "STD-057",
+      "category": "std_loads_combinations",
+      "rationale": "逐层侧力10/15/20kN按楼层排序，与重力分工况并组成D+W。"
+    },
+    {
+      "id": "STD-058",
+      "category": "std_boundary_connectivity",
+      "rationale": "只有右上节点施加侧力，两柱顶不加题外刚性楼层耦合。"
+    },
+    {
+      "id": "STD-059",
+      "category": "std_boundary_connectivity",
+      "rationale": "无载中高连系梁仍与两柱真实共节点刚接，两柱须在接入处分段。"
+    },
+    {
+      "id": "STD-060",
+      "category": "std_loads_combinations",
+      "rationale": "D与L须独立保留，再按1.2D+1.4L组合，不能先相加再统一放大。"
+    },
+    {
+      "id": "STD-061",
+      "category": "std_geometry_topology",
+      "rationale": "不等层高先累加为标高，不等跨按给定顺序构建实际节点网格。"
+    },
+    {
+      "id": "STD-062",
+      "category": "std_geometry_topology",
+      "rationale": "上层右跨梁柱明确不存在，不能补成完整两跨网格或给空区加载。"
+    },
+    {
+      "id": "STD-063",
+      "category": "std_boundary_connectivity",
+      "rationale": "刚接梁柱与轴力斜撑为混合单元，首层交叉支撑两端铰接且交点不相连。"
+    },
+    {
+      "id": "STD-064",
+      "category": "std_geometry_topology",
+      "rationale": "两层真实右侧外挑段接入楼层节点，自由端保留且区别主跨和悬段。"
+    },
+    {
+      "id": "STD-065",
+      "category": "std_loads_combinations",
+      "rationale": "三层12/10/6kN/m逐层指派，不能将首层荷载复制到全楼。"
+    },
+    {
+      "id": "STD-066",
+      "category": "std_materials_sections",
+      "rationale": "边柱/中柱与左梁/右梁四截面组交叉映射，成员表须对应实体属性。"
+    },
+    {
+      "id": "STD-067",
+      "category": "std_geometry_topology",
+      "rationale": "上层中柱缺失而顶梁仍连续，不能根据下层规则柱线补柱或增设支座。"
+    },
+    {
+      "id": "STD-068",
+      "category": "std_units_coordinates",
+      "rationale": "柱底负绝对标高合法，须按实际标高保留地面和上部楼层连接。"
+    },
+    {
+      "id": "STD-069",
+      "category": "std_boundary_connectivity",
+      "rationale": "混凝土框架左柱脚铰、右柱脚固定，材料角色不改变混合边界语义。"
+    },
+    {
+      "id": "STD-070",
+      "category": "std_geometry_topology",
+      "rationale": "三层混凝土框架按三个实际楼层构造，保留各层独立节点与层间位置。"
+    },
+    {
+      "id": "STD-071",
+      "category": "std_materials_sections",
+      "rationale": "C30作为完整弹性材料记录参与一次分析，不能只替换等级名称或执行来源题后续更新。"
+    },
+    {
+      "id": "STD-072",
+      "category": "std_geometry_topology",
+      "rationale": "不等层高累加为3.3/7.3/10.4m，不等跨与实际楼层梁柱逐项连接。"
+    },
+    {
+      "id": "STD-073",
+      "category": "std_materials_sections",
+      "rationale": "柱C40与梁C30按构件角色分配各自E等实体弹性属性，不全局覆盖。"
+    },
+    {
+      "id": "STD-074",
+      "category": "std_units_coordinates",
+      "rationale": "左右矩形柱的局部轴朝向决定强弱向刚度，不能仅交换尺寸标签。"
+    },
+    {
+      "id": "STD-075",
+      "category": "std_geometry_topology",
+      "rationale": "下层三跨、上层左两跨的退台拓扑优先保持，缺失上层区域不补建。"
+    },
+    {
+      "id": "STD-076",
+      "category": "std_loads_combinations",
+      "rationale": "左右受荷宽度4/6m分别折为40/60kN/m，面载不重复施加。"
+    },
+    {
+      "id": "STD-077",
+      "category": "std_materials_sections",
+      "rationale": "首层/上层柱与顶层梁采用不同截面组，属性须随楼层和构件角色指派。"
+    },
+    {
+      "id": "STD-078",
+      "category": "std_loads_combinations",
+      "rationale": "D、W+、W-独立保存并按明示三组合计算，反向侧力不能绝对值化。"
+    },
+    {
+      "id": "STD-079",
+      "category": "std_loads_combinations",
+      "rationale": "楼面按Y半跨受荷宽度仅传给X梁，Y梁不重复加载且不加刚性楼板。"
+    },
+    {
+      "id": "STD-080",
+      "category": "std_geometry_topology",
+      "rationale": "空间网格为X两跨、Y一跨，两方向跨数及真实三维梁柱连接须保持。"
+    },
+    {
+      "id": "STD-081",
+      "category": "std_geometry_topology",
+      "rationale": "三层空间网格为X一跨、Y两跨，须按方向及楼层正确构造实际构件。"
+    },
+    {
+      "id": "STD-082",
+      "category": "std_loads_combinations",
+      "rationale": "两层不同面载分别按Y边/中轴线宽度传给X梁，不跨层复制或重复分配。"
+    },
+    {
+      "id": "STD-083",
+      "category": "std_materials_sections",
+      "rationale": "首层柱C40，其余柱和梁C30，材料同时按楼层与构件角色分配。"
+    },
+    {
+      "id": "STD-084",
+      "category": "std_loads_combinations",
+      "rationale": "一层与二层面载不同，分别只传给该层X梁并保留分层荷载索引。"
+    },
+    {
+      "id": "STD-085",
+      "category": "std_geometry_topology",
+      "rationale": "X/Y均为不等跨且层高不等，完整梁连接表优先于规则空间模板。"
+    },
+    {
+      "id": "STD-086",
+      "category": "std_geometry_topology",
+      "rationale": "L形平面缺角区明确不存在，只建实际梁柱且不虚构楼面区域。"
+    },
+    {
+      "id": "STD-087",
+      "category": "std_geometry_topology",
+      "rationale": "下层2×2跨、上层左1×2跨，逐层柱网与退台连接按实际构件保留。"
+    },
+    {
+      "id": "STD-088",
+      "category": "std_loads_combinations",
+      "rationale": "双向侧力Wx/Wy与D分别保存，逐组合输出同一位置的方向分量。"
+    },
+    {
+      "id": "STD-089",
+      "category": "std_materials_sections",
+      "rationale": "角柱/边柱/中柱与X/Y梁五组截面按空间角色指派。"
+    },
+    {
+      "id": "STD-090",
+      "category": "std_units_coordinates",
+      "rationale": "只旋转指定柱线的局部截面轴，不能误转其他柱或全局荷载向量。"
+    },
+    {
+      "id": "STD-091",
+      "category": "std_loads_combinations",
+      "rationale": "活载仅作用顶层指定一格的四边梁，保留D并按D+L计算且不重复加载。"
+    },
+    {
+      "id": "STD-092",
+      "category": "std_geometry_topology",
+      "rationale": "高低屋面形成真实三维斜梁网，端点标高和屋面连接按实际几何构造。"
+    },
+    {
+      "id": "STD-093",
+      "category": "std_boundary_connectivity",
+      "rationale": "指定立面的轴力斜撑与其余刚接梁柱混用，不能把支撑当抗弯梁或补到其他面。"
+    },
+    {
+      "id": "STD-094",
+      "category": "std_units_coordinates",
+      "rationale": "源Y向上到全局Z向上的带符号轴变换须同时作用于坐标、约束、荷载与局部轴。"
+    },
+    {
+      "id": "STD-095",
+      "category": "std_loads_combinations",
+      "rationale": "柱顶只有轴向压力，保持压缩方向和有符号轴力/位移，不引入稳定分析。"
+    },
+    {
+      "id": "STD-096",
+      "category": "std_loads_combinations",
+      "rationale": "顶点轴压与X向侧力为独立分量，按一阶弹性静力叠加其轴向和弯曲响应。"
+    },
+    {
+      "id": "STD-097",
+      "category": "std_loads_combinations",
+      "rationale": "中高节点与顶部轴压独立施加，使上下柱段轴力不同，不能并移到柱顶。"
+    },
+    {
+      "id": "STD-098",
+      "category": "std_units_coordinates",
+      "rationale": "空间柱的两主惯性矩须与明确局部轴对应，再解释全局双向弯曲响应。"
+    },
+    {
+      "id": "STD-099",
+      "category": "std_materials_sections",
+      "rationale": "C1/C2分段EA/EI分别指派，截面界面连续且无内铰。"
+    },
+    {
+      "id": "STD-100",
+      "category": "std_geometry_topology",
+      "rationale": "柱顶真实1m偏心短梁具有给定A/I/J，不能用未声明刚臂替代空间几何。"
+    },
+    {
+      "id": "INT-001",
+      "category": "int_undo_recovery",
+      "rationale": "追加跨中30kN后只撤回该项，原均布载与近支座点力仍保留。"
+    },
+    {
+      "id": "INT-002",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "初始竖向端力只有数值10而缺单位，确认kN后再分析并保留独立轴力。"
+    },
+    {
+      "id": "INT-003",
+      "category": "int_result_query_revision",
+      "rationale": "仅把第一个位移观测点移至支承跨中，物理模型和外伸端查询均不变。"
+    },
+    {
+      "id": "INT-004",
+      "category": "int_conflict_clarification",
+      "rationale": "两端固支与左铰右滚互相冲突，须先确认唯一支承条件。"
+    },
+    {
+      "id": "INT-005",
+      "category": "int_loads_combinations_update",
+      "rationale": "将跨中25kN替换为40kN，不能累加或改动已有支座力矩。"
+    },
+    {
+      "id": "INT-006",
+      "category": "int_geometry_topology_update",
+      "rationale": "跨度由8改10m，右支座、截面分界及跨中观测节点同步更新。"
+    },
+    {
+      "id": "INT-007",
+      "category": "int_missing_invalid_input",
+      "rationale": "初始模型尚无外荷载定义，须补齐整梁加载信息后计算。"
+    },
+    {
+      "id": "INT-008",
+      "category": "int_loads_combinations_update",
+      "rationale": "仅移动局部均布载区间，强度与结构边界保持，不保留旧加载段。"
+    },
+    {
+      "id": "INT-009",
+      "category": "int_undo_recovery",
+      "rationale": "先改左力再移右力，最后只撤回右力位置，须保留左力35kN。"
+    },
+    {
+      "id": "INT-010",
+      "category": "int_conflict_clarification",
+      "rationale": "左半跨6kN/m同时标D和L构成工况归属冲突，确认后保留两独立工况。"
+    },
+    {
+      "id": "INT-011",
+      "category": "int_missing_invalid_input",
+      "rationale": "右端仅写有支承但约束自由度缺失，须确认仅Uz约束。"
+    },
+    {
+      "id": "INT-012",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "初始主力方向未明确，先确认全局-Z；后续改幅值仍保留独立+X端力。"
+    },
+    {
+      "id": "INT-013",
+      "category": "int_targeted_parameter_update",
+      "rationale": "仅将中段B2替换为新增B4实体属性，外段、连接和荷载不变。"
+    },
+    {
+      "id": "INT-014",
+      "category": "int_conflict_clarification",
+      "rationale": "同一区段同时指派M1/M2，先澄清材料映射再执行后续点力替换。"
+    },
+    {
+      "id": "INT-015",
+      "category": "int_missing_invalid_input",
+      "rationale": "第二跨长度缺失，须补全后才能确定右支座及第二跨观测点。"
+    },
+    {
+      "id": "INT-016",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "长跨内3.5m缺少测距原点/方向说明，确认后映射到全局x=7.5m。"
+    },
+    {
+      "id": "INT-017",
+      "category": "int_missing_invalid_input",
+      "rationale": "第三跨-4m被明确作为长度录入错误修正，不等同于合法负坐标。"
+    },
+    {
+      "id": "INT-018",
+      "category": "int_complete_input_execution",
+      "rationale": "第二跨零外载但实际存在，初始输入完整，应直接分析其连续梁响应。"
+    },
+    {
+      "id": "INT-019",
+      "category": "int_loads_combinations_update",
+      "rationale": "分两轮只修改C2的L1与D系数，原始工况和其余组合保持。"
+    },
+    {
+      "id": "INT-020",
+      "category": "int_conflict_clarification",
+      "rationale": "第三跨荷载文字8与表12不一致，先确认逐跨荷载表的权威依据。"
+    },
+    {
+      "id": "INT-021",
+      "category": "int_targeted_parameter_update",
+      "rationale": "只替换第二跨B2为B3，第一跨和左端固定边界不随之变化。"
+    },
+    {
+      "id": "INT-022",
+      "category": "int_geometry_topology_update",
+      "rationale": "外伸长度由2改3m，端力随真实自由端移动，局部均布区同步伸长。"
+    },
+    {
+      "id": "INT-023",
+      "category": "int_loads_combinations_update",
+      "rationale": "有效模型上的点力替换先确认目标为第二跨中点，支座力与上向区载保持。"
+    },
+    {
+      "id": "INT-024",
+      "category": "int_complete_input_execution",
+      "rationale": "正负荷载与组合已完整明示，合法上拔方向无需按无效值拒绝。"
+    },
+    {
+      "id": "INT-025",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "端部力矩20缺单位，须确认kN·m及绕全局+Y的符号定义。"
+    },
+    {
+      "id": "INT-026",
+      "category": "int_undo_recovery",
+      "rationale": "撤销早一轮的活载调整，同时保留较新一轮中间两跨B3截面更新。"
+    },
+    {
+      "id": "INT-027",
+      "category": "int_loads_combinations_update",
+      "rationale": "四个内部上弦节点力各由10替换为15kN，端节点不追加荷载。"
+    },
+    {
+      "id": "INT-028",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "五个下弦力的吨力/kN单位未确认，澄清后保留独立水平分量。"
+    },
+    {
+      "id": "INT-029",
+      "category": "int_missing_invalid_input",
+      "rationale": "总高0m使三角桁架几何退化，须先修正高度而非按平面直线模型求解。"
+    },
+    {
+      "id": "INT-030",
+      "category": "int_conflict_clarification",
+      "rationale": "纯Warren无竖杆的文字与含竖杆端点表冲突，须确认保留表中连接。"
+    },
+    {
+      "id": "INT-031",
+      "category": "int_loads_combinations_update",
+      "rationale": "只把四个指定上弦节点力移到同X下弦，剩余上弦力和分组截面保持。"
+    },
+    {
+      "id": "INT-032",
+      "category": "int_missing_invalid_input",
+      "rationale": "腹杆DG1终点字段缺失，须补为顶点后才形成完整连接。"
+    },
+    {
+      "id": "INT-033",
+      "category": "int_result_query_revision",
+      "rationale": "物理输入完整，额外最大轴力的查询集合待确认；明确后用同状态结果取绝对值极值。"
+    },
+    {
+      "id": "INT-034",
+      "category": "int_geometry_topology_update",
+      "rationale": "按附件B替换指定两格斜杆端点，每格仍只保留一根斜杆。"
+    },
+    {
+      "id": "INT-035",
+      "category": "int_missing_invalid_input",
+      "rationale": "K腹杆交点是否与竖杆共节点未明确，须补齐连接语义后分析。"
+    },
+    {
+      "id": "INT-036",
+      "category": "int_complete_input_execution",
+      "rationale": "交叉处明确不相连且端点表完整，合法不连接语义应直接保留。"
+    },
+    {
+      "id": "INT-037",
+      "category": "int_missing_invalid_input",
+      "rationale": "第二节间长度及其后累计坐标未给出，不能由隐藏总跨反推。"
+    },
+    {
+      "id": "INT-038",
+      "category": "int_geometry_topology_update",
+      "rationale": "只抬高最高端上弦节点，其他坐标、连接、荷载向量与材料角色保持。"
+    },
+    {
+      "id": "INT-039",
+      "category": "int_conflict_clarification",
+      "rationale": "上下弦截面组引用冲突先澄清，后续仅改腹杆A4不改变D/W工况。"
+    },
+    {
+      "id": "INT-040",
+      "category": "int_missing_invalid_input",
+      "rationale": "B节点Y约束字段空缺，须补齐该必要边界后分析空间桁架。"
+    },
+    {
+      "id": "INT-041",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "初始20kN只称水平而未给X/Y方向，须确认全局+X。"
+    },
+    {
+      "id": "INT-042",
+      "category": "int_undo_recovery",
+      "rationale": "替换空间顶层两斜杆后撤回该项，恢复原连接表而保留其他状态。"
+    },
+    {
+      "id": "INT-043",
+      "category": "int_geometry_topology_update",
+      "rationale": "两柱及屋面标高由7改9m，跨度、混合柱脚和线载强度保持。"
+    },
+    {
+      "id": "INT-044",
+      "category": "int_conflict_clarification",
+      "rationale": "18+18m分跨与总宽30m冲突，先确认以分跨为准。"
+    },
+    {
+      "id": "INT-045",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "屋面荷载8缺单位和类型，确认已折算kN/m后不能再乘受荷宽。"
+    },
+    {
+      "id": "INT-046",
+      "category": "int_loads_combinations_update",
+      "rationale": "仅将中柱顶X力+4.9替换为-7kN，竖向分量与屋面荷载保持。"
+    },
+    {
+      "id": "INT-047",
+      "category": "int_geometry_topology_update",
+      "rationale": "只改变左夹层连接层位，柱段随共节点更新，右短挑和屋面保持。"
+    },
+    {
+      "id": "INT-048",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "坡屋面6kN/m的长度基准未给出，确认按实际坡长而非再次投影。"
+    },
+    {
+      "id": "INT-049",
+      "category": "int_geometry_topology_update",
+      "rationale": "先移动真实屋脊并更新两坡长度，再单改右坡线载，几何更新是主变化。"
+    },
+    {
+      "id": "INT-050",
+      "category": "int_loads_combinations_update",
+      "rationale": "已有效的错高门架追加点力前须确认中柱节点层位与方向，再仅在M6加载。"
+    },
+    {
+      "id": "INT-051",
+      "category": "int_complete_input_execution",
+      "rationale": "上拔W、重力D和组合系数完整，按合法全局符号直接计算。"
+    },
+    {
+      "id": "INT-052",
+      "category": "int_targeted_parameter_update",
+      "rationale": "只替换屋面中段B4截面，左右段、分界位置及混合柱脚保持。"
+    },
+    {
+      "id": "INT-053",
+      "category": "int_conflict_clarification",
+      "rationale": "左右铰固柱脚在文字和边界表中相反，须确认采用唯一边界表。"
+    },
+    {
+      "id": "INT-054",
+      "category": "int_targeted_parameter_update",
+      "rationale": "先整体替换W荷载表，再只改中柱C4；跨对象链以成员组属性更新为主类。"
+    },
+    {
+      "id": "INT-055",
+      "category": "int_loads_combinations_update",
+      "rationale": "新增两层W节点力和D+W组合，已折算重力D保留且不重复施加。"
+    },
+    {
+      "id": "INT-056",
+      "category": "int_loads_combinations_update",
+      "rationale": "吊车增加20%的范围需先确认，仅替换右顶竖力并保留水平及独立设备力。"
+    },
+    {
+      "id": "INT-057",
+      "category": "int_conflict_clarification",
+      "rationale": "逐层侧力文字与表顺序相反，须先确认低到高10/15/20kN。"
+    },
+    {
+      "id": "INT-058",
+      "category": "int_loads_combinations_update",
+      "rationale": "右上节点50kN替换为80kN，重力及其他字段保持。"
+    },
+    {
+      "id": "INT-059",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "面载与线载关系未明确，确认48kN/m为8kN/m²一次折算后的同一荷载。"
+    },
+    {
+      "id": "INT-060",
+      "category": "int_loads_combinations_update",
+      "rationale": "追加两层W及新组合，保留原D/L工况、旧组合和中柱刚度。"
+    },
+    {
+      "id": "INT-061",
+      "category": "int_conflict_clarification",
+      "rationale": "层高3.6+4.2m与屋顶总标高4.2m冲突，确认累计7.8m后建模。"
+    },
+    {
+      "id": "INT-062",
+      "category": "int_complete_input_execution",
+      "rationale": "上层右跨明确不存在且实际连接完整，直接分析退台而不补猜梁柱。"
+    },
+    {
+      "id": "INT-063",
+      "category": "int_missing_invalid_input",
+      "rationale": "初始斜杆的单元类型和交叉连接未说明，须补齐轴力杆及不连接语义。"
+    },
+    {
+      "id": "INT-064",
+      "category": "int_geometry_topology_update",
+      "rationale": "仅延长二层外挑至2m，一层外挑与既有下层点载保持。"
+    },
+    {
+      "id": "INT-065",
+      "category": "int_loads_combinations_update",
+      "rationale": "只把顶层线载6改8kN/m，一二层荷载与顶层截面保持。"
+    },
+    {
+      "id": "INT-066",
+      "category": "int_targeted_parameter_update",
+      "rationale": "有效模型收到两版B-right属性后确认v2，只更新右跨梁目标组。"
+    },
+    {
+      "id": "INT-067",
+      "category": "int_conflict_clarification",
+      "rationale": "端点表删除上层中柱而旧文字保留，须确认删除并保留上层连续梁。"
+    },
+    {
+      "id": "INT-068",
+      "category": "int_complete_input_execution",
+      "rationale": "柱底-1.5m是合法绝对标高且两层相对层高为正，直接执行完整输入。"
+    },
+    {
+      "id": "INT-069",
+      "category": "int_missing_invalid_input",
+      "rationale": "材料E和G均缺失，不能从材料名猜默认值；补E后按已给nu关系求G。"
+    },
+    {
+      "id": "INT-070",
+      "category": "int_missing_invalid_input",
+      "rationale": "第二层相对层高-3.3m为明示录入错误，确认正值后重建累计标高。"
+    },
+    {
+      "id": "INT-071",
+      "category": "int_targeted_parameter_update",
+      "rationale": "全部梁柱换用附件C40实体弹性记录，保留截面差异、轴向及荷载。"
+    },
+    {
+      "id": "INT-072",
+      "category": "int_missing_invalid_input",
+      "rationale": "总跨数、后续跨度与连接缺失，须补为两跨5/7m后计算。"
+    },
+    {
+      "id": "INT-073",
+      "category": "int_complete_input_execution",
+      "rationale": "梁C30、柱C40是完整且明确的材料分组，应直接线性分析。"
+    },
+    {
+      "id": "INT-074",
+      "category": "int_undo_recovery",
+      "rationale": "只撤回上一轮对左柱组施加的90度轴旋转，右柱、属性及全局力矩保持。"
+    },
+    {
+      "id": "INT-075",
+      "category": "int_loads_combinations_update",
+      "rationale": "只改上层最右实际梁线载，不新增退台空区或改变下层点力。"
+    },
+    {
+      "id": "INT-076",
+      "category": "int_missing_invalid_input",
+      "rationale": "右受荷宽度缺失使面载折算不唯一，须补齐6m而非猜值。"
+    },
+    {
+      "id": "INT-077",
+      "category": "int_targeted_parameter_update",
+      "rationale": "先改首层柱截面，再仅改顶层梁B4，两次分组更新须累积保持。"
+    },
+    {
+      "id": "INT-078",
+      "category": "int_loads_combinations_update",
+      "rationale": "只将W-幅值增20%并保持负方向，D、W+及全部组合系数保持。"
+    },
+    {
+      "id": "INT-079",
+      "category": "int_missing_invalid_input",
+      "rationale": "Y向跨度缺失，须补齐后确定空间几何及X梁面载分配。"
+    },
+    {
+      "id": "INT-080",
+      "category": "int_missing_invalid_input",
+      "rationale": "二层面载强度缺失，须补齐该层荷载而不从一层自动复制。"
+    },
+    {
+      "id": "INT-081",
+      "category": "int_conflict_clarification",
+      "rationale": "文字与坐标表的X/Y跨数互换，须先确认坐标表为准。"
+    },
+    {
+      "id": "INT-082",
+      "category": "int_loads_combinations_update",
+      "rationale": "仅替换二层面载8为9kN/m²并重算X梁线载，不累加旧载。"
+    },
+    {
+      "id": "INT-083",
+      "category": "int_conflict_clarification",
+      "rationale": "完整空间几何却同时要求2D和3D，须确认唯一分析维度。"
+    },
+    {
+      "id": "INT-084",
+      "category": "int_targeted_parameter_update",
+      "rationale": "全部梁柱替换为C35记录，分层面载、独立设备工况及组合保持。"
+    },
+    {
+      "id": "INT-085",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "初始节点和层高数字缺单位，确认mm后仅转换相关长度字段。"
+    },
+    {
+      "id": "INT-086",
+      "category": "int_complete_input_execution",
+      "rationale": "L形东北缺角区明确不存在，直接使用完整实际节点梁柱与荷载。"
+    },
+    {
+      "id": "INT-087",
+      "category": "int_geometry_topology_update",
+      "rationale": "按附件B更换上层边界、节点梁柱及荷载区，首层外边柱加强保持。"
+    },
+    {
+      "id": "INT-088",
+      "category": "int_undo_recovery",
+      "rationale": "X侧力增幅后再反转Y，最后只撤回Y反向，须保留X增幅。"
+    },
+    {
+      "id": "INT-089",
+      "category": "int_targeted_parameter_update",
+      "rationale": "确认周边柱编辑范围仅为非角边柱，角柱、中柱和铰脚边界保持。"
+    },
+    {
+      "id": "INT-090",
+      "category": "int_targeted_parameter_update",
+      "rationale": "移除首层指定柱的初始局部轴旋转后再改Y力；前者不是撤销对话历史修改。"
+    },
+    {
+      "id": "INT-091",
+      "category": "int_loads_combinations_update",
+      "rationale": "活载从区域A移到B，旧独有边删除且共享边只保留一次。"
+    },
+    {
+      "id": "INT-092",
+      "category": "int_geometry_topology_update",
+      "rationale": "只抬高高侧屋面，共享端点及实际坡长随几何更新，线载强度保持。"
+    },
+    {
+      "id": "INT-093",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "初始左侧立面缺观察方向，须确认全局Y=0及实际支撑端点。"
+    },
+    {
+      "id": "INT-094",
+      "category": "int_units_coordinates_clarification",
+      "rationale": "源轴映射Yg=±Zs符号缺失，确认后同步变换几何、约束、力与力矩。"
+    },
+    {
+      "id": "INT-095",
+      "category": "int_missing_invalid_input",
+      "rationale": "柱总高0m为不可用几何输入，确认4.5m后保留中点与顶点轴压。"
+    },
+    {
+      "id": "INT-096",
+      "category": "int_loads_combinations_update",
+      "rationale": "只反转水平X分量，轴压、截面分界和局部轴均保持。"
+    },
+    {
+      "id": "INT-097",
+      "category": "int_result_query_revision",
+      "rationale": "物理状态不变，仅将柱顶Uz/Ux从m改为mm并保留位置、符号和工况。"
+    },
+    {
+      "id": "INT-098",
+      "category": "int_conflict_clarification",
+      "rationale": "Iy/Iz表与局部轴注释互换构成矛盾，须采用确认后的完整修正表。"
+    },
+    {
+      "id": "INT-099",
+      "category": "int_geometry_topology_update",
+      "rationale": "只把C1/C2分段界面从3上移到4m，柱高、柱顶力与力矩保持。"
+    },
+    {
+      "id": "INT-100",
+      "category": "int_undo_recovery",
+      "rationale": "将短臂由+X转向+Y后撤回该几何修改，保留全局端力与柱中力。"
+    },
+    {
+      "id": "MM-001",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从固支均布梁简图读取两端固定边界、跨中节点和全跨线载。"
+    },
+    {
+      "id": "MM-002",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从悬臂简图辨认自由端纯力矩，不能按端部竖向点力还原。"
+    },
+    {
+      "id": "MM-003",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程尺寸与支座标注区分两侧外伸、加载支承跨与右端力。"
+    },
+    {
+      "id": "MM-004",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从标注图分离两处线载区及偏心点力，保留中间无载区。"
+    },
+    {
+      "id": "MM-005",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从简图辨认左固定右滚支及跨中相连力点。"
+    },
+    {
+      "id": "MM-006",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程标注识别三个不同点载及其位置，并保持摘要对象一致。"
+    },
+    {
+      "id": "MM-007",
+      "category": "mm_missing_quality_clarification",
+      "rationale": "首轮荷载图示模糊，须按轮次取得补图后确认倾斜梁荷载。"
+    },
+    {
+      "id": "MM-008",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF还原左右分离加载区和中段无载梁段。"
+    },
+    {
+      "id": "MM-009",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从标注箭头区分向上/向下点力及跨内节点力矩。"
+    },
+    {
+      "id": "MM-010",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "将梁段图形与B1/B2属性表、D/L作用区逐项对应。"
+    },
+    {
+      "id": "MM-011",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从简图区分中间撑点和真实右端外伸，保留左固支。"
+    },
+    {
+      "id": "MM-012",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从尺寸图重建折线悬臂及刚接折点，施加全局竖力。"
+    },
+    {
+      "id": "MM-013",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF识别两端与中段材料分区及x=3m附加点力。"
+    },
+    {
+      "id": "MM-014",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合图形与属性表映射互相错开的材料、截面分界。"
+    },
+    {
+      "id": "MM-015",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从简图识别左端固定与两处滚支，保留双跨连续性。"
+    },
+    {
+      "id": "MM-016",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从标注图重建不等双跨加尾段及对应线载/点载位置。"
+    },
+    {
+      "id": "MM-017",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程符号识别三跨末端固定及两个中间支点，无内铰。"
+    },
+    {
+      "id": "MM-018",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF保留三跨实际梁段并识别中跨无外载。"
+    },
+    {
+      "id": "MM-019",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合图形和工况表区分D、L、W作用跨及三个明示组合。"
+    },
+    {
+      "id": "MM-020",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从尺寸链识别递增跨度和末端短悬段，逐跨对应荷载。"
+    },
+    {
+      "id": "MM-021",
+      "category": "mm_missing_quality_clarification",
+      "rationale": "首轮第二跨截面图表标记冲突，确认B2后再完成异截面梁分析。"
+    },
+    {
+      "id": "MM-022",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程标注识别双侧外伸及左右不同端部集中力。"
+    },
+    {
+      "id": "MM-023",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从简图区分中支座节点力和长跨跨中力，保留右端固定。"
+    },
+    {
+      "id": "MM-024",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合连续梁图与工况表识别四跨上拔区域及D/W组合。"
+    },
+    {
+      "id": "MM-025",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从简图识别两端固定、中支座转角自由及支座节点力矩。"
+    },
+    {
+      "id": "MM-026",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF恢复五跨、分跨截面组及独立活载作用跨。"
+    },
+    {
+      "id": "MM-027",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程图完整识别六节间Pratt端点和全部竖杆。"
+    },
+    {
+      "id": "MM-028",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从坐标/荷载标注读取非对称梯形上弦及右半下弦偏载。"
+    },
+    {
+      "id": "MM-029",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从三角桁架简图识别七个实际节点和屋脊腹杆连接。"
+    },
+    {
+      "id": "MM-030",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF识别上下弦错位节点，保留无竖杆Warren连接。"
+    },
+    {
+      "id": "MM-031",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程图读取每格双斜杆及交叉不连接语义，并识别截面组。"
+    },
+    {
+      "id": "MM-032",
+      "category": "mm_missing_quality_clarification",
+      "rationale": "首轮屋脊尺寸缺失，须取得补图后确定偏置顶点几何。"
+    },
+    {
+      "id": "MM-033",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF识别阶梯上弦和完整腹杆，不能补成平直上弦。"
+    },
+    {
+      "id": "MM-034",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从力学简图辨认向中心屋脊汇交的腹杆端点。"
+    },
+    {
+      "id": "MM-035",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程标注读取高低支承位置及K腹杆真实中点连接。"
+    },
+    {
+      "id": "MM-036",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF辨认X腹杆中心连接节点并将斜杆按真实端点分段。"
+    },
+    {
+      "id": "MM-037",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合图形和表格还原不等节间、错位上弦及各节点荷载。"
+    },
+    {
+      "id": "MM-038",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF恢复整体倾斜两弦及全局竖向加载。"
+    },
+    {
+      "id": "MM-039",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合三排弦杆图和四组面积表映射双层腹杆结构。"
+    },
+    {
+      "id": "MM-040",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合空间方锥的多个视图确定中心顶点和底面连接。"
+    },
+    {
+      "id": "MM-041",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合上下双锥视图识别两侧顶点及各自杆件连接。"
+    },
+    {
+      "id": "MM-042",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合多层三角柱视图还原三层空间杆系和跨层连接。"
+    },
+    {
+      "id": "MM-043",
+      "category": "mm_architectural_dxf",
+      "rationale": "从建筑DXF和分析标注提取双坡屋面、混合柱脚及实际梁柱。"
+    },
+    {
+      "id": "MM-044",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从简图辨认一跨水平屋面、一跨双坡的不同屋面连接。"
+    },
+    {
+      "id": "MM-045",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程尺寸和边界符号重建单坡屋面及铰固柱脚。"
+    },
+    {
+      "id": "MM-046",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从标高标注识别中柱基础抬高，不能将全部柱脚合到同一高程。"
+    },
+    {
+      "id": "MM-047",
+      "category": "mm_architectural_dxf",
+      "rationale": "从建筑DXF提取两侧独立夹层悬挑，保持各自连接高度与自由端。"
+    },
+    {
+      "id": "MM-048",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程图识别屋脊实际中柱和两坡连接，不把中柱漏作辅助线。"
+    },
+    {
+      "id": "MM-049",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合多个屋面视图辨认双峰单谷的折线连接次序。"
+    },
+    {
+      "id": "MM-050",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF恢复三跨不同屋面标高及中柱分段连接。"
+    },
+    {
+      "id": "MM-051",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合屋面图与工况表还原右檐外伸及风吸加载区。"
+    },
+    {
+      "id": "MM-052",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程标注读取梁柱各自截面分段和连续界面。"
+    },
+    {
+      "id": "MM-053",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从简图识别中部横梁真实刚接以及左右混合柱脚。"
+    },
+    {
+      "id": "MM-054",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合不等跨门架图与分组/荷载表，保留两端挑檐。"
+    },
+    {
+      "id": "MM-055",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程图确认上层只保留右跨，不能补建缺失左上梁柱。"
+    },
+    {
+      "id": "MM-056",
+      "category": "mm_architectural_dxf",
+      "rationale": "从建筑DXF识别屋面下挂刚接短柱及其真实自由端荷载。"
+    },
+    {
+      "id": "MM-057",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合楼层图与荷载表保留第二层右跨缺梁和完整柱线。"
+    },
+    {
+      "id": "MM-058",
+      "category": "mm_missing_quality_clarification",
+      "rationale": "首轮裁掉柱脚符号，须等待补全边界图后确认外伸框架模型。"
+    },
+    {
+      "id": "MM-059",
+      "category": "mm_architectural_dxf",
+      "rationale": "从建筑DXF识别单层两跨真实梁柱，右跨无荷载仍保留。"
+    },
+    {
+      "id": "MM-060",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF读取局部斜顶梁及D/L独立工况和实际长度基准。"
+    },
+    {
+      "id": "MM-061",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程支座符号逐一识别铰、固、滚三种柱脚。"
+    },
+    {
+      "id": "MM-062",
+      "category": "mm_architectural_dxf",
+      "rationale": "从建筑DXF提取退台上层左侧真实悬挑，不增加端部支座。"
+    },
+    {
+      "id": "MM-063",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程图辨认逐层反向单斜撑，保留轴力杆角色。"
+    },
+    {
+      "id": "MM-064",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF还原上下层不同方向与长度的交错悬挑。"
+    },
+    {
+      "id": "MM-065",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程图读取中柱仅到第二层，顶梁中点连续而无支座。"
+    },
+    {
+      "id": "MM-066",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合梁跨图和截面表映射跨内分界及交叉梁组。"
+    },
+    {
+      "id": "MM-067",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF识别底层无中柱的转换梁与上层中柱真实接入。"
+    },
+    {
+      "id": "MM-068",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从绝对标高标注识别左右柱脚不同高程及相同楼层标高。"
+    },
+    {
+      "id": "MM-069",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程图读取首层双侧阳台悬挑及左右不同悬段荷载。"
+    },
+    {
+      "id": "MM-070",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合楼层几何和属性表重建中层斜柱，保留实际节点移位。"
+    },
+    {
+      "id": "MM-071",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程标注识别首层中跨零载和顶层完整三跨受载。"
+    },
+    {
+      "id": "MM-072",
+      "category": "mm_missing_quality_clarification",
+      "rationale": "首轮错层高差遮蔽，须补齐0.5m后确定中柱不同接入标高。"
+    },
+    {
+      "id": "MM-073",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合退台挑梁图与材料表映射柱、首层梁及顶层梁三类材料。"
+    },
+    {
+      "id": "MM-074",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合各视图和截面朝向辨认三列柱的强弱轴方向。"
+    },
+    {
+      "id": "MM-075",
+      "category": "mm_architectural_dxf",
+      "rationale": "从建筑DXF识别上层两翼之间缺梁，不能按连续楼面补建。"
+    },
+    {
+      "id": "MM-076",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合边界图和受荷宽度表辨认中柱铰脚及逐层左右折算差异。"
+    },
+    {
+      "id": "MM-077",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程标注读取四层实际缺梁位置和上下柱截面分段。"
+    },
+    {
+      "id": "MM-078",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合顶层挑梁图与正反侧力工况表，保持各工况作用点。"
+    },
+    {
+      "id": "MM-079",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合上下层视图识别屋面整体X向平移及真实层间斜柱。"
+    },
+    {
+      "id": "MM-080",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合平面/立面读取顶层缺失Y梁，保留其余空间柱网。"
+    },
+    {
+      "id": "MM-081",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF还原顶层沿Y方向退台及下层仍存在的柱线。"
+    },
+    {
+      "id": "MM-082",
+      "category": "mm_architectural_dxf",
+      "rationale": "从建筑DXF识别顶层整条中间Y梁线缺失和各层实际楼面。"
+    },
+    {
+      "id": "MM-083",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合逐层空间视图还原第三层局部退台及下层连续柱网。"
+    },
+    {
+      "id": "MM-084",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF识别顶层缺边中柱但转换梁仍连续的空间连接。"
+    },
+    {
+      "id": "MM-085",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合多视图读取移位角节点及斜柱，不能套用垂直规则网格。"
+    },
+    {
+      "id": "MM-086",
+      "category": "mm_architectural_dxf",
+      "rationale": "从建筑DXF提取U形真实区域和共用边，不能填补缺口或重复建梁。"
+    },
+    {
+      "id": "MM-087",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合逐层视图恢复顶层对角双翼及中心共节点。"
+    },
+    {
+      "id": "MM-088",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合空间框架图和工况/单元表识别顶层轴力斜杆及独立双向侧力。"
+    },
+    {
+      "id": "MM-089",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合空间柱组图与截面/边界表识别内柱铰脚及多组属性。"
+    },
+    {
+      "id": "MM-090",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合视图区分角柱铰脚与只在指定上层柱段发生的局部轴旋转。"
+    },
+    {
+      "id": "MM-091",
+      "category": "mm_structural_dxf",
+      "rationale": "从结构DXF识别实际缺梁及偏区加载边，避免恢复被删梁或重复活载。"
+    },
+    {
+      "id": "MM-092",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合空间屋盖视图确定中高两低的真实双坡梁柱连接。"
+    },
+    {
+      "id": "MM-093",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程立面标注识别上下层位于相反侧面的X轴力支撑。"
+    },
+    {
+      "id": "MM-094",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合基础错高视图及源坐标方向标注，按带符号映射还原空间模型。"
+    },
+    {
+      "id": "MM-095",
+      "category": "mm_mechanics_schematic",
+      "rationale": "从轴压柱简图识别材料分界共节点及上下段不同材料。"
+    },
+    {
+      "id": "MM-096",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程支座标注识别中高只约束X的侧向撑点，保留其他自由度。"
+    },
+    {
+      "id": "MM-097",
+      "category": "mm_diagram_table_fusion",
+      "rationale": "联合柱简图与边界/属性表识别底铰、顶端侧向导向和跨内横力。"
+    },
+    {
+      "id": "MM-098",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合空间视图还原中高Y向侧臂、柱顶双向力与臂端竖力。"
+    },
+    {
+      "id": "MM-099",
+      "category": "mm_annotated_engineering_drawing",
+      "rationale": "从工程尺寸图识别上段倾斜折线柱与分段截面界面。"
+    },
+    {
+      "id": "MM-100",
+      "category": "mm_multiview_reconstruction",
+      "rationale": "综合空间支架视图还原柱顶+X与-Y两根真实短梁及不同端力。"
+    }
+  ]
+}

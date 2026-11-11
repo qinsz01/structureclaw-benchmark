@@ -1,0 +1,909 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "dimension": "3d",
+      "plane": null,
+      "semantics": "global-z-up",
+      "version": 1,
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "N0-0-0",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N0-1-0",
+        "x": 0.0,
+        "y": 4.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N1-0-0",
+        "x": 5.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N1-1-0",
+        "x": 5.0,
+        "y": 4.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N0-0-1",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      {
+        "id": "N0-1-1",
+        "x": 0.0,
+        "y": 4.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      {
+        "id": "N1-0-1",
+        "x": 5.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      {
+        "id": "N1-1-1",
+        "x": 5.0,
+        "y": 4.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "C0-0-1",
+        "type": "column",
+        "nodes": [
+          "N0-0-0",
+          "N0-0-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "X0-0-1",
+        "type": "beam",
+        "nodes": [
+          "N0-0-1",
+          "N1-0-1"
+        ],
+        "material": "S",
+        "section": "B",
+        "rotation_angle": 90.0
+      },
+      {
+        "id": "Y0-0-1",
+        "type": "beam",
+        "nodes": [
+          "N0-0-1",
+          "N0-1-1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "C0-1-1",
+        "type": "column",
+        "nodes": [
+          "N0-1-0",
+          "N0-1-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "X0-1-1",
+        "type": "beam",
+        "nodes": [
+          "N0-1-1",
+          "N1-1-1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "C1-0-1",
+        "type": "column",
+        "nodes": [
+          "N1-0-0",
+          "N1-0-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "Y1-0-1",
+        "type": "beam",
+        "nodes": [
+          "N1-0-1",
+          "N1-1-1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "C1-1-1",
+        "type": "column",
+        "nodes": [
+          "N1-1-0",
+          "N1-1-1"
+        ],
+        "material": "S",
+        "section": "C"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "B",
+        "name": "B",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 160.0,
+          "H": 280.0
+        },
+        "properties": {
+          "A": 0.044800000000000006,
+          "Iy": 0.00029269333333333344,
+          "Iz": 9.557333333333336e-05,
+          "J": 0.0002458905624878523
+        }
+      },
+      {
+        "id": "C",
+        "name": "C",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 220.0,
+          "H": 360.0
+        },
+        "properties": {
+          "A": 0.07919999999999999,
+          "Iy": 0.0008553599999999999,
+          "Iz": 0.00031944,
+          "J": 0.0007915399436937966
+        }
+      },
+      {
+        "id": "A",
+        "name": "A",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 60.0,
+          "H": 80.0
+        },
+        "properties": {
+          "A": 0.0048,
+          "Iy": 2.5600000000000005e-06,
+          "Iz": 1.4399999999999998e-06,
+          "J": 3.1101609374999997e-06
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "id": "D-1",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "X0-0-1",
+            "wz": -8.0
+          },
+          {
+            "id": "D-2",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "Y0-0-1",
+            "wz": -8.0
+          },
+          {
+            "id": "D-3",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "X0-1-1",
+            "wz": -8.0
+          },
+          {
+            "id": "D-4",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "Y1-0-1",
+            "wz": -8.0
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "id": "Q-1",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "X0-0-1",
+            "wz": -5.0
+          },
+          {
+            "id": "Q-2",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "X0-1-1",
+            "wz": -5.0
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "id": "W-1",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "N0-0-1",
+            "fx": 6.0,
+            "fy": 3.0
+          },
+          {
+            "id": "W-2",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "N0-1-1",
+            "fx": 6.0
+          },
+          {
+            "id": "W-3",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "N1-0-1",
+            "fx": 6.0,
+            "fy": 3.0
+          },
+          {
+            "id": "W-4",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "N1-1-1",
+            "fx": 6.0
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "SERVICE",
+        "factors": {
+          "D": 1.0,
+          "Q": 1.0
+        }
+      },
+      {
+        "id": "REVERSE",
+        "factors": {
+          "D": 1.0,
+          "W": -1.0
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    },
+    "metadata": {
+      "elementReferenceVectors": {
+        "C0-0-1": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "X0-0-1": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Y0-0-1": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "C0-1-1": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "X0-1-1": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "C1-0-1": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "Y1-0-1": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "C1-1-1": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "stories": [
+      {
+        "id": "S1",
+        "elevation": 0.0,
+        "height": 3.2,
+        "rigid_diaphragm": false
+      }
+    ]
+  },
+  "kind": "static",
+  "engine": "OpenSees",
+  "derived": [],
+  "requests": [
+    {
+      "id": "case:D:N1-1-1:ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1-1"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -1.8994430818594512e-06
+    },
+    {
+      "id": "case:D:N1-0-1:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-0-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -7.06090026478376e-06
+    },
+    {
+      "id": "case:D:N0-0-0:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0-0"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 7.4961310918618125
+    },
+    {
+      "id": "case:D:N0-0-0:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0-0"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 35.99999999999999
+    },
+    {
+      "id": "case:D:N1-1-1:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -7.060900264783762e-06
+    },
+    {
+      "id": "case:D:N1-1-1:uy",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1-1"
+      },
+      "component": "uy",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -7.910802077423342e-07
+    },
+    {
+      "id": "case:D:N0-0-0:Fy",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0-0"
+      },
+      "component": "Fy",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 3.650360510606365
+    },
+    {
+      "id": "case:D:C0-0-1:M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "C0-0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 7.92599152178616
+    },
+    {
+      "id": "case:D:X0-0-1:M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "X0-0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -0.000301137035362705
+    },
+    {
+      "id": "case:D:X0-0-1:T",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "X0-0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "T",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 1.924340913549555e-17
+    },
+    {
+      "id": "combination:SERVICE:N1-1-1:ux",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1-1"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -3.086595008021608e-06
+    },
+    {
+      "id": "combination:SERVICE:N1-0-1:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-0-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -9.512601745611455e-06
+    },
+    {
+      "id": "combination:SERVICE:N0-0-0:Fx",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0-0"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 12.181213024275447
+    },
+    {
+      "id": "combination:SERVICE:N0-0-0:Fz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0-0"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 48.49999999999999
+    },
+    {
+      "id": "combination:SERVICE:N1-1-1:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -9.512601745611457e-06
+    },
+    {
+      "id": "combination:SERVICE:N1-1-1:uy",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1-1"
+      },
+      "component": "uy",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -7.910802077423341e-07
+    },
+    {
+      "id": "combination:SERVICE:N0-0-0:Fy",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0-0"
+      },
+      "component": "Fy",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 3.650360510606365
+    },
+    {
+      "id": "combination:SERVICE:C0-0-1:M2",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "C0-0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 12.87973622290251
+    },
+    {
+      "id": "combination:SERVICE:X0-0-1:M2",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "X0-0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -0.0004893476824643934
+    },
+    {
+      "id": "combination:SERVICE:X0-0-1:T",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "X0-0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "T",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 1.924340913549555e-17
+    }
+  ],
+  "clarificationFields": [],
+  "referenceChecks": [
+    {
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 7.105427357601002e-15,
+      "forceMomentBalance": [
+        1.1329648656599887e-15,
+        -2.7443839170757174e-16,
+        0.0,
+        -5.684341886080802e-14,
+        0.0,
+        -4.707460190939375e-15
+      ],
+      "dofs": 48,
+      "freeDofs": 24,
+      "factorization": "numpy-cholesky-batched",
+      "factorizationCount": 1,
+      "rightHandSides": 2,
+      "minimumScaledPivot": 0.01760064024091523,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ]
+    },
+    {
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 7.105427357601002e-15,
+      "forceMomentBalance": [
+        -3.870488809165421e-15,
+        -2.500207996294707e-16,
+        -2.842170943040401e-14,
+        0.0,
+        0.0,
+        1.027496092314655e-14
+      ],
+      "dofs": 48,
+      "freeDofs": 24,
+      "factorization": "numpy-cholesky-batched",
+      "factorizationCount": 1,
+      "rightHandSides": 2,
+      "minimumScaledPivot": 0.01760064024091523,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ]
+    }
+  ],
+  "reportIds": [
+    "case:D:N1-1-1:ux",
+    "case:D:N1-0-1:uz",
+    "case:D:N0-0-0:Fx",
+    "case:D:N0-0-0:Fz",
+    "case:D:N1-1-1:uz",
+    "case:D:N1-1-1:uy",
+    "case:D:N0-0-0:Fy",
+    "case:D:C0-0-1:M2",
+    "case:D:X0-0-1:M2",
+    "case:D:X0-0-1:T",
+    "combination:SERVICE:N1-1-1:ux",
+    "combination:SERVICE:N1-0-1:uz",
+    "combination:SERVICE:N0-0-0:Fx",
+    "combination:SERVICE:N0-0-0:Fz",
+    "combination:SERVICE:N1-1-1:uz",
+    "combination:SERVICE:N1-1-1:uy",
+    "combination:SERVICE:N0-0-0:Fy",
+    "combination:SERVICE:C0-0-1:M2",
+    "combination:SERVICE:X0-0-1:M2",
+    "combination:SERVICE:X0-0-1:T"
+  ]
+}

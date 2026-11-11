@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-041",
+  "modelId": "M-INT-041",
+  "referenceKind": "native-opensees",
+  "method": "native-openseespy",
+  "solver": {
+    "module": "openseespy.opensees",
+    "version": "3.7.1",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "runnerSha256": "1519c55df3a55b7483a82794b8e2f789b2090e8e9153f37895c1d0157cb69f54",
+    "referenceIoSha256": "22066f2728b59482df3da98e4bed3bb8a81edfadfab351fb90d40cc11f436717",
+    "nativeModuleSha256": "b4c234a20c235bb4a8ed9f780a9ac2d5b2534c42ad499054882ba8c8e94bed1d",
+    "nativeBinaryModule": "openseespylinux.opensees",
+    "nativeBinarySha256": "b0985e344fb76d2f445c2b3046c37676aa02d8c632d66345a4bc927a56fee25f",
+    "openseespyPackageVersion": "3.7.1.2",
+    "openseespylinuxPackageVersion": "3.7.1.2"
+  },
+  "inputHashes": {
+    "contract.json": "105b41d039675c8896c6c37884b0ddba5f9ce92a9cf08d9eb6a9467b1c67fb4d",
+    "reference-requests.json": "5653b765895a33fa9cddad6a19af01258732277d7ef02f09a41c0056f2226e9a",
+    "model-state-1.json": "fa11b9418ef4fad968b9a4037cb33192589a8d3c81f12cc21f6dd51ffab6342c"
+  },
+  "sourceHash": "3502be5944393663463d7124fbaf5e762b2e12f2e0234b060ea7203522c9545e",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "105b41d039675c8896c6c37884b0ddba5f9ce92a9cf08d9eb6a9467b1c67fb4d"
+      },
+      {
+        "path": "input-t1.txt",
+        "sha256": "ddaa61340ce2d72932dac99048d29c70607a7100ff0c147263c479b758994ec9"
+      },
+      {
+        "path": "input-t2.txt",
+        "sha256": "96df8cf6c39c3301877dc45ba2fe15be84e156951a86891db0785009efeb76b7"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "fa11b9418ef4fad968b9a4037cb33192589a8d3c81f12cc21f6dd51ffab6342c"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "3301c4ae835670150e164a38ab55e64ba348800c3de114e5093f64290858857a"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "5653b765895a33fa9cddad6a19af01258732277d7ef02f09a41c0056f2226e9a"
+      }
+    ]
+  },
+  "sameEngineTruthStatus": "pending",
+  "nativeIndependentReview": "pending",
+  "llmEndToEnd": "not-run",
+  "nativeRole": "same-engine-candidate",
+  "warnings": [
+    "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+    "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+    "OpenSees results for a different planned engine are cross-engine diagnostics only."
+  ],
+  "checks": [
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        3.552713678800501e-15,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.4210854715202004e-14
+      ],
+      "balanceTolerance": [
+        2.01e-06,
+        1.0999999999999999e-07,
+        3.01e-06,
+        9.01e-06,
+        1.201e-05,
+        6.01e-06
+      ],
+      "freeResidual": 3.552713678800501e-15,
+      "equilibriumPassed": true,
+      "nativeNodes": 5,
+      "nativeElements": 8,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "loadIntegration": "Three-point Gauss native beamPoint loads; exact linear-load work at segment endpoints",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case:D:node:P:ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "P"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.355501046059071e-05
+        },
+        {
+          "id": "case:D:node:P:uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "P"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.353212852607759e-05
+        },
+        {
+          "id": "case:D:node:P:uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "P"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.0951956627995515e-05
+        },
+        {
+          "id": "case:D:node:A:Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 4.645159123447013
+        },
+        {
+          "id": "case:D:node:A:Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.96773868517052
+        },
+        {
+          "id": "case:D:node:A:Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.96773868517052
+        },
+        {
+          "id": "case:D:member:AB:0:right:N",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "AB",
+            "positionM": 0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        }
+      ],
+      "derived": [],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            3.552713678800501e-15,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -1.4210854715202004e-14
+          ],
+          "balanceTolerance": [
+            2.01e-06,
+            1.0999999999999999e-07,
+            3.01e-06,
+            9.01e-06,
+            1.201e-05,
+            6.01e-06
+          ],
+          "freeResidual": 3.552713678800501e-15,
+          "equilibriumPassed": true,
+          "nativeNodes": 5,
+          "nativeElements": 8,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "loadIntegration": "Three-point Gauss native beamPoint loads; exact linear-load work at segment endpoints",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "native-input-receipt.json",
+      "sha256": "edc7f83adcbac65a9547a32e56f7017cf79c9bc9c06ab094bf8d9c6457382924"
+    },
+    {
+      "path": "native-solver-receipt.json",
+      "sha256": "c9c6366ab2508a356b143b113cf8bc6d66303f0e9d0a5bbd59c5fd98c67af41f"
+    },
+    {
+      "path": "native-raw-responses.json",
+      "sha256": "3f22b5496221f150e341fb210a75edbf75de14fd75c343b3dcae1463b62c9192"
+    },
+    {
+      "path": "native-checks.json",
+      "sha256": "76583fabc85d77a44824d1474f4955d46d38b22ba761598ec08676092156aed1"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+Geometry is supplied only in geometry.png. Coordinate labels are (X,Z) in metres; all Y=0. Every node with Z=0 is fully fixed. Other nodes have only the inactive planar DOFs uy/rx/rz fixed. Member connectivity and properties come from the schedules, not from guessing line crossings. The drawing has no embedded text/coordinate metadata or SVG counterpart.
+几何只见附图；标注坐标为米。底层节点全固定，其余节点仅固定平面外自由度。杆件连接按构件表核对。

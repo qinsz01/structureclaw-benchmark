@@ -1,0 +1,63 @@
+{
+  "id": "STD-051",
+  "sourceTask": {
+    "id": "STD-051",
+    "family": "standard_workflow",
+    "baseGroup": "M-STD-051",
+    "title": "双坡门架局部上拔工况",
+    "subcategory": "局部上拔与斜梁组合",
+    "difficulty": "L3",
+    "difficultyReason": "坡向转换、局部上拔和工况叠加同时出现，任何符号误差都会改结果。",
+    "language": "中文",
+    "inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "turns": 1,
+    "scenario": "跨度18m、檐高6m、脊高7.5m，D全屋面向下，W只右坡向上，题定组合；完整属性按公共契约随题给出。 D两坡各向下6kN/m，W仅右坡向上8kN/m，按坡长；C0=D、C1=D+W。",
+    "modelingFocus": "坡梁方向、局部风区与组合",
+    "expectedOutput": "两组合屋脊位移、柱脚反力/弯矩、右坡端力，保留符号及组合标签。",
+    "gradingFocus": "坡梁方向、局部风区与组合；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "origin": "新增",
+    "oldPrimaryId": "无",
+    "oldSecondaryId": "无",
+    "reuseChange": "新增工程场景；母模型、提示词和真值均待建立。",
+    "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；逐工况独立框架解与线性叠加；按全局方向复核各坡荷载合力/力矩。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+    "prerequisite": "斜杆荷载与多组合需验证；完整题面、参数/单位契约与真值待验证",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "STD-051",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "当前为二维门架力学模型，采用 OpenSees，保留真实屋面/悬挑/边界。 本题重点：坡梁方向、局部风区与组合。",
+      "executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "两坡加载范围、有符号向上荷载与 D/D+W 组合须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+      "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；逐工况独立框架解与线性叠加；按全局方向复核各坡荷载合力/力矩。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+      "analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+      "requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-STD-051",
+    "taskId": "STD-051",
+    "structure": "门式刚架",
+    "dimension": "2D",
+    "difficulty": "L3",
+    "title": "双坡门架局部上拔工况",
+    "spec": "跨度18m、檐高6m、脊高7.5m，D全屋面向下，W只右坡向上，题定组合；完整属性按公共契约随题给出。 D两坡各向下6kN/m，W仅右坡向上8kN/m，按坡长；C0=D、C1=D+W。 边界：两个柱脚固定。",
+    "challenge": "坡梁方向、局部风区与组合",
+    "source": "无",
+    "prerequisite": "斜杆荷载与多组合需验证；完整题面、参数/单位契约与真值待验证",
+    "distinctness": "单层单跨对称双坡门架；两个柱脚固定；D两坡向下；W仅右坡向上；两组合；梁柱角色截面；单材料",
+    "topologyKey": "单层单跨对称双坡门架",
+    "boundaryKey": "两个柱脚固定",
+    "loadKey": "D两坡向下；W仅右坡向上；两组合",
+    "propertyKey": "梁柱角色截面；单材料"
+  },
+  "appendixDecisions": [
+    "Missing source material/section appendix completed with explicit solid-rectangle steel properties; this is an author decision, not a recovered source value or a numerical reference.",
+    "屋面梁采用B1，柱采用C1。位移向量补充约定为ux、uz、ry；右坡端力明确为平面内N、V3、M2，输出位置覆盖其两端。均布载荷按坡长，不按水平投影折算。"
+  ],
+  "reviewStatus": "author-inspected-independent-review-pending",
+  "native": "pending",
+  "inputBlindReview": "pending"
+}

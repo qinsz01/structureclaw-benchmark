@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-045",
+  "inputHashes": {
+    "contract.json": "1dc6b0f8e693f3977965a97968516d4b20e89c8aacf8948c5fd61967d061a70d",
+    "reference-requests.json": "9acee5c3a1f5646adc08fd20f48fbb9096e27e00392edad79df89e629cc097b1",
+    "model-state-1.json": "f7033db31a0bfb043a6845ae0825bef684db73f9888ae22e771cec45b0e0023f"
+  },
+  "sourceHash": "ca5bd703d27dbbf9adfde5642bcebb2109cfc6615fa02a72f6bc63d88a952615",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "1dc6b0f8e693f3977965a97968516d4b20e89c8aacf8948c5fd61967d061a70d"
+      },
+      {
+        "path": "geometry.json",
+        "sha256": "f500625781d99501b97cb43e26f40a9d15d9e569c212ed19aa6c338c3f7d5538"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "ee70e1c824f6bbeda0c6ecb981b2ff11b7289a4fd78b8267ffe142554062d7dd"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "f7033db31a0bfb043a6845ae0825bef684db73f9888ae22e771cec45b0e0023f"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "8dedb888a9dc1618806d660f65bbd9909ecdc87ae9d47ee591197e4ec14bb9bf"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "74d1e13f222396c4a8b2fa412dac6c4c4c4f4b59de03672f72b5dde7574d6c49"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "603567bb8fe008b397f1321bc9f655a7b647a1945a1ce735f4a916b6e9a17d6d"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "9acee5c3a1f5646adc08fd20f48fbb9096e27e00392edad79df89e629cc097b1"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 21,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "L",
+            "x": 0,
+            "y": 0,
+            "z": 7.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "M",
+            "x": 10.5,
+            "y": 0,
+            "z": 7.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "R",
+            "x": 21,
+            "y": 0,
+            "z": 7.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "CL",
+            "type": "column",
+            "nodes": [
+              "A",
+              "L"
+            ],
+            "material": "M1",
+            "section": "COLUMN"
+          },
+          {
+            "id": "CR",
+            "type": "column",
+            "nodes": [
+              "B",
+              "R"
+            ],
+            "material": "M1",
+            "section": "COLUMN"
+          },
+          {
+            "id": "RL",
+            "type": "beam",
+            "nodes": [
+              "L",
+              "M"
+            ],
+            "material": "M1",
+            "section": "ROOF"
+          },
+          {
+            "id": "RR",
+            "type": "beam",
+            "nodes": [
+              "M",
+              "R"
+            ],
+            "material": "M1",
+            "section": "ROOF"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "ROOF",
+            "name": "ROOF",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "COLUMN",
+            "name": "COLUMN",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "RL",
+                "wz": -8,
+                "start": 0.0,
+                "end": 10.5
+              },
+              {
+                "id": "D-2",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "RR",
+                "wz": -8,
+                "start": 0.0,
+                "end": 10.5
+              },
+              {
+                "id": "equipment",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "M",
+                "fz": -60.0
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "localAxes": "Local 1 points from the first listed node to the second; local 2 is global +Y; local 3 = local 1 cross local 2.",
+          "kinematics": "Euler-Bernoulli, axial and flexural deformation included; shear deformation excluded; no end releases.",
+          "inactiveDofs": [
+            "uy",
+            "rx",
+            "rz"
+          ]
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

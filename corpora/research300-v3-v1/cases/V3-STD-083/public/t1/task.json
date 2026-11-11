@@ -1,0 +1,106 @@
+{
+  "caseId": "V3-STD-083",
+  "turnId": "t1",
+  "family": "STD",
+  "designedLevel": "L4",
+  "engine": "OpenSees",
+  "kind": "project",
+  "title": "湖南新新线缆有限公司风电线缆项目可行性研究报告：1号分析子结构",
+  "instruction": "依据首轮完整工程资料建立物理模型、转换荷载并完成 task.json 的全部设计/分析要求。",
+  "sourceId": "SRC-CABLE-2010",
+  "answerFile": "answer.json",
+  "integration": "one-way",
+  "constraints": [
+    {
+      "id": "upperVertical",
+      "absoluteLimit": 0.007306,
+      "unit": "m",
+      "scope": "All secondary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryVertical",
+      "absoluteLimit": 0.0007873,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryLateral",
+      "absoluteLimit": 0.001451,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; max sqrt(ux^2+uy^2)"
+    },
+    {
+      "id": "primaryEndAction",
+      "absoluteLimit": 29.68,
+      "unit": "kN.m",
+      "scope": "All beam/column end cuts and M2/M3 components, or all axial bars when no beam/column exists; signed max-abs"
+    }
+  ],
+  "requirements": {
+    "upperSelections": [
+      {
+        "kind": "case",
+        "id": "D"
+      },
+      {
+        "kind": "case",
+        "id": "Q"
+      },
+      {
+        "kind": "case",
+        "id": "W"
+      }
+    ],
+    "primarySelections": [
+      {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      {
+        "kind": "combination",
+        "id": "WIND"
+      },
+      {
+        "kind": "combination",
+        "id": "REVERSE"
+      }
+    ],
+    "completeEnumerationRequired": false,
+    "gravityRecalculationRequired": true,
+    "oneWayTransfer": true
+  },
+  "report": [
+    "design",
+    "feasible",
+    "volume",
+    "metrics",
+    "transfers",
+    "jobIdsByModel"
+  ],
+  "attachments": [
+    "combinations.json",
+    "design-catalog.json",
+    "engineering-brief.md",
+    "interface-details.csv",
+    "load-units.json",
+    "load-zones.json",
+    "primary/connection-details.json",
+    "primary/construction-runs.csv",
+    "primary/grid-dimensions.csv",
+    "primary/joint-details.csv",
+    "primary/joint-locations.csv",
+    "primary/materials.json",
+    "primary/model-conventions.json",
+    "primary/section-families.json",
+    "source-basis.json",
+    "tool-contract.md",
+    "upper/connection-details.json",
+    "upper/construction-runs.csv",
+    "upper/grid-dimensions.csv",
+    "upper/joint-details.csv",
+    "upper/joint-locations.csv",
+    "upper/materials.json",
+    "upper/model-conventions.json",
+    "upper/section-families.json"
+  ]
+}

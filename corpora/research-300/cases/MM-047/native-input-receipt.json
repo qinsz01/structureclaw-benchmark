@@ -1,0 +1,360 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-047",
+  "inputHashes": {
+    "contract.json": "8bba6a099960ff7a41e11d0f71b4faaf2cb5d1e1105b9e0a28f69433b56c3613",
+    "reference-requests.json": "9c80460bda527120bcb8c1ec07d2fb589f434ae5d70ce0a7621a1accaa13a14c",
+    "model-state-1.json": "16ede03732274848a7fad4bd98f1fe3bbd77241e46de075e9e21a51567e15550"
+  },
+  "sourceHash": "e02b98b6025c4ccd15498e96d23287f3e6a60859da2beb5f536f4ab61d76a650",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "8bba6a099960ff7a41e11d0f71b4faaf2cb5d1e1105b9e0a28f69433b56c3613"
+      },
+      {
+        "path": "input.dxf",
+        "sha256": "228a62903e9b6dddceb4c04c5badede8ad2a2962eee2bba05fb0a80c34a7fa30"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "16ede03732274848a7fad4bd98f1fe3bbd77241e46de075e9e21a51567e15550"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "821e00e681039f51a9b386f3f9e93a815259093287b07e60d56fb04ce9523afa"
+      },
+      {
+        "path": "properties.txt",
+        "sha256": "90826d6d875c4fde567d5e73ab75cdd3ee0767f004bd250e2046533a6734ce6b"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "9c80460bda527120bcb8c1ec07d2fb589f434ae5d70ce0a7621a1accaa13a14c"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "BL",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "JL",
+            "x": 0,
+            "y": 0,
+            "z": 3,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "EL",
+            "x": 0,
+            "y": 0,
+            "z": 7,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "BR",
+            "x": 18,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "JR",
+            "x": 18,
+            "y": 0,
+            "z": 3,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "ER",
+            "x": 18,
+            "y": 0,
+            "z": 7,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "TL",
+            "x": 6,
+            "y": 0,
+            "z": 3,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "TR",
+            "x": 12,
+            "y": 0,
+            "z": 3,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "column_L_lower",
+            "type": "column",
+            "nodes": [
+              "BL",
+              "JL"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "column_L_upper",
+            "type": "column",
+            "nodes": [
+              "JL",
+              "EL"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "column_R_lower",
+            "type": "column",
+            "nodes": [
+              "BR",
+              "JR"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "column_R_upper",
+            "type": "column",
+            "nodes": [
+              "JR",
+              "ER"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "roof",
+            "type": "beam",
+            "nodes": [
+              "EL",
+              "ER"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "mezzanine_left",
+            "type": "beam",
+            "nodes": [
+              "JL",
+              "TL"
+            ],
+            "material": "M1",
+            "section": "B2"
+          },
+          {
+            "id": "mezzanine_right",
+            "type": "beam",
+            "nodes": [
+              "JR",
+              "TR"
+            ],
+            "material": "M1",
+            "section": "B2"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 700.0
+            },
+            "properties": {
+              "A": 0.21,
+              "Iy": 0.008574999999999998,
+              "Iz": 0.0015749999999999998,
+              "J": 0.004603782069970844
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "roof",
+                "start": 0.0,
+                "end": 18.0,
+                "wx": 0.0,
+                "wy": 0.0,
+                "wz": -6.0
+              },
+              {
+                "id": "D-2",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "mezzanine_left",
+                "start": 0.0,
+                "end": 6.0,
+                "wx": 0.0,
+                "wy": 0.0,
+                "wz": -4.0
+              },
+              {
+                "id": "D-3",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "mezzanine_right",
+                "start": 0.0,
+                "end": 6.0,
+                "wx": 0.0,
+                "wy": 0.0,
+                "wz": -8.0
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

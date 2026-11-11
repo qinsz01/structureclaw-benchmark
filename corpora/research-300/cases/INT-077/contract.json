@@ -1,0 +1,541 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "INT-077",
+  "modelId": "M-INT-077",
+  "family": "interactive_robustness",
+  "language": "中文",
+  "locale": "zh",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "文本3轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-077（变截面框架顶层左跨偏载）。T1建立M-INT-077；T2下层柱改附件650×650mm记录；T3仅顶层梁改附件B4。",
+    "task.modelingFocus": "楼层与构件组属性同步映射；荷载位置的独立状态保持",
+    "task.expectedOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "上层柱仍500×500；下层梁不跟随B4；几何和荷载不变；顶层15kN点力不随下柱或顶梁截面更新消失。",
+    "task.prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "三层各3.6m，柱线x=0/6/12m；各实际梁向下10kN/m。",
+    "model.boundaryKey": "所有柱脚面内三自由度固定",
+    "model.loadKey": "三层两跨6m，下层柱600×600、上层500×500mm，顶层梁截面另列；顶层左跨除基准线载外，x=3m处另向下15kN，其余顶层梁无此点力",
+    "model.propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz。",
+    "engine.adapterGap": "未逐题验收；前置检查项：基础工具，并核对跨分组连续更新后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+    "engine.truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。"
+  },
+  "modelStates": [
+    "model-state-1.json",
+    "model-state-2.json",
+    "model-state-3.json"
+  ],
+  "attachments": [
+    "input-t1.json"
+  ],
+  "turns": [
+    {
+      "instruction": "建立并分析三层两跨混凝土框架。首层柱600×600mm、以上两层柱500×500mm，顶层梁按B3；每根实际梁向下10kN/m，顶层左跨x=3m处连通节点另向下15kN。附件还列出后续可用完整截面记录。分别报告每个原始工况及每个明示组合的最高层最右梁柱节点全局Ux/Uz、最左首层柱底全局支反力矩My及竖向支反力Rz（即Fz），保留正负号和单位。\n每个可计算的新状态使用题定OpenSees引擎进行一阶线弹性分析；自重、P-delta、刚性楼板、刚域及施工阶段关闭。未明确更改的字段保持。每个数值附节点或构件、全局方向、单位、工况或组合、轮次、模型状态与可追溯运行ID。Rz表示竖向支反力Fz。保留原工况并分别计算所有明示组合。关键缺项或矛盾解决前不得编造新数值。",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-t1.json"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "id": "t1",
+      "requiredOutputIds": [
+        "s1--case-D--n2-3--ux",
+        "s1--case-D--n2-3--uz",
+        "s1--case-D--n0-0--My",
+        "s1--case-D--n0-0--Fz",
+        "t1-interaction"
+      ],
+      "requiredQuantityIds": [
+        "case-D--n2-3--ux",
+        "case-D--n2-3--uz",
+        "case-D--n0-0--My",
+        "case-D--n0-0--Fz"
+      ]
+    },
+    {
+      "instruction": "仅把下层柱（地面至首层，c0-1/c1-1/c2-1）截面改为附件C-new的650×650mm记录并重新分析。上层柱、全部梁、几何和荷载保持。分别报告每个原始工况及每个明示组合的最高层最右梁柱节点全局Ux/Uz、最左首层柱底全局支反力矩My及竖向支反力Rz（即Fz），保留正负号和单位。",
+      "state": 2,
+      "expectation": "analyze",
+      "attachments": [],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "id": "t2",
+      "changedFields": [
+        "/elements/0/section",
+        "/elements/1/section",
+        "/elements/2/section"
+      ],
+      "preservedFields": [
+        "/schema_version",
+        "/unit_system",
+        "/coordinate_system",
+        "/nodes",
+        "/materials",
+        "/sections",
+        "/load_cases",
+        "/load_combinations",
+        "/analysis_control",
+        "/metadata"
+      ],
+      "requiredOutputIds": [
+        "s2--case-D--n2-3--ux",
+        "s2--case-D--n2-3--uz",
+        "s2--case-D--n0-0--My",
+        "s2--case-D--n0-0--Fz",
+        "t2-interaction"
+      ],
+      "requiredQuantityIds": [
+        "case-D--n2-3--ux",
+        "case-D--n2-3--uz",
+        "case-D--n0-0--My",
+        "case-D--n0-0--Fz"
+      ]
+    },
+    {
+      "instruction": "在当前状态基础上，仅将顶层梁截面改为附件B4完整记录，包括顶层左跨的两个连通梁段。下层柱保持上轮650×650mm，上层柱仍500×500mm，下层梁及全部荷载保持。分别报告每个原始工况及每个明示组合的最高层最右梁柱节点全局Ux/Uz、最左首层柱底全局支反力矩My及竖向支反力Rz（即Fz），保留正负号和单位。",
+      "state": 3,
+      "expectation": "analyze",
+      "attachments": [],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "id": "t3",
+      "changedFields": [
+        "/elements/13/section",
+        "/elements/14/section",
+        "/elements/15/section"
+      ],
+      "preservedFields": [
+        "/schema_version",
+        "/unit_system",
+        "/coordinate_system",
+        "/nodes",
+        "/materials",
+        "/sections",
+        "/load_cases",
+        "/load_combinations",
+        "/analysis_control",
+        "/metadata"
+      ],
+      "requiredOutputIds": [
+        "s3--case-D--n2-3--ux",
+        "s3--case-D--n2-3--uz",
+        "s3--case-D--n0-0--My",
+        "s3--case-D--n0-0--Fz",
+        "t3-interaction"
+      ],
+      "requiredQuantityIds": [
+        "case-D--n2-3--ux",
+        "case-D--n2-3--uz",
+        "case-D--n0-0--My",
+        "case-D--n0-0--Fz"
+      ]
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "s1--case-D--n2-3--ux",
+      "description": "case D: n2-3 ux [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n2-3--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n2-3--uz",
+      "description": "case D: n2-3 uz [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n2-3--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n0-0--My",
+      "description": "case D: n0-0 My [kN.m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n0-0--Fz",
+      "description": "case D: n0-0 Fz [kN]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n2-3--ux",
+      "description": "case D: n2-3 ux [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n2-3--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n2-3--uz",
+      "description": "case D: n2-3 uz [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n2-3--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n0-0--My",
+      "description": "case D: n0-0 My [kN.m]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n0-0--Fz",
+      "description": "case D: n0-0 Fz [kN]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s3--case-D--n2-3--ux",
+      "description": "case D: n2-3 ux [m]",
+      "state": 3,
+      "quantityIds": [
+        "case-D--n2-3--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s3--case-D--n2-3--uz",
+      "description": "case D: n2-3 uz [m]",
+      "state": 3,
+      "quantityIds": [
+        "case-D--n2-3--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s3--case-D--n0-0--My",
+      "description": "case D: n0-0 My [kN.m]",
+      "state": 3,
+      "quantityIds": [
+        "case-D--n0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s3--case-D--n0-0--Fz",
+      "description": "case D: n0-0 Fz [kN]",
+      "state": 3,
+      "quantityIds": [
+        "case-D--n0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "t1-interaction",
+      "description": "建立并分析三层两跨混凝土框架。首层柱600×600mm、以上两层柱500×500mm，顶层梁按B3；每根实际梁向下10kN/m，顶层左跨x=3m处连通节点另向下15kN。附件还列出后续可用完整截面记录。分别报告每个原始工况及每个明示组合的最高层最右梁柱节点全局Ux/Uz、最左首层柱底全局支反力矩My及竖向支反力Rz（即Fz），保留正负号和单位。\n每个可计算的新状态使用题定OpenSees引擎进行一阶线弹性分析；自重、P-delta、刚性楼板、刚域及施工阶段关闭。未明确更改的字段保持。每个数值附节点或构件、全局方向、单位、工况或组合、轮次、模型状态与可追溯运行ID。Rz表示竖向支反力Fz。保留原工况并分别计算所有明示组合。关键缺项或矛盾解决前不得编造新数值。",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "interaction"
+    },
+    {
+      "id": "t2-interaction",
+      "description": "仅把下层柱（地面至首层，c0-1/c1-1/c2-1）截面改为附件C-new的650×650mm记录并重新分析。上层柱、全部梁、几何和荷载保持。分别报告每个原始工况及每个明示组合的最高层最右梁柱节点全局Ux/Uz、最左首层柱底全局支反力矩My及竖向支反力Rz（即Fz），保留正负号和单位。",
+      "state": 2,
+      "quantityIds": [],
+      "kind": "interaction"
+    },
+    {
+      "id": "t3-interaction",
+      "description": "在当前状态基础上，仅将顶层梁截面改为附件B4完整记录，包括顶层左跨的两个连通梁段。下层柱保持上轮650×650mm，上层柱仍500×500mm，下层梁及全部荷载保持。分别报告每个原始工况及每个明示组合的最高层最右梁柱节点全局Ux/Uz、最左首层柱底全局支反力矩My及竖向支反力Rz（即Fz），保留正负号和单位。",
+      "state": 3,
+      "quantityIds": [],
+      "kind": "interaction"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        6,
+        7
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        8,
+        9,
+        10
+      ],
+      "targets": [
+        "output:s1--case-D--n2-3--ux",
+        "output:s1--case-D--n2-3--uz",
+        "output:s1--case-D--n0-0--My",
+        "output:s1--case-D--n0-0--Fz",
+        "output:s2--case-D--n2-3--ux",
+        "output:s2--case-D--n2-3--uz",
+        "output:s2--case-D--n0-0--My",
+        "output:s2--case-D--n0-0--Fz",
+        "output:s3--case-D--n2-3--ux",
+        "output:s3--case-D--n2-3--uz",
+        "output:s3--case-D--n0-0--My",
+        "output:s3--case-D--n0-0--Fz",
+        "output:t1-interaction",
+        "output:t2-interaction",
+        "output:t3-interaction",
+        "gate:report-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        15,
+        16
+      ],
+      "targets": [
+        "gate:adapter-capability-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        17,
+        18
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        19
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        20,
+        21
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        22,
+        23
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "turn:t3",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        31,
+        32,
+        33,
+        34
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "targets": [
+        "gate:native-execution",
+        "gate:state-preservation",
+        "gate:report-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        40,
+        41,
+        42
+      ],
+      "targets": [
+        "gate:adapter-capability-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        43,
+        44,
+        45
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending",
+      "description": "Execute the named engine independently for each changed computable state and each selection; retain software version, settings, native input, run ID, successful log and raw result mapping."
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending",
+      "description": "Generate and independently review same-engine reference values; check equilibrium, signs, units and stiffness without importing the SUT path."
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending",
+      "description": "Independently reconstruct each turn from only its released public input and verify original source requirements."
+    },
+    {
+      "id": "state-preservation",
+      "status": "pending",
+      "description": "Verify target field changes, all non-target fields, undo equivalence and query-only state identity."
+    },
+    {
+      "id": "adapter-capability-review",
+      "status": "pending",
+      "description": "Exercise this case topology, loads, coordinates and selected engine; support in principle is not evidence of adapter acceptance."
+    },
+    {
+      "id": "report-completeness",
+      "status": "pending",
+      "description": "Check signed quantities in the report body, locations, directions, units, selections and current turn against structured artifacts."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run"
+}

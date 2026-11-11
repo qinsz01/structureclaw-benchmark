@@ -1,0 +1,76 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "C30",
+      "type": "concrete",
+      "E": 30000,
+      "G": 12500,
+      "nu": 0.2,
+      "rho": 2500
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 450.0,
+        "H": 450.0
+      },
+      "properties": {
+        "A": 0.2025,
+        "Iy": 0.0034171875000000005,
+        "Iz": 0.0034171875000000005,
+        "J": 0.005775046875000001
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows the thin arrow on each drawn member from first to second end",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "C30 is elastic with E=30000 MPa, nu=0.20, G=12500 MPa and rho=2500 kg/m3. C1 is the specified solid 450 by 450 mm square; use the tabulated A/I/J without stiffness reductions.",
+    "Use planar XZ analysis with ux, uz and ry active. Constraints on uy, rx and rz enforce the plane only. An X-only support symbol restrains ux while leaving uz and ry free."
+  ],
+  "planarConstraints": "All nodes restrain uy, rx, rz. In-plane ux, uz, ry restraints follow the support symbols; unmarked in-plane DOFs are free."
+}

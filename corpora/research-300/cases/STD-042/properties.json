@@ -1,0 +1,278 @@
+{
+  "units": {
+    "E": "MPa",
+    "G": "MPa",
+    "rho": "kg/m3",
+    "shape": "mm",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4"
+  },
+  "coordinate_system": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "CHORD",
+      "name": "CHORD",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 80.0,
+        "H": 80.0
+      },
+      "properties": {
+        "A": 0.0064,
+        "Iy": 3.413333333333334e-06,
+        "Iz": 3.413333333333334e-06,
+        "J": 5.768533333333335e-06
+      }
+    },
+    {
+      "id": "HORIZONTAL",
+      "name": "HORIZONTAL",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 70.0,
+        "H": 70.0
+      },
+      "properties": {
+        "A": 0.004900000000000001,
+        "Iy": 2.0008333333333342e-06,
+        "Iz": 2.0008333333333342e-06,
+        "J": 3.3814083333333346e-06
+      }
+    },
+    {
+      "id": "DIAGONAL",
+      "name": "DIAGONAL",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 60.0,
+        "H": 60.0
+      },
+      "properties": {
+        "A": 0.0036,
+        "Iy": 1.0799999999999998e-06,
+        "Iz": 1.0799999999999998e-06,
+        "J": 1.8251999999999997e-06
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "load_combinations": [],
+  "localAxes": {
+    "elementReferenceVectors": {
+      "CH1": [
+        1,
+        0,
+        0
+      ],
+      "CH2": [
+        1,
+        0,
+        0
+      ],
+      "CH3": [
+        1,
+        0,
+        0
+      ],
+      "CH4": [
+        1,
+        0,
+        0
+      ],
+      "CH5": [
+        1,
+        0,
+        0
+      ],
+      "CH6": [
+        1,
+        0,
+        0
+      ],
+      "H1": [
+        0,
+        0,
+        1
+      ],
+      "H2": [
+        0,
+        0,
+        1
+      ],
+      "H3": [
+        0,
+        0,
+        1
+      ],
+      "H4": [
+        0,
+        0,
+        1
+      ],
+      "H5": [
+        0,
+        0,
+        1
+      ],
+      "H6": [
+        0,
+        0,
+        1
+      ],
+      "H7": [
+        0,
+        0,
+        1
+      ],
+      "H8": [
+        0,
+        0,
+        1
+      ],
+      "H9": [
+        0,
+        0,
+        1
+      ],
+      "D1": [
+        0,
+        0,
+        1
+      ],
+      "D2": [
+        0,
+        0,
+        1
+      ],
+      "D3": [
+        0,
+        0,
+        1
+      ],
+      "D4": [
+        0,
+        0,
+        1
+      ],
+      "D5": [
+        0,
+        0,
+        1
+      ],
+      "D6": [
+        0,
+        0,
+        1
+      ],
+      "D7": [
+        0,
+        0,
+        1
+      ],
+      "D8": [
+        0,
+        0,
+        1
+      ],
+      "D9": [
+        0,
+        0,
+        1
+      ],
+      "D10": [
+        0,
+        0,
+        1
+      ],
+      "D11": [
+        0,
+        0,
+        1
+      ],
+      "D12": [
+        0,
+        0,
+        1
+      ]
+    },
+    "memberGroups": {
+      "inter-level-chords": [
+        "CH1",
+        "CH2",
+        "CH3",
+        "CH4",
+        "CH5",
+        "CH6"
+      ],
+      "horizontal-ties": [
+        "H1",
+        "H2",
+        "H3",
+        "H4",
+        "H5",
+        "H6",
+        "H7",
+        "H8",
+        "H9"
+      ],
+      "inter-level-diagonals": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8",
+        "D9",
+        "D10",
+        "D11",
+        "D12"
+      ]
+    },
+    "inactiveDofs": [
+      "rx",
+      "ry",
+      "rz"
+    ],
+    "crossingConnectivity": "Members connect only at listed endpoints; all diagonal X crossings are unconnected."
+  },
+  "analysis": "first-order linear elastic Euler-Bernoulli frame and axial-only truss",
+  "restraintConvention": "[ux,uy,uz,rx,ry,rz]; true = zero prescribed displacement; false = free active DOF; planar inactive DOFs and truss rotations are explicitly suppressed",
+  "sectionRollConvention": "ey_new=cos(theta)*ey+sin(theta)*ez; ez_new=-sin(theta)*ey+cos(theta)*ez; theta in degrees about i-to-j"
+}

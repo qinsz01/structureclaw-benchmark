@@ -1,0 +1,86 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "C40",
+      "name": "C40",
+      "type": "concrete",
+      "E": 32500,
+      "G": 13541.666666666668,
+      "nu": 0.2,
+      "rho": 2500
+    },
+    {
+      "id": "C30",
+      "name": "C30",
+      "type": "concrete",
+      "E": 30000,
+      "G": 12500,
+      "nu": 0.2,
+      "rho": 2500
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 400.0,
+        "H": 400.0
+      },
+      "properties": {
+        "A": 0.16000000000000003,
+        "Iy": 0.002133333333333334,
+        "Iz": 0.002133333333333334,
+        "J": 0.0036053333333333345
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows the thin arrow on each drawn member from first to second end",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "C40：E=32500 MPa；C30：E=30000 MPa。两材料均取 ν=0.20、ρ=2500 kg/m³，G=E/[2(1+ν)]。这些是本题给定线弹性输入，不采用自动开裂或刚度折减。",
+    "C1 为 400×400 mm 实心正方形，完整 A/I/J 见截面表。平面分析保留 X、Z 平移和 Ry，其他自由度仅作平面外约束。",
+    "轴力 N 取 lower 首端构件内侧，拉为正、压为负。"
+  ],
+  "planarConstraints": "All nodes restrain uy, rx, rz. In-plane ux, uz, ry restraints follow the support symbols; unmarked in-plane DOFs are free."
+}

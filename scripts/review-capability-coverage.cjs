@@ -1,6 +1,7 @@
 const fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto');
 const {annotateCoverage}=require('../lib/requirement-semantics.cjs');
-const file=path.join(__dirname,'../planning/capability-coverage-300.json');
+// Reconcile only the current projection; retain the approved source archive.
+const file=path.join(__dirname,'../planning/benchmark-plan.json');
 const registry=path.join(__dirname,'../analysis-capabilities.json');
 const coverage=JSON.parse(fs.readFileSync(file,'utf8')),definitions=JSON.parse(fs.readFileSync(registry,'utf8'));
 coverage.modelProtocol=definitions.modelProtocol;

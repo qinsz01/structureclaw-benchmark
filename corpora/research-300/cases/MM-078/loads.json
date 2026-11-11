@@ -1,0 +1,87 @@
+{
+  "units": "forces kN; moments kN*m; line loads kN/m of actual member length; positions m from first end; global axes",
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b0-1",
+          "wz": -10
+        },
+        {
+          "id": "D-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b0-2",
+          "wz": -8
+        },
+        {
+          "id": "D-3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b0-3",
+          "wz": -6
+        },
+        {
+          "id": "D-4",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "cant",
+          "wz": -4
+        }
+      ]
+    },
+    {
+      "id": "W+",
+      "type": "wind",
+      "loads": [
+        {
+          "id": "W+-1",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "tip",
+          "fx": 20
+        }
+      ]
+    },
+    {
+      "id": "W-",
+      "type": "wind",
+      "loads": [
+        {
+          "id": "W--1",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "tip",
+          "fx": -20
+        }
+      ]
+    }
+  ],
+  "load_combinations": [
+    {
+      "id": "D",
+      "factors": {
+        "D": 1
+      }
+    },
+    {
+      "id": "D+W+",
+      "factors": {
+        "D": 1,
+        "W+": 1
+      }
+    },
+    {
+      "id": "D+W-",
+      "factors": {
+        "D": 1,
+        "W-": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "caseId": "V3-INT-072",
+  "turnId": "t2",
+  "family": "INT",
+  "designedLevel": "L4",
+  "engine": "OpenSees",
+  "kind": "project",
+  "title": "多跨裸框架：构造29",
+  "instruction": "调整使用分区：仅 Q 改为 X=9.45 m 分界，西/东面压比 2.15，总活荷载仍为 205.903125 kN。根据受荷几何重新分配，不提供接收节点或构件荷载。原 D、W、自重和所有结构输入保留。",
+  "sourceId": null,
+  "answerFile": "answer.json",
+  "integration": "one-way",
+  "constraints": [
+    {
+      "id": "upperVertical",
+      "absoluteLimit": 0.0172,
+      "unit": "m",
+      "scope": "All secondary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryVertical",
+      "absoluteLimit": 0.0001669,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryLateral",
+      "absoluteLimit": 0.0001633,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; max sqrt(ux^2+uy^2)"
+    },
+    {
+      "id": "primaryEndAction",
+      "absoluteLimit": 24.61,
+      "unit": "kN.m",
+      "scope": "All beam/column end cuts and M2/M3 components, or all axial bars when no beam/column exists; signed max-abs"
+    }
+  ],
+  "requirements": {
+    "upperSelections": [
+      {
+        "kind": "case",
+        "id": "D"
+      },
+      {
+        "kind": "case",
+        "id": "Q"
+      },
+      {
+        "kind": "case",
+        "id": "W"
+      }
+    ],
+    "primarySelections": [
+      {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      {
+        "kind": "combination",
+        "id": "WIND"
+      },
+      {
+        "kind": "combination",
+        "id": "REVERSE"
+      }
+    ],
+    "completeEnumerationRequired": false,
+    "gravityRecalculationRequired": true,
+    "oneWayTransfer": true
+  },
+  "report": [
+    "design",
+    "feasible",
+    "volume",
+    "metrics",
+    "transfers",
+    "jobIdsByModel"
+  ],
+  "attachments": [
+    "engineering-revision.md"
+  ]
+}

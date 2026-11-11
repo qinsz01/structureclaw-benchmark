@@ -1,0 +1,548 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "dimension": "2d",
+      "plane": "xz",
+      "semantics": "global-z-up",
+      "version": 1,
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "N0-0",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N1-0",
+        "x": 5.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N2-0",
+        "x": 10.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N0-1",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "mass": 5.35
+      },
+      {
+        "id": "N1-1",
+        "x": 5.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "mass": 5.7
+      },
+      {
+        "id": "N2-1",
+        "x": 10.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "mass": 6.05
+      },
+      {
+        "id": "H1",
+        "x": 2.5,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "mass": 6.4
+      }
+    ],
+    "elements": [
+      {
+        "id": "C0-1",
+        "type": "column",
+        "nodes": [
+          "N0-0",
+          "N0-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C1-1",
+        "type": "column",
+        "nodes": [
+          "N1-0",
+          "N1-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C2-1",
+        "type": "column",
+        "nodes": [
+          "N2-0",
+          "N2-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "B0-1a",
+        "type": "beam",
+        "nodes": [
+          "N0-1",
+          "H1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "B0-1b",
+        "type": "beam",
+        "nodes": [
+          "H1",
+          "N1-1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "V1a",
+        "type": "truss",
+        "nodes": [
+          "N0-0",
+          "H1"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "V1b",
+        "type": "truss",
+        "nodes": [
+          "N1-0",
+          "H1"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "B1-1",
+        "type": "beam",
+        "nodes": [
+          "N1-1",
+          "N2-1"
+        ],
+        "material": "S",
+        "section": "B"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "B",
+        "name": "B",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 220.0,
+          "H": 280.0
+        },
+        "properties": {
+          "A": 0.06160000000000001,
+          "Iy": 0.0004024533333333335,
+          "Iz": 0.00024845333333333336,
+          "J": 0.000517499558479106
+        }
+      },
+      {
+        "id": "C",
+        "name": "C",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 295.0,
+          "H": 360.0
+        },
+        "properties": {
+          "A": 0.10619999999999999,
+          "Iy": 0.0011469599999999998,
+          "Iz": 0.0007701712499999999,
+          "J": 0.0015500404859863674
+        }
+      },
+      {
+        "id": "A",
+        "name": "A",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 90.0,
+          "H": 80.0
+        },
+        "properties": {
+          "A": 0.0072,
+          "Iy": 3.8400000000000005e-06,
+          "Iz": 4.86e-06,
+          "J": 7.205894711172076e-06
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "id": "D-1",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "B0-1a",
+            "wz": -8.0
+          },
+          {
+            "id": "D-2",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "B0-1b",
+            "wz": -8.0
+          },
+          {
+            "id": "D-3",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "B1-1",
+            "wz": -8.0
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "id": "Q-1",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "B0-1a",
+            "wz": -5.0
+          },
+          {
+            "id": "Q-2",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "B1-1",
+            "wz": -5.0
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "id": "W-1",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "N0-1",
+            "fx": 6.0
+          },
+          {
+            "id": "W-2",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "N1-1",
+            "fx": 6.0
+          },
+          {
+            "id": "W-3",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "N2-1",
+            "fx": 6.0
+          },
+          {
+            "id": "W-4",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "H1",
+            "fx": 6.0
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "SERVICE",
+        "factors": {
+          "D": 1.0,
+          "Q": 1.0
+        }
+      },
+      {
+        "id": "REVERSE",
+        "factors": {
+          "D": 1.0,
+          "W": -1.0
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false,
+      "mass_source": "nodal",
+      "mass_directions": [
+        "x"
+      ]
+    },
+    "metadata": {}
+  },
+  "kind": "modal",
+  "engine": "OpenSees",
+  "derived": [],
+  "parameters": {
+    "analysisType": "modal",
+    "numModes": 2,
+    "direction": "x"
+  },
+  "requireShapes": true,
+  "requests": [
+    {
+      "id": "mode-1-period",
+      "path": [
+        "modes",
+        0,
+        "period"
+      ],
+      "unit": "s",
+      "value": 0.048432090388821694,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-1-frequency",
+      "path": [
+        "modes",
+        0,
+        "frequency"
+      ],
+      "unit": "Hz",
+      "value": 20.647467246856717,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-1-effectiveMass",
+      "path": [
+        "modes",
+        0,
+        "effectiveMass"
+      ],
+      "unit": "tonne",
+      "value": 23.491862652936042,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-period",
+      "path": [
+        "modes",
+        1,
+        "period"
+      ],
+      "unit": "s",
+      "value": 0.009957427054634888,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-frequency",
+      "path": [
+        "modes",
+        1,
+        "frequency"
+      ],
+      "unit": "Hz",
+      "value": 100.42754965847624,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-effectiveMass",
+      "path": [
+        "modes",
+        1,
+        "effectiveMass"
+      ],
+      "unit": "tonne",
+      "value": 0.007151080910894766,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    }
+  ],
+  "clarificationFields": [],
+  "referenceChecks": [
+    {
+      "method": "independent-condensed-K-M",
+      "totalMass": 23.5,
+      "effectiveMassSum": 23.500000000000004,
+      "firstPeriods": [
+        0.048432090388821694,
+        0.009957427054634888
+      ]
+    }
+  ],
+  "modalTruth": {
+    "shape": {
+      "N0-0": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "N1-0": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "N2-0": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "N0-1": [
+        -0.2041436446517079,
+        -0.23031939258082598,
+        0.2534569085574513,
+        -0.16719399841048
+      ],
+      "N1-1": [
+        -0.20669809723274069,
+        0.02009118754184751,
+        -0.2916322138523599,
+        -0.2173970770694085
+      ],
+      "N2-1": [
+        -0.21212346372456742,
+        0.3140102029544643,
+        0.14148042008589978,
+        0.040911801581607746
+      ],
+      "H1": [
+        -0.2020540426305402,
+        -0.13541200164072267,
+        -0.08876888917642942,
+        0.29867681192669027
+      ]
+    },
+    "masses": {
+      "N0-0": 0,
+      "N1-0": 0,
+      "N2-0": 0,
+      "N0-1": 5.35,
+      "N1-1": 5.7,
+      "N2-1": 6.05,
+      "H1": 6.4
+    }
+  },
+  "reportIds": [
+    "mode-1-period",
+    "mode-1-frequency",
+    "mode-1-effectiveMass",
+    "mode-2-period",
+    "mode-2-frequency",
+    "mode-2-effectiveMass"
+  ]
+}

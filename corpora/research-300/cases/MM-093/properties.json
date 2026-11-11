@@ -1,0 +1,108 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 350.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.175,
+        "Iy": 0.003645833333333333,
+        "Iz": 0.0017864583333333328,
+        "J": 0.0040575733442708315
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 250.0,
+        "H": 450.0
+      },
+      "properties": {
+        "A": 0.1125,
+        "Iy": 0.0018984375000000002,
+        "Iz": 0.0005859375,
+        "J": 0.0015299494051021186
+      }
+    },
+    {
+      "id": "A1",
+      "name": "A1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 60.0,
+        "H": 60.0
+      },
+      "properties": {
+        "A": 0.0036,
+        "Iy": 1.0799999999999998e-06,
+        "Iz": 1.0799999999999998e-06,
+        "J": 1.8251999999999997e-06
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows the thin arrow on each drawn member from first to second end",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "M1：E=206000 MPa、ν=0.30、G=E/[2(1+ν)]、ρ=7850 kg/m³。实心矩形 C1=350×500 mm、B1=250×450 mm、A1=60×60 mm；A1 仅取 EA 轴向刚度。",
+    "轴力支撑只传递拉压轴力，端部不传弯矩；图中交叉不连接符号必须保留，不能以投影相交创建节点。",
+    "梁柱局部 1 轴沿首节点至末节点，2=(r×1)/|r×1|，3=1×2；柱 r=+X、梁 r=+Z。首层前侧两根支撑均需分别报告 N。"
+  ]
+}

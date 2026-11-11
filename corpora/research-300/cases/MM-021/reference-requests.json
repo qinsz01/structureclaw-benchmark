@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case-D:n1:uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "case-D:b1:V3@3:left",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "b1",
+            "positionM": 3,
+            "side": "left"
+          },
+          "component": "V3",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "case-D:b2:V3@0:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "b2",
+            "positionM": 0,
+            "side": "right"
+          },
+          "component": "V3",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "case-D:b1:M2@0:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "b1",
+            "positionM": 0,
+            "side": "right"
+          },
+          "component": "M2",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        }
+      ],
+      "derived": [
+        {
+          "id": "case-D:shear-jump-at-n1",
+          "operation": "difference",
+          "operands": [
+            "case-D:b2:V3@0:right",
+            "case-D:b1:V3@3:left"
+          ],
+          "unit": "kN",
+          "description": "首跨集中力点右侧V3减左侧V3，保留符号。"
+        }
+      ]
+    }
+  ]
+}

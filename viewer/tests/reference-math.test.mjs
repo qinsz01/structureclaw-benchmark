@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ts from 'typescript';
+import { legacyReference as reference, referenceIds } from './legacy-reference-fixture.mjs';
 
 const source = fs.readFileSync(new URL('../src/reference-math.ts', import.meta.url), 'utf8');
 const js = ts.transpileModule(source, {
@@ -10,8 +11,6 @@ const js = ts.transpileModule(source, {
 const { beamCheck, referenceResult, memberMoment } = await import(
   `data:text/javascript;base64,${Buffer.from(js).toString('base64')}`
 );
-const reference = (id) =>
-  JSON.parse(fs.readFileSync(new URL(`../public/data/models/${id}.json`, import.meta.url)));
 
 test('simple beam reproduces signed deflection, reactions and equilibrium without changing input', () => {
   const r = reference('beam-simple-6m'),
@@ -77,8 +76,8 @@ test('engine gating never borrows numerical results and incomplete moments stay 
 });
 test('all eligible frozen models agree at comparable analytical control locations', () => {
   let count = 0;
-  for (const file of fs.readdirSync(new URL('../public/data/models/', import.meta.url))) {
-    const r = reference(file.replace('.json', '')),
+  for (const id of referenceIds) {
+    const r = reference(id),
       c = beamCheck(r);
     if (!c) continue;
     count++;

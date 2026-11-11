@@ -1,3 +1,4 @@
+import { exactJson } from './research-response';
 const base = new URL('./data/', document.baseURI).href;
 export const dataUrl = (path: string) => base + path;
 const cache = new Map<string, Promise<unknown>>();
@@ -18,9 +19,7 @@ export function fetchData<T>(path: string): Promise<T> {
   return cache.get(path) as Promise<T>;
 }
 export function downloadJson(value: unknown, name: string) {
-  const url = URL.createObjectURL(
-    new Blob([JSON.stringify(value, null, 2)], { type: 'application/json' }),
-  );
+  const url = URL.createObjectURL(new Blob([exactJson(value, 2)], { type: 'application/json' }));
   const link = document.createElement('a');
   link.href = url;
   link.download = name;

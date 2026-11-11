@@ -1,0 +1,10 @@
+RECTANGULAR COLUMN ORIENTATION APPENDIX
+All axes below are global XYZ unit vectors. Positive roll angles are in degrees.
+For every member, local x points from the first listed node to the second.
+At zero roll in the XZ plane, local y=(0,1,0) and local z=local x cross local y.
+Roll theta transforms y_new=cos(theta)*y+sin(theta)*z and z_new=-sin(theta)*y+cos(theta)*z.
+Both column lines use the identical CR section: B=350 mm along local y, H=500 mm along local z; A=0.175 m^2, Iy=0.003645833333333333 m^4, Iz=0.001786458333333333 m^4. J is listed in input-data.json.
+Left columns c0-1 and c0-2: roll=0; x=(0,0,1), y=(0,1,0), z=(-1,0,0). Planar bending uses Iy about local y (strong axis); global My equals local M2.
+Right columns c1-1 and c1-2: roll=90; x=(0,0,1), y=(-1,0,0), z=(0,-1,0). Planar bending uses Iz about local z (weak axis); global My equals minus local M3.
+Beams b0-1 and b0-2: roll=0; x=(1,0,0), y=(0,1,0), z=(0,0,1).
+Report both local M2 and M3 at both ends of every column and identify the nonzero in-plane component. Moment signs follow the cut convention in the general analysis appendix. No extra nodal couple is applied.

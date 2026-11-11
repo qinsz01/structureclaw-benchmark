@@ -1,0 +1,696 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "dimension": "2d",
+      "plane": "xz",
+      "semantics": "global-z-up",
+      "version": 1,
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "J001",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "J002",
+        "x": 5.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "J003",
+        "x": 10.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "J004",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "J005",
+        "x": 5.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "J006",
+        "x": 10.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "J007",
+        "x": 12.2,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "M001",
+        "type": "column",
+        "nodes": [
+          "J001",
+          "J004"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "M002",
+        "type": "column",
+        "nodes": [
+          "J002",
+          "J005"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "M003",
+        "type": "column",
+        "nodes": [
+          "J003",
+          "J006"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "M004",
+        "type": "beam",
+        "nodes": [
+          "J004",
+          "J005"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "M005",
+        "type": "beam",
+        "nodes": [
+          "J005",
+          "J006"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "M006",
+        "type": "beam",
+        "nodes": [
+          "J006",
+          "J007"
+        ],
+        "material": "S",
+        "section": "B"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "B",
+        "name": "B",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 220.0,
+          "H": 280.0
+        },
+        "properties": {
+          "A": 0.06160000000000001,
+          "Iy": 0.0004024533333333335,
+          "Iz": 0.00024845333333333336,
+          "J": 0.000517499558479106
+        }
+      },
+      {
+        "id": "C",
+        "name": "C",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 295.0,
+          "H": 360.0
+        },
+        "properties": {
+          "A": 0.10619999999999999,
+          "Iy": 0.0011469599999999998,
+          "Iz": 0.0007701712499999999,
+          "J": 0.0015500404859863674
+        }
+      },
+      {
+        "id": "A",
+        "name": "A",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 90.0,
+          "H": 80.0
+        },
+        "properties": {
+          "A": 0.0072,
+          "Iy": 3.8400000000000005e-06,
+          "Iz": 4.86e-06,
+          "J": 7.205894711172076e-06
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "id": "D-1",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M004",
+            "wz": -8.0
+          },
+          {
+            "id": "D-2",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M005",
+            "wz": -8.0
+          },
+          {
+            "id": "D-3",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M006",
+            "wz": -8.0
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "id": "Q-1",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M004",
+            "wz": -5.0
+          },
+          {
+            "id": "Q-2",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M006",
+            "wz": -5.0
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "id": "W-1",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J004",
+            "fx": 6.0
+          },
+          {
+            "id": "W-2",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fx": 6.0
+          },
+          {
+            "id": "W-3",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J006",
+            "fx": 6.0
+          },
+          {
+            "id": "W-4",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fx": 6.0
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "SERVICE",
+        "factors": {
+          "D": 1.0,
+          "Q": 1.0
+        }
+      },
+      {
+        "id": "REVERSE",
+        "factors": {
+          "D": 1.0,
+          "W": -1.0
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    },
+    "metadata": {}
+  },
+  "kind": "static",
+  "engine": "OpenSees",
+  "derived": [],
+  "requests": [
+    {
+      "id": "case:D:J007:ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J007"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": 5.576029465452457e-05
+    },
+    {
+      "id": "case:D:J006:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J006"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -5.612808492063351e-06
+    },
+    {
+      "id": "case:D:J001:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J001"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 4.326113757249287
+    },
+    {
+      "id": "case:D:J001:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J001"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 18.467437278367747
+    },
+    {
+      "id": "case:D:J007:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J007"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.00034926652631276
+    },
+    {
+      "id": "case:D:M001:M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "M001",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -1.9448554950624366
+    },
+    {
+      "id": "case:D:M002:M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "M002",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 6.1600858155929235
+    },
+    {
+      "id": "combination:SERVICE:J007:ux",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J007"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": 9.915001501922062e-05
+    },
+    {
+      "id": "combination:SERVICE:J006:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J006"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -7.318990233552233e-06
+    },
+    {
+      "id": "combination:SERVICE:J001:Fx",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J001"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 7.100908921157862
+    },
+    {
+      "id": "combination:SERVICE:J001:Fz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J001"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 30.398644340045635
+    },
+    {
+      "id": "combination:SERVICE:J007:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J007"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.0006414121340496706
+    },
+    {
+      "id": "combination:SERVICE:M001:M2",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "M001",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -2.913861508472436
+    },
+    {
+      "id": "combination:SERVICE:M002:M2",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "M002",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 14.696902215472829
+    }
+  ],
+  "clarificationFields": [],
+  "referenceChecks": [
+    {
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 2.3024567090256672e-14,
+      "forceMomentBalance": [
+        4.0200056448507673e-14,
+        0.0,
+        0.0,
+        0.0,
+        1.1368683772161603e-13,
+        0.0
+      ],
+      "dofs": 42,
+      "freeDofs": 12,
+      "factorization": "numpy-cholesky-batched",
+      "factorizationCount": 1,
+      "rightHandSides": 2,
+      "minimumScaledPivot": 0.022635633020034015,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ]
+    },
+    {
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 5.5813473572981246e-14,
+      "forceMomentBalance": [
+        6.026549023810621e-14,
+        0.0,
+        -2.842170943040401e-14,
+        0.0,
+        2.2737367544323206e-13,
+        0.0
+      ],
+      "dofs": 42,
+      "freeDofs": 12,
+      "factorization": "numpy-cholesky-batched",
+      "factorizationCount": 1,
+      "rightHandSides": 2,
+      "minimumScaledPivot": 0.022635633020034015,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ]
+    }
+  ],
+  "reportIds": [
+    "case:D:J007:ux",
+    "case:D:J006:uz",
+    "case:D:J001:Fx",
+    "case:D:J001:Fz",
+    "case:D:J007:uz",
+    "case:D:M001:M2",
+    "case:D:M002:M2",
+    "combination:SERVICE:J007:ux",
+    "combination:SERVICE:J006:uz",
+    "combination:SERVICE:J001:Fx",
+    "combination:SERVICE:J001:Fz",
+    "combination:SERVICE:J007:uz",
+    "combination:SERVICE:M001:M2",
+    "combination:SERVICE:M002:M2"
+  ]
+}

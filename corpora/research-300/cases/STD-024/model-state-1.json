@@ -1,0 +1,321 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "S0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "P1",
+      "x": 2.5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "S1",
+      "x": 5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "P2",
+      "x": 7.5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "S2",
+      "x": 10,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "P3",
+      "x": 12.5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "S3",
+      "x": 15,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "B1a",
+      "type": "beam",
+      "nodes": [
+        "S0",
+        "P1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "B1b",
+      "type": "beam",
+      "nodes": [
+        "P1",
+        "S1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "B2a",
+      "type": "beam",
+      "nodes": [
+        "S1",
+        "P2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "B2b",
+      "type": "beam",
+      "nodes": [
+        "P2",
+        "S2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "B3a",
+      "type": "beam",
+      "nodes": [
+        "S2",
+        "P3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "B3b",
+      "type": "beam",
+      "nodes": [
+        "P3",
+        "S3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-B1a",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "B1a",
+          "wz": -8
+        },
+        {
+          "id": "D-B1b",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "B1b",
+          "wz": -8
+        },
+        {
+          "id": "D-B2a",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "B2a",
+          "wz": -8
+        },
+        {
+          "id": "D-B2b",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "B2b",
+          "wz": -8
+        },
+        {
+          "id": "D-B3a",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "B3a",
+          "wz": -8
+        },
+        {
+          "id": "D-B3b",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "B3b",
+          "wz": -8
+        }
+      ]
+    },
+    {
+      "id": "W",
+      "type": "wind",
+      "loads": [
+        {
+          "id": "W-B2a",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "B2a",
+          "wz": 6
+        },
+        {
+          "id": "W-B2b",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "B2b",
+          "wz": 6
+        }
+      ]
+    }
+  ],
+  "load_combinations": [
+    {
+      "id": "C0",
+      "factors": {
+        "D": 1
+      }
+    },
+    {
+      "id": "C1",
+      "factors": {
+        "D": 1,
+        "W": 1
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "spanLengthsM": [
+      5,
+      5,
+      5
+    ],
+    "spanSectionIds": [
+      "B1",
+      "B1",
+      "B1"
+    ],
+    "observationNodes": {
+      "span-1-midpoint": "P1",
+      "span-2-midpoint": "P2",
+      "span-3-midpoint": "P3"
+    },
+    "beamTheory": "Euler-Bernoulli",
+    "localAxes": "Each beam runs along +global X; local 1=+X, local 2=+Y, local 3=+Z.",
+    "continuity": "Every support and midpoint is one shared node; no member end releases."
+  }
+}

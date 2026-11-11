@@ -1,0 +1,3 @@
+## Table b
+
+Connection replacement B (all coordinates m, forces kN). Only dAB2: B1 -> A2 and dBC2: C1 -> B2 change. Both remain section A1, material M1, axial-only. Other records in table A remain active.

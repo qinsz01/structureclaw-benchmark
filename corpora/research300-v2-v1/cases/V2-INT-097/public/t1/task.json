@@ -1,0 +1,59 @@
+{
+  "caseId": "V2-INT-097",
+  "turnId": "t1",
+  "family": "INT",
+  "title": "桁架跨高比对用钢量影响的研究：子问题2：有限截面方案与约束比选",
+  "designLevel": "L4",
+  "engine": "OpenSees",
+  "analysis": "scheme",
+  "instruction": "依据签发图表和约定重建物理模型，执行指定分析并交付带符号结果、单位及真实作业标识。",
+  "requests": [],
+  "derived": [],
+  "reportIds": [],
+  "requireShapes": false,
+  "sourceId": "SRC-PIPE-2020",
+  "constraint": {
+    "nodes": [
+      "LOW-MID",
+      "ROW1-MID",
+      "ROW2-MID"
+    ],
+    "component": "uz",
+    "absoluteLimit": 3.7731e-05
+  },
+  "schemeSelections": [
+    "SERVICE",
+    "REVERSE"
+  ],
+  "authoringBasis": [
+    [
+      "来源 SRC-PIPE-2020；2.5m宽的横向三层管道承重梁/支承架：各排管径及线荷载按表1/2转换，支承连接显式给定。",
+      "来源事实：SRC-PIPE-2020-F1 唐山曹妃甸工业园实际管架；九条管道分三排，架面宽2.5m、管顶约10m。；SRC-PIPE-2020-F2 比较跨度15/20/25/30/35m与矢高1.5/2/2.5/3/3.5m；这些是论文研究方案，并非25个已建结构。；SRC-PIPE-2020-F3 左右两片桁架对称；三层水平横梁，节间不超过3.5m。；SRC-PIPE-2020-F4 2.5m节间：单片中间节点G=10.37kN、Q=18.50kN，端节点G=5.48kN、Q=9.25kN。",
+      "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+      "作者材料：线弹性钢，E=206000MPa，nu=0.3，G=E/[2(1+nu)]，rho=7850kg/m³。",
+      "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+      "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+      "横向宽2.5m来自来源；三层高度0/1.25/2.5m和2.5m管道分担长度为作者设定。表2线重：气管0.4/0.5、煤气管2.0/4.9、水管0.7/1.0kN/m；上/下排总G/Q=7/14.75kN、中排5.25/7.5kN。",
+      "各排多管道作用以该排横梁跨中合力代替；这是明确作者理想化，不声称管道实际落点。横梁跨中连续，无铰释放。",
+      "W为最高自由节点上题给等效横力10kN；3D另加全局y向4kN，不声称原工程风压规范计算结果。",
+      "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+      "截面尺寸(m)：B=0.12×0.24, C=0.18×0.3, A=0.06×0.08",
+      "位移限值为题设的线弹性方案筛选条件，不是规范安全结论；数值在候选运行前固定。"
+    ]
+  ],
+  "loadInput": "Build load_cases from load-recipe.json. Convert surface pressure to member line vectors exactly once.",
+  "attachments": [
+    "analysis-control.json",
+    "combinations.json",
+    "load-recipe.json",
+    "materials.csv",
+    "materials.json",
+    "members.csv",
+    "model-convention.json",
+    "nodes.csv",
+    "schemes.json",
+    "sections.json",
+    "source-basis.json",
+    "tool-contract.md"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "caseId": "V3-INT-080",
+  "turnId": "t4",
+  "family": "INT",
+  "designedLevel": "L4",
+  "engine": "OpenSees",
+  "kind": "project",
+  "title": "平面轴力桁架：构造22",
+  "instruction": "仅撤销第2轮的 Q 分区调整，将 Q 恢复为第1轮的面压分区；保留第3轮设备恒载以及其他未撤销输入，重新计算当前状态。",
+  "sourceId": null,
+  "answerFile": "answer.json",
+  "integration": "one-way",
+  "constraints": [
+    {
+      "id": "upperVertical",
+      "absoluteLimit": 0.01509,
+      "unit": "m",
+      "scope": "All secondary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryVertical",
+      "absoluteLimit": 0.04004,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryLateral",
+      "absoluteLimit": 0.009561,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; max sqrt(ux^2+uy^2)"
+    },
+    {
+      "id": "primaryEndAction",
+      "absoluteLimit": 905.9,
+      "unit": "kN",
+      "scope": "All beam/column end cuts and M2/M3 components, or all axial bars when no beam/column exists; signed max-abs"
+    }
+  ],
+  "requirements": {
+    "upperSelections": [
+      {
+        "kind": "case",
+        "id": "D"
+      },
+      {
+        "kind": "case",
+        "id": "Q"
+      },
+      {
+        "kind": "case",
+        "id": "W"
+      }
+    ],
+    "primarySelections": [
+      {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      {
+        "kind": "combination",
+        "id": "WIND"
+      },
+      {
+        "kind": "combination",
+        "id": "REVERSE"
+      }
+    ],
+    "completeEnumerationRequired": false,
+    "gravityRecalculationRequired": true,
+    "oneWayTransfer": true
+  },
+  "report": [
+    "design",
+    "feasible",
+    "volume",
+    "metrics",
+    "transfers",
+    "jobIdsByModel"
+  ],
+  "attachments": [
+    "engineering-revision.md"
+  ]
+}

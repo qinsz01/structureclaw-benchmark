@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "investigation": {
+    "path": ".bench-work/commercial-246/pkpm-precision-review/std089-m3-investigation.json",
+    "sha256": "06cae22d61956fea4605b37fc817e654aa8d6109164bd42792fe01a6c236d15b"
+  },
+  "decision": "Support only as a newly versioned conservative engineering comparison policy, not as a verified bound on vendor solver numerical error.",
+  "strictComparisonPreserved": true,
+  "acceptanceRegionChanges": true,
+  "nativeReferencesUnchanged": true,
+  "proposedName": "native-f32-recovery-scale-v1",
+  "evidenceKind": "analytical-recovery-scale",
+  "formula": {
+    "canonicalExpression": "member end action = signed row of canonical 12x12 Timoshenko k times calibrated source-local native DISP, minus signed consistent fixed-end load.",
+    "termSelection": "Every structurally nonzero coefficient in the canonical stiffness row, including terms whose current displacement is zero; each structurally nonzero fixed-end-load term included. No algebraic rewriting, splitting, redundant zero terms, or residual-dependent selection.",
+    "unitRoundoff": 5.960464477539063e-08,
+    "n": "number of retained canonical product/load terms",
+    "gamma": "(2*n-1)*u/(1-(2*n-1)*u)",
+    "scaleAllowance": "gamma*sum(abs(term))",
+    "additionalRepresentationalSensitivity": "sum(abs(k_ij)*0.5ULP_f32(d_j)) plus a separately specified output halfULP, if policy adopts these. This is a separate sensitivity term; it is not the native arithmetic remainder. Do not silently claim it accounts for input-stiffness/global-solve perturbations.",
+    "typedCombination": "sum(abs(factor)*basic_case_allowance)",
+    "derivedEquilibriumReaction": "sum(abs(transform_coefficient)*member_end_allowance); add its own declared summation representation allowance if used.",
+    "inputQuantization": "Actual A/I/J and geometry are native float32; UserMaterial E/nu stored as doubles. Independent source-vs-actual forward response change is not an observed native residual, but cannot be called a rigorous bound without a separate validated sensitivity/interval analysis."
+  },
+  "minimalEligibleScope": [
+    "PKPM2027R1.0.1 executions with frozen native material, numeric section, geometry, load and output identity bindings.",
+    "Only the already independently reviewed principal-axis horizontal beams and vertical columns with zero roll, correct calibrated source axes and ends, and first-order linear response.",
+    "Canonical uniform line-load/nodal-load endpoint recovery, using source-local calibrated native six-DOF displacements; missing sentinels prohibited.",
+    "Fixed/pinned support DOFs only through previously qualified explicit boundary derivations/raw-DISP pin mapping; no silent zero fills.",
+    "Apply to all eligible member-end force components in all reviewed runs, not only STD089 failures; retain unmapped/outside-scope components as policy unavailable."
+  ],
+  "limits": [
+    "The canonical K is independently constructed, not directly exported vendor stiffness.",
+    "Native As=5A/6 remains a response-checked hypothesis; source public convention can define it but that does not create a raw native As observation.",
+    "Vendor internal operation ordering, scalar types, factorization and force recovery precision are unknown. A textbook dot-product gamma does not establish the vendor error bound.",
+    "This policy broadens numeric acceptance even with unchanged atol/rtol fields; output must retain strict and policy-aware results with an explicit policy version.",
+    "No per-quantity constant, measured discrepancy or multiplier selected to clear the two failures.",
+    "Higher precision export/internals remains the preferred route if authored strict comparison is the target."
+  ],
+  "twoIllustrativeRows": [
+    {
+      "quantityId": "case-D-member-x0-0-1-s0-right-M3",
+      "nCanonicalTerms": 4,
+      "gamma7": 4.1723268751077727e-07,
+      "scaleAllowance": 3.77553940777974e-07,
+      "DISPHalfULPSensitivity": 4.211545752638781e-08,
+      "outputHalfULP": 2.3283064365386963e-10,
+      "qualifiedVendorBound": false
+    },
+    {
+      "quantityId": "case-D-member-x0-0-2-s0-right-M3",
+      "nCanonicalTerms": 4,
+      "gamma7": 4.1723268751077727e-07,
+      "scaleAllowance": 9.17740666553387e-07,
+      "DISPHalfULPSensitivity": 8.365792154952827e-08,
+      "outputHalfULP": 3.725290298461914e-09,
+      "qualifiedVendorBound": false
+    }
+  ]
+}

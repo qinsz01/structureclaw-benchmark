@@ -1,0 +1,169 @@
+{
+  "units": {
+    "coordinates": "m",
+    "member_length": "m",
+    "E": "MPa",
+    "G": "MPa",
+    "rho": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "shape": "mm",
+    "force": "kN",
+    "moment": "kN.m",
+    "line_load": "kN/m of actual member length",
+    "rotation_angle": "degree",
+    "displacement": "m"
+  },
+  "axisDefinitions": {
+    "globalAxes": "Right-handed XYZ, Z upward.",
+    "conflict": "The Iy/Iz table and the local-axis annotation have interchanged labels. Which assignment and reference direction is authoritative has not yet been confirmed.",
+    "reactionNaming": "Rz means vertical support reaction Fz."
+  },
+  "analysisMethod": "First-order linear elastic Euler-Bernoulli beam/column and axial-only truss analysis.",
+  "sectionAxisAnnotation": {
+    "candidateIy": 0.0031249999999999997,
+    "candidateIz": 0.001125,
+    "unit": "m4",
+    "authoritative": null
+  },
+  "documentType": "Public engineering input tables",
+  "nodeTable": [
+    {
+      "id": "base",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "mid",
+      "x": 0,
+      "y": 0,
+      "z": 3,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "top",
+      "x": 0,
+      "y": 0,
+      "z": 6,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  "memberTable": [
+    {
+      "id": "column1",
+      "type": "column",
+      "nodes": [
+        "base",
+        "mid"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "column2",
+      "type": "column",
+      "nodes": [
+        "mid",
+        "top"
+      ],
+      "material": "M1",
+      "section": "C1"
+    }
+  ],
+  "materialTable": [
+    {
+      "id": "M1",
+      "name": "C35",
+      "type": "concrete",
+      "E": 31500,
+      "G": 13125.0,
+      "nu": 0.2,
+      "rho": 2500
+    }
+  ],
+  "sectionTable": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "general",
+      "properties": {
+        "A": 0.15,
+        "Iy": 0.001125,
+        "Iz": 0.0031249999999999997,
+        "J": 0.0028173707999999994
+      }
+    }
+  ],
+  "loadCaseTable": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "top-load",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "top",
+          "fx": 20,
+          "fy": 15,
+          "fz": -400
+        },
+        {
+          "id": "mid-lateral",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "mid",
+          "fx": -8
+        }
+      ]
+    }
+  ],
+  "combinationTable": [],
+  "analysisSettings": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinateContract": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "memberAxisData": {}
+}

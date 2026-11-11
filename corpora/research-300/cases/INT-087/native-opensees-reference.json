@@ -1,0 +1,965 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-087",
+  "modelId": "M-INT-087",
+  "referenceKind": "native-opensees",
+  "method": "native-openseespy",
+  "solver": {
+    "module": "openseespy.opensees",
+    "version": "3.7.1",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "runnerSha256": "cdda4e5b51596485c32100b1426c58f98830470bc0ab555ff1c477b3083eb9d7",
+    "referenceIoSha256": "22066f2728b59482df3da98e4bed3bb8a81edfadfab351fb90d40cc11f436717",
+    "nativeModuleSha256": "b4c234a20c235bb4a8ed9f780a9ac2d5b2534c42ad499054882ba8c8e94bed1d",
+    "nativeBinaryModule": "openseespylinux.opensees",
+    "nativeBinarySha256": "b0985e344fb76d2f445c2b3046c37676aa02d8c632d66345a4bc927a56fee25f",
+    "openseespyPackageVersion": "3.7.1.2",
+    "openseespylinuxPackageVersion": "3.7.1.2"
+  },
+  "inputHashes": {
+    "contract.json": "4572030cf76bdab02da5b5e0b17414437005f45cb647160f2e6ade06520594c5",
+    "reference-requests.json": "6374173c3d94a23d50153be6cc394cfd3b2ae5c867b60592b7319aa45fb6b2b5",
+    "model-state-1.json": "6aa68319e563a8dabd884b240b8e6e65c6b8917792b3138d639c6b3b3d96aa0e",
+    "model-state-2.json": "573a6716079f0d9880b49b634779c8acf337b12a34b4ccd300551ea6334b20d8"
+  },
+  "sourceHash": "46c425ce562f716d335794964148e14f094ca992e4ef3f71fc2c91dcf1ab237b",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions-v2.txt",
+        "sha256": "c9303e7eb89248c6abb62f30788c19ac7142a4f4fdba164d01c94ff975c1cde8"
+      },
+      {
+        "path": "appendix-a.json",
+        "sha256": "8073f777679a4c5a06141a52d93a2f99df7a7a0f1e2ed40185eb64c961e76af2"
+      },
+      {
+        "path": "appendix-b.json",
+        "sha256": "36de0ee8742630d74ab2139bf6d23364ec1ebc80c87b2214e6d5002d3c8045d7"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "4572030cf76bdab02da5b5e0b17414437005f45cb647160f2e6ade06520594c5"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "6aa68319e563a8dabd884b240b8e6e65c6b8917792b3138d639c6b3b3d96aa0e"
+      },
+      {
+        "path": "model-state-2.json",
+        "sha256": "573a6716079f0d9880b49b634779c8acf337b12a34b4ccd300551ea6334b20d8"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "b4831a8532ac04c97b97f4b1d4e9408e7b5c0d97c7c0a82926fc71a9af325ca4"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "6374173c3d94a23d50153be6cc394cfd3b2ae5c867b60592b7319aa45fb6b2b5"
+      }
+    ]
+  },
+  "sameEngineTruthStatus": "pending",
+  "nativeIndependentReview": "pending",
+  "llmEndToEnd": "not-run",
+  "nativeRole": "cross-engine-diagnostic",
+  "theory": "Timoshenko",
+  "warnings": [
+    "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+    "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+    "OpenSees results for a different planned engine are cross-engine diagnostics only."
+  ],
+  "checks": [
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        1.0512424264419451e-15,
+        -3.945425050916363e-16,
+        1.1368683772161603e-13,
+        0.0,
+        -4.547473508864641e-13,
+        1.3384065431031007e-14
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        7.560999999999999e-05,
+        0.00037800999999999997,
+        0.00038521,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 9.237055564881302e-14,
+      "equilibriumPassed": true,
+      "nativeNodes": 24,
+      "nativeElements": 34,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-2-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-2-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-2-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "c0-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-2-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-2-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        }
+      },
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    },
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        2.308483265656136e-15,
+        9.705777848090236e-16,
+        0.0,
+        -4.547473508864641e-13,
+        -4.547473508864641e-13,
+        6.399394902878441e-15
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        6.600999999999999e-05,
+        0.00029701,
+        0.00035641,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 6.394884621840902e-14,
+      "equilibriumPassed": true,
+      "nativeNodes": 22,
+      "nativeElements": 29,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-2-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-2-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-2-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "c0-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        }
+      },
+      "state": 2,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case-D--n1-2-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 7.186909772659264e-06
+        },
+        {
+          "id": "case-D--n1-2-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -9.675073948228718e-06
+        },
+        {
+          "id": "case-D--n1-2-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -6.112296728867923e-07
+        },
+        {
+          "id": "case-D--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 5.695448781032348
+        },
+        {
+          "id": "case-D--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 73.59478171040136
+        }
+      ],
+      "derived": [],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            1.0512424264419451e-15,
+            -3.945425050916363e-16,
+            1.1368683772161603e-13,
+            0.0,
+            -4.547473508864641e-13,
+            1.3384065431031007e-14
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            7.560999999999999e-05,
+            0.00037800999999999997,
+            0.00038521,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 9.237055564881302e-14,
+          "equilibriumPassed": true,
+          "nativeNodes": 24,
+          "nativeElements": 34,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-2-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-2-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y2-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y2-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-2-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "c0-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-2-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-2-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ]
+    },
+    {
+      "state": 2,
+      "model": "model-state-2.json",
+      "quantities": [
+        {
+          "id": "case-D--n1-1-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 7.309340369086544e-06
+        },
+        {
+          "id": "case-D--n1-1-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.1533004419692762e-05
+        },
+        {
+          "id": "case-D--n1-1-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 4.616138798217685e-06
+        },
+        {
+          "id": "case-D--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 5.682989036177924
+        },
+        {
+          "id": "case-D--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 73.98365878193462
+        }
+      ],
+      "derived": [],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            2.308483265656136e-15,
+            9.705777848090236e-16,
+            0.0,
+            -4.547473508864641e-13,
+            -4.547473508864641e-13,
+            6.399394902878441e-15
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            6.600999999999999e-05,
+            0.00029701,
+            0.00035641,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 6.394884621840902e-14,
+          "equilibriumPassed": true,
+          "nativeNodes": 22,
+          "nativeElements": 29,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-2-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-2-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y2-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y2-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-2-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "c0-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ]
+    }
+  ],
+  "analysisConvention": {
+    "id": "commercial-linear-static-v2",
+    "bendingTheory": "Timoshenko",
+    "effectiveShearAreas": {
+      "localY": "5*A/6",
+      "localZ": "5*A/6"
+    },
+    "publicAttachment": "analysis-conventions-v2.txt"
+  },
+  "notCommercialScoringTruth": true,
+  "artifacts": [
+    {
+      "path": "native-input-receipt.json",
+      "sha256": "6410b55642559e9b3076f639749299db104206ec0f62ba3075b364f4de0d65e7"
+    },
+    {
+      "path": "native-solver-receipt.json",
+      "sha256": "0d0837b6308eceb1534c356dc863fb9f84a0b5236d5418265a4300b33a7e21b8"
+    },
+    {
+      "path": "native-raw-responses.json",
+      "sha256": "88099796d4295953aa7396f0dee1ded78e3ea9e78d03ea5e43ab501e6722fdf5"
+    },
+    {
+      "path": "native-checks.json",
+      "sha256": "b66574dcf8551b36abd58651af28266b7938ee21ba78b7b0196a7fd2ea5d82a4"
+    }
+  ]
+}

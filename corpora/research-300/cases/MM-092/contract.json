@@ -1,0 +1,1473 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "MM-092",
+  "modelId": "M-MM-092",
+  "family": "multimodal_reverse_engineering",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "sourceRequirements": {
+      "task.inputForm": "新平面及正交立面/局部截面PNG共同给本题空间几何、连接与朝向；附录给明确约束、荷载向量、完整属性和视图轴约定，不直接给完整节点坐标答案。所有新附件待制作、盲审与验证。",
+      "task.scenario": "几何：单层X网格0、6、12m，Y网格0、5m；x=0及12m列柱顶z=6m，x=6m列柱顶z=8m，各网格相邻顶点刚接屋面梁；边界：六柱脚固定；荷载：所有屋面梁按实际长度全局向下6kN/m；属性：钢M1、柱C1、坡向X梁B1、Y梁B2，无刚性楼板。（本栏是编题规格，实际用户输入按图/表分工呈现。）",
+      "task.modelingFocus": "两侧坡向相反且有一整条屋脊柱线，多视图共同确定。",
+      "task.expectedOutput": "前后两个屋脊节点Uz、外侧柱脚弯矩；附与数值一致的模型/结果图。",
+      "task.gradingFocus": "模型核对：单坡空间屋盖改为双坡屋盖及中部屋脊柱列。；数值/表述核对：前后两个屋脊节点Uz、外侧柱脚弯矩，位置、方向、单位须一致。",
+      "task.prerequisite": "斜杆荷载与局部轴需验证；本题新增几何/属性与真值均待独立核验；材料截面代号须在本题附录定值。斜杆全局荷载和局部轴适配待验证。",
+      "model.topologyKey": "单层X网格0、6、12m，Y网格0、5m；x=0及12m列柱顶z=6m，x=6m列柱顶z=8m，各网格相邻顶点刚接屋面梁",
+      "model.boundaryKey": "六柱脚固定",
+      "model.loadKey": "所有屋面梁按实际长度全局向下6kN/m",
+      "model.propertyKey": "钢M1、柱C1、坡向X梁B1、Y梁B2，无刚性楼板。",
+      "engine.analysisContract": "一阶线弹性；自重OFF并保存配置；按附录实际E/A/I/J，不套默认刚度折减；无默认刚性楼板。采用题定右手全局Z向上，核对构件局部轴与结果分量。题给线载/点力/力矩按原位映射；如作等效节点加载，须保留原始分布荷载并采用与单元插值一致的等效荷载，核验跨内响应及合力/力矩，不用统一楼面载替代。荷载契约：所有屋面梁按实际长度全局向下6kN/m；未指定组合时仅算题定基本荷载，指定组合逐组执行，不能用软件默认包络替换。",
+      "engine.executionRequirement": "三维坡梁逐段定义局部轴，真实坡长计荷载，屋脊柱与两侧斜梁共节点；执行后按原题完整输出：前后两个屋脊节点Uz、外侧柱脚弯矩；附与数值一致的模型/结果图。本轮仅规划，不运行。",
+      "engine.requiredEvidence": "计划保存输入PNG/DXF及图中构件/标签→计算节点/构件ID映射、可复现OpenSees输入模型、引擎版本与设置快照、实际运行日志、原始结果表/观测点索引、可视图所用数据。",
+      "engine.adapterGap": "尚未确认本题可通过；接口/求解/读回预检重点：三维坡梁逐段定义局部轴，真实坡长计荷载，屋脊柱与两侧斜梁共节点。特殊单元、轴向、边界及组合均不因OpenSees原生支持而视作已接通。",
+      "engine.truthPlan": "独立建立并复核OpenSees参考模型，固定版本/求解设置及观测位置；以独立模型审阅、整体平衡及构件端力/节点结果一致性校核。不把展示层插值或图像读数直接当数值真值。"
+    },
+    "requirements": [
+      {
+        "id": 1,
+        "sourceField": "task.inputForm",
+        "sourceRange": [
+          0,
+          32
+        ],
+        "candidateFeatures": [
+          "input.multimodal-source-binding"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "截面",
+              "range": [
+                11,
+                13
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 2,
+        "sourceField": "task.inputForm",
+        "sourceRange": [
+          32,
+          69
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes",
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 3,
+        "sourceField": "task.inputForm",
+        "sourceRange": [
+          69,
+          84
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 4,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          0,
+          24
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 5,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          24,
+          64
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 6,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          64,
+          73
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 7,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          73,
+          96
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 8,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          96,
+          125
+        ],
+        "candidateFeatures": [
+          "diaphragm.rigid-floor"
+        ],
+        "semantics": {
+          "kind": "forbidden",
+          "atoms": [
+            {
+              "featureId": "diaphragm.rigid-floor",
+              "kind": "forbidden",
+              "term": "刚性楼板",
+              "range": [
+                24,
+                28
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 9,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          125,
+          149
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 10,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          149,
+          150
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 11,
+        "sourceField": "task.modelingFocus",
+        "sourceRange": [
+          0,
+          24
+        ],
+        "candidateFeatures": [
+          "input.multiview-reconstruction"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 12,
+        "sourceField": "task.expectedOutput",
+        "sourceRange": [
+          0,
+          18
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 13,
+        "sourceField": "task.expectedOutput",
+        "sourceRange": [
+          18,
+          32
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 14,
+        "sourceField": "task.gradingFocus",
+        "sourceRange": [
+          0,
+          25
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "output",
+          "atoms": [
+            {
+              "featureId": "interaction.edit",
+              "kind": "output",
+              "term": "改为",
+              "range": [
+                11,
+                13
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 15,
+        "sourceField": "task.gradingFocus",
+        "sourceRange": [
+          26,
+          64
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 16,
+        "sourceField": "task.prerequisite",
+        "sourceRange": [
+          0,
+          12
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "局部轴",
+              "range": [
+                5,
+                8
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 17,
+        "sourceField": "task.prerequisite",
+        "sourceRange": [
+          12,
+          31
+        ],
+        "candidateFeatures": [
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 18,
+        "sourceField": "task.prerequisite",
+        "sourceRange": [
+          31,
+          46
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "材料",
+              "range": [
+                0,
+                2
+              ]
+            },
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "截面",
+              "range": [
+                2,
+                4
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 19,
+        "sourceField": "task.prerequisite",
+        "sourceRange": [
+          46,
+          62
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "局部轴",
+              "range": [
+                7,
+                10
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 20,
+        "sourceField": "model.topologyKey",
+        "sourceRange": [
+          0,
+          21
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 21,
+        "sourceField": "model.topologyKey",
+        "sourceRange": [
+          21,
+          60
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 22,
+        "sourceField": "model.boundaryKey",
+        "sourceRange": [
+          0,
+          5
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 23,
+        "sourceField": "model.loadKey",
+        "sourceRange": [
+          0,
+          19
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 24,
+        "sourceField": "model.propertyKey",
+        "sourceRange": [
+          0,
+          26
+        ],
+        "candidateFeatures": [
+          "diaphragm.rigid-floor"
+        ],
+        "semantics": {
+          "kind": "forbidden",
+          "atoms": [
+            {
+              "featureId": "diaphragm.rigid-floor",
+              "kind": "forbidden",
+              "term": "刚性楼板",
+              "range": [
+                21,
+                25
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 25,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          0,
+          6
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 26,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          6,
+          17
+        ],
+        "candidateFeatures": [
+          "gravity.explicit-self-weight"
+        ],
+        "semantics": {
+          "kind": "forbidden",
+          "atoms": [
+            {
+              "featureId": "gravity.self-weight",
+              "kind": "forbidden",
+              "term": "自重",
+              "range": [
+                0,
+                2
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 27,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          17,
+          39
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 28,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          39,
+          47
+        ],
+        "candidateFeatures": [
+          "diaphragm.rigid-floor"
+        ],
+        "semantics": {
+          "kind": "forbidden",
+          "atoms": [
+            {
+              "featureId": "diaphragm.rigid-floor",
+              "kind": "forbidden",
+              "term": "刚性楼板",
+              "range": [
+                3,
+                7
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 29,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          47,
+          72
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "局部轴",
+              "range": [
+                16,
+                19
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 30,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          72,
+          88
+        ],
+        "candidateFeatures": [
+          "member.partial-point-and-piecewise-load"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "load.member-distribution",
+              "kind": "required",
+              "term": "线载",
+              "range": [
+                2,
+                4
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 31,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          88,
+          145
+        ],
+        "candidateFeatures": [
+          "member.partial-point-and-piecewise-load",
+          "member.response-stations"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "load.member-distribution",
+              "kind": "required",
+              "term": "分布荷载",
+              "range": [
+                14,
+                18
+              ]
+            },
+            {
+              "featureId": "result.position",
+              "kind": "required",
+              "term": "跨内",
+              "range": [
+                36,
+                38
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 32,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          145,
+          170
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 33,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          170,
+          206
+        ],
+        "candidateFeatures": [
+          "selection.cases-and-linear-combinations"
+        ],
+        "semantics": {
+          "kind": "forbidden",
+          "atoms": [
+            {
+              "featureId": "interaction.edit",
+              "kind": "forbidden",
+              "term": "替换",
+              "range": [
+                33,
+                35
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 34,
+        "sourceField": "engine.executionRequirement",
+        "sourceRange": [
+          0,
+          32
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "geometry.actual-connectivity",
+              "kind": "required",
+              "term": "共节点",
+              "range": [
+                28,
+                31
+              ]
+            },
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "局部轴",
+              "range": [
+                8,
+                11
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 35,
+        "sourceField": "engine.executionRequirement",
+        "sourceRange": [
+          32,
+          61
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 36,
+        "sourceField": "engine.executionRequirement",
+        "sourceRange": [
+          61,
+          75
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 37,
+        "sourceField": "engine.executionRequirement",
+        "sourceRange": [
+          75,
+          85
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 38,
+        "sourceField": "engine.requiredEvidence",
+        "sourceRange": [
+          0,
+          87
+        ],
+        "candidateFeatures": [
+          "member.response-stations",
+          "input.multimodal-source-binding",
+          "input.dxf-topology",
+          "evaluation.execution-freshness"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [
+            {
+              "featureId": "result.position",
+              "kind": "output",
+              "term": "观测",
+              "range": [
+                73,
+                75
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 39,
+        "sourceField": "engine.adapterGap",
+        "sourceRange": [
+          0,
+          10
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 40,
+        "sourceField": "engine.adapterGap",
+        "sourceRange": [
+          10,
+          55
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "geometry.actual-connectivity",
+              "kind": "required",
+              "term": "共节点",
+              "range": [
+                41,
+                44
+              ]
+            },
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "局部轴",
+              "range": [
+                21,
+                24
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 41,
+        "sourceField": "engine.adapterGap",
+        "sourceRange": [
+          55,
+          90
+        ],
+        "candidateFeatures": [
+          "selection.cases-and-linear-combinations"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 42,
+        "sourceField": "engine.truthPlan",
+        "sourceRange": [
+          0,
+          35
+        ],
+        "candidateFeatures": [
+          "member.response-stations",
+          "truth.same-engine-independent",
+          "evaluation.execution-freshness"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "result.position",
+              "kind": "required",
+              "term": "观测",
+              "range": [
+                30,
+                32
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 43,
+        "sourceField": "engine.truthPlan",
+        "sourceRange": [
+          35,
+          63
+        ],
+        "candidateFeatures": [
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 44,
+        "sourceField": "engine.truthPlan",
+        "sourceRange": [
+          63,
+          83
+        ],
+        "candidateFeatures": [
+          "input.multimodal-source-binding",
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      }
+    ],
+    "sourceTaskTurns": 1,
+    "subcategory": "多视图重建"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "drawing-plan-0-Z0.png",
+    "drawing-plan-0-Z0.svg",
+    "drawing-plan-1-Z6.png",
+    "drawing-plan-1-Z6.svg",
+    "drawing-plan-2-Z8.png",
+    "drawing-plan-2-Z8.svg",
+    "drawing-elevation-0-Y0.png",
+    "drawing-elevation-0-Y0.svg",
+    "drawing-elevation-1-Y5.png",
+    "drawing-elevation-1-Y5.svg",
+    "drawing-elevation-YZ-0-X0.png",
+    "drawing-elevation-YZ-0-X0.svg",
+    "drawing-elevation-YZ-1-X6.png",
+    "drawing-elevation-YZ-1-X6.svg",
+    "drawing-elevation-YZ-2-X12.png",
+    "drawing-elevation-YZ-2-X12.svg",
+    "section-details.png",
+    "section-details.svg",
+    "properties.json",
+    "assignments.json",
+    "loads.json"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Double-pitched spatial roof frame\n\nReconstruct the structure from the attached dimensioned drawings and, where supplied, DXF. Use the matching member labels in the property, assignment and load appendices. Geometry and support evidence must be read from the drawings. Perform first-order linear elastic analysis using OpenSees; save the self-weight OFF and no-rigid-diaphragm settings. Use explicit section/material stiffness and signed right-handed global axes, Z upward. Retain actual load positions and distributed loads.\n\nReport all of the following for each stated selection, with signs and units:\n- Global Uz at front ridge node n1-0-1 [case-D-n1-0-1-uz]\n- Global Uz at rear ridge node n1-1-1 [case-D-n1-1-1-uz]\n- Global support moment Mx at outer column base n0-0-0 [case-D-n0-0-0-Mx]\n- Global support moment My at outer column base n0-0-0 [case-D-n0-0-0-My]\n- Global support moment Mx at outer column base n0-1-0 [case-D-n0-1-0-Mx]\n- Global support moment My at outer column base n0-1-0 [case-D-n0-1-0-My]\n- Global support moment Mx at outer column base n2-0-0 [case-D-n2-0-0-Mx]\n- Global support moment My at outer column base n2-0-0 [case-D-n2-0-0-My]\n- Global support moment Mx at outer column base n2-1-0 [case-D-n2-1-0-Mx]\n- Global support moment My at outer column base n2-1-0 [case-D-n2-1-0-My]\n\nProvide labelled model and result figures consistent with the numerical values. Preserve the input-to-model ID mapping, engine version/settings, current execution log, original result tables and figure data. If an essential datum is missing, ask specifically for it before analysis.\n",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "drawing-plan-0-Z0.png",
+        "drawing-plan-0-Z0.svg",
+        "drawing-plan-1-Z6.png",
+        "drawing-plan-1-Z6.svg",
+        "drawing-plan-2-Z8.png",
+        "drawing-plan-2-Z8.svg",
+        "drawing-elevation-0-Y0.png",
+        "drawing-elevation-0-Y0.svg",
+        "drawing-elevation-1-Y5.png",
+        "drawing-elevation-1-Y5.svg",
+        "drawing-elevation-YZ-0-X0.png",
+        "drawing-elevation-YZ-0-X0.svg",
+        "drawing-elevation-YZ-1-X6.png",
+        "drawing-elevation-YZ-1-X6.svg",
+        "drawing-elevation-YZ-2-X12.png",
+        "drawing-elevation-YZ-2-X12.svg",
+        "section-details.png",
+        "section-details.svg",
+        "properties.json",
+        "assignments.json",
+        "loads.json"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "o1",
+      "description": "Global Uz at front ridge node n1-0-1",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n1-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o2",
+      "description": "Global Uz at rear ridge node n1-1-1",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n1-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o3",
+      "description": "Global support moment Mx at outer column base n0-0-0",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n0-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o4",
+      "description": "Global support moment My at outer column base n0-0-0",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n0-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o5",
+      "description": "Global support moment Mx at outer column base n0-1-0",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n0-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o6",
+      "description": "Global support moment My at outer column base n0-1-0",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n0-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o7",
+      "description": "Global support moment Mx at outer column base n2-0-0",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n2-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o8",
+      "description": "Global support moment My at outer column base n2-0-0",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n2-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o9",
+      "description": "Global support moment Mx at outer column base n2-1-0",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n2-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "o10",
+      "description": "Global support moment My at outer column base n2-1-0",
+      "state": 1,
+      "quantityIds": [
+        "case-D-n2-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "figures",
+      "description": "Provide a labelled model view and result/deformed-shape figures consistent with the reported signed values and selected loads.",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "figure"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1,
+        2,
+        3
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:drawing-plan-0-Z0.png",
+        "attachment:drawing-plan-0-Z0.svg",
+        "attachment:drawing-plan-1-Z6.png",
+        "attachment:drawing-plan-1-Z6.svg",
+        "attachment:drawing-plan-2-Z8.png",
+        "attachment:drawing-plan-2-Z8.svg",
+        "attachment:drawing-elevation-0-Y0.png",
+        "attachment:drawing-elevation-0-Y0.svg",
+        "attachment:drawing-elevation-1-Y5.png",
+        "attachment:drawing-elevation-1-Y5.svg",
+        "attachment:drawing-elevation-YZ-0-X0.png",
+        "attachment:drawing-elevation-YZ-0-X0.svg",
+        "attachment:drawing-elevation-YZ-1-X6.png",
+        "attachment:drawing-elevation-YZ-1-X6.svg",
+        "attachment:drawing-elevation-YZ-2-X12.png",
+        "attachment:drawing-elevation-YZ-2-X12.svg",
+        "attachment:section-details.png",
+        "attachment:section-details.svg",
+        "attachment:properties.json",
+        "attachment:assignments.json",
+        "attachment:loads.json",
+        "gate:inputBlindReview"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:drawing-plan-0-Z0.png",
+        "attachment:drawing-plan-0-Z0.svg",
+        "attachment:drawing-plan-1-Z6.png",
+        "attachment:drawing-plan-1-Z6.svg",
+        "attachment:drawing-plan-2-Z8.png",
+        "attachment:drawing-plan-2-Z8.svg",
+        "attachment:drawing-elevation-0-Y0.png",
+        "attachment:drawing-elevation-0-Y0.svg",
+        "attachment:drawing-elevation-1-Y5.png",
+        "attachment:drawing-elevation-1-Y5.svg",
+        "attachment:drawing-elevation-YZ-0-X0.png",
+        "attachment:drawing-elevation-YZ-0-X0.svg",
+        "attachment:drawing-elevation-YZ-1-X6.png",
+        "attachment:drawing-elevation-YZ-1-X6.svg",
+        "attachment:drawing-elevation-YZ-2-X12.png",
+        "attachment:drawing-elevation-YZ-2-X12.svg",
+        "attachment:section-details.png",
+        "attachment:section-details.svg",
+        "attachment:properties.json",
+        "attachment:assignments.json",
+        "attachment:loads.json",
+        "gate:inputBlindReview"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        11
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:drawing-plan-0-Z0.png",
+        "attachment:drawing-plan-0-Z0.svg",
+        "attachment:drawing-plan-1-Z6.png",
+        "attachment:drawing-plan-1-Z6.svg",
+        "attachment:drawing-plan-2-Z8.png",
+        "attachment:drawing-plan-2-Z8.svg",
+        "attachment:drawing-elevation-0-Y0.png",
+        "attachment:drawing-elevation-0-Y0.svg",
+        "attachment:drawing-elevation-1-Y5.png",
+        "attachment:drawing-elevation-1-Y5.svg",
+        "attachment:drawing-elevation-YZ-0-X0.png",
+        "attachment:drawing-elevation-YZ-0-X0.svg",
+        "attachment:drawing-elevation-YZ-1-X6.png",
+        "attachment:drawing-elevation-YZ-1-X6.svg",
+        "attachment:drawing-elevation-YZ-2-X12.png",
+        "attachment:drawing-elevation-YZ-2-X12.svg",
+        "attachment:section-details.png",
+        "attachment:section-details.svg",
+        "attachment:properties.json",
+        "attachment:assignments.json",
+        "attachment:loads.json",
+        "gate:inputBlindReview"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        12,
+        13
+      ],
+      "targets": [
+        "output:o1",
+        "output:o2",
+        "output:o3",
+        "output:o4",
+        "output:o5",
+        "output:o6",
+        "output:o7",
+        "output:o8",
+        "output:o9",
+        "output:o10",
+        "output:figures",
+        "quantity:case-D-n1-0-1-uz",
+        "quantity:case-D-n1-1-1-uz",
+        "quantity:case-D-n0-0-0-Mx",
+        "quantity:case-D-n0-0-0-My",
+        "quantity:case-D-n0-1-0-Mx",
+        "quantity:case-D-n0-1-0-My",
+        "quantity:case-D-n2-0-0-Mx",
+        "quantity:case-D-n2-0-0-My",
+        "quantity:case-D-n2-1-0-Mx",
+        "quantity:case-D-n2-1-0-My",
+        "gate:figureConsistency"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        14,
+        15
+      ],
+      "targets": [
+        "output:o1",
+        "output:o2",
+        "output:o3",
+        "output:o4",
+        "output:o5",
+        "output:o6",
+        "output:o7",
+        "output:o8",
+        "output:o9",
+        "output:o10",
+        "output:figures",
+        "quantity:case-D-n1-0-1-uz",
+        "quantity:case-D-n1-1-1-uz",
+        "quantity:case-D-n0-0-0-Mx",
+        "quantity:case-D-n0-0-0-My",
+        "quantity:case-D-n0-1-0-Mx",
+        "quantity:case-D-n0-1-0-My",
+        "quantity:case-D-n2-0-0-Mx",
+        "quantity:case-D-n2-0-0-My",
+        "quantity:case-D-n2-1-0-Mx",
+        "quantity:case-D-n2-1-0-My",
+        "gate:figureConsistency"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "targets": [
+        "gate:independentReference",
+        "gate:inputBlindReview",
+        "attachment:properties.json"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        20,
+        21
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:drawing-plan-0-Z0.png",
+        "attachment:drawing-plan-0-Z0.svg",
+        "attachment:drawing-plan-1-Z6.png",
+        "attachment:drawing-plan-1-Z6.svg",
+        "attachment:drawing-plan-2-Z8.png",
+        "attachment:drawing-plan-2-Z8.svg",
+        "attachment:drawing-elevation-0-Y0.png",
+        "attachment:drawing-elevation-0-Y0.svg",
+        "attachment:drawing-elevation-1-Y5.png",
+        "attachment:drawing-elevation-1-Y5.svg",
+        "attachment:drawing-elevation-YZ-0-X0.png",
+        "attachment:drawing-elevation-YZ-0-X0.svg",
+        "attachment:drawing-elevation-YZ-1-X6.png",
+        "attachment:drawing-elevation-YZ-1-X6.svg",
+        "attachment:drawing-elevation-YZ-2-X12.png",
+        "attachment:drawing-elevation-YZ-2-X12.svg",
+        "attachment:section-details.png",
+        "attachment:section-details.svg",
+        "attachment:properties.json",
+        "attachment:assignments.json",
+        "attachment:loads.json",
+        "gate:inputBlindReview"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        22
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:drawing-plan-0-Z0.png",
+        "attachment:drawing-plan-0-Z0.svg",
+        "attachment:drawing-plan-1-Z6.png",
+        "attachment:drawing-plan-1-Z6.svg",
+        "attachment:drawing-plan-2-Z8.png",
+        "attachment:drawing-plan-2-Z8.svg",
+        "attachment:drawing-elevation-0-Y0.png",
+        "attachment:drawing-elevation-0-Y0.svg",
+        "attachment:drawing-elevation-1-Y5.png",
+        "attachment:drawing-elevation-1-Y5.svg",
+        "attachment:drawing-elevation-YZ-0-X0.png",
+        "attachment:drawing-elevation-YZ-0-X0.svg",
+        "attachment:drawing-elevation-YZ-1-X6.png",
+        "attachment:drawing-elevation-YZ-1-X6.svg",
+        "attachment:drawing-elevation-YZ-2-X12.png",
+        "attachment:drawing-elevation-YZ-2-X12.svg",
+        "attachment:section-details.png",
+        "attachment:section-details.svg",
+        "attachment:properties.json",
+        "attachment:assignments.json",
+        "attachment:loads.json",
+        "gate:inputBlindReview"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        23
+      ],
+      "targets": [
+        "attachment:loads.json"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        24
+      ],
+      "targets": [
+        "attachment:properties.json",
+        "attachment:assignments.json",
+        "turn:t1"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "targets": [
+        "attachment:properties.json",
+        "attachment:loads.json",
+        "gate:adapterMapping"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        34,
+        35,
+        36,
+        37
+      ],
+      "targets": [
+        "gate:nativeExecution",
+        "gate:adapterMapping",
+        "output:o1",
+        "output:o2",
+        "output:o3",
+        "output:o4",
+        "output:o5",
+        "output:o6",
+        "output:o7",
+        "output:o8",
+        "output:o9",
+        "output:o10",
+        "output:figures"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        38
+      ],
+      "targets": [
+        "gate:nativeExecution",
+        "gate:adapterMapping",
+        "output:o1",
+        "output:o2",
+        "output:o3",
+        "output:o4",
+        "output:o5",
+        "output:o6",
+        "output:o7",
+        "output:o8",
+        "output:o9",
+        "output:o10",
+        "output:figures"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        39,
+        40,
+        41
+      ],
+      "targets": [
+        "gate:nativeExecution",
+        "gate:adapterMapping",
+        "output:o1",
+        "output:o2",
+        "output:o3",
+        "output:o4",
+        "output:o5",
+        "output:o6",
+        "output:o7",
+        "output:o8",
+        "output:o9",
+        "output:o10",
+        "output:figures"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        42,
+        43,
+        44
+      ],
+      "targets": [
+        "gate:independentReference",
+        "gate:inputBlindReview",
+        "attachment:properties.json"
+      ],
+      "notes": "Authored evidence mapping only; independent input, native execution and reference acceptance remain pending."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "inputBlindReview",
+      "status": "pending",
+      "description": "Independent reconstruction from public modality inputs"
+    },
+    {
+      "id": "nativeExecution",
+      "status": "pending",
+      "description": "Fresh prescribed-engine execution, original outputs and input/settings hashes"
+    },
+    {
+      "id": "independentReference",
+      "status": "pending",
+      "description": "Independent numerical references for every selection and requested position"
+    },
+    {
+      "id": "adapterMapping",
+      "status": "pending",
+      "description": "Prescribed-engine mapping of topology, loads, units, axes and outputs"
+    },
+    {
+      "id": "figureConsistency",
+      "status": "pending",
+      "description": "Figures checked against model and result data"
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run"
+}

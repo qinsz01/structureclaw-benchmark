@@ -1,0 +1,191 @@
+Input tables. X horizontal, Z upward; Y completes the right-handed system. Section shape dimensions B,H are mm; listed section properties are authoritative. Coordinates m; nodal forces kN; nodal moments kN*m; line loads kN/m; E,G MPa; A m2; Iy,Iz,J m4; density kg/m3. Restraints ordered ux,uy,uz,rx,ry,rz; true=fixed. Member local x follows the ordered end nodes. For planar XZ members local y is global +Y and local z=x cross y; bending about local y uses Iy. For spatial members the explicit reference vector defines local z by its projection normal to local x, local y=z cross x. Linear elastic first-order static analysis, self-weight OFF, no automatic loads/combinations, diaphragm, rigid offsets or P-delta. Distributed load intervals are measured in m along the actual member unless this turn explicitly leaves that basis unresolved. All omitted load components are zero. Beam-column joints are rigid unless explicitly restrained; truss elements are axial-only. Truss rotational restraints eliminate inactive bookkeeping DOFs and do not add rotational stiffness. Use OpenSees for every calculable state; rerun after a physical edit, and reuse a result for a pure query only when its state is unchanged. Retain solver version/settings, run ID, successful log, model snapshot and raw result mapping.
+Section shape dimensions B and H are mm. Members are rigidly continuous at shared nodes; only listed supports restrain planar DOFs. Use OpenSees with the explicit properties and settings. Report signed values with location, global direction, unit, case/combination and current turn. Rz is support reaction in global +Z; fixed-end My is support reaction moment about global +Y by the right-hand rule. After a physical change, run the current state and retain input, snapshot, model differences, software version/settings, run ID, success log and result mapping. Do not guess essential missing input or present historical results as the updated result.
+A continuous beam lies on global X with a pin at x=0 and vertical rollers at x=5 and 10 m. The free right end is initially x=12 m. In case D only the overhang x=10–12 m carries an 8 kN/m downward UDL, and a separate 10 kN downward point force acts at the free end. Both supported spans carry no UDL. All connected spans use B1.
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "n0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n1",
+      "x": 5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n2",
+      "x": 10,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n3",
+      "x": 12,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "b1",
+      "type": "beam",
+      "nodes": [
+        "n0",
+        "n1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b2",
+      "type": "beam",
+      "nodes": [
+        "n1",
+        "n2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b3",
+      "type": "beam",
+      "nodes": [
+        "n2",
+        "n3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "overhang-b3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b3",
+          "start": 0,
+          "end": 2,
+          "wz": -8
+        },
+        {
+          "id": "free-end-force",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "n3",
+          "fz": -10
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "b1": [
+        0,
+        0,
+        5
+      ],
+      "b2": [
+        0,
+        0,
+        5
+      ],
+      "b3": [
+        0,
+        0,
+        2
+      ]
+    }
+  }
+}

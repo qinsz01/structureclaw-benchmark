@@ -1,0 +1,433 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-098",
+  "modelId": "M-STD-098",
+  "family": "standard_workflow",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "高6m，底六自由度固定，顶X向20、Y向15、Z向-400kN，给非对称截面；完整属性按公共契约随题给出。 给出局部轴和两个不同主惯性矩，顶力为(20,15,-400)kN，采用一阶弹性。",
+    "task.modelingFocus": "两个弯曲方向与截面惯性矩",
+    "task.expectedOutput": "柱顶X/Y/Z位移及转角、柱底六分量反力，附对应截面轴。",
+    "task.gradingFocus": "两个弯曲方向与截面惯性矩；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "空间局部轴需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "竖直空间悬臂柱",
+    "model.boundaryKey": "底六自由度固定顶自由",
+    "model.loadKey": "顶点轴压加X/Y两个水平分量力",
+    "model.propertyKey": "非对称截面；两主惯性矩不同；局部轴明确",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "非对称截面两个主轴、局部轴与三维六分量反力须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；两主轴悬臂解析弯曲加轴向缩短，转回全局；六分量反力平衡复核。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-data.json",
+    "output-requests.json",
+    "analysis-conventions.txt",
+    "appendix-decisions.txt",
+    "output-scope.json"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Required solver: OpenSees.\nAnalyze the attached 6 m spatial cantilever column in OpenSees. All six base degrees of freedom are fixed and the top is free. In case D, apply the global top force (Fx,Fy,Fz)=(20,15,-400) kN at the centroidal reference axis. Use the supplied asymmetric unequal-flange welded H section, its distinct centroidal principal inertias, and its explicit local axes. Report all three top translations and all three top rotations, all six global base reactions, and the mapping between the two principal section inertias and the global bending directions. Use first-order linear elastic static analysis with self-weight and P-Delta disabled.\n\nUse all public appendices. Report the complete requested numerical table and the required summaries.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-data.json",
+        "output-requests.json",
+        "analysis-conventions.txt",
+        "appendix-decisions.txt",
+        "output-scope.json"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "out-case-D-node-top-ux",
+      "description": "case-D-node-top-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-top-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-top-uy",
+      "description": "case-D-node-top-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-top-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-top-uz",
+      "description": "case-D-node-top-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-top-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-top-rx",
+      "description": "case-D-node-top-rx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-top-rx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-top-ry",
+      "description": "case-D-node-top-ry",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-top-ry"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-top-rz",
+      "description": "case-D-node-top-rz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-top-rz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-Fx",
+      "description": "case-D-node-base-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-Fy",
+      "description": "case-D-node-base-Fy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-Fz",
+      "description": "case-D-node-base-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-Mx",
+      "description": "case-D-node-base-Mx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-My",
+      "description": "case-D-node-base-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-Mz",
+      "description": "case-D-node-base-Mz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "interaction-1",
+      "description": "Report the section-axis mapping: local x=global +Z, local y=global -Y and local z=global +X; global X bending uses Iy and global Y bending uses Iz. Include the numerical principal inertias from the appendix.",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "interaction"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        5
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "output:out-case-D-node-top-ux",
+        "output:out-case-D-node-top-uy",
+        "output:out-case-D-node-top-uz",
+        "output:out-case-D-node-top-rx",
+        "output:out-case-D-node-top-ry",
+        "output:out-case-D-node-top-rz",
+        "output:out-case-D-node-base-Fx",
+        "output:out-case-D-node-base-Fy",
+        "output:out-case-D-node-base-Fz",
+        "output:out-case-D-node-base-Mx",
+        "output:out-case-D-node-base-My",
+        "output:out-case-D-node-base-Mz",
+        "output:interaction-1",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        7,
+        8
+      ],
+      "targets": [
+        "output:out-case-D-node-top-ux",
+        "output:out-case-D-node-top-uy",
+        "output:out-case-D-node-top-uz",
+        "output:out-case-D-node-top-rx",
+        "output:out-case-D-node-top-ry",
+        "output:out-case-D-node-top-rz",
+        "output:out-case-D-node-base-Fx",
+        "output:out-case-D-node-base-Fy",
+        "output:out-case-D-node-base-Fz",
+        "output:out-case-D-node-base-Mx",
+        "output:out-case-D-node-base-My",
+        "output:out-case-D-node-base-Mz",
+        "output:interaction-1",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        9,
+        10
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        11
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        12
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        14,
+        15,
+        16
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        22,
+        23
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        24
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        25,
+        26,
+        27
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending"
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-case-acceptance",
+      "status": "pending"
+    },
+    {
+      "id": "model-fidelity",
+      "status": "pending"
+    },
+    {
+      "id": "signed-output-completeness",
+      "status": "pending"
+    }
+  ],
+  "authoringNotes": [
+    "The unspecified material is completed as Q355 steel, E=206000 MPa, nu=0.3, G=E/[2(1+nu)] and rho=7850 kg/m³.",
+    "The asymmetric section is an idealized welded H of total depth 400 mm, bottom flange 300x20 mm, top flange 200x15 mm and centered 12 mm web. Flanges have different widths and thicknesses, so reflection across local z=0 is not a symmetry. All dimensions and the centroid from the bottom outside face are given in the shape record.",
+    "A and the centroidal Iy/Iz are computed from the three non-overlapping component rectangles with the parallel-axis theorem. Since every component is centered in local y, Iyz=0 and local y/z are principal axes. J is the explicit open thin-wall sum of length times thickness cubed divided by 3. Fillets, warping and shear-center eccentric coupling are outside the declared Euler-Bernoulli idealization.",
+    "The reference vector is global +X. For the upward column, local x=+Z, local y=-Y and local z=+X, with zero section roll; Iy and Iz must not be interchanged.",
+    "The custom section supplies explicit A/Iy/Iz/J. Native adapter support for this custom shape remains an acceptance gate; the properties must not be replaced by a rectangular section.",
+    "All members use first-order linear elastic Euler-Bernoulli bending, axial deformation and finite Saint-Venant torsion stiffness. Shear deformation and self-weight are disabled. No geometric stiffness, buckling, capacity or reinforcement assessment is requested.",
+    "Section properties A, Iy, Iz and J are explicit inputs in SI units. Rectangular-section J uses the numerical approximation supplied in input-data.json; no default section properties may replace it."
+  ]
+}

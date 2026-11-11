@@ -1,0 +1,248 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "n0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n1",
+      "x": 2.5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n2",
+      "x": 3.25,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n3",
+      "x": 5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n4",
+      "x": 6.5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "b1",
+      "type": "beam",
+      "nodes": [
+        "n0",
+        "n1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b2",
+      "type": "beam",
+      "nodes": [
+        "n1",
+        "n2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b3",
+      "type": "beam",
+      "nodes": [
+        "n2",
+        "n3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b4",
+      "type": "beam",
+      "nodes": [
+        "n3",
+        "n4"
+      ],
+      "material": "M1",
+      "section": "B2"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "B2",
+      "name": "B2",
+      "type": "general",
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0026999999999999993,
+        "Iz": 0.0006749999999999998,
+        "J": 0.0037078593749999985
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "uniform-b1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b1",
+          "start": 0,
+          "end": 2.5,
+          "wz": -15
+        },
+        {
+          "id": "uniform-b2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b2",
+          "start": 0.0,
+          "end": 0.75,
+          "wz": -15
+        },
+        {
+          "id": "uniform-b3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b3",
+          "start": 0.0,
+          "end": 1.75,
+          "wz": -15
+        },
+        {
+          "id": "uniform-b4",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b4",
+          "start": 0,
+          "end": 1.5,
+          "wz": -15
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "b1": [
+        0,
+        0,
+        2.5
+      ],
+      "b2": [
+        0,
+        0,
+        0.75
+      ],
+      "b3": [
+        0,
+        0,
+        1.75
+      ],
+      "b4": [
+        0,
+        0,
+        1.5
+      ]
+    }
+  }
+}

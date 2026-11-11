@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-021",
+  "evaluationProfile": "engineering-v2.3",
+  "referenceKind": "independent-elastic-matrix",
+  "notCommercialScoringTruth": true,
+  "sameEngineTruthStatus": "pending",
+  "warnings": [
+    "Euler-Bernoulli reference omits shear deformation; Timoshenko displacements may differ physically. Frozen request tolerances are unchanged.",
+    "Commercial-engine references remain diagnostic pending independently reviewed same-engine native truth."
+  ],
+  "toleranceFrozenBeforeCandidate": true,
+  "inputHashes": {
+    "contract.json": "8911765afa1e5fdf9c58e43ed6dc016f6fb5d290fb0f0becd7df23850170489e",
+    "reference-requests.json": "4f0fb698dfcd4bf3d29839017c43a1c7841c24229ecd10356743c3b3a497fd91",
+    "model-state-1.json": "d306aa4a7927840a4f5f8c63b7365038fec26a85de798e6e71424e635f6a4ae6"
+  },
+  "sourceHash": "65fa58f174ff3ac2320f78b7c692f903016e4881ef6212154a95b4777d9440d1",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "8911765afa1e5fdf9c58e43ed6dc016f6fb5d290fb0f0becd7df23850170489e"
+      },
+      {
+        "path": "input-initial.png",
+        "sha256": "88050e6f9caff425a9ca10c2d98854fa1eb5454e0de2069af560b41194c6fdc4"
+      },
+      {
+        "path": "input-initial.svg",
+        "sha256": "4ba1a3dac8e2eb223a6598f6433e95de9b4e2af7ece7269fc90b60c5ef2a89dc"
+      },
+      {
+        "path": "input-resolved.png",
+        "sha256": "88050e6f9caff425a9ca10c2d98854fa1eb5454e0de2069af560b41194c6fdc4"
+      },
+      {
+        "path": "input-resolved.svg",
+        "sha256": "4ba1a3dac8e2eb223a6598f6433e95de9b4e2af7ece7269fc90b60c5ef2a89dc"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "d306aa4a7927840a4f5f8c63b7365038fec26a85de798e6e71424e635f6a4ae6"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "b19fe7960d51d46e94e7691c7cddcafa35b26332567c1d19529bda6f6e502b45"
+      },
+      {
+        "path": "properties-confirmed.txt",
+        "sha256": "c2c36ca8baca2a0d9b90a31606da08224811487534ff68b6d24feb523ee4d83a"
+      },
+      {
+        "path": "properties.txt",
+        "sha256": "7890dc183aadfc7d15430512d9aad99735de54f583d1e107daab320ce599ee27"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "4f0fb698dfcd4bf3d29839017c43a1c7841c24229ecd10356743c3b3a497fd91"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "quantities": [
+        {
+          "id": "case-D:n1:uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -5.328137902030477e-05
+        },
+        {
+          "id": "case-D:b1:V3@3:left",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "b1",
+            "positionM": 3,
+            "side": "left"
+          },
+          "component": "V3",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 11.171156893819337
+        },
+        {
+          "id": "case-D:b2:V3@0:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "b2",
+            "positionM": 0,
+            "side": "right"
+          },
+          "component": "V3",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -10.828843106180667
+        },
+        {
+          "id": "case-D:b1:M2@0:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "b1",
+            "positionM": 0,
+            "side": "right"
+          },
+          "component": "M2",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 46.84231378763867
+        }
+      ],
+      "derived": [
+        {
+          "id": "case-D:shear-jump-at-n1",
+          "operation": "difference",
+          "operands": [
+            "case-D:b2:V3@0:right",
+            "case-D:b1:V3@3:left"
+          ],
+          "unit": "kN",
+          "description": "首跨集中力点右侧V3减左侧V3，保留符号。",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -22.000000000000004,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 7.105427357601002e-15,
+      "forceMomentBalance": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "dofs": 24,
+      "freeDofs": 7,
+      "factorization": "scipy-sparse-superlu",
+      "factorizationCount": 1,
+      "rightHandSides": 1,
+      "minimumScaledPivot": 0.31578947368421034,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ]
+}

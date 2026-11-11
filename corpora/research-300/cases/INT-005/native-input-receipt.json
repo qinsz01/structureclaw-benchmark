@@ -1,0 +1,364 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-005",
+  "inputHashes": {
+    "contract.json": "4be7feea08a3cc5da62223c3caf82f7648040ffa0c22c3003bdf2088a59f7abb",
+    "reference-requests.json": "7aeb015ab79fb400b0b434f608c12cd5e0d81e6abc85489f404aee8717561b0c",
+    "model-state-1.json": "94eb094f5297fa72aa0de3cbf604119c126e5be613845f8d93d61985cd9c335c",
+    "model-state-2.json": "2679cd9997d0e6852dcd0ee824b72aef81b31b7710bff273e09aefe468251f8c"
+  },
+  "sourceHash": "94df401a0ea0aad51fdc46139cacfc154c83a733b9c69134883acd2a027329df",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "4be7feea08a3cc5da62223c3caf82f7648040ffa0c22c3003bdf2088a59f7abb"
+      },
+      {
+        "path": "input-tables.txt",
+        "sha256": "4a35bf3838a579905d7b341e8a42bfe1d7fa5b26a841e07a7a1ecfbfa9ca23ad"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "94eb094f5297fa72aa0de3cbf604119c126e5be613845f8d93d61985cd9c335c"
+      },
+      {
+        "path": "model-state-2.json",
+        "sha256": "2679cd9997d0e6852dcd0ee824b72aef81b31b7710bff273e09aefe468251f8c"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "277792477ac165c08e74a13dd6781c35bd94d374811251dadd7286176120e7c1"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "7aeb015ab79fb400b0b434f608c12cd5e0d81e6abc85489f404aee8717561b0c"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "n0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n1",
+            "x": 2,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n2",
+            "x": 4,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "b1",
+            "type": "beam",
+            "nodes": [
+              "n0",
+              "n1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b2",
+            "type": "beam",
+            "nodes": [
+              "n1",
+              "n2"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "midpoint-force",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n1",
+                "fz": -25
+              },
+              {
+                "id": "left-moment",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n0",
+                "my": 10
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "b1": [
+              0,
+              0,
+              2
+            ],
+            "b2": [
+              0,
+              0,
+              2
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    },
+    {
+      "state": 2,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "n0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n1",
+            "x": 2,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n2",
+            "x": 4,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "b1",
+            "type": "beam",
+            "nodes": [
+              "n0",
+              "n1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b2",
+            "type": "beam",
+            "nodes": [
+              "n1",
+              "n2"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "midpoint-force",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n1",
+                "fz": -40
+              },
+              {
+                "id": "left-moment",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n0",
+                "my": 10
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "b1": [
+              0,
+              0,
+              2
+            ],
+            "b2": [
+              0,
+              0,
+              2
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-2.json"
+    }
+  ]
+}

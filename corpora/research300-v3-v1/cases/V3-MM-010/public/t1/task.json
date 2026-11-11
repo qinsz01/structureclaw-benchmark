@@ -1,0 +1,132 @@
+{
+  "caseId": "V3-MM-010",
+  "turnId": "t1",
+  "family": "MM",
+  "title": "PKPM结构V2全新三维门刚项目实测：江苏某工业厂房设计：2号分析子结构",
+  "designLevel": "L1",
+  "engine": "OpenSees",
+  "analysis": "static",
+  "instruction": "依据签发图表和约定重建物理模型，执行指定分析并交付带符号结果、单位及真实作业标识。",
+  "requests": [
+    {
+      "id": "case:D:J003:ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J003"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case:D:J003:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J003"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case:D:J001:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J001"
+      },
+      "component": "Fx",
+      "unit": "kN"
+    },
+    {
+      "id": "case:D:J001:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "J001"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    },
+    {
+      "id": "case:D:M001:M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "M001",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m"
+    },
+    {
+      "id": "case:D:M002:M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "M002",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m"
+    }
+  ],
+  "derived": [],
+  "reportIds": [
+    "case:D:J003:ux",
+    "case:D:J003:uz",
+    "case:D:J001:Fx",
+    "case:D:J001:Fz",
+    "case:D:M001:M2",
+    "case:D:M002:M2"
+  ],
+  "requireShapes": false,
+  "sourceId": "SRC-JIANGSU-2023",
+  "authoringBasis": [
+    [
+      "来源 SRC-JIANGSU-2023；含7.5m吊车作用点的单根阶梯柱/带横梁局部构架：用题给等效节点力，检查反力及分段内力。",
+      "来源事实：SRC-JIANGSU-2023-F1 江苏某五跨工业厂房；檐口11.35m、柱距8m、屋面坡度5%。；SRC-JIANGSU-2023-F2 每跨两台5t吊车；吊车柱脚按刚接，抗风柱脚按铰接。；SRC-JIANGSU-2023-F3 吊车建模标高7.5m。",
+      "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+      "作者材料：线弹性钢，E=206000MPa，nu=0.3，G=E/[2(1+nu)]，rho=7850kg/m³。",
+      "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+      "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+      "吊车作用点7.5m、柱顶11.35m；30/12/25kN竖向等效作用及8/6kN横向作用均为作者给定，不从5t吊车吨位推算轮压。",
+      "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+      "截面尺寸(m)：B=0.22×0.48, C=0.32×0.55, A=0.07×0.1"
+    ]
+  ],
+  "attachments": [
+    "analysis-control.json",
+    "combinations.json",
+    "geometry-nodes-01.png",
+    "geometry-overview.png",
+    "loads.json",
+    "materials.csv",
+    "materials.json",
+    "members.csv",
+    "model-convention.json",
+    "sections.json",
+    "source-basis.json",
+    "tool-contract.md"
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-025",
+  "evaluationProfile": "engineering-v2.3",
+  "referenceKind": "independent-elastic-matrix",
+  "notCommercialScoringTruth": true,
+  "sameEngineTruthStatus": "pending",
+  "warnings": [
+    "Euler-Bernoulli reference omits shear deformation; Timoshenko displacements may differ physically. Frozen request tolerances are unchanged.",
+    "Commercial-engine references remain diagnostic pending independently reviewed same-engine native truth."
+  ],
+  "toleranceFrozenBeforeCandidate": true,
+  "inputHashes": {
+    "contract.json": "10b972fb8895acbcf8eac0b746ca969ebddcf961e98bdb1c6cb71d34259fa6d4",
+    "reference-requests.json": "f6744b7dcf13c4366826cd8bde773466f18af09c2281624a2b4d671ba4f74065",
+    "model-state-1.json": "5f83d5cd709bcbb9076545f06f166d13d6c232608ce62b066748c13215601fba"
+  },
+  "sourceHash": "ee5b1a08b77c951f3e2a88b5e44df8c5361379505cfe6eb3abf6737bf3278e4c",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "10b972fb8895acbcf8eac0b746ca969ebddcf961e98bdb1c6cb71d34259fa6d4"
+      },
+      {
+        "path": "input.png",
+        "sha256": "eb354bd8c366e97ea1b295ed568b0dad43caab463df4faca89f44dba3811ffc1"
+      },
+      {
+        "path": "input.svg",
+        "sha256": "c984d7bb08522c1d0006a42083307a56a35ae0a1c82fb63fd9810d8257f13e81"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "5f83d5cd709bcbb9076545f06f166d13d6c232608ce62b066748c13215601fba"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "0cb592853120d60079b212d6df3b59eced8c8bf8d39d5126af3662c39b1bfafd"
+      },
+      {
+        "path": "properties.txt",
+        "sha256": "48e1c0b0155dc4c1159f19b12b6a575c1ca819c1f082a7895db9d467e87e1067"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "f6744b7dcf13c4366826cd8bde773466f18af09c2281624a2b4d671ba4f74065"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "quantities": [
+        {
+          "id": "case-D:n1:ry",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1"
+          },
+          "component": "ry",
+          "unit": "rad",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.1236965120460269e-05
+        },
+        {
+          "id": "case-D:b1:M2@0:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "b1",
+            "positionM": 0,
+            "side": "right"
+          },
+          "component": "M2",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 7.499999999999999
+        },
+        {
+          "id": "case-D:b2:M2@5:left",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "b2",
+            "positionM": 5,
+            "side": "left"
+          },
+          "component": "M2",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 17.5
+        }
+      ],
+      "derived": []
+    }
+  ],
+  "checks": [
+    {
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 3.552713678800501e-15,
+      "forceMomentBalance": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "dofs": 18,
+      "freeDofs": 2,
+      "factorization": "scipy-sparse-superlu",
+      "factorizationCount": 1,
+      "rightHandSides": 1,
+      "minimumScaledPivot": 0.9999999999999998,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ]
+}

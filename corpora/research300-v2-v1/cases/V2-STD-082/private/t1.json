@@ -1,0 +1,889 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "dimension": "2d",
+      "plane": "xz",
+      "semantics": "global-z-up",
+      "version": 1,
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "N0-0",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N1-0",
+        "x": 23.61,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N2-0",
+        "x": 55.82,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N0-1",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 31.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "N1-1",
+        "x": 23.61,
+        "y": 0.0,
+        "z": 31.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "N2-1",
+        "x": 55.82,
+        "y": 0.0,
+        "z": 31.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "OBS-B0-1",
+        "x": 11.805,
+        "y": 0.0,
+        "z": 31.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "OBS-B1-1",
+        "x": 39.715,
+        "y": 0.0,
+        "z": 31.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "C0-1",
+        "type": "column",
+        "nodes": [
+          "N0-0",
+          "N0-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C1-1",
+        "type": "column",
+        "nodes": [
+          "N1-0",
+          "N1-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C2-1",
+        "type": "column",
+        "nodes": [
+          "N2-0",
+          "N2-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "B0-1-i",
+        "type": "beam",
+        "nodes": [
+          "N0-1",
+          "OBS-B0-1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "B0-1-j",
+        "type": "beam",
+        "nodes": [
+          "OBS-B0-1",
+          "N1-1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "B1-1-i",
+        "type": "beam",
+        "nodes": [
+          "N1-1",
+          "OBS-B1-1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "B1-1-j",
+        "type": "beam",
+        "nodes": [
+          "OBS-B1-1",
+          "N2-1"
+        ],
+        "material": "S",
+        "section": "B"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "B",
+        "name": "B",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 280.0,
+          "H": 650.0
+        },
+        "properties": {
+          "A": 0.18200000000000002,
+          "Iy": 0.006407916666666667,
+          "Iz": 0.001189066666666667,
+          "J": 0.0034691928781415485
+        }
+      },
+      {
+        "id": "C",
+        "name": "C",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 450.0,
+          "H": 750.0
+        },
+        "properties": {
+          "A": 0.3375,
+          "Iy": 0.0158203125,
+          "Iz": 0.005695312500000001,
+          "J": 0.014262939675
+        }
+      },
+      {
+        "id": "A",
+        "name": "A",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 100.0,
+          "H": 120.0
+        },
+        "properties": {
+          "A": 0.012,
+          "Iy": 1.4399999999999998e-05,
+          "Iz": 1.0000000000000003e-05,
+          "J": 1.984394290123457e-05
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "type": "distributed",
+            "element": "B0-1-i",
+            "wz": -15.0,
+            "id": "D-1",
+            "reference_frame": "global"
+          },
+          {
+            "type": "distributed",
+            "element": "B0-1-j",
+            "wz": -15.0,
+            "id": "D-2",
+            "reference_frame": "global"
+          },
+          {
+            "type": "distributed",
+            "element": "B1-1-i",
+            "wz": -15.0,
+            "id": "D-3",
+            "reference_frame": "global"
+          },
+          {
+            "type": "distributed",
+            "element": "B1-1-j",
+            "wz": -15.0,
+            "id": "D-4",
+            "reference_frame": "global"
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "type": "distributed",
+            "element": "B0-1-i",
+            "wz": -3.75,
+            "id": "Q-1",
+            "reference_frame": "global"
+          },
+          {
+            "type": "distributed",
+            "element": "B0-1-j",
+            "wz": -3.75,
+            "id": "Q-2",
+            "reference_frame": "global"
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "type": "nodal",
+            "node": "N2-1",
+            "fx": 10.0,
+            "id": "W-1",
+            "reference_frame": "global"
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "SERVICE",
+        "factors": {
+          "D": 1.0,
+          "Q": 1.0
+        }
+      },
+      {
+        "id": "REVERSE",
+        "factors": {
+          "D": 1.0,
+          "W": -1.0
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    },
+    "metadata": {}
+  },
+  "kind": "static",
+  "engine": "OpenSees",
+  "derived": [
+    {
+      "id": "signed-governing-vertical-response",
+      "operation": "max_abs",
+      "operands": [
+        "case:D:N1-1:uz",
+        "case:D:N2-1:uz",
+        "combination:SERVICE:N1-1:uz",
+        "combination:SERVICE:N2-1:uz",
+        "combination:REVERSE:N1-1:uz",
+        "combination:REVERSE:N2-1:uz"
+      ],
+      "unit": "m",
+      "tiePolicy": "any"
+    }
+  ],
+  "requests": [
+    {
+      "id": "case:D:N2-1:ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N2-1"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.004893531399091325
+    },
+    {
+      "id": "case:D:N1-1:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.00020376319418773851
+    },
+    {
+      "id": "case:D:N0-0:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 22.375751534194283
+    },
+    {
+      "id": "case:D:N0-0:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 154.89269916487476
+    },
+    {
+      "id": "case:D:N2-1:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N2-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.0001024735233391354
+    },
+    {
+      "id": "case:D:C0-1:M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "C0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -265.12607429974065
+    },
+    {
+      "id": "case:D:C1-1:M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "C1-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -258.19502186442094
+    },
+    {
+      "id": "combination:SERVICE:N2-1:ux",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N2-1"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.004104429577815582
+    },
+    {
+      "id": "combination:SERVICE:N1-1:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.00022484015007751205
+    },
+    {
+      "id": "combination:SERVICE:N0-0:Fx",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 28.18619323906326
+    },
+    {
+      "id": "combination:SERVICE:N0-0:Fz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 197.8887347789314
+    },
+    {
+      "id": "combination:SERVICE:N2-1:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N2-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.0001018337294607453
+    },
+    {
+      "id": "combination:SERVICE:C0-1:M2",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "C0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -320.2478385363418
+    },
+    {
+      "id": "combination:SERVICE:C1-1:M2",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "C1-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -190.05039843661837
+    },
+    {
+      "id": "combination:REVERSE:N2-1:ux",
+      "selection": {
+        "kind": "combination",
+        "id": "REVERSE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N2-1"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.009254625143288613
+    },
+    {
+      "id": "combination:REVERSE:N1-1:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "REVERSE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.00020323098496027186
+    },
+    {
+      "id": "combination:REVERSE:N0-0:Fx",
+      "selection": {
+        "kind": "combination",
+        "id": "REVERSE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 25.51279535991233
+    },
+    {
+      "id": "combination:REVERSE:N0-0:Fz",
+      "selection": {
+        "kind": "combination",
+        "id": "REVERSE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0-0"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 157.73563103862014
+    },
+    {
+      "id": "combination:REVERSE:N2-1:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "REVERSE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N2-1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.0001017299400536807
+    },
+    {
+      "id": "combination:REVERSE:C0-1:M2",
+      "selection": {
+        "kind": "combination",
+        "id": "REVERSE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "C0-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -326.8977927037468
+    },
+    {
+      "id": "combination:REVERSE:C1-1:M2",
+      "selection": {
+        "kind": "combination",
+        "id": "REVERSE"
+      },
+      "location": {
+        "kind": "member",
+        "id": "C1-1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -329.5093333192862
+    }
+  ],
+  "clarificationFields": [],
+  "referenceChecks": [
+    {
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 5.307946911415128e-12,
+      "forceMomentBalance": [
+        3.137142516024432e-12,
+        0.0,
+        0.0,
+        0.0,
+        9.822542779147625e-11,
+        0.0
+      ],
+      "dofs": 48,
+      "freeDofs": 15,
+      "factorization": "numpy-cholesky-batched",
+      "factorizationCount": 1,
+      "rightHandSides": 3,
+      "minimumScaledPivot": 0.0005156707683970919,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ]
+    },
+    {
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 2.85116660096929e-12,
+      "forceMomentBalance": [
+        -2.6387211480631285e-12,
+        0.0,
+        0.0,
+        0.0,
+        -7.639755494892597e-11,
+        0.0
+      ],
+      "dofs": 48,
+      "freeDofs": 15,
+      "factorization": "numpy-cholesky-batched",
+      "factorizationCount": 1,
+      "rightHandSides": 3,
+      "minimumScaledPivot": 0.0005156707683970919,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ]
+    },
+    {
+      "selection": {
+        "kind": "combination",
+        "id": "REVERSE"
+      },
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 2.688352232732165e-12,
+      "forceMomentBalance": [
+        -1.4725998198628076e-12,
+        0.0,
+        0.0,
+        0.0,
+        -4.729372449219227e-11,
+        0.0
+      ],
+      "dofs": 48,
+      "freeDofs": 15,
+      "factorization": "numpy-cholesky-batched",
+      "factorizationCount": 1,
+      "rightHandSides": 3,
+      "minimumScaledPivot": 0.0005156707683970919,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ]
+    }
+  ],
+  "reportIds": [
+    "case:D:N2-1:ux",
+    "case:D:N1-1:uz",
+    "case:D:N0-0:Fx",
+    "case:D:N0-0:Fz",
+    "case:D:N2-1:uz",
+    "case:D:C0-1:M2",
+    "case:D:C1-1:M2",
+    "combination:SERVICE:N2-1:ux",
+    "combination:SERVICE:N1-1:uz",
+    "combination:SERVICE:N0-0:Fx",
+    "combination:SERVICE:N0-0:Fz",
+    "combination:SERVICE:N2-1:uz",
+    "combination:SERVICE:C0-1:M2",
+    "combination:SERVICE:C1-1:M2",
+    "combination:REVERSE:N2-1:ux",
+    "combination:REVERSE:N1-1:uz",
+    "combination:REVERSE:N0-0:Fx",
+    "combination:REVERSE:N0-0:Fz",
+    "combination:REVERSE:N2-1:uz",
+    "combination:REVERSE:C0-1:M2",
+    "combination:REVERSE:C1-1:M2"
+  ]
+}

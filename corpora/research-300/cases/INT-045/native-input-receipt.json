@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-045",
+  "inputHashes": {
+    "contract.json": "d03d38c7df37b224f97d2cbc85c041860236fc8a3d4be6929aa096a8923b64b7",
+    "reference-requests.json": "7106b0862a88441cfe6a0b6ff29ef1cd58fdc5231db0d05687603f3b76a409e1",
+    "model-state-1.json": "76b1a043a7e31654a73033884683a27352fc0d8ee1f591710bbe0b45985c7b23"
+  },
+  "sourceHash": "b8a8d61d53d2826a0adecd5c82392d4a1c855563228fbfeac992695c63956791",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "d03d38c7df37b224f97d2cbc85c041860236fc8a3d4be6929aa096a8923b64b7"
+      },
+      {
+        "path": "input-t1.txt",
+        "sha256": "470a60fd71d5f11304e1012d4f9dadf2509a5d408dae585e0c19c2581e5cd8fe"
+      },
+      {
+        "path": "input-t2.txt",
+        "sha256": "920c602ea583f06e1a6dfd5f749833f81153aea88cb7eae3e32adae9eb81b9e6"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "76b1a043a7e31654a73033884683a27352fc0d8ee1f591710bbe0b45985c7b23"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "63c5df40d34b808a0ed522331df70b79889a84ec39100c72fb534b91d99a745a"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "7106b0862a88441cfe6a0b6ff29ef1cd58fdc5231db0d05687603f3b76a409e1"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 21,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "P",
+            "x": 0,
+            "y": 0,
+            "z": 3,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "L",
+            "x": 0,
+            "y": 0,
+            "z": 7.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "R",
+            "x": 21,
+            "y": 0,
+            "z": 7.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "cLa",
+            "type": "column",
+            "nodes": [
+              "A",
+              "P"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "cLb",
+            "type": "column",
+            "nodes": [
+              "P",
+              "L"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "cR",
+            "type": "column",
+            "nodes": [
+              "B",
+              "R"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "roof",
+            "type": "beam",
+            "nodes": [
+              "L",
+              "R"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "q-roof",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "roof",
+                "wz": -8
+              },
+              {
+                "id": "column-side",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "P",
+                "fx": 9
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "cLa": [
+              -3,
+              0,
+              0
+            ],
+            "cLb": [
+              -4.5,
+              0,
+              0
+            ],
+            "cR": [
+              -7.5,
+              0,
+              0
+            ],
+            "roof": [
+              -0.0,
+              0,
+              21
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

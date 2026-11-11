@@ -1,0 +1,36 @@
+{
+  "gravityMPerS2": 9.80665,
+  "roofJointRule": "At each issued X/Y grid location take the highest issued joint; use adjacent joints on each Y line as strip bearings.",
+  "loadSharing": "One-way strip resultant to its two bounding roof joints by integrating linear distance weights. Preserve force and first moment. This is an issued lumped deck model, not a plate/shell analysis.",
+  "areaBasis": {
+    "D": "horizontal projection",
+    "Q": "horizontal projection",
+    "W": "actual surface, pressure in the upward local normal"
+  },
+  "stripWidthM": 2.8,
+  "planEdgesY": null,
+  "zones": [
+    {
+      "id": "WEST",
+      "startX": 0.0,
+      "endX": 5.246,
+      "D": 1.3,
+      "Q": 2.8,
+      "W": 0.55
+    },
+    {
+      "id": "EAST",
+      "startX": 5.246,
+      "endX": 12.2,
+      "D": 1.55,
+      "Q": 4.2,
+      "W": 0.8
+    }
+  ],
+  "horizontalAction": {
+    "fxKN": 10,
+    "fyKN": 0.0,
+    "placement": "Equally over roof joints at the largest issued Z."
+  },
+  "memberGravity": "Uniform explicit global -Z line load rho*A*g/1000 on beams/columns; half rho*A*L*g/1000 nodal loads at each axial-bar end. Automatic self_weight stays false."
+}

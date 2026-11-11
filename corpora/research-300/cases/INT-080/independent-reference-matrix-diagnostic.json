@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-080",
+  "evaluationProfile": "engineering-v2.3",
+  "referenceKind": "independent-elastic-matrix",
+  "notCommercialScoringTruth": true,
+  "sameEngineTruthStatus": "pending",
+  "warnings": [
+    "Timoshenko diagnostic uses publicly prescribed Asy=Asz=5*A/6; native serialization differences require separate input review. Frozen request tolerances are unchanged.",
+    "Commercial-engine references remain diagnostic pending independently reviewed same-engine native truth."
+  ],
+  "toleranceFrozenBeforeCandidate": true,
+  "inputHashes": {
+    "contract.json": "94da13f4284dad47a76940fd3569001bfd2a31512071d55989fcb2d5b0bcb717",
+    "reference-requests.json": "c0f48ddfbe462cb91f995cb215bbeaa288c298402357b41e8b6327d9d9e50614",
+    "model-state-1.json": "cf350ac0135ac300796cd002c327693b9e1cc6820146ef2bb03580b635c46cfc"
+  },
+  "sourceHash": "91e93adb994aaa11c1fa883d4705fc75dd6e3fcf46ec2cd0939c937c6457ede3",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions-v2.txt",
+        "sha256": "9629fdf21147ce9e824418679e65d181a1a6b30d8bc5e79ab81d9d39f3d51ed9"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "94da13f4284dad47a76940fd3569001bfd2a31512071d55989fcb2d5b0bcb717"
+      },
+      {
+        "path": "input-t1.json",
+        "sha256": "a2dad98679906c7b0b972f1c007e646e223e1563c4e86b779e5a0592b595e9ea"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "cf350ac0135ac300796cd002c327693b9e1cc6820146ef2bb03580b635c46cfc"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "ea5280136341af6dfd0dd7e1a6c058cb37a46f98608c157c1b253e06c47a948b"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "c0f48ddfbe462cb91f995cb215bbeaa288c298402357b41e8b6327d9d9e50614"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "quantities": [
+        {
+          "id": "case-D--n2-1-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.356927878520545e-06
+        },
+        {
+          "id": "case-D--n2-1-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.2143951145349519e-05
+        },
+        {
+          "id": "case-D--n2-1-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -7.791537471845652e-21
+        },
+        {
+          "id": "case-D--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 9.408177019450955
+        },
+        {
+          "id": "case-D--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 113.23018645022296
+        }
+      ],
+      "derived": []
+    }
+  ],
+  "checks": [
+    {
+      "method": "independent-direct-stiffness",
+      "theory": "Timoshenko",
+      "freeResidual": 8.526512829121202e-14,
+      "forceMomentBalance": [
+        6.032193612560188e-15,
+        1.7256332301709633e-31,
+        -1.1368683772161603e-13,
+        0.0,
+        9.094947017729282e-13,
+        -1.2500688192790208e-14
+      ],
+      "dofs": 108,
+      "freeDofs": 72,
+      "factorization": "scipy-sparse-superlu",
+      "factorizationCount": 1,
+      "rightHandSides": 1,
+      "minimumScaledPivot": 0.016219700266848602,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Timoshenko bending with explicit effective shear areas.",
+        "Shear areas are caller-supplied diagnostics; no native-input qualification or corpus promotion is implied.",
+        "Only nodal/point and piecewise-constant distributed loads are supported in finite-shear mode.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "c0-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        }
+      },
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ],
+  "analysisConvention": {
+    "id": "commercial-linear-static-v2",
+    "bendingTheory": "Timoshenko",
+    "effectiveShearAreas": {
+      "localY": "5*A/6",
+      "localZ": "5*A/6"
+    },
+    "publicAttachment": "analysis-conventions-v2.txt"
+  }
+}

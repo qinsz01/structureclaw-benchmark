@@ -1,0 +1,1375 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-092",
+  "modelId": "M-STD-092",
+  "family": "standard_workflow",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "单层2乘1跨，屋面一侧高6m另一侧8m，坡梁按实际长度竖向加载；完整属性按公共契约随题给出。 X跨6+6m、Y跨5m，Y=0侧高6m、Y=5侧高8m；各屋面梁按实际长度向下5kN/m。",
+    "task.modelingFocus": "三维斜梁连接与荷载投影",
+    "task.expectedOutput": "四角及坡面中线节点三向位移、斜梁端力、所有柱脚反力。",
+    "task.gradingFocus": "三维斜梁连接与荷载投影；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "斜杆荷载与局部轴需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "空间单层X两跨Y一跨；单坡斜屋面",
+    "model.boundaryKey": "全部柱脚六自由度固定",
+    "model.loadKey": "每根屋面梁按真实杆长全局竖向线载",
+    "model.propertyKey": "单钢材料；梁柱分组截面及局部轴",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "空间坡梁实际长度线载、全局方向及三维端力转换须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立三维坐标变换解；按真实长度逐梁算总载并核验空间力矩。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-data.json",
+    "output-requests.json",
+    "analysis-conventions.txt"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Required solver: OpenSees.\nBuild a single-story spatial steel frame with X bays 6+6 m and one Y bay 5 m. The roof edge at Y=0 is at Z=6 m; the edge at Y=5 is at Z=8 m. Fix all six column bases in all six degrees of freedom. Roof beams follow the actual single-slope surface: four horizontal X beams of length 6 m and three sloping Y beams of length sqrt(29) m. Use Q355 steel (E=206000 MPa, nu=0.3, G=206000/2.6 MPa, density=7850 kg/m^3), solid rectangular columns C1=400x500 mm, X beams BX=300x600 mm and sloping Y beams BY=250x500 mm. D applies global downward 5 kN/m per actual member length to every roof beam. Each sloping beam has a connected, unreleased midpoint node at Y=2.5, Z=7 m; its two halves have the same section and load intensity, without added mass. Use OpenSees for first-order linear elastic Euler-Bernoulli analysis, self weight off. Report ux/uy/uz at the four roof corners, both edge nodes on X=6 and all three slope midline nodes at Y=2.5 (nine nodes in total), all six local end-force components at both physical ends of each of the three sloping beams, and all six reaction components at every base.\n\nUse all public appendices. Report the complete requested numerical table and the required summaries.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-data.json",
+        "output-requests.json",
+        "analysis-conventions.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "out-case-D-node-n0-0-1-ux",
+      "description": "case-D-node-n0-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-1-uy",
+      "description": "case-D-node-n0-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-1-uz",
+      "description": "case-D-node-n0-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-1-ux",
+      "description": "case-D-node-n0-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-1-uy",
+      "description": "case-D-node-n0-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-1-uz",
+      "description": "case-D-node-n0-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-1-ux",
+      "description": "case-D-node-n1-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-1-uy",
+      "description": "case-D-node-n1-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-1-uz",
+      "description": "case-D-node-n1-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-1-ux",
+      "description": "case-D-node-n1-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-1-uy",
+      "description": "case-D-node-n1-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-1-uz",
+      "description": "case-D-node-n1-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-1-ux",
+      "description": "case-D-node-n2-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-1-uy",
+      "description": "case-D-node-n2-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-1-uz",
+      "description": "case-D-node-n2-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-1-ux",
+      "description": "case-D-node-n2-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-1-uy",
+      "description": "case-D-node-n2-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-1-uz",
+      "description": "case-D-node-n2-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y0-0-1-ux",
+      "description": "case-D-node-mid-y0-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y0-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y0-0-1-uy",
+      "description": "case-D-node-mid-y0-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y0-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y0-0-1-uz",
+      "description": "case-D-node-mid-y0-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y0-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y1-0-1-ux",
+      "description": "case-D-node-mid-y1-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y1-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y1-0-1-uy",
+      "description": "case-D-node-mid-y1-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y1-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y1-0-1-uz",
+      "description": "case-D-node-mid-y1-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y1-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y2-0-1-ux",
+      "description": "case-D-node-mid-y2-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y2-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y2-0-1-uy",
+      "description": "case-D-node-mid-y2-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y2-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-mid-y2-0-1-uz",
+      "description": "case-D-node-mid-y2-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-mid-y2-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-a-s0-right-N",
+      "description": "case-D-member-y0-0-1-a-s0-right-N",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-a-s0-right-N"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-a-s0-right-V2",
+      "description": "case-D-member-y0-0-1-a-s0-right-V2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-a-s0-right-V2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-a-s0-right-V3",
+      "description": "case-D-member-y0-0-1-a-s0-right-V3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-a-s0-right-V3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-a-s0-right-T",
+      "description": "case-D-member-y0-0-1-a-s0-right-T",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-a-s0-right-T"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-a-s0-right-M2",
+      "description": "case-D-member-y0-0-1-a-s0-right-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-a-s0-right-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-a-s0-right-M3",
+      "description": "case-D-member-y0-0-1-a-s0-right-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-a-s0-right-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-b-s2.69258240357-left-N",
+      "description": "case-D-member-y0-0-1-b-s2.69258240357-left-N",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-b-s2.69258240357-left-N"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-b-s2.69258240357-left-V2",
+      "description": "case-D-member-y0-0-1-b-s2.69258240357-left-V2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-b-s2.69258240357-left-V2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-b-s2.69258240357-left-V3",
+      "description": "case-D-member-y0-0-1-b-s2.69258240357-left-V3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-b-s2.69258240357-left-V3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-b-s2.69258240357-left-T",
+      "description": "case-D-member-y0-0-1-b-s2.69258240357-left-T",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-b-s2.69258240357-left-T"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-b-s2.69258240357-left-M2",
+      "description": "case-D-member-y0-0-1-b-s2.69258240357-left-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-b-s2.69258240357-left-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y0-0-1-b-s2.69258240357-left-M3",
+      "description": "case-D-member-y0-0-1-b-s2.69258240357-left-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y0-0-1-b-s2.69258240357-left-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-a-s0-right-N",
+      "description": "case-D-member-y1-0-1-a-s0-right-N",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-a-s0-right-N"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-a-s0-right-V2",
+      "description": "case-D-member-y1-0-1-a-s0-right-V2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-a-s0-right-V2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-a-s0-right-V3",
+      "description": "case-D-member-y1-0-1-a-s0-right-V3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-a-s0-right-V3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-a-s0-right-T",
+      "description": "case-D-member-y1-0-1-a-s0-right-T",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-a-s0-right-T"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-a-s0-right-M2",
+      "description": "case-D-member-y1-0-1-a-s0-right-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-a-s0-right-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-a-s0-right-M3",
+      "description": "case-D-member-y1-0-1-a-s0-right-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-a-s0-right-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-b-s2.69258240357-left-N",
+      "description": "case-D-member-y1-0-1-b-s2.69258240357-left-N",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-b-s2.69258240357-left-N"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-b-s2.69258240357-left-V2",
+      "description": "case-D-member-y1-0-1-b-s2.69258240357-left-V2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-b-s2.69258240357-left-V2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-b-s2.69258240357-left-V3",
+      "description": "case-D-member-y1-0-1-b-s2.69258240357-left-V3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-b-s2.69258240357-left-V3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-b-s2.69258240357-left-T",
+      "description": "case-D-member-y1-0-1-b-s2.69258240357-left-T",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-b-s2.69258240357-left-T"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-b-s2.69258240357-left-M2",
+      "description": "case-D-member-y1-0-1-b-s2.69258240357-left-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-b-s2.69258240357-left-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y1-0-1-b-s2.69258240357-left-M3",
+      "description": "case-D-member-y1-0-1-b-s2.69258240357-left-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y1-0-1-b-s2.69258240357-left-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-a-s0-right-N",
+      "description": "case-D-member-y2-0-1-a-s0-right-N",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-a-s0-right-N"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-a-s0-right-V2",
+      "description": "case-D-member-y2-0-1-a-s0-right-V2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-a-s0-right-V2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-a-s0-right-V3",
+      "description": "case-D-member-y2-0-1-a-s0-right-V3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-a-s0-right-V3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-a-s0-right-T",
+      "description": "case-D-member-y2-0-1-a-s0-right-T",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-a-s0-right-T"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-a-s0-right-M2",
+      "description": "case-D-member-y2-0-1-a-s0-right-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-a-s0-right-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-a-s0-right-M3",
+      "description": "case-D-member-y2-0-1-a-s0-right-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-a-s0-right-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-b-s2.69258240357-left-N",
+      "description": "case-D-member-y2-0-1-b-s2.69258240357-left-N",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-b-s2.69258240357-left-N"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-b-s2.69258240357-left-V2",
+      "description": "case-D-member-y2-0-1-b-s2.69258240357-left-V2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-b-s2.69258240357-left-V2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-b-s2.69258240357-left-V3",
+      "description": "case-D-member-y2-0-1-b-s2.69258240357-left-V3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-b-s2.69258240357-left-V3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-b-s2.69258240357-left-T",
+      "description": "case-D-member-y2-0-1-b-s2.69258240357-left-T",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-b-s2.69258240357-left-T"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-b-s2.69258240357-left-M2",
+      "description": "case-D-member-y2-0-1-b-s2.69258240357-left-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-b-s2.69258240357-left-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-y2-0-1-b-s2.69258240357-left-M3",
+      "description": "case-D-member-y2-0-1-b-s2.69258240357-left-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-y2-0-1-b-s2.69258240357-left-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-0-Fx",
+      "description": "case-D-node-n0-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-0-Fy",
+      "description": "case-D-node-n0-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-0-Fz",
+      "description": "case-D-node-n0-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-0-Mx",
+      "description": "case-D-node-n0-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-0-My",
+      "description": "case-D-node-n0-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-0-Mz",
+      "description": "case-D-node-n0-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-0-Fx",
+      "description": "case-D-node-n0-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-0-Fy",
+      "description": "case-D-node-n0-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-0-Fz",
+      "description": "case-D-node-n0-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-0-Mx",
+      "description": "case-D-node-n0-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-0-My",
+      "description": "case-D-node-n0-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-1-0-Mz",
+      "description": "case-D-node-n0-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-0-Fx",
+      "description": "case-D-node-n1-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-0-Fy",
+      "description": "case-D-node-n1-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-0-Fz",
+      "description": "case-D-node-n1-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-0-Mx",
+      "description": "case-D-node-n1-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-0-My",
+      "description": "case-D-node-n1-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-0-Mz",
+      "description": "case-D-node-n1-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-0-Fx",
+      "description": "case-D-node-n1-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-0-Fy",
+      "description": "case-D-node-n1-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-0-Fz",
+      "description": "case-D-node-n1-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-0-Mx",
+      "description": "case-D-node-n1-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-0-My",
+      "description": "case-D-node-n1-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-0-Mz",
+      "description": "case-D-node-n1-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-0-Fx",
+      "description": "case-D-node-n2-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-0-Fy",
+      "description": "case-D-node-n2-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-0-Fz",
+      "description": "case-D-node-n2-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-0-Mx",
+      "description": "case-D-node-n2-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-0-My",
+      "description": "case-D-node-n2-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-0-0-Mz",
+      "description": "case-D-node-n2-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-0-Fx",
+      "description": "case-D-node-n2-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-0-Fy",
+      "description": "case-D-node-n2-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-0-Fz",
+      "description": "case-D-node-n2-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-0-Mx",
+      "description": "case-D-node-n2-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-0-My",
+      "description": "case-D-node-n2-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n2-1-0-Mz",
+      "description": "case-D-node-n2-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n2-1-0-Mz"
+      ],
+      "kind": "numerical"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7
+      ],
+      "targets": [
+        "output:out-case-D-node-n0-0-1-ux",
+        "output:out-case-D-node-n0-0-1-uy",
+        "output:out-case-D-node-n0-0-1-uz",
+        "output:out-case-D-node-n0-1-1-ux",
+        "output:out-case-D-node-n0-1-1-uy",
+        "output:out-case-D-node-n0-1-1-uz",
+        "output:out-case-D-node-n1-0-1-ux",
+        "output:out-case-D-node-n1-0-1-uy",
+        "output:out-case-D-node-n1-0-1-uz",
+        "output:out-case-D-node-n1-1-1-ux",
+        "output:out-case-D-node-n1-1-1-uy",
+        "output:out-case-D-node-n1-1-1-uz",
+        "output:out-case-D-node-n2-0-1-ux",
+        "output:out-case-D-node-n2-0-1-uy",
+        "output:out-case-D-node-n2-0-1-uz",
+        "output:out-case-D-node-n2-1-1-ux",
+        "output:out-case-D-node-n2-1-1-uy",
+        "output:out-case-D-node-n2-1-1-uz",
+        "output:out-case-D-node-mid-y0-0-1-ux",
+        "output:out-case-D-node-mid-y0-0-1-uy",
+        "output:out-case-D-node-mid-y0-0-1-uz",
+        "output:out-case-D-node-mid-y1-0-1-ux",
+        "output:out-case-D-node-mid-y1-0-1-uy",
+        "output:out-case-D-node-mid-y1-0-1-uz",
+        "output:out-case-D-node-mid-y2-0-1-ux",
+        "output:out-case-D-node-mid-y2-0-1-uy",
+        "output:out-case-D-node-mid-y2-0-1-uz",
+        "output:out-case-D-member-y0-0-1-a-s0-right-N",
+        "output:out-case-D-member-y0-0-1-a-s0-right-V2",
+        "output:out-case-D-member-y0-0-1-a-s0-right-V3",
+        "output:out-case-D-member-y0-0-1-a-s0-right-T",
+        "output:out-case-D-member-y0-0-1-a-s0-right-M2",
+        "output:out-case-D-member-y0-0-1-a-s0-right-M3",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-N",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-V2",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-V3",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-T",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-M2",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-M3",
+        "output:out-case-D-member-y1-0-1-a-s0-right-N",
+        "output:out-case-D-member-y1-0-1-a-s0-right-V2",
+        "output:out-case-D-member-y1-0-1-a-s0-right-V3",
+        "output:out-case-D-member-y1-0-1-a-s0-right-T",
+        "output:out-case-D-member-y1-0-1-a-s0-right-M2",
+        "output:out-case-D-member-y1-0-1-a-s0-right-M3",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-N",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-V2",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-V3",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-T",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-M2",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-M3",
+        "output:out-case-D-member-y2-0-1-a-s0-right-N",
+        "output:out-case-D-member-y2-0-1-a-s0-right-V2",
+        "output:out-case-D-member-y2-0-1-a-s0-right-V3",
+        "output:out-case-D-member-y2-0-1-a-s0-right-T",
+        "output:out-case-D-member-y2-0-1-a-s0-right-M2",
+        "output:out-case-D-member-y2-0-1-a-s0-right-M3",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-N",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-V2",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-V3",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-T",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-M2",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-M3",
+        "output:out-case-D-node-n0-0-0-Fx",
+        "output:out-case-D-node-n0-0-0-Fy",
+        "output:out-case-D-node-n0-0-0-Fz",
+        "output:out-case-D-node-n0-0-0-Mx",
+        "output:out-case-D-node-n0-0-0-My",
+        "output:out-case-D-node-n0-0-0-Mz",
+        "output:out-case-D-node-n0-1-0-Fx",
+        "output:out-case-D-node-n0-1-0-Fy",
+        "output:out-case-D-node-n0-1-0-Fz",
+        "output:out-case-D-node-n0-1-0-Mx",
+        "output:out-case-D-node-n0-1-0-My",
+        "output:out-case-D-node-n0-1-0-Mz",
+        "output:out-case-D-node-n1-0-0-Fx",
+        "output:out-case-D-node-n1-0-0-Fy",
+        "output:out-case-D-node-n1-0-0-Fz",
+        "output:out-case-D-node-n1-0-0-Mx",
+        "output:out-case-D-node-n1-0-0-My",
+        "output:out-case-D-node-n1-0-0-Mz",
+        "output:out-case-D-node-n1-1-0-Fx",
+        "output:out-case-D-node-n1-1-0-Fy",
+        "output:out-case-D-node-n1-1-0-Fz",
+        "output:out-case-D-node-n1-1-0-Mx",
+        "output:out-case-D-node-n1-1-0-My",
+        "output:out-case-D-node-n1-1-0-Mz",
+        "output:out-case-D-node-n2-0-0-Fx",
+        "output:out-case-D-node-n2-0-0-Fy",
+        "output:out-case-D-node-n2-0-0-Fz",
+        "output:out-case-D-node-n2-0-0-Mx",
+        "output:out-case-D-node-n2-0-0-My",
+        "output:out-case-D-node-n2-0-0-Mz",
+        "output:out-case-D-node-n2-1-0-Fx",
+        "output:out-case-D-node-n2-1-0-Fy",
+        "output:out-case-D-node-n2-1-0-Fz",
+        "output:out-case-D-node-n2-1-0-Mx",
+        "output:out-case-D-node-n2-1-0-My",
+        "output:out-case-D-node-n2-1-0-Mz",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        8,
+        9
+      ],
+      "targets": [
+        "output:out-case-D-node-n0-0-1-ux",
+        "output:out-case-D-node-n0-0-1-uy",
+        "output:out-case-D-node-n0-0-1-uz",
+        "output:out-case-D-node-n0-1-1-ux",
+        "output:out-case-D-node-n0-1-1-uy",
+        "output:out-case-D-node-n0-1-1-uz",
+        "output:out-case-D-node-n1-0-1-ux",
+        "output:out-case-D-node-n1-0-1-uy",
+        "output:out-case-D-node-n1-0-1-uz",
+        "output:out-case-D-node-n1-1-1-ux",
+        "output:out-case-D-node-n1-1-1-uy",
+        "output:out-case-D-node-n1-1-1-uz",
+        "output:out-case-D-node-n2-0-1-ux",
+        "output:out-case-D-node-n2-0-1-uy",
+        "output:out-case-D-node-n2-0-1-uz",
+        "output:out-case-D-node-n2-1-1-ux",
+        "output:out-case-D-node-n2-1-1-uy",
+        "output:out-case-D-node-n2-1-1-uz",
+        "output:out-case-D-node-mid-y0-0-1-ux",
+        "output:out-case-D-node-mid-y0-0-1-uy",
+        "output:out-case-D-node-mid-y0-0-1-uz",
+        "output:out-case-D-node-mid-y1-0-1-ux",
+        "output:out-case-D-node-mid-y1-0-1-uy",
+        "output:out-case-D-node-mid-y1-0-1-uz",
+        "output:out-case-D-node-mid-y2-0-1-ux",
+        "output:out-case-D-node-mid-y2-0-1-uy",
+        "output:out-case-D-node-mid-y2-0-1-uz",
+        "output:out-case-D-member-y0-0-1-a-s0-right-N",
+        "output:out-case-D-member-y0-0-1-a-s0-right-V2",
+        "output:out-case-D-member-y0-0-1-a-s0-right-V3",
+        "output:out-case-D-member-y0-0-1-a-s0-right-T",
+        "output:out-case-D-member-y0-0-1-a-s0-right-M2",
+        "output:out-case-D-member-y0-0-1-a-s0-right-M3",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-N",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-V2",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-V3",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-T",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-M2",
+        "output:out-case-D-member-y0-0-1-b-s2.69258240357-left-M3",
+        "output:out-case-D-member-y1-0-1-a-s0-right-N",
+        "output:out-case-D-member-y1-0-1-a-s0-right-V2",
+        "output:out-case-D-member-y1-0-1-a-s0-right-V3",
+        "output:out-case-D-member-y1-0-1-a-s0-right-T",
+        "output:out-case-D-member-y1-0-1-a-s0-right-M2",
+        "output:out-case-D-member-y1-0-1-a-s0-right-M3",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-N",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-V2",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-V3",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-T",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-M2",
+        "output:out-case-D-member-y1-0-1-b-s2.69258240357-left-M3",
+        "output:out-case-D-member-y2-0-1-a-s0-right-N",
+        "output:out-case-D-member-y2-0-1-a-s0-right-V2",
+        "output:out-case-D-member-y2-0-1-a-s0-right-V3",
+        "output:out-case-D-member-y2-0-1-a-s0-right-T",
+        "output:out-case-D-member-y2-0-1-a-s0-right-M2",
+        "output:out-case-D-member-y2-0-1-a-s0-right-M3",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-N",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-V2",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-V3",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-T",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-M2",
+        "output:out-case-D-member-y2-0-1-b-s2.69258240357-left-M3",
+        "output:out-case-D-node-n0-0-0-Fx",
+        "output:out-case-D-node-n0-0-0-Fy",
+        "output:out-case-D-node-n0-0-0-Fz",
+        "output:out-case-D-node-n0-0-0-Mx",
+        "output:out-case-D-node-n0-0-0-My",
+        "output:out-case-D-node-n0-0-0-Mz",
+        "output:out-case-D-node-n0-1-0-Fx",
+        "output:out-case-D-node-n0-1-0-Fy",
+        "output:out-case-D-node-n0-1-0-Fz",
+        "output:out-case-D-node-n0-1-0-Mx",
+        "output:out-case-D-node-n0-1-0-My",
+        "output:out-case-D-node-n0-1-0-Mz",
+        "output:out-case-D-node-n1-0-0-Fx",
+        "output:out-case-D-node-n1-0-0-Fy",
+        "output:out-case-D-node-n1-0-0-Fz",
+        "output:out-case-D-node-n1-0-0-Mx",
+        "output:out-case-D-node-n1-0-0-My",
+        "output:out-case-D-node-n1-0-0-Mz",
+        "output:out-case-D-node-n1-1-0-Fx",
+        "output:out-case-D-node-n1-1-0-Fy",
+        "output:out-case-D-node-n1-1-0-Fz",
+        "output:out-case-D-node-n1-1-0-Mx",
+        "output:out-case-D-node-n1-1-0-My",
+        "output:out-case-D-node-n1-1-0-Mz",
+        "output:out-case-D-node-n2-0-0-Fx",
+        "output:out-case-D-node-n2-0-0-Fy",
+        "output:out-case-D-node-n2-0-0-Fz",
+        "output:out-case-D-node-n2-0-0-Mx",
+        "output:out-case-D-node-n2-0-0-My",
+        "output:out-case-D-node-n2-0-0-Mz",
+        "output:out-case-D-node-n2-1-0-Fx",
+        "output:out-case-D-node-n2-1-0-Fy",
+        "output:out-case-D-node-n2-1-0-Fz",
+        "output:out-case-D-node-n2-1-0-Mx",
+        "output:out-case-D-node-n2-1-0-My",
+        "output:out-case-D-node-n2-1-0-Mz",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        10,
+        11
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        12,
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        14
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        15
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        16,
+        17
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        23,
+        24
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        25
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        26,
+        27,
+        28
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending"
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-case-acceptance",
+      "status": "pending"
+    },
+    {
+      "id": "model-fidelity",
+      "status": "pending"
+    },
+    {
+      "id": "signed-output-completeness",
+      "status": "pending"
+    }
+  ],
+  "authoringNotes": [
+    "Material and section appendix frozen as Q355 E=206000 MPa, nu=0.3, rho=7850 kg/m3; C1 400x500, BX 300x600, BY 250x500 mm.",
+    "Slope midline wording is made explicit by including both X=6 edge nodes and three connected Y=2.5 roof midpoint nodes, in addition to all four corners. These observation nodes do not create additional beams across the roof.",
+    "The true sloping-beam length is sqrt(5^2+2^2)=sqrt(29) m. Gravity load is global -Z at 5 kN/m of actual length, including its local axial and transverse projections; no horizontal-projection rescaling is applied.",
+    "Total downward input load is 5*(24+3*sqrt(29)) kN. This is an input-load audit, not a solved response or native acceptance result."
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-096",
+  "runs": [
+    {
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "factors": {
+        "D": 1.0
+      },
+      "responses": {
+        "runtime": {
+          "module": "openseespy.opensees",
+          "version": "3.7.1"
+        },
+        "analysisReturnCode": 0,
+        "nodes": {
+          "base": {
+            "tag": 1,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reaction": [
+              -30.0,
+              0.0,
+              600.0,
+              0.0,
+              -126.00000000000001,
+              0.0
+            ]
+          },
+          "top": {
+            "tag": 2,
+            "displacement": [
+              0.007226995884773664,
+              0.0,
+              -0.00041481481481481474,
+              0.0,
+              0.002581069958847737,
+              0.0
+            ],
+            "reaction": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.4210854715202004e-14,
+              0.0
+            ]
+          }
+        },
+        "elements": {
+          "1": {
+            "localForce": [
+              600.0,
+              0.0,
+              30.0,
+              -0.0,
+              -126.00000000000001,
+              0.0,
+              -600.0,
+              0.0,
+              -30.0,
+              0.0,
+              1.4210854715202004e-14,
+              0.0
+            ],
+            "globalForce": [
+              -30.0,
+              0.0,
+              600.0,
+              -0.0,
+              -126.00000000000001,
+              0.0,
+              30.0,
+              0.0,
+              -600.0,
+              0.0,
+              1.4210854715202004e-14,
+              0.0
+            ]
+          }
+        },
+        "nativeInput": {
+          "nodes": {
+            "base": {
+              "tag": 1,
+              "xyz": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "fixed": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "authoredFixed": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "authored": true
+            },
+            "top": {
+              "tag": 2,
+              "xyz": [
+                0.0,
+                0.0,
+                4.2
+              ],
+              "fixed": [
+                false,
+                true,
+                false,
+                true,
+                false,
+                true
+              ],
+              "authoredFixed": [
+                false,
+                true,
+                false,
+                true,
+                false,
+                true
+              ],
+              "authored": true
+            }
+          },
+          "members": {
+            "column": {
+              "element": {
+                "id": "column",
+                "type": "column",
+                "nodes": [
+                  "base",
+                  "top"
+                ],
+                "material": "M1",
+                "section": "C1"
+              },
+              "length": 4.2,
+              "axes": [
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -1.0,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "properties": {
+                "E": 30000000.0,
+                "A": 0.2025,
+                "G": 12500000.0,
+                "Iy": 0.0034171875000000005,
+                "Iz": 0.0034171875000000005,
+                "J": 0.005775046875000001
+              },
+              "stationNodes": [
+                [
+                  0.0,
+                  "base"
+                ],
+                [
+                  4.2,
+                  "top"
+                ]
+              ]
+            }
+          },
+          "segments": [
+            {
+              "tag": 1,
+              "member": "column",
+              "start": 0.0,
+              "end": 4.2,
+              "nodes": [
+                "base",
+                "top"
+              ]
+            }
+          ],
+          "pointLoads": [],
+          "nodalLoads": [
+            {
+              "node": "top",
+              "values": [
+                30.0,
+                0.0,
+                -600.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "dimension": "2d",
+          "nativeNdm": 3,
+          "nativeNdf": 6,
+          "addedMass": 0.0
+        }
+      }
+    }
+  ]
+}

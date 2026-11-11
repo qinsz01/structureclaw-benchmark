@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case-D-D-loaded-corner-uy",
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "case-D-D-gap-back-uy",
+          "location": {
+            "kind": "node",
+            "id": "n1-1-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "case-D-D-gap-front-uy",
+          "location": {
+            "kind": "node",
+            "id": "n1-0-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        }
+      ],
+      "derived": [
+        {
+          "id": "D-gap-relative-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-D-gap-back-uy",
+            "case-D-D-gap-front-uy"
+          ],
+          "unit": "m",
+          "description": "Signed relative Uy across the missing beam: Uy(n1-1-2) minus Uy(n1-0-2)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "caseId": "V2-STD-092",
+  "turnId": "t1",
+  "family": "STD",
+  "title": "某单层钢结构冷库结构设计：子问题3：有限截面方案与约束比选",
+  "designLevel": "L4",
+  "engine": "OpenSees",
+  "analysis": "scheme",
+  "instruction": "依据签发图表和约定重建物理模型，执行指定分析并交付带符号结果、单位及真实作业标识。",
+  "requests": [],
+  "derived": [],
+  "reportIds": [],
+  "requireShapes": false,
+  "sourceId": "SRC-COLD-2023",
+  "constraint": {
+    "nodes": [
+      "M0",
+      "M1",
+      "M2",
+      "M3"
+    ],
+    "component": "uz",
+    "absoluteLimit": 7.15236e-05
+  },
+  "schemeSelections": [
+    "SERVICE",
+    "REVERSE"
+  ],
+  "authoringBasis": [
+    [
+      "来源 SRC-COLD-2023；屋面檩条/连续传力梁子结构：采用7.5m相邻柱距及屋面恒活载，檩条间距、支承连续性明确设定。",
+      "来源事实：SRC-COLD-2023-F1 河南商丘单层高架冷库；冷库与穿堂以结构缝分开。；SRC-COLD-2023-F2 横向轴线跨23.61m、32.21m；檐高31.2m；纵向柱距6.8m、9×7.5m、7.4m。；SRC-COLD-2023-F3 附加屋面恒载2.0kN/m²，屋面活载0.5kN/m²；无吊车和天窗。",
+      "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+      "作者材料：线弹性钢，E=206000MPa，nu=0.3，G=E/[2(1+nu)]，rho=7850kg/m³。",
+      "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+      "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+      "屋面四跨传力梁；两端取6.8/7.4m边跨及两个7.5m标准跨，属于重新排列的明确连续梁理想化；作者支座P-R-R-R-R，受荷带宽1.5m。",
+      "公开受荷：D对recipe中全部指定梁，p=2.0kN/m²；Q对列出的交替梁，p=0.5kN/m²；分担宽1.5m。未列构件不重复分配面载。",
+      "W为最高自由节点上题给等效横力10kN；3D另加全局y向4kN，不声称原工程风压规范计算结果。",
+      "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+      "截面尺寸(m)：B=0.28×0.65, C=0.45×0.75, A=0.1×0.12",
+      "位移限值为题设的线弹性方案筛选条件，不是规范安全结论；数值在候选运行前固定。"
+    ]
+  ],
+  "loadInput": "Build load_cases from load-recipe.json. Convert surface pressure to member line vectors exactly once.",
+  "attachments": [
+    "analysis-control.json",
+    "combinations.json",
+    "load-recipe.json",
+    "materials.csv",
+    "materials.json",
+    "members.csv",
+    "model-convention.json",
+    "nodes.csv",
+    "schemes.json",
+    "sections.json",
+    "source-basis.json",
+    "tool-contract.md"
+  ]
+}

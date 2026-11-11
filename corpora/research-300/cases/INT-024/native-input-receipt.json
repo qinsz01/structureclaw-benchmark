@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-024",
+  "inputHashes": {
+    "contract.json": "5a66631a3959412a11909f097cb200275d1a6522db65bcc60e39deda75ed18e0",
+    "reference-requests.json": "e786a4be117deb2637b3c3589a9c0fb1d227d6f1a70b8df2c43ffff9e63049c0",
+    "model-state-1.json": "b55c9a12fd69cf765e96b560c53043c84c30726046c7024ab7ccbb485ce32fd3"
+  },
+  "sourceHash": "4145940d8d03cbdf8ca9dd79b1b9c3e768201207fa9b1b65ff3a31e57e809b89",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "5a66631a3959412a11909f097cb200275d1a6522db65bcc60e39deda75ed18e0"
+      },
+      {
+        "path": "input-tables.txt",
+        "sha256": "6c79bf1c2f3300d54f08fde68e06261837e16747f9857195082b5bc1fff2389b"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "b55c9a12fd69cf765e96b560c53043c84c30726046c7024ab7ccbb485ce32fd3"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "d85ae2455fd8b4a4db23813385c52027824811fb57a50be3a56b9228543d95ea"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "e786a4be117deb2637b3c3589a9c0fb1d227d6f1a70b8df2c43ffff9e63049c0"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "n0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n1",
+            "x": 5,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n2",
+            "x": 7.5,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n3",
+            "x": 10,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n4",
+            "x": 15,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "b1",
+            "type": "beam",
+            "nodes": [
+              "n0",
+              "n1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b2",
+            "type": "beam",
+            "nodes": [
+              "n1",
+              "n2"
+            ],
+            "material": "M1",
+            "section": "B2"
+          },
+          {
+            "id": "b3",
+            "type": "beam",
+            "nodes": [
+              "n2",
+              "n3"
+            ],
+            "material": "M1",
+            "section": "B2"
+          },
+          {
+            "id": "b4",
+            "type": "beam",
+            "nodes": [
+              "n3",
+              "n4"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "general",
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0026999999999999993,
+              "Iz": 0.0006749999999999998,
+              "J": 0.0037078593749999985
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "downward-b1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b1",
+                "start": 0,
+                "end": 5,
+                "wz": -8
+              },
+              {
+                "id": "downward-b2",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b2",
+                "start": 0,
+                "end": 2.5,
+                "wz": -8
+              },
+              {
+                "id": "downward-b3",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b3",
+                "start": 0.0,
+                "end": 2.5,
+                "wz": -8
+              },
+              {
+                "id": "downward-b4",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b4",
+                "start": 0,
+                "end": 5,
+                "wz": -8
+              }
+            ]
+          },
+          {
+            "id": "W",
+            "type": "wind",
+            "loads": [
+              {
+                "id": "upward-b2",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b2",
+                "start": 0,
+                "end": 2.5,
+                "wz": 6
+              },
+              {
+                "id": "upward-b3",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b3",
+                "start": 0.0,
+                "end": 2.5,
+                "wz": 6
+              }
+            ]
+          }
+        ],
+        "load_combinations": [
+          {
+            "id": "C0",
+            "factors": {
+              "D": 1
+            }
+          },
+          {
+            "id": "C1",
+            "factors": {
+              "D": 1,
+              "W": 1
+            }
+          },
+          {
+            "id": "C2",
+            "factors": {
+              "D": 0.9,
+              "W": 1.5
+            }
+          }
+        ],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "b1": [
+              0,
+              0,
+              5
+            ],
+            "b2": [
+              0,
+              0,
+              2.5
+            ],
+            "b3": [
+              0,
+              0,
+              2.5
+            ],
+            "b4": [
+              0,
+              0,
+              5
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

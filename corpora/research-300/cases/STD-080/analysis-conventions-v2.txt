@@ -1,0 +1,24 @@
+Commercial elastic analysis convention: commercial-linear-static-v2
+
+Use the specified native engine for first-order, small-displacement, linear
+elastic static analysis with Timoshenko bending. For every beam and column,
+the prescribed effective shear areas are Asy = Asz = 5*A/6, in m^2. A is the
+explicit cross-sectional area in the currently available property appendix;
+Asy acts for local-y shear V2 and Asz for local-z shear V3. This is a prescribed
+benchmark idealization, including generalized numerical sections, rather than
+an inference from a section name. Apply it to each newly supplied or edited
+section. Truss/brace members retain their specified axial-only behavior.
+
+Retain the supplied E, G, A, Iy, Iz and J, geometry, connectivity, supports,
+loads and load selections. Use gross uncracked concrete stiffness where stated.
+Preserve the stated local axes, member-end cut signs and units. Self-weight,
+rigid floors, rigid offsets, P-Delta and construction stages remain off.
+
+Use explicit elastic stiffness rather than silently substituting a native
+material grade's defaults. A native representation using equivalent EA,
+G*Asy, G*Asz, GJ, E*Iy and E*Iz must retain the supplied physical definitions
+and report the actual native material/section values, modifiers and numerical
+serialization differences. Equivalent elastic stiffness does not assert
+identical literal material fields or qualify stress/design calculations.
+Retain native input, settings, engine/version, logs and raw result evidence.
+This appendix supplies analysis inputs, not computed answers or acceptance.

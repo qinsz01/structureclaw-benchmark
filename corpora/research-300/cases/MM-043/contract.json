@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "MM-043",
+  "modelId": "M-MM-043",
+  "family": "multimodal_reverse_engineering",
+  "language": "中文",
+  "locale": "zh",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "新建筑DXF通过明确结构层提供本题几何/连接；围护/设备为干扰层；工程附录明确支座、荷载、属性和坐标映射，不把墙线默认成杆件或支座。所有新附件待制作、盲审与验证。",
+    "task.scenario": "几何：门架柱脚x=0、18m，檐高7m，屋脊(9,9)m，两坡梁刚接；边界：左柱脚铰、右柱脚固定；荷载：两坡按实际长度全局向下6kN/m；属性：柱C1、坡梁B1，材料M1。（本栏是编题规格，实际用户输入按图/表分工呈现。）",
+    "task.modelingFocus": "建筑DXF需剔除围护，并保留双坡与不同柱脚。",
+    "task.expectedOutput": "屋脊Uz、右柱脚弯矩；附与数值一致的模型/结果图。",
+    "task.gradingFocus": "模型核对：平屋面双固端门架改为双坡屋面及铰固混合边界。；数值/表述核对：屋脊Uz、右柱脚弯矩，位置、方向、单位须一致。",
+    "task.prerequisite": "基础工具；本题新增几何/属性与真值均待独立核验；材料截面代号须在本题附录定值。斜杆全局荷载和局部轴适配待验证。",
+    "model.topologyKey": "门架柱脚x=0、18m，檐高7m，屋脊(9,9)m，两坡梁刚接",
+    "model.boundaryKey": "左柱脚铰、右柱脚固定",
+    "model.loadKey": "两坡按实际长度全局向下6kN/m",
+    "model.propertyKey": "柱C1、坡梁B1，材料M1。",
+    "engine.analysisContract": "一阶线弹性；自重OFF并保存配置；按附录实际E/A/I/J，不套默认刚度折减；无默认刚性楼板。全局Z向上，核对XZ到求解器平面的映射及Ry符号。题给线载/点力/力矩按原位映射；如作等效节点加载，须保留原始分布荷载并采用与单元插值一致的等效荷载，核验跨内响应及合力/力矩，不用统一楼面载替代。荷载契约：两坡按实际长度全局向下6kN/m；未指定组合时仅算题定基本荷载，指定组合逐组执行，不能用软件默认包络替换。",
+    "engine.executionRequirement": "两坡真实梁与铰/固柱脚同时保留；按实际坡长施全局竖向线载；执行后按原题完整输出：屋脊Uz、右柱脚弯矩；附与数值一致的模型/结果图。本轮仅规划，不运行。",
+    "engine.requiredEvidence": "计划保存输入PNG/DXF及图中构件/标签→计算节点/构件ID映射、可复现OpenSees输入模型、引擎版本与设置快照、实际运行日志、原始结果表/观测点索引、可视图所用数据。",
+    "engine.adapterGap": "尚未确认本题可通过；接口/求解/读回预检重点：两坡真实梁与铰/固柱脚同时保留；按实际坡长施全局竖向线载。特殊单元、轴向、边界及组合均不因OpenSees原生支持而视作已接通。",
+    "engine.truthPlan": "独立建立并复核OpenSees参考模型，固定版本/求解设置及观测位置；以独立模型审阅、整体平衡及构件端力/节点结果一致性校核。不把展示层插值或图像读数直接当数值真值。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input.dxf",
+    "properties.txt"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "请依据所附图纸与属性附录恢复模型，使用 OpenSees 实际分析。分析前先澄清缺失或冲突的必要信息；保留图示连通关系、支座、载荷位置及属性组。\n\n要求输出：\n屋脊R的Uz\n右柱脚：全局支座反力矩My及紧邻柱底上方截面内力矩M2\n给出与数值表一致的模型/结果图，包含支座、荷载、ID 对应及结果正负号与单位。",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input.dxf",
+        "properties.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "output-1",
+      "description": "屋脊R的Uz",
+      "state": 1,
+      "quantityIds": [
+        "D:node:R:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-2",
+      "description": "右柱脚：全局支座反力矩My及紧邻柱底上方截面内力矩M2",
+      "state": 1,
+      "quantityIds": [
+        "D:node:BR:My",
+        "D:member:column_right:M2:0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "model-result-figure",
+      "description": "给出与数值表一致的模型/结果图，包含支座、荷载、ID 对应及结果正负号与单位。",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "figure",
+      "turnIds": [
+        "t1"
+      ]
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        11
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        12,
+        13
+      ],
+      "targets": [
+        "output:output-1",
+        "output:output-2",
+        "output:model-result-figure",
+        "gate:figure-consistency"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        14,
+        15
+      ],
+      "targets": [
+        "output:output-1",
+        "output:output-2",
+        "output:model-result-figure",
+        "gate:figure-consistency"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "targets": [
+        "gate:same-engine-truth",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        20
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        21
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        22
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        23
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "targets": [
+        "attachment:properties.txt",
+        "turn:t1",
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        38
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        39,
+        40,
+        41,
+        42
+      ],
+      "targets": [
+        "gate:adapter-preflight"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        43,
+        44,
+        45
+      ],
+      "targets": [
+        "gate:same-engine-truth",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "input-blind-review",
+      "status": "pending",
+      "description": "Independent input reconstruction and modality/legibility review."
+    },
+    {
+      "id": "model-source-review",
+      "status": "pending",
+      "description": "Independent review against every original source requirement."
+    },
+    {
+      "id": "native-execution",
+      "status": "pending",
+      "description": "Actual prescribed engine version, input, configuration, logs, raw results and observation mapping."
+    },
+    {
+      "id": "same-engine-truth",
+      "status": "pending",
+      "description": "Independently reviewed same-engine reference and separate equilibrium/stiffness cross-check."
+    },
+    {
+      "id": "figure-consistency",
+      "status": "pending",
+      "description": "Requested model/result figures and their underlying numeric data match."
+    },
+    {
+      "id": "adapter-preflight",
+      "status": "pending",
+      "description": "Case-specific conversion and readback tests, including axes and load jumps."
+    }
+  ],
+  "authoringNotes": [
+    "附录补全：M1为线弹性钢材，E=206000 MPa，nu=0.30，G=79230.76923076923 MPa，rho=7850 kg/m3。原规划未给数值，此处明确编定为本题输入。",
+    "采用一阶Euler-Bernoulli梁柱或指定的纯轴力桁架理论。自重、P-Delta、刚性楼板、刚臂和施工阶段均关闭。全部题定荷载共同组成基本工况D，无荷载组合。",
+    "全部梁柱节点为刚接。平面模型保留ux、uz、ry，约束非作用自由度uy、rx、rz。局部1轴沿杆件i端至j端，局部2轴为全局+Y，局部3轴为1轴叉乘2轴。构件M2为截面内力矩，支座My为全局反力矩。",
+    "附录补全：B1为实心矩形截面，B=300 mm、H=600 mm；完整A/Iy/Iz/J数值见属性表，原规划仅给截面代号。",
+    "附录补全：C1为实心矩形截面，B=500 mm、H=500 mm；完整A/Iy/Iz/J数值见属性表，原规划仅给截面代号。",
+    "柱脚弯矩的输出约定补全：同时报告支座My和紧邻柱底截面的M2，分别注明符号定义。"
+  ]
+}

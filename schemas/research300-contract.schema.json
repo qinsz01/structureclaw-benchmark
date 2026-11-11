@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research300-contract.schema.json",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "evaluationProfile": {
+      "const": "engineering-v2.3"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^(STD|INT|MM)-(00[1-9]|0[1-9][0-9]|100)$"
+    },
+    "modelId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "enum": [
+        "standard_workflow",
+        "interactive_robustness",
+        "multimodal_reverse_engineering"
+      ]
+    },
+    "language": {
+      "enum": [
+        "中文",
+        "英文"
+      ]
+    },
+    "locale": {
+      "enum": [
+        "zh",
+        "en"
+      ]
+    },
+    "plannedEngine": {
+      "enum": [
+        "OpenSees",
+        "PKPM",
+        "YJK"
+      ]
+    },
+    "analysisConvention": {
+      "const": {
+        "id": "commercial-linear-static-v2",
+        "bendingTheory": "Timoshenko",
+        "effectiveShearAreas": {"localY": "5*A/6", "localZ": "5*A/6"},
+        "publicAttachment": "analysis-conventions-v2.txt"
+      }
+    },
+    "sourcePlan": {
+      "oneOf": [
+        {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "sourceRequirements"
+          ],
+          "properties": {
+            "sourceRequirements": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "requirements": {
+              "type": "array"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "modelStates": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!.*(?:\\\\|:|%|[\\u0000-\\u001f]))(?!/)(?!.*(?:^|/)\\.)[^/]+(?:/[^/]+)*$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!.*(?:\\\\|:|%|[\\u0000-\\u001f]))(?!/)(?!.*(?:^|/)\\.)[^/]+(?:/[^/]+)*$"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "turns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^t[1-9][0-9]*$"
+          },
+          "instruction": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expectation": {
+            "enum": [
+              "analyze",
+              "clarify",
+              "clarify-or-analyze",
+              "query"
+            ]
+          },
+          "clarificationBlocksAnalysis": {
+            "description": "False permits only an output-query ambiguity alongside analysis of a known physical state; unresolved physical inputs remain blocking.",
+            "type": "boolean"
+          },
+          "clarificationPolicy": {
+            "description": "Authored conditions for a uniquely justified inference; a direct analysis still requires independent semantic review and all numerical evidence.",
+            "type": "string",
+            "minLength": 1
+          },
+          "requiredOutputIds": {
+            "description": "Explicit current-turn output allowlist; an empty array selects no outputs.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "requiredQuantityIds": {
+            "description": "Explicit current-turn report quantity allowlist drawn from eligible required outputs; private calculation operands are excluded.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "outputUnits": {
+            "description": "Current requested quantity ID or component mapped to its reporting unit; quantity ID takes precedence over component.",
+            "type": "object",
+            "additionalProperties": {
+              "enum": [
+                "m",
+                "mm",
+                "rad",
+                "kN",
+                "N",
+                "kN.m",
+                "kN*m",
+                "kN·m",
+                "N.m",
+                "N*m"
+              ]
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(?!.*(?:\\\\|:|%|[\\u0000-\\u001f]))(?!/)(?!.*(?:^|/)\\.)[^/]+(?:/[^/]+)*$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "unresolvedFields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "expectedQuestions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "changedFields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(?:/(?:[^~/]|~[01])*)+$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "preservedFields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(?:/(?:[^~/]|~[01])*)+$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "instruction",
+          "state",
+          "expectation",
+          "attachments",
+          "unresolvedFields",
+          "expectedQuestions"
+        ],
+        "anyOf": [
+          {
+            "properties": {
+              "clarificationBlocksAnalysis": {
+                "const": true
+              }
+            }
+          },
+          {
+            "required": [
+              "clarificationBlocksAnalysis"
+            ],
+            "properties": {
+              "clarificationBlocksAnalysis": {
+                "const": false
+              },
+              "expectation": {
+                "const": "analyze"
+              },
+              "state": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "unresolvedFields": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "pattern": "^/requestedOutputs/(?:[^~/]|~[01])+(?:/(?:[^~/]|~[01])+)*$"
+                }
+              },
+              "expectedQuestions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ],
+        "additionalProperties": true
+      },
+      "minItems": 1
+    },
+    "requiredOutputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "quantityIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "kind": {
+            "enum": [
+              "numerical",
+              "derived",
+              "figure",
+              "interaction"
+            ]
+          },
+          "turnIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^t[1-9][0-9]*$"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "state",
+          "quantityIds",
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "requirementCoverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sourceField": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requirementIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "turn",
+                        "attachment",
+                        "quantity",
+                        "output",
+                        "acceptance-gate",
+                        "gate"
+                      ]
+                    },
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "state": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "id"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "minItems": 1
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "sourceField",
+          "requirementIds",
+          "targets",
+          "notes"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "status": {
+      "const": "authored-candidate"
+    },
+    "sameEngineTruthStatus": {
+      "const": "pending"
+    },
+    "inputBlindReview": {
+      "const": "pending"
+    },
+    "llmEndToEnd": {
+      "const": "not-run"
+    },
+    "tolerancePolicy": {
+      "type": "object",
+      "properties": {
+        "justification": {
+          "type": "string",
+          "minLength": 1
+        },
+        "frozenBeforeCandidate": {
+          "const": true
+        }
+      },
+      "required": [
+        "justification",
+        "frozenBeforeCandidate"
+      ],
+      "additionalProperties": false
+    },
+    "acceptanceGates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "const": "pending"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "evaluationProfile",
+    "id",
+    "modelId",
+    "family",
+    "language",
+    "locale",
+    "plannedEngine",
+    "sourcePlan",
+    "modelStates",
+    "attachments",
+    "turns",
+    "requiredOutputs",
+    "requirementCoverage",
+    "status",
+    "sameEngineTruthStatus",
+    "inputBlindReview",
+    "llmEndToEnd"
+  ],
+  "additionalProperties": true
+}

@@ -1,0 +1,590 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-056",
+  "inputHashes": {
+    "contract.json": "93026e9ec39c84ef34eab533e728ccbcb123d40e509d73e6a69e19033b0c2a8d",
+    "reference-requests.json": "26d07b7cd220fad3e49a6eeb6eef49ec5e62f55c9e7b2368b8b73bed04b4110d",
+    "model-state-1.json": "2ccfd57456db99792df09fad380d9a3147237ffa2d6ad4b499a05358e3b9d326",
+    "model-state-2.json": "41d73231c033d27080cff3c9abbcf219e8271bc6048233a8677ca786ed80ea7d"
+  },
+  "sourceHash": "0c8c85de0d7726a564a6f030b59a828196bd2fafaab08599a00506a42494ccef",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "93026e9ec39c84ef34eab533e728ccbcb123d40e509d73e6a69e19033b0c2a8d"
+      },
+      {
+        "path": "input-t1.json",
+        "sha256": "ec3935def5df612c74589f428efb9262dcefa5528998e4c2f4dab3aee3006720"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "2ccfd57456db99792df09fad380d9a3147237ffa2d6ad4b499a05358e3b9d326"
+      },
+      {
+        "path": "model-state-2.json",
+        "sha256": "41d73231c033d27080cff3c9abbcf219e8271bc6048233a8677ca786ed80ea7d"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "6eac9a49fa6880a768477cb7fff2b91efec9393fcfa965fd578a997eebc1e994"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "26d07b7cd220fad3e49a6eeb6eef49ec5e62f55c9e7b2368b8b73bed04b4110d"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "n0-0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "n1-0",
+            "x": 24,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "n0-1",
+            "x": 0,
+            "y": 0,
+            "z": 12,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n1-1",
+            "x": 24,
+            "y": 0,
+            "z": 12,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "leftEquipment",
+            "x": 0,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "c0-1",
+            "type": "column",
+            "nodes": [
+              "n0-0",
+              "leftEquipment"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "c0-1b",
+            "type": "column",
+            "nodes": [
+              "leftEquipment",
+              "n0-1"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "c1-1",
+            "type": "column",
+            "nodes": [
+              "n1-0",
+              "n1-1"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "b0-1",
+            "type": "beam",
+            "nodes": [
+              "n0-1",
+              "n1-1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 700.0
+            },
+            "properties": {
+              "A": 0.21,
+              "Iy": 0.008574999999999998,
+              "Iz": 0.0015749999999999998,
+              "J": 0.004603782069970844
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          },
+          {
+            "id": "C2",
+            "name": "C2",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 350.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.175,
+              "Iy": 0.003645833333333333,
+              "Iz": 0.0017864583333333328,
+              "J": 0.0040575733442708315
+            }
+          },
+          {
+            "id": "A1",
+            "name": "A1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 100.0,
+              "H": 100.0
+            },
+            "properties": {
+              "A": 0.010000000000000002,
+              "Iy": 8.333333333333335e-06,
+              "Iz": 8.333333333333335e-06,
+              "J": 1.4083333333333338e-05
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b0-1",
+                "wz": -36
+              },
+              {
+                "id": "equipment-side",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "leftEquipment",
+                "fx": 14
+              },
+              {
+                "id": "crane-horizontal",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n1-1",
+                "fx": 10
+              },
+              {
+                "id": "crane-vertical",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n1-1",
+                "fz": -98
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "modelPath": "model-state-1.json"
+    },
+    {
+      "state": 2,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "n0-0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "n1-0",
+            "x": 24,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "n0-1",
+            "x": 0,
+            "y": 0,
+            "z": 12,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n1-1",
+            "x": 24,
+            "y": 0,
+            "z": 12,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "leftEquipment",
+            "x": 0,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "c0-1",
+            "type": "column",
+            "nodes": [
+              "n0-0",
+              "leftEquipment"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "c0-1b",
+            "type": "column",
+            "nodes": [
+              "leftEquipment",
+              "n0-1"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "c1-1",
+            "type": "column",
+            "nodes": [
+              "n1-0",
+              "n1-1"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "b0-1",
+            "type": "beam",
+            "nodes": [
+              "n0-1",
+              "n1-1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 700.0
+            },
+            "properties": {
+              "A": 0.21,
+              "Iy": 0.008574999999999998,
+              "Iz": 0.0015749999999999998,
+              "J": 0.004603782069970844
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          },
+          {
+            "id": "C2",
+            "name": "C2",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 350.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.175,
+              "Iy": 0.003645833333333333,
+              "Iz": 0.0017864583333333328,
+              "J": 0.0040575733442708315
+            }
+          },
+          {
+            "id": "A1",
+            "name": "A1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 100.0,
+              "H": 100.0
+            },
+            "properties": {
+              "A": 0.010000000000000002,
+              "Iy": 8.333333333333335e-06,
+              "Iz": 8.333333333333335e-06,
+              "J": 1.4083333333333338e-05
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b0-1",
+                "wz": -36
+              },
+              {
+                "id": "equipment-side",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "leftEquipment",
+                "fx": 14
+              },
+              {
+                "id": "crane-horizontal",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n1-1",
+                "fx": 10
+              },
+              {
+                "id": "crane-vertical",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n1-1",
+                "fz": -117.6
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "modelPath": "model-state-2.json"
+    }
+  ]
+}

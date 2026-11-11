@@ -1,0 +1,102 @@
+{
+  "caseId": "INT-026",
+  "sourceRowsRead": true,
+  "sourceAudit": [
+    {
+      "field": "task.inputForm",
+      "source": "文本4轮＋完整属性附件（仅暂缺项除外）",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "task.scenario",
+      "source": "T1所用独立模型为M-INT-026（末跨内部点力的四跨分组梁）。T1建立M-INT-026；T2第二第四跨活载强度统一增至12kN/m；T3中间两跨B2替换B3；T4仅撤销T2荷载调整。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "task.modelingFocus",
+      "source": "几何、截面组、工况映射同时存在；荷载分布的独立状态保持",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "task.expectedOutput",
+      "source": "第四跨中点x=17m的Uz及x=15m支座Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "task.gradingFocus",
+      "source": "最终B3保留且活载恢复初始；第一第三跨不新增L；组合系数不变；第四跨D点力16kN不随活载撤销或截面更新改变。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "task.prerequisite",
+      "source": "多组合执行契约需验证；逐轮状态与目标/非目标差异评测待实现",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "model.topologyKey",
+      "source": "连续梁；跨度4、6、5、4m",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "model.boundaryKey",
+      "source": "x=0铰、x=4/10/15/19m滚支",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "model.loadKey",
+      "source": "跨度4、6、5、4m，中间两跨B2其余B1，D全跨、L仅第二第四跨，题定组合；D工况另在第四跨跨中x=17m施加向下16kN点力；D全梁8kN/m加第四跨中16kN；L仅第二/第四跨10kN/m；C1=D、C2=D+L。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "model.propertyKey",
+      "source": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "engine.analysisContract",
+      "source": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 保留独立原始工况及题定组合系数，修改组合不得覆盖原工况；各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "engine.executionRequirement",
+      "source": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "engine.requiredEvidence",
+      "source": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：第四跨中点x=17m的Uz及x=15m支座Rz。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "engine.adapterGap",
+      "source": "未逐题验收；前置检查项：多组合执行契约需验证，并核对多步分组更新后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    },
+    {
+      "field": "engine.truthPlan",
+      "source": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "review": "Source reviewed against explicit turn sequence, public appendix, state snapshots, quantity selections and pending acceptance gates."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "missing-property-appendix",
+      "description": "The source leaves absolute material and section values to the author appendix. Freeze Q355 E=206000 MPa, nu=0.3, G=E/[2(1+nu)] MPa and density=7850 kg/m3; B1 is 0.3 by 0.6 m. Where B2/B3 are unspecified rectangles, use 0.3 by 0.7 m and 0.35 by 0.8 m respectively, with every A/Iy/Iz/J explicitly supplied. Source-prescribed inertia ratios override these optional rectangle definitions."
+    },
+    {
+      "id": "connected-stations",
+      "description": "Point-load and displacement observation stations are connected nodes, without additional planar restraints or masses."
+    },
+    {
+      "id": "acceptance-pending",
+      "description": "Source and structural authoring checks do not establish native execution, independent numerical truth or blind input acceptance; all remain pending."
+    },
+    {
+      "id": "selective-undo",
+      "description": "State 4 restores only live-load intensities from state 1 while retaining state 3 B3 section assignments. Neither D nor the source-defined C1/C2 factors changes in any turn."
+    }
+  ],
+  "status": "author-checked; independent input blind review pending",
+  "native": "pending",
+  "llm": "not-run"
+}

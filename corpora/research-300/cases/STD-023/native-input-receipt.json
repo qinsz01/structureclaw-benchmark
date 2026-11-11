@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-023",
+  "inputHashes": {
+    "contract.json": "4a2acd5eb023a444c41812509ce26cb6567cc5edbdf8751d012ddcc3ba373398",
+    "reference-requests.json": "b9da54ba9701f1b5dffb9bae5ece390be23637e7f62499662c239f4d6b431288",
+    "model-state-1.json": "e91ff1a5ca08dde1c4e54f2cbc05663474a9930974dd7b122ec31f0d73426c80"
+  },
+  "sourceHash": "655ec841c8a576acffb1f27e926a5161148725e38313d6e7aec4565fc7ed5611",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "4a2acd5eb023a444c41812509ce26cb6567cc5edbdf8751d012ddcc3ba373398"
+      },
+      {
+        "path": "geometry.json",
+        "sha256": "7f05eebee068a5a5166bf200af17a3ccf41d9f2d2c8200def5a32291980160fe"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "cf7665486714f596a833ae230e5470704e37b687bb8d4a76f12025cb17baa090"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "e91ff1a5ca08dde1c4e54f2cbc05663474a9930974dd7b122ec31f0d73426c80"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "223b93aea69958a7f892394e96ed26f5a611ef00cca45ee731c8d06014ef6558"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "d4de64b3103764f76b9e337aa4ef25ff22d9acd36b7657c9181cdde0818863ad"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "e10d612d311c83ed88e32d7fd1f7619b30a6bd7454506b8ec8c9d8bf3565f789"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "b9da54ba9701f1b5dffb9bae5ece390be23637e7f62499662c239f4d6b431288"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "S0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "P1",
+            "x": 2.0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "S1",
+            "x": 4,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "P2",
+            "x": 7.0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "S2",
+            "x": 10,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "B1a",
+            "type": "beam",
+            "nodes": [
+              "S0",
+              "P1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "B1b",
+            "type": "beam",
+            "nodes": [
+              "P1",
+              "S1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "B2a",
+            "type": "beam",
+            "nodes": [
+              "S1",
+              "P2"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "B2b",
+            "type": "beam",
+            "nodes": [
+              "P2",
+              "S2"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-support-force",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "S1",
+                "fz": -30
+              },
+              {
+                "id": "D-span-force",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "P2",
+                "fz": -20
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "spanLengthsM": [
+            4,
+            6
+          ],
+          "spanSectionIds": [
+            "B1",
+            "B1"
+          ],
+          "observationNodes": {
+            "span-1-midpoint": "P1",
+            "span-2-midpoint": "P2"
+          },
+          "beamTheory": "Euler-Bernoulli",
+          "localAxes": "Each beam runs along +global X; local 1=+X, local 2=+Y, local 3=+Z.",
+          "continuity": "Every support and midpoint is one shared node; no member end releases."
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

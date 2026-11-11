@@ -1,0 +1,25 @@
+{
+  "caseId": "INT-044",
+  "sourceRowsRead": true,
+  "sourceAudit": [
+    {
+      "sourceField": "task.scenario",
+      "check": "Exact original turn count, edits, and delayed clarification retained."
+    },
+    {
+      "sourceField": "model.spec",
+      "check": "两跨各18m、高9m，三柱脚固定，两跨屋面6kN/m；右跨屋面跨中x=27m另有向下24kN点力，左右屋面仍6kN/m；所有柱脚面内三自由度固定。"
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "check": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。"
+    }
+  ],
+  "decisions": [
+    "The source leaves absolute section/material appendix unspecified. Freeze explicit E=206000 MPa, nu=0.3, G=E/(2*(1+nu)), density=7850 kg/m3; B1=0.30x0.60m, C1=0.50x0.50m solid rectangles; proportional I sections are general sections with unchanged A,J. All values are public inputs, not tuned reference values.",
+    "T1 legitimately contains contradictory geometric records. Coordinates identify the supplied bay-table alternative; they do not designate precedence. No numeric results until user selects the bay schedule."
+  ],
+  "status": "author-checked; independent input blind review pending",
+  "native": "pending",
+  "llm": "not-run"
+}

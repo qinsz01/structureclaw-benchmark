@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-040",
+  "inputHashes": {
+    "contract.json": "d4228c053a85fd33300b30923eb3753d0788da598ade764a723460a02d848e05",
+    "reference-requests.json": "e979bc0ab78f1342f35627df22f5fec6c96256456f3f2331ca3538c753ce3447",
+    "model-state-1.json": "aff8044ac87a61749f827faf8e02c3ecc58885c31b7c70edd3c5dbc4ec90f719"
+  },
+  "sourceHash": "9fdc6a60505897a12431cfdae92f43cd67478f2d4b59313392c6658abcb68b89",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "d4228c053a85fd33300b30923eb3753d0788da598ade764a723460a02d848e05"
+      },
+      {
+        "path": "geometry.json",
+        "sha256": "dfbcbfe1343fbfada6dd211e29e041b771e96eb02741d5a7e2189db24ce8dd2c"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "3ff02f9145c84fcc5b4e5c4dda3bedb3a37af03b38a92598751a4a6e6142da99"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "aff8044ac87a61749f827faf8e02c3ecc58885c31b7c70edd3c5dbc4ec90f719"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "ef84bb74da6562e744b12026b6801c0a76ba18361e9e579a3661f209a56f4e9a"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "e4ce702f3f6b44962c65d0b999deec1ec37069a23369d1d9efce99911c8f60bf"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "fc6cdb63ca493e388ad7c02d140d0435801eb70c9e382eebb8438eab7ee15255"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "e979bc0ab78f1342f35627df22f5fec6c96256456f3f2331ca3538c753ce3447"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "3d",
+          "plane": null,
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 4,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "C",
+            "x": 2,
+            "y": 3.4641016151377544,
+            "z": 0,
+            "restraints": [
+              false,
+              false,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "D",
+            "x": 2,
+            "y": 1.1547005383792515,
+            "z": 3,
+            "restraints": [
+              false,
+              false,
+              false,
+              true,
+              true,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "AB",
+            "type": "truss",
+            "nodes": [
+              "A",
+              "B"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "BC",
+            "type": "truss",
+            "nodes": [
+              "B",
+              "C"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "CA",
+            "type": "truss",
+            "nodes": [
+              "C",
+              "A"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "AD",
+            "type": "truss",
+            "nodes": [
+              "A",
+              "D"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "BD",
+            "type": "truss",
+            "nodes": [
+              "B",
+              "D"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "CD",
+            "type": "truss",
+            "nodes": [
+              "C",
+              "D"
+            ],
+            "material": "M1",
+            "section": "T1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "steel",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "T1",
+            "name": "T1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 100.0,
+              "H": 100.0
+            },
+            "properties": {
+              "A": 0.01,
+              "Iy": 8.333333333333334e-06,
+              "Iz": 8.333333333333334e-06,
+              "J": 1.4083333333333335e-05
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "LC1",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "P-D",
+                "type": "nodal",
+                "node": "D",
+                "reference_frame": "global",
+                "fz": -30
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "AB": [
+              0,
+              0,
+              1
+            ],
+            "BC": [
+              0,
+              0,
+              1
+            ],
+            "CA": [
+              0,
+              0,
+              1
+            ],
+            "AD": [
+              0,
+              0,
+              1
+            ],
+            "BD": [
+              0,
+              0,
+              1
+            ],
+            "CD": [
+              0,
+              0,
+              1
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

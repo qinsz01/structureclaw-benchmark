@@ -1,0 +1,368 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "B1",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "B2",
+      "x": 6,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "B3",
+      "x": 6,
+      "y": 6,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "B4",
+      "x": 0,
+      "y": 6,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "U",
+      "x": 4,
+      "y": 2,
+      "z": 3,
+      "restraints": [
+        false,
+        false,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "L",
+      "x": 3,
+      "y": 3,
+      "z": -2,
+      "restraints": [
+        false,
+        false,
+        false,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "ring1",
+      "type": "truss",
+      "nodes": [
+        "B1",
+        "B2"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "upper1",
+      "type": "truss",
+      "nodes": [
+        "B1",
+        "U"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "lower1",
+      "type": "truss",
+      "nodes": [
+        "B1",
+        "L"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "ring2",
+      "type": "truss",
+      "nodes": [
+        "B2",
+        "B3"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "upper2",
+      "type": "truss",
+      "nodes": [
+        "B2",
+        "U"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "lower2",
+      "type": "truss",
+      "nodes": [
+        "B2",
+        "L"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "ring3",
+      "type": "truss",
+      "nodes": [
+        "B3",
+        "B4"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "upper3",
+      "type": "truss",
+      "nodes": [
+        "B3",
+        "U"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "lower3",
+      "type": "truss",
+      "nodes": [
+        "B3",
+        "L"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "ring4",
+      "type": "truss",
+      "nodes": [
+        "B4",
+        "B1"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "upper4",
+      "type": "truss",
+      "nodes": [
+        "B4",
+        "U"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "lower4",
+      "type": "truss",
+      "nodes": [
+        "B4",
+        "L"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "apex_link",
+      "type": "truss",
+      "nodes": [
+        "L",
+        "U"
+      ],
+      "material": "M1",
+      "section": "A1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "A1",
+      "name": "A1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 100.0,
+        "H": 100.0
+      },
+      "properties": {
+        "A": 0.010000000000000002,
+        "Iy": 8.333333333333335e-06,
+        "Iz": 8.333333333333335e-06,
+        "J": 1.4083333333333338e-05
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "U",
+          "fx": 10.0,
+          "fy": 0.0,
+          "fz": -30.0
+        },
+        {
+          "id": "D-2",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "L",
+          "fx": 0.0,
+          "fy": 8.0,
+          "fz": -20.0
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "ring1": [
+        0,
+        0,
+        1
+      ],
+      "upper1": [
+        0,
+        0,
+        1
+      ],
+      "lower1": [
+        0,
+        0,
+        1
+      ],
+      "ring2": [
+        0,
+        0,
+        1
+      ],
+      "upper2": [
+        0,
+        0,
+        1
+      ],
+      "lower2": [
+        0,
+        0,
+        1
+      ],
+      "ring3": [
+        0,
+        0,
+        1
+      ],
+      "upper3": [
+        0,
+        0,
+        1
+      ],
+      "lower3": [
+        0,
+        0,
+        1
+      ],
+      "ring4": [
+        0,
+        0,
+        1
+      ],
+      "upper4": [
+        0,
+        0,
+        1
+      ],
+      "lower4": [
+        0,
+        0,
+        1
+      ],
+      "apex_link": [
+        0,
+        0,
+        1
+      ]
+    }
+  }
+}

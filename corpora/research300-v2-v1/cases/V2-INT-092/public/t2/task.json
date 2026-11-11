@@ -1,0 +1,48 @@
+{
+  "caseId": "V2-INT-092",
+  "turnId": "t2",
+  "family": "INT",
+  "title": "某单层钢结构冷库结构设计：子问题2：有限截面方案与约束比选",
+  "designLevel": "L4",
+  "engine": "OpenSees",
+  "analysis": "scheme",
+  "instruction": "仅将Q内的机械荷载增大20%，保留其他荷载、连接、支承、材料和截面。",
+  "requests": [],
+  "derived": [],
+  "reportIds": [],
+  "requireShapes": false,
+  "sourceId": "SRC-COLD-2023",
+  "constraint": {
+    "nodes": [
+      "OBS-B0-1",
+      "OBS-B1-1",
+      "OBS-B2-1"
+    ],
+    "component": "uz",
+    "absoluteLimit": 0.000124895
+  },
+  "schemeSelections": [
+    "SERVICE",
+    "REVERSE"
+  ],
+  "authoringBasis": [
+    [
+      "来源 SRC-COLD-2023；纵向边柱列局部三跨：保留6.8+7.5+7.5m轴网，截断边界显式给定；不能冒充真实纵向抗侧体系。",
+      "来源事实：SRC-COLD-2023-F1 河南商丘单层高架冷库；冷库与穿堂以结构缝分开。；SRC-COLD-2023-F2 横向轴线跨23.61m、32.21m；檐高31.2m；纵向柱距6.8m、9×7.5m、7.4m。；SRC-COLD-2023-F3 附加屋面恒载2.0kN/m²，屋面活载0.5kN/m²；无吊车和天窗。",
+      "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+      "作者材料：线弹性钢，E=206000MPa，nu=0.3，G=E/[2(1+nu)]，rho=7850kg/m³。",
+      "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+      "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+      "保留纵向边部三柱距；作者采用刚接等效纵向柱列、4m分担宽度，不能视作原纵向支撑系统。",
+      "公开受荷：D对recipe中全部指定梁，p=2.0kN/m²；Q对列出的交替梁，p=0.5kN/m²；分担宽4.0m。未列构件不重复分配面载。",
+      "W为最高自由节点上题给等效横力10kN；3D另加全局y向4kN，不声称原工程风压规范计算结果。",
+      "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+      "截面尺寸(m)：B=0.28×0.65, C=0.45×0.75, A=0.1×0.12",
+      "位移限值为题设的线弹性方案筛选条件，不是规范安全结论；数值在候选运行前固定。"
+    ]
+  ],
+  "interactionRule": "Apply only this issued change order to the last confirmed state; retain all other prior inputs. Initial restores refer to t1.",
+  "attachments": [
+    "change-order.json"
+  ]
+}

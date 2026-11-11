@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-014",
+  "inputHashes": {
+    "contract.json": "d58e53d0a2124aaa0c4c487aa9f3346ca51409c60dadba0b743e439db539a20f",
+    "reference-requests.json": "4ac8a1a7a275d0dac0e812697ee1c70e0489403dbbacb9cd3bc6b5a513bead2a",
+    "model-state-1.json": "25b93d1cb19b2db1172f35e0ecaf5b5b1740c9cc8ede177f0ba0b796b88c4616"
+  },
+  "sourceHash": "dcf1c03930c8c51cfd14fa5390db829d9ddfbc87ad751175e16cf63872eda6af",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "d58e53d0a2124aaa0c4c487aa9f3346ca51409c60dadba0b743e439db539a20f"
+      },
+      {
+        "path": "input.png",
+        "sha256": "f4b8b419c4df9ed24ccb760efca1b9d1c12ffeda14bb53f782440cb99bfde655"
+      },
+      {
+        "path": "input.svg",
+        "sha256": "cd3a5712e0b685a60f6c64d5142851e75bc210c9db509d71cb75cfbafb00f850"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "25b93d1cb19b2db1172f35e0ecaf5b5b1740c9cc8ede177f0ba0b796b88c4616"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "7a74ba0b012fc0c10309e332c80bf4a230573c28f9e4b1c2aceaf3e6f9bd6ff0"
+      },
+      {
+        "path": "properties.txt",
+        "sha256": "7ed66cfe82a03cb110dca13630c575e7f7d4c0dc082d0ca6cf031ee3be714f1b"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "4ac8a1a7a275d0dac0e812697ee1c70e0489403dbbacb9cd3bc6b5a513bead2a"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "n0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n1",
+            "x": 2,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n2",
+            "x": 5,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n3",
+            "x": 8,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n4",
+            "x": 10,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "b1",
+            "type": "beam",
+            "nodes": [
+              "n0",
+              "n1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b2",
+            "type": "beam",
+            "nodes": [
+              "n1",
+              "n2"
+            ],
+            "material": "M2",
+            "section": "B1"
+          },
+          {
+            "id": "b3",
+            "type": "beam",
+            "nodes": [
+              "n2",
+              "n3"
+            ],
+            "material": "M2",
+            "section": "B2"
+          },
+          {
+            "id": "b4",
+            "type": "beam",
+            "nodes": [
+              "n3",
+              "n4"
+            ],
+            "material": "M1",
+            "section": "B2"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          },
+          {
+            "id": "M2",
+            "name": "Steel E180",
+            "type": "steel",
+            "E": 180000,
+            "G": 69230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 700.0
+            },
+            "properties": {
+              "A": 0.21,
+              "Iy": 0.008574999999999998,
+              "Iz": 0.0015749999999999998,
+              "J": 0.004603782069970844
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b1",
+                "wz": -9
+              },
+              {
+                "id": "D-2",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b2",
+                "wz": -9
+              },
+              {
+                "id": "D-3",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n3",
+                "my": 25
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

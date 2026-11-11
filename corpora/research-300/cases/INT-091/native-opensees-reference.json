@@ -1,0 +1,4163 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-091",
+  "modelId": "M-INT-091",
+  "referenceKind": "native-opensees",
+  "method": "native-openseespy",
+  "solver": {
+    "module": "openseespy.opensees",
+    "version": "3.7.1",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "runnerSha256": "cdda4e5b51596485c32100b1426c58f98830470bc0ab555ff1c477b3083eb9d7",
+    "referenceIoSha256": "22066f2728b59482df3da98e4bed3bb8a81edfadfab351fb90d40cc11f436717",
+    "nativeModuleSha256": "b4c234a20c235bb4a8ed9f780a9ac2d5b2534c42ad499054882ba8c8e94bed1d",
+    "nativeBinaryModule": "openseespylinux.opensees",
+    "nativeBinarySha256": "b0985e344fb76d2f445c2b3046c37676aa02d8c632d66345a4bc927a56fee25f",
+    "openseespyPackageVersion": "3.7.1.2",
+    "openseespylinuxPackageVersion": "3.7.1.2"
+  },
+  "inputHashes": {
+    "contract.json": "afcfda489ba55ec6ad8d49552f8e263479273470e198b8c323815fc025b9c75f",
+    "reference-requests.json": "01e82bce4845264160d419c7e6b5ce9835ad9cd9b5c65f4eb4080c0d2d4a7ee0",
+    "model-state-1.json": "3a7c47a6fc488fd0c1f45557a523fc1ec8b0b72ce342f5e073e081ad160e370a",
+    "model-state-2.json": "c67808d879959a048e853c0d9d4127c8ad34caa71baf92dcb35363d5ac536700"
+  },
+  "sourceHash": "72d9912d21c39780d52261e3f0fd11c1aaae3dc2ba61537e587292437e40aed1",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions-v2.txt",
+        "sha256": "c9303e7eb89248c6abb62f30788c19ac7142a4f4fdba164d01c94ff975c1cde8"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "afcfda489ba55ec6ad8d49552f8e263479273470e198b8c323815fc025b9c75f"
+      },
+      {
+        "path": "input.json",
+        "sha256": "bba51e4d8d899c7cb0d268c8637286716661234dc1f7b06e0890665787d3e14d"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "3a7c47a6fc488fd0c1f45557a523fc1ec8b0b72ce342f5e073e081ad160e370a"
+      },
+      {
+        "path": "model-state-2.json",
+        "sha256": "c67808d879959a048e853c0d9d4127c8ad34caa71baf92dcb35363d5ac536700"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "dd145ed254431fc43fe4a4e1a7dcbfd80fd5d01373f43d6ef56ddfd1d4b8dc09"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "01e82bce4845264160d419c7e6b5ce9835ad9cd9b5c65f4eb4080c0d2d4a7ee0"
+      },
+      {
+        "path": "regions.json",
+        "sha256": "68581c1b0198b7e0ee63f5dde801b767b7517ad80036d9aa904004e5de1a6c64"
+      }
+    ]
+  },
+  "sameEngineTruthStatus": "pending",
+  "nativeIndependentReview": "pending",
+  "llmEndToEnd": "not-run",
+  "nativeRole": "cross-engine-diagnostic",
+  "theory": "Timoshenko",
+  "warnings": [
+    "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+    "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+    "OpenSees results for a different planned engine are cross-engine diagnostics only."
+  ],
+  "checks": [
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        -2.1454517540066134e-15,
+        -3.273320993553223e-16,
+        0.0,
+        -4.547473508864641e-13,
+        -9.094947017729282e-13,
+        7.572086825389587e-15
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        7.921e-05,
+        0.00039600999999999997,
+        0.00047521,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 9.592326932761353e-14,
+      "equilibriumPassed": true,
+      "nativeNodes": 27,
+      "nativeElements": 42,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "c0-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        }
+      },
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    },
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        3.660266534311063e-16,
+        1.8127860323957634e-16,
+        1.4210854715202004e-14,
+        5.684341886080802e-14,
+        -5.684341886080802e-14,
+        -2.57519700008757e-15
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        8.81e-06,
+        2.201e-05,
+        2.641e-05,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 3.730349362740526e-14,
+      "equilibriumPassed": true,
+      "nativeNodes": 27,
+      "nativeElements": 42,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "c0-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        }
+      },
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "L"
+      }
+    },
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        -1.491862189340054e-16,
+        0.0,
+        -2.0491421059976034e-16,
+        4.263256414560601e-14,
+        6.752237657892152e-15,
+        0.0
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        9.1e-07,
+        1.0999999999999999e-07,
+        6.49e-06,
+        1.0999999999999999e-07,
+        1.081e-05
+      ],
+      "freeResidual": 1.7408297026122455e-13,
+      "equilibriumPassed": true,
+      "nativeNodes": 27,
+      "nativeElements": 42,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "c0-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        }
+      },
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "W"
+      }
+    },
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        7.771561172376096e-16,
+        3.552713678800501e-15,
+        0.0,
+        0.0,
+        9.094947017729282e-13,
+        -2.842170943040401e-14
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        9.1e-07,
+        8.800999999999999e-05,
+        0.00042448999999999997,
+        0.00050161,
+        1.081e-05
+      ],
+      "freeResidual": 2.0605739337042905e-13,
+      "equilibriumPassed": true,
+      "nativeNodes": 27,
+      "nativeElements": 42,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "c0-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        }
+      },
+      "state": 1,
+      "selection": {
+        "kind": "combination",
+        "id": "TOTAL"
+      }
+    },
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        -2.1454517540066134e-15,
+        -3.273320993553223e-16,
+        0.0,
+        -4.547473508864641e-13,
+        -9.094947017729282e-13,
+        7.572086825389587e-15
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        7.921e-05,
+        0.00039600999999999997,
+        0.00047521,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 9.592326932761353e-14,
+      "equilibriumPassed": true,
+      "nativeNodes": 27,
+      "nativeElements": 42,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "c0-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        }
+      },
+      "state": 2,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    },
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        -2.862293735361732e-17,
+        1.0408340855860843e-17,
+        1.4210854715202004e-14,
+        -2.842170943040401e-14,
+        0.0,
+        8.448103328007051e-16
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        8.81e-06,
+        2.201e-05,
+        7.921e-05,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 3.7192471324942744e-14,
+      "equilibriumPassed": true,
+      "nativeNodes": 27,
+      "nativeElements": 42,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "c0-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        }
+      },
+      "state": 2,
+      "selection": {
+        "kind": "case",
+        "id": "L"
+      }
+    },
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        -1.491862189340054e-16,
+        0.0,
+        -2.0491421059976034e-16,
+        4.263256414560601e-14,
+        6.752237657892152e-15,
+        0.0
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        9.1e-07,
+        1.0999999999999999e-07,
+        6.49e-06,
+        1.0999999999999999e-07,
+        1.081e-05
+      ],
+      "freeResidual": 1.7408297026122455e-13,
+      "equilibriumPassed": true,
+      "nativeNodes": 27,
+      "nativeElements": 42,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "c0-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        }
+      },
+      "state": 2,
+      "selection": {
+        "kind": "case",
+        "id": "W"
+      }
+    },
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        -7.355227538141662e-16,
+        -3.552713678800501e-15,
+        0.0,
+        0.0,
+        0.0,
+        4.263256414560601e-14
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        9.1e-07,
+        8.800999999999999e-05,
+        0.00042448999999999997,
+        0.00055441,
+        1.081e-05
+      ],
+      "freeResidual": 1.5432100042289676e-13,
+      "equilibriumPassed": true,
+      "nativeNodes": 27,
+      "nativeElements": 42,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-1": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-1": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "c0-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c0-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c1-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "x1-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-0-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-1-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        },
+        "y2-1-2": {
+          "Asy": 0.125,
+          "Asz": 0.125
+        },
+        "c2-2-2": {
+          "Asy": 0.16666666666666666,
+          "Asz": 0.16666666666666666
+        }
+      },
+      "state": 2,
+      "selection": {
+        "kind": "combination",
+        "id": "TOTAL"
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case-D--n2-2-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -6.071441023962969e-06
+        },
+        {
+          "id": "case-D--n2-2-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -5.245851522766434e-05
+        },
+        {
+          "id": "case-D--n2-2-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.171938501038513e-06
+        },
+        {
+          "id": "case-D--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.6934741201725236
+        },
+        {
+          "id": "case-D--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 61.65490202848623
+        },
+        {
+          "id": "case-L--n2-2-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.1120195158393963e-06
+        },
+        {
+          "id": "case-L--n2-2-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.1393764050204274e-10
+        },
+        {
+          "id": "case-L--n2-2-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.6998998710105735e-06
+        },
+        {
+          "id": "case-L--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.40752943029575983
+        },
+        {
+          "id": "case-L--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 21.188232464837828
+        },
+        {
+          "id": "case-W--n2-2-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.3550396028973025e-05
+        },
+        {
+          "id": "case-W--n2-2-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.5425559023866624e-06
+        },
+        {
+          "id": "case-W--n2-2-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.0004697532801228289
+        },
+        {
+          "id": "case-W--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.6822341474572595
+        },
+        {
+          "id": "case-W--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.3476200565743378
+        },
+        {
+          "id": "combination-TOTAL--n2-2-2--ux",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.059097452084951e-05
+        },
+        {
+          "id": "combination-TOTAL--n2-2-2--uz",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.99158453876372e-05
+        },
+        {
+          "id": "combination-TOTAL--n2-2-2--uy",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.00047022531875285636
+        },
+        {
+          "id": "combination-TOTAL--n0-0-0--My",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.968178837334017
+        },
+        {
+          "id": "combination-TOTAL--n0-0-0--Fz",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 83.19075454989837
+        }
+      ],
+      "derived": [],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            -2.1454517540066134e-15,
+            -3.273320993553223e-16,
+            0.0,
+            -4.547473508864641e-13,
+            -9.094947017729282e-13,
+            7.572086825389587e-15
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            7.921e-05,
+            0.00039600999999999997,
+            0.00047521,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 9.592326932761353e-14,
+          "equilibriumPassed": true,
+          "nativeNodes": 27,
+          "nativeElements": 42,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "c0-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            3.660266534311063e-16,
+            1.8127860323957634e-16,
+            1.4210854715202004e-14,
+            5.684341886080802e-14,
+            -5.684341886080802e-14,
+            -2.57519700008757e-15
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            8.81e-06,
+            2.201e-05,
+            2.641e-05,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 3.730349362740526e-14,
+          "equilibriumPassed": true,
+          "nativeNodes": 27,
+          "nativeElements": 42,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "c0-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          }
+        },
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            -1.491862189340054e-16,
+            0.0,
+            -2.0491421059976034e-16,
+            4.263256414560601e-14,
+            6.752237657892152e-15,
+            0.0
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            9.1e-07,
+            1.0999999999999999e-07,
+            6.49e-06,
+            1.0999999999999999e-07,
+            1.081e-05
+          ],
+          "freeResidual": 1.7408297026122455e-13,
+          "equilibriumPassed": true,
+          "nativeNodes": 27,
+          "nativeElements": 42,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "c0-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          }
+        },
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            7.771561172376096e-16,
+            3.552713678800501e-15,
+            0.0,
+            0.0,
+            9.094947017729282e-13,
+            -2.842170943040401e-14
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            9.1e-07,
+            8.800999999999999e-05,
+            0.00042448999999999997,
+            0.00050161,
+            1.081e-05
+          ],
+          "freeResidual": 2.0605739337042905e-13,
+          "equilibriumPassed": true,
+          "nativeNodes": 27,
+          "nativeElements": 42,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "c0-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            }
+          },
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          }
+        }
+      ]
+    },
+    {
+      "state": 2,
+      "model": "model-state-2.json",
+      "quantities": [
+        {
+          "id": "case-D--n2-2-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -6.071441023962969e-06
+        },
+        {
+          "id": "case-D--n2-2-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -5.245851522766434e-05
+        },
+        {
+          "id": "case-D--n2-2-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.171938501038513e-06
+        },
+        {
+          "id": "case-D--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.6934741201725236
+        },
+        {
+          "id": "case-D--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 61.65490202848623
+        },
+        {
+          "id": "case-L--n2-2-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.181744772188002e-06
+        },
+        {
+          "id": "case-L--n2-2-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.073535811842059e-07
+        },
+        {
+          "id": "case-L--n2-2-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.0555418014217824e-05
+        },
+        {
+          "id": "case-L--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.047817167378236033
+        },
+        {
+          "id": "case-L--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.4963586888998625
+        },
+        {
+          "id": "case-W--n2-2-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.3550396028973025e-05
+        },
+        {
+          "id": "case-W--n2-2-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.5425559023866624e-06
+        },
+        {
+          "id": "case-W--n2-2-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.0004697532801228289
+        },
+        {
+          "id": "case-W--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.6822341474572595
+        },
+        {
+          "id": "case-W--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.3476200565743378
+        },
+        {
+          "id": "combination-TOTAL--n2-2-2--ux",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.4297210232822082e-05
+        },
+        {
+          "id": "combination-TOTAL--n2-2-2--uz",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.930860574409349e-05
+        },
+        {
+          "id": "combination-TOTAL--n2-2-2--uy",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.0004633698006096492
+        },
+        {
+          "id": "combination-TOTAL--n0-0-0--My",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.4235254350080195
+        },
+        {
+          "id": "combination-TOTAL--n0-0-0--Fz",
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 61.50616339616069
+        }
+      ],
+      "derived": [],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            -2.1454517540066134e-15,
+            -3.273320993553223e-16,
+            0.0,
+            -4.547473508864641e-13,
+            -9.094947017729282e-13,
+            7.572086825389587e-15
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            7.921e-05,
+            0.00039600999999999997,
+            0.00047521,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 9.592326932761353e-14,
+          "equilibriumPassed": true,
+          "nativeNodes": 27,
+          "nativeElements": 42,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "c0-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            -2.862293735361732e-17,
+            1.0408340855860843e-17,
+            1.4210854715202004e-14,
+            -2.842170943040401e-14,
+            0.0,
+            8.448103328007051e-16
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            8.81e-06,
+            2.201e-05,
+            7.921e-05,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 3.7192471324942744e-14,
+          "equilibriumPassed": true,
+          "nativeNodes": 27,
+          "nativeElements": 42,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "c0-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "L"
+          }
+        },
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            -1.491862189340054e-16,
+            0.0,
+            -2.0491421059976034e-16,
+            4.263256414560601e-14,
+            6.752237657892152e-15,
+            0.0
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            9.1e-07,
+            1.0999999999999999e-07,
+            6.49e-06,
+            1.0999999999999999e-07,
+            1.081e-05
+          ],
+          "freeResidual": 1.7408297026122455e-13,
+          "equilibriumPassed": true,
+          "nativeNodes": 27,
+          "nativeElements": 42,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "c0-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "W"
+          }
+        },
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            -7.355227538141662e-16,
+            -3.552713678800501e-15,
+            0.0,
+            0.0,
+            0.0,
+            4.263256414560601e-14
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            9.1e-07,
+            8.800999999999999e-05,
+            0.00042448999999999997,
+            0.00055441,
+            1.081e-05
+          ],
+          "freeResidual": 1.5432100042289676e-13,
+          "equilibriumPassed": true,
+          "nativeNodes": 27,
+          "nativeElements": 42,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-1": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-1": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "c0-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c0-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c1-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "x1-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-0-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-1-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            },
+            "y2-1-2": {
+              "Asy": 0.125,
+              "Asz": 0.125
+            },
+            "c2-2-2": {
+              "Asy": 0.16666666666666666,
+              "Asz": 0.16666666666666666
+            }
+          },
+          "selection": {
+            "kind": "combination",
+            "id": "TOTAL"
+          }
+        }
+      ]
+    }
+  ],
+  "analysisConvention": {
+    "id": "commercial-linear-static-v2",
+    "bendingTheory": "Timoshenko",
+    "effectiveShearAreas": {
+      "localY": "5*A/6",
+      "localZ": "5*A/6"
+    },
+    "publicAttachment": "analysis-conventions-v2.txt"
+  },
+  "notCommercialScoringTruth": true,
+  "artifacts": [
+    {
+      "path": "native-input-receipt.json",
+      "sha256": "1e977e2308436207303317dd9e196a39adbab756880280fa43f46b5de917ecbd"
+    },
+    {
+      "path": "native-solver-receipt.json",
+      "sha256": "70050eabcaff9b0609fb2af8030f4ca4078ac8ff43afda48dc08b4f913919893"
+    },
+    {
+      "path": "native-raw-responses.json",
+      "sha256": "a278a9694bb9f3527bd56cb01afdded3ad1469f32cc557cbe5b466d0dc5c2d86"
+    },
+    {
+      "path": "native-checks.json",
+      "sha256": "d634fe2ce2db191f92e6b34c483f53fc36ec42eba802adb1583a62267199d96c"
+    }
+  ]
+}

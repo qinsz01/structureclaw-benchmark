@@ -1,0 +1,5 @@
+# Analysis basis / 分析依据
+Global Z is vertical. Coordinates in geometry.csv, where supplied, are millimetres; the raster drawing has its own printed coordinate units. loads.csv uses N, N/m and N·m, with member positions in metres. Blank distributed start/end means the full physical member. Roll is in degrees. Properties are the supplied uncoupled centroidal elastic constants, without fillets or further section deductions.
+Perform first-order small-displacement elastic Euler–Bernoulli analysis. Self weight, rigid floor, P-delta, rigid offsets and construction stages are OFF. Columns use reference vector (1,0,0); other 3D frame members use (0,0,1). Trusses carry axial force only and have no tension-only restriction. Public member start/end order defines the local axes; roll is about its positive local X.
+Use every explicitly listed member; geometrical line crossings introduce no extra joints. The selected engine is OpenSees. Both case:D and combination:D exist and have different physical meaning.
+全局 Z 向上。毫米、牛顿制的原始资料需按各列单位解释。所有列出的杆件均为实际构件，线条相交不自动增加节点。仅采用公开给定的弹性性质；工况 D 与组合 D 是不同选择。

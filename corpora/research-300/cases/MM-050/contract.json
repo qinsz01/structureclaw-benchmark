@@ -1,0 +1,353 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "MM-050",
+  "modelId": "M-MM-050",
+  "family": "multimodal_reverse_engineering",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "新结构DXF的实体、尺寸及连接符号给本题几何/拓扑/支座；荷载标注或区域标签关联载荷表；完整属性另附，源单位与坐标映射显式给定。所有新附件待制作、盲审与验证。",
+    "task.scenario": "几何：柱线x=0、12、30、40m；左跨梁z=6m、中跨梁z=8m、右跨梁z=7m；中间两柱分别设6/8m和7/8m连接节点，端柱达到各自屋面；边界：四柱脚固定；荷载：三屋面依次向下5、7、6kN/m；属性：柱C1、梁B1，材料M1。（本栏是编题规格，实际用户输入按图/表分工呈现。）",
+    "task.modelingFocus": "四根柱上的不同连接标高需在DXF中保留，不能共线合并。",
+    "task.expectedOutput": "三屋面中点Uz、中间两柱脚弯矩；附与数值一致的模型/结果图。",
+    "task.gradingFocus": "模型核对：两跨错高扩为三跨三个屋面标高，新增独立柱段与梁连接。；数值/表述核对：三屋面中点Uz、中间两柱脚弯矩，位置、方向、单位须一致。",
+    "task.prerequisite": "基础工具；本题新增几何/属性与真值均待独立核验；材料截面代号须在本题附录定值。",
+    "model.topologyKey": "柱线x=0、12、30、40m；左跨梁z=6m、中跨梁z=8m、右跨梁z=7m；中间两柱分别设6/8m和7/8m连接节点，端柱达到各自屋面",
+    "model.boundaryKey": "四柱脚固定",
+    "model.loadKey": "三屋面依次向下5、7、6kN/m",
+    "model.propertyKey": "柱C1、梁B1，材料M1。",
+    "engine.analysisContract": "一阶线弹性；自重OFF并保存配置；按附录实际E/A/I/J，不套默认刚度折减；无默认刚性楼板。全局Z向上，核对XZ到求解器平面的映射及Ry符号。题给线载/点力/力矩按原位映射；如作等效节点加载，须保留原始分布荷载并采用与单元插值一致的等效荷载，核验跨内响应及合力/力矩，不用统一楼面载替代。荷载契约：三屋面依次向下5、7、6kN/m；未指定组合时仅算题定基本荷载，指定组合逐组执行，不能用软件默认包络替换。",
+    "engine.executionRequirement": "共用中柱保留错高连接短段，不把不同标高梁节点合并；执行后按原题完整输出：三屋面中点Uz、中间两柱脚弯矩；附与数值一致的模型/结果图。本轮仅规划，不运行。",
+    "engine.requiredEvidence": "计划保存输入PNG/DXF及图中构件/标签→计算节点/构件ID映射、可复现OpenSees输入模型、引擎版本与设置快照、实际运行日志、原始结果表/观测点索引、可视图所用数据。",
+    "engine.adapterGap": "尚未确认本题可通过；接口/求解/读回预检重点：共用中柱保留错高连接短段，不把不同标高梁节点合并。特殊单元、轴向、边界及组合均不因OpenSees原生支持而视作已接通。",
+    "engine.truthPlan": "独立建立并复核OpenSees参考模型，固定版本/求解设置及观测位置；以独立模型审阅、整体平衡及构件端力/节点结果一致性校核。不把展示层插值或图像读数直接当数值真值。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input.dxf",
+    "properties.txt"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Reconstruct the model from the supplied OpenSees input drawings and property appendix. Use OpenSees for the actual analysis. Resolve missing or contradictory essential data before analysis. Preserve the drawing connectivity, supports, load positions and property groups.\n\nRequested outputs:\nConnected geometric roof midpoints M0, M1 and M2: Uz\nFirst interior column base: global support reaction My and column-section M2 just above the base\nSecond interior column base: global support reaction My and column-section M2 just above the base\nProvide a model/result figure consistent with the numerical table, including support/load/ID mapping and signed result units.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input.dxf",
+        "properties.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "output-1",
+      "description": "Connected geometric roof midpoints M0, M1 and M2: Uz",
+      "state": 1,
+      "quantityIds": [
+        "D:node:M0:uz",
+        "D:node:M1:uz",
+        "D:node:M2:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-2",
+      "description": "First interior column base: global support reaction My and column-section M2 just above the base",
+      "state": 1,
+      "quantityIds": [
+        "D:node:B1:My",
+        "D:member:column1_lower:M2:0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-3",
+      "description": "Second interior column base: global support reaction My and column-section M2 just above the base",
+      "state": 1,
+      "quantityIds": [
+        "D:node:B2:My",
+        "D:member:column2_lower:M2:0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "model-result-figure",
+      "description": "Provide a model/result figure consistent with the numerical table, including support/load/ID mapping and signed result units.",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "figure",
+      "turnIds": [
+        "t1"
+      ]
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        13
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        14,
+        15
+      ],
+      "targets": [
+        "output:output-1",
+        "output:output-2",
+        "output:output-3",
+        "output:model-result-figure",
+        "gate:figure-consistency"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        16,
+        17
+      ],
+      "targets": [
+        "output:output-1",
+        "output:output-2",
+        "output:output-3",
+        "output:model-result-figure",
+        "gate:figure-consistency"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        18,
+        19,
+        20
+      ],
+      "targets": [
+        "gate:same-engine-truth",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        21,
+        22,
+        23
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        24
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        25
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        26
+      ],
+      "targets": [
+        "attachment:input.dxf",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "targets": [
+        "attachment:properties.txt",
+        "turn:t1",
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        36,
+        37,
+        38,
+        39
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        40
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        41,
+        42,
+        43
+      ],
+      "targets": [
+        "gate:adapter-preflight"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        44,
+        45,
+        46
+      ],
+      "targets": [
+        "gate:same-engine-truth",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "input-blind-review",
+      "status": "pending",
+      "description": "Independent input reconstruction and modality/legibility review."
+    },
+    {
+      "id": "model-source-review",
+      "status": "pending",
+      "description": "Independent review against every original source requirement."
+    },
+    {
+      "id": "native-execution",
+      "status": "pending",
+      "description": "Actual prescribed engine version, input, configuration, logs, raw results and observation mapping."
+    },
+    {
+      "id": "same-engine-truth",
+      "status": "pending",
+      "description": "Independently reviewed same-engine reference and separate equilibrium/stiffness cross-check."
+    },
+    {
+      "id": "figure-consistency",
+      "status": "pending",
+      "description": "Requested model/result figures and their underlying numeric data match."
+    },
+    {
+      "id": "adapter-preflight",
+      "status": "pending",
+      "description": "Case-specific conversion and readback tests, including axes and load jumps."
+    }
+  ],
+  "authoringNotes": [
+    "Appendix completion: M1 is linear elastic steel, E=206000 MPa, nu=0.30, G=79230.76923076923 MPa, rho=7850 kg/m3. These values were unspecified by the source plan and are explicit case inputs.",
+    "Use first-order Euler-Bernoulli frame theory or axial-only truss theory as assigned. Self-weight, P-Delta, rigid floors, rigid offsets and staged construction are OFF. All stated loads act together in basic case D; there are no load combinations.",
+    "All frame joints are rigid. The planar model retains ux, uz and ry; uy, rx and rz are inactive. Local axis 1 follows member i to j, axis 2 is global +Y, and axis 3 is axis 1 cross axis 2. Member M2 is a section force and support My is a global reaction.",
+    "Appendix completion: B1 is a solid rectangular section, B=300 mm and H=600 mm; its explicit A/Iy/Iz/J values are supplied in the property table. The source specified only the section code.",
+    "Appendix completion: C1 is a solid rectangular section, B=500 mm and H=500 mm; its explicit A/Iy/Iz/J values are supplied in the property table. The source specified only the section code.",
+    "Output convention completion: report both support My and column-root section M2 at each requested interior column base, with their sign conventions."
+  ]
+}

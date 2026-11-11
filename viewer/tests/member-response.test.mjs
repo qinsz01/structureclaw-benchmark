@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ts from 'typescript';
+import { legacyReference as read, referenceIds } from './legacy-reference-fixture.mjs';
 const js = ts.transpileModule(
   fs.readFileSync(new URL('../src/member-response.ts', import.meta.url), 'utf8'),
   { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } },
@@ -9,8 +10,6 @@ const js = ts.transpileModule(
 const { memberResponses } = await import(
   `data:text/javascript;base64,${Buffer.from(js).toString('base64')}`
 );
-const read = (id) =>
-  JSON.parse(fs.readFileSync(new URL(`../public/data/models/${id}.json`, import.meta.url)));
 const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} != ${b}`);
 test('interior UDL correction reproduces quartic beam deflection, not only nodal interpolation', () => {
   const r = read('beam-simple-6m'),
@@ -45,8 +44,8 @@ test('UDL plus midpoint force preserves both one-sided shear values and interior
 });
 test('all frozen structural references have explicit coverage, endpoints and immutable inputs', () => {
   const counts = {};
-  for (const file of fs.readdirSync(new URL('../public/data/models/', import.meta.url))) {
-    const r = read(file.slice(0, -5)),
+  for (const id of referenceIds) {
+    const r = read(id),
       before = JSON.stringify(r),
       rows = memberResponses(r, r.numerical.result, 'opensees');
     assert.equal(rows.length, r.model.elements.length);

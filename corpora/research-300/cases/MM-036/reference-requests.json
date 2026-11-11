@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "D-U2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "U2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "D-X0BL-N",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "X0BL",
+            "positionM": 0.9762812094883317,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "D-X0TL-N",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "X0TL",
+            "positionM": 0.9762812094883317,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "D-X0BR-N",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "X0BR",
+            "positionM": 0.9762812094883317,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        },
+        {
+          "id": "D-X0TR-N",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "X0TR",
+            "positionM": 0.9762812094883317,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          }
+        }
+      ],
+      "derived": [
+        {
+          "id": "D-C0-diagonal-up-balance",
+          "operation": "difference",
+          "operands": [
+            "D-X0BL-N",
+            "D-X0TR-N"
+          ],
+          "unit": "kN",
+          "description": "Opposite collinear rods X0BL and X0TR must have equal signed axial force at C0."
+        },
+        {
+          "id": "D-C0-diagonal-down-balance",
+          "operation": "difference",
+          "operands": [
+            "D-X0TL-N",
+            "D-X0BR-N"
+          ],
+          "unit": "kN",
+          "description": "Opposite collinear rods X0TL and X0BR must have equal signed axial force at C0."
+        }
+      ]
+    }
+  ]
+}

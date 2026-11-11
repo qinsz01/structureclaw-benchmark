@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "case": "STD-029",
+  "notes": [
+    "从只读旧题保留材料截面：E=205000MPa、nu=0.3、rho=7850kg/m³、全杆A=0.01m²；明确补齐G=78846.15384615384MPa。新规划契约要求自重关闭，优先于旧题关于后端自重的模糊说明。完整截面附表明确T1为边长0.1m的实心正方形，Iy=Iz=A²/12，Saint-Venant常数J=0.14083333333333334A²；这些弯曲和扭转常数在全部仅轴力桁架单元中不参与刚度。仅分析本题D工况，不沿用旧题默认ULS组合。所称节点位移明确包括ux、uz；左右支反力包括Fx、Fz，右端自由X方向反力亦列出。纯桁架非轴向运动自由度uy、rx、ry、rz作平面/无刚度自由度抑制。",
+    "节点及十根杆端点逐项读取只读旧题truss-triangle-static.json。H和中央竖杆交叉不相连，避免擅增第七节点。"
+  ],
+  "appendixPolicy": "Numerical properties and any missing source connection table are explicit author decisions. They are inputs, not solver defaults or validated answers.",
+  "tolerancePolicy": "Absolute 1e-8 plus relative 1e-6 in each declared output unit, frozen before candidate runs.",
+  "sourceReview": "Author source comparison recorded separately; independent input-blind review pending.",
+  "referenceStatus": "Requests only; no reference values authored."
+}

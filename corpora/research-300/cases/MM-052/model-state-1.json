@@ -1,0 +1,357 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "A0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "AS",
+      "x": 0,
+      "y": 0,
+      "z": 3,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "A1",
+      "x": 0,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "B0",
+      "x": 22,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "BS",
+      "x": 22,
+      "y": 0,
+      "z": 3,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "B1",
+      "x": 22,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "P",
+      "x": 6,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "M",
+      "x": 11,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "Q",
+      "x": 16,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "CAL",
+      "type": "column",
+      "nodes": [
+        "A0",
+        "AS"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "CAU",
+      "type": "column",
+      "nodes": [
+        "AS",
+        "A1"
+      ],
+      "material": "M1",
+      "section": "C2"
+    },
+    {
+      "id": "CBL",
+      "type": "column",
+      "nodes": [
+        "B0",
+        "BS"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "CBU",
+      "type": "column",
+      "nodes": [
+        "BS",
+        "B1"
+      ],
+      "material": "M1",
+      "section": "C2"
+    },
+    {
+      "id": "R1",
+      "type": "beam",
+      "nodes": [
+        "A1",
+        "P"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "R2a",
+      "type": "beam",
+      "nodes": [
+        "P",
+        "M"
+      ],
+      "material": "M1",
+      "section": "B2"
+    },
+    {
+      "id": "R2b",
+      "type": "beam",
+      "nodes": [
+        "M",
+        "Q"
+      ],
+      "material": "M1",
+      "section": "B2"
+    },
+    {
+      "id": "R3",
+      "type": "beam",
+      "nodes": [
+        "Q",
+        "B1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    },
+    {
+      "id": "C2",
+      "name": "C2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 350.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.175,
+        "Iy": 0.003645833333333333,
+        "Iz": 0.0017864583333333328,
+        "J": 0.0040575733442708315
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "B2",
+      "name": "B2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 700.0
+      },
+      "properties": {
+        "A": 0.21,
+        "Iy": 0.008574999999999998,
+        "Iz": 0.0015749999999999998,
+        "J": 0.004603782069970844
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "R1",
+          "wz": -8
+        },
+        {
+          "id": "D-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "R2a",
+          "wz": -8
+        },
+        {
+          "id": "D-3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "R2b",
+          "wz": -8
+        },
+        {
+          "id": "D-4",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "R3",
+          "wz": -8
+        },
+        {
+          "id": "D-5",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "B1",
+          "fx": 15
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {}
+}

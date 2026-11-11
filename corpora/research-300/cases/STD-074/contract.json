@@ -1,0 +1,638 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-074",
+  "modelId": "M-STD-074",
+  "family": "standard_workflow",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "两层单跨7m，左右矩形柱强弱轴安排不同，完整惯性矩与局部轴显式提供；完整属性按公共契约随题给出。 两层均3.6m，各梁10kN/m，顶层右节点X向20kN；左右柱局部轴和惯性矩明列。",
+    "task.modelingFocus": "矩形尺寸次序与实际弯曲刚度",
+    "task.expectedOutput": "左右柱顶X位移、逐列层间位移差、柱端弯矩及柱脚反力。",
+    "task.gradingFocus": "矩形尺寸次序与实际弯曲刚度；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "局部轴输入与适配需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "平面两层单跨矩形柱混凝土框架",
+    "model.boundaryKey": "全部柱脚固定",
+    "model.loadKey": "两层梁线载加顶右节点侧力",
+    "model.propertyKey": "左右柱局部轴不同；强弱轴惯性矩明确",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "矩形柱局部轴与强弱惯性矩输入/转换须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立局部到全局刚度变换；将截面转90°的映射关系作辅助校验。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-data.json",
+    "output-requests.json",
+    "analysis-conventions.txt",
+    "column-orientations.txt"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Required solver: OpenSees.\nBuild a two-story, single-bay planar concrete frame: span 7 m, story heights 3.6 m and 3.6 m, both bases fixed. Each beam carries 10 kN/m downward and the top-right node n1-2 carries 20 kN in global +X, all in case D. The explicit appendix supplies C30 (E=30000 MPa, nu=0.2, G=12500 MPa, density=2500 kg/m^3), 300x600 mm beams and identical 350x500 mm rectangular columns CR. The left columns have roll 0 degrees; the right columns have roll 90 degrees. Use column-orientations.txt to preserve the different strong/weak bending directions and exact local axes. Run first-order linear elastic Euler-Bernoulli analysis in OpenSees, self weight off. Report ux at both column tops on each story, the four signed ux(upper)-ux(lower) story displacement differences, local M2 and M3 at both ends of all four columns, and Fx/Fz/My at both bases.\n\nUse all public appendices. Report the complete requested numerical table and the required summaries.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-data.json",
+        "output-requests.json",
+        "analysis-conventions.txt",
+        "column-orientations.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "out-case-D-node-n0-1-ux",
+      "description": "case-D-node-n0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-1-ux",
+      "description": "case-D-node-n1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-2-ux",
+      "description": "case-D-node-n0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-2-ux",
+      "description": "case-D-node-n1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-ux",
+      "description": "case-D-node-n0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-ux",
+      "description": "case-D-node-n1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c0-1-s0-right-M2",
+      "description": "case-D-member-c0-1-s0-right-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c0-1-s0-right-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c0-1-s0-right-M3",
+      "description": "case-D-member-c0-1-s0-right-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c0-1-s0-right-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c0-1-s3.6-left-M2",
+      "description": "case-D-member-c0-1-s3.6-left-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c0-1-s3.6-left-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c0-1-s3.6-left-M3",
+      "description": "case-D-member-c0-1-s3.6-left-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c0-1-s3.6-left-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c1-1-s0-right-M2",
+      "description": "case-D-member-c1-1-s0-right-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c1-1-s0-right-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c1-1-s0-right-M3",
+      "description": "case-D-member-c1-1-s0-right-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c1-1-s0-right-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c1-1-s3.6-left-M2",
+      "description": "case-D-member-c1-1-s3.6-left-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c1-1-s3.6-left-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c1-1-s3.6-left-M3",
+      "description": "case-D-member-c1-1-s3.6-left-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c1-1-s3.6-left-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c0-2-s0-right-M2",
+      "description": "case-D-member-c0-2-s0-right-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c0-2-s0-right-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c0-2-s0-right-M3",
+      "description": "case-D-member-c0-2-s0-right-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c0-2-s0-right-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c0-2-s3.6-left-M2",
+      "description": "case-D-member-c0-2-s3.6-left-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c0-2-s3.6-left-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c0-2-s3.6-left-M3",
+      "description": "case-D-member-c0-2-s3.6-left-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c0-2-s3.6-left-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c1-2-s0-right-M2",
+      "description": "case-D-member-c1-2-s0-right-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c1-2-s0-right-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c1-2-s0-right-M3",
+      "description": "case-D-member-c1-2-s0-right-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c1-2-s0-right-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c1-2-s3.6-left-M2",
+      "description": "case-D-member-c1-2-s3.6-left-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c1-2-s3.6-left-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-c1-2-s3.6-left-M3",
+      "description": "case-D-member-c1-2-s3.6-left-M3",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-c1-2-s3.6-left-M3"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-Fx",
+      "description": "case-D-node-n0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-Fz",
+      "description": "case-D-node-n0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n0-0-My",
+      "description": "case-D-node-n0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-Fx",
+      "description": "case-D-node-n1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-Fz",
+      "description": "case-D-node-n1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-n1-0-My",
+      "description": "case-D-node-n1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-n1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-drift-n0-0-n0-1-ux",
+      "description": "n0-1 minus n0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "D-drift-n0-0-n0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-D-drift-n1-0-n1-1-ux",
+      "description": "n1-1 minus n1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "D-drift-n1-0-n1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-D-drift-n0-1-n0-2-ux",
+      "description": "n0-2 minus n0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "D-drift-n0-1-n0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-D-drift-n1-1-n1-2-ux",
+      "description": "n1-2 minus n1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "D-drift-n1-1-n1-2-ux"
+      ],
+      "kind": "derived"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7
+      ],
+      "targets": [
+        "output:out-case-D-node-n0-1-ux",
+        "output:out-case-D-node-n1-1-ux",
+        "output:out-case-D-node-n0-2-ux",
+        "output:out-case-D-node-n1-2-ux",
+        "output:out-case-D-node-n0-0-ux",
+        "output:out-case-D-node-n1-0-ux",
+        "output:out-case-D-member-c0-1-s0-right-M2",
+        "output:out-case-D-member-c0-1-s0-right-M3",
+        "output:out-case-D-member-c0-1-s3.6-left-M2",
+        "output:out-case-D-member-c0-1-s3.6-left-M3",
+        "output:out-case-D-member-c1-1-s0-right-M2",
+        "output:out-case-D-member-c1-1-s0-right-M3",
+        "output:out-case-D-member-c1-1-s3.6-left-M2",
+        "output:out-case-D-member-c1-1-s3.6-left-M3",
+        "output:out-case-D-member-c0-2-s0-right-M2",
+        "output:out-case-D-member-c0-2-s0-right-M3",
+        "output:out-case-D-member-c0-2-s3.6-left-M2",
+        "output:out-case-D-member-c0-2-s3.6-left-M3",
+        "output:out-case-D-member-c1-2-s0-right-M2",
+        "output:out-case-D-member-c1-2-s0-right-M3",
+        "output:out-case-D-member-c1-2-s3.6-left-M2",
+        "output:out-case-D-member-c1-2-s3.6-left-M3",
+        "output:out-case-D-node-n0-0-Fx",
+        "output:out-case-D-node-n0-0-Fz",
+        "output:out-case-D-node-n0-0-My",
+        "output:out-case-D-node-n1-0-Fx",
+        "output:out-case-D-node-n1-0-Fz",
+        "output:out-case-D-node-n1-0-My",
+        "output:out-D-drift-n0-0-n0-1-ux",
+        "output:out-D-drift-n1-0-n1-1-ux",
+        "output:out-D-drift-n0-1-n0-2-ux",
+        "output:out-D-drift-n1-1-n1-2-ux",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        8,
+        9
+      ],
+      "targets": [
+        "output:out-case-D-node-n0-1-ux",
+        "output:out-case-D-node-n1-1-ux",
+        "output:out-case-D-node-n0-2-ux",
+        "output:out-case-D-node-n1-2-ux",
+        "output:out-case-D-node-n0-0-ux",
+        "output:out-case-D-node-n1-0-ux",
+        "output:out-case-D-member-c0-1-s0-right-M2",
+        "output:out-case-D-member-c0-1-s0-right-M3",
+        "output:out-case-D-member-c0-1-s3.6-left-M2",
+        "output:out-case-D-member-c0-1-s3.6-left-M3",
+        "output:out-case-D-member-c1-1-s0-right-M2",
+        "output:out-case-D-member-c1-1-s0-right-M3",
+        "output:out-case-D-member-c1-1-s3.6-left-M2",
+        "output:out-case-D-member-c1-1-s3.6-left-M3",
+        "output:out-case-D-member-c0-2-s0-right-M2",
+        "output:out-case-D-member-c0-2-s0-right-M3",
+        "output:out-case-D-member-c0-2-s3.6-left-M2",
+        "output:out-case-D-member-c0-2-s3.6-left-M3",
+        "output:out-case-D-member-c1-2-s0-right-M2",
+        "output:out-case-D-member-c1-2-s0-right-M3",
+        "output:out-case-D-member-c1-2-s3.6-left-M2",
+        "output:out-case-D-member-c1-2-s3.6-left-M3",
+        "output:out-case-D-node-n0-0-Fx",
+        "output:out-case-D-node-n0-0-Fz",
+        "output:out-case-D-node-n0-0-My",
+        "output:out-case-D-node-n1-0-Fx",
+        "output:out-case-D-node-n1-0-Fz",
+        "output:out-case-D-node-n1-0-My",
+        "output:out-D-drift-n0-0-n0-1-ux",
+        "output:out-D-drift-n1-0-n1-1-ux",
+        "output:out-D-drift-n0-1-n0-2-ux",
+        "output:out-D-drift-n1-1-n1-2-ux",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        10,
+        11
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        12
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        14
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        15,
+        16
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        22,
+        23
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        24
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        25,
+        26,
+        27
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending"
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-case-acceptance",
+      "status": "pending"
+    },
+    {
+      "id": "model-fidelity",
+      "status": "pending"
+    },
+    {
+      "id": "signed-output-completeness",
+      "status": "pending"
+    }
+  ],
+  "authoringNotes": [
+    "The source specifies different strong/weak directions but leaves rectangle dimensions and actual axis vectors to the appendix. Freeze one CR 350x500 mm section with left roll 0 degrees and right roll 90 degrees, rather than silently swapping section names.",
+    "C30 E=30000 MPa, nu=0.2, rho=2500 kg/m3 and 300x600 mm beams complete the missing material/beam appendix.",
+    "The two-dimensional protocol uses initial local y=global +Y, z=x cross y, with roll applied afterwards. Right-column in-plane bending is local M3; both M2 and M3 are requested so a roll omission cannot be concealed."
+  ]
+}

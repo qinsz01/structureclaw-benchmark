@@ -1,0 +1,61 @@
+{
+  "sourceTask": {
+    "id": "INT-062",
+    "family": "interactive_robustness",
+    "baseGroup": "M-INT-062",
+    "title": "退台框架上层右跨明确不存在",
+    "subcategory": "不规则拓扑直接执行",
+    "difficulty": "L2",
+    "difficultyReason": "完整缺失区域是明确几何而非需要补问的参数",
+    "language": "英文",
+    "inputForm": "文本单轮＋完整属性附件（仅暂缺项除外）",
+    "turns": 1,
+    "scenario": "T1所用独立模型为M-INT-062（退台框架下层空旷侧新增设备点力）。T1完整给M-INT-062连接表，注明上层右跨梁柱不存在，直接建模分析。",
+    "modelingFocus": "缺失上层右跨不能按规则网格补全；荷载位置的独立状态保持",
+    "expectedOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "gradingFocus": "不补齐规则网格；保留下层两跨及上层左跨；不得给不存在梁加载；设备点力只加真实下层梁，不虚构上层右梁。",
+    "origin": "新增",
+    "oldPrimaryId": "无",
+    "oldSecondaryId": "无",
+    "reuseChange": "新增交互场景；独立起始模型来源另见M-INT-062，不把同基础模型计为旧交互题沿用。该题已有独立物理改动，不与其他任务共享模型。",
+    "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+    "prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "INT-062",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "2D平面钢框架的不规则拓扑直接执行，重点是缺失上层右跨不能按规则网格补全，用显式杆系模型核对状态与响应。",
+      "executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "未逐题验收；前置检查项：基础工具，并核对不规则拓扑直接执行后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+      "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+      "requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-INT-062",
+    "taskId": "INT-062",
+    "structure": "平面钢框架",
+    "dimension": "2D",
+    "difficulty": "L2",
+    "title": "退台框架下层空旷侧新增设备点力",
+    "spec": "下层两跨各6m，上层仅左跨保留，层高3.6、3.3m，各层梁10kN/m；下层右跨梁中点x=9m,z=3.6m另向下18kN，上层右跨仍不存在；所有柱脚面内三自由度固定。",
+    "challenge": "缺失上层右跨不能按规则网格补全；荷载位置需与交互状态独立保持",
+    "source": "无",
+    "prerequisite": "基础工具",
+    "distinctness": "相对原结构锚点新增/修改荷载位置：下层右跨梁中点x=9m,z=3.6m另向下18kN，上层右跨仍不存在",
+    "topologyKey": "平面钢框架；下层两跨各6m",
+    "boundaryKey": "所有柱脚面内三自由度固定",
+    "loadKey": "下层两跨各6m，上层仅左跨保留，层高3.6、3.3m，各层梁10kN/m；下层右跨梁中点x=9m,z=3.6m另向下18kN，上层右跨仍不存在",
+    "propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值"
+  },
+  "authorReview": {
+    "sourceInspection": "Upper-right node, beam and column removed; no orphaned elements. Lower right midpoint connects two beam pieces and receives 18 kN. Highest actual right joint is n1-2, not nonexistent n2-2.",
+    "appendixCompletion": "Source supplies no complete numerical section/material appendix. Explicit steel E=206000 MPa, nu=0.3, G=E/2.6, rho=7850 kg/m3; base B1=300x600 mm, C1=500x500 mm solid rectangles, unless the case-specific public table overrides. A/Iy/Iz/J are explicit, not engine defaults. UDL uses actual member length; sections are linear elastic engineering inputs, not design-code defaults.",
+    "reviewStatus": "Author checked source topology, supports, load magnitudes/locations and turn sequence. Independent blind reconstruction and native execution pending."
+  },
+  "validationStatus": "Structural checks only; independent input review, numerical reference and native execution remain pending."
+}

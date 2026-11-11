@@ -1,0 +1,332 @@
+{
+  "title": "Complete numerical input appendix",
+  "units": {
+    "coordinates": "m",
+    "forces": "kN",
+    "moments": "kN.m",
+    "lineLoads": "kN/m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m^3",
+    "A": "m^2",
+    "Iy": "m^4",
+    "Iz": "m^4",
+    "J": "m^4",
+    "shapeDimensions": "mm",
+    "rotations": "rad",
+    "sectionRoll": "degree"
+  },
+  "coordinateConvention": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodeTable": {
+    "columns": [
+      "id",
+      "X_m",
+      "Y_m",
+      "Z_m",
+      "fixed_ux",
+      "fixed_uy",
+      "fixed_uz",
+      "fixed_rx",
+      "fixed_ry",
+      "fixed_rz"
+    ],
+    "rows": [
+      [
+        "n0-0",
+        0,
+        0,
+        0,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        "n1-0",
+        12,
+        0,
+        0,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        "n2-0",
+        27,
+        0,
+        0,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        "n0-1",
+        0,
+        0,
+        7,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      [
+        "n1-1",
+        12,
+        0,
+        7,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      [
+        "n2-1",
+        27,
+        0,
+        7,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    ]
+  },
+  "memberTable": {
+    "columns": [
+      "id",
+      "kind",
+      "start_node",
+      "end_node",
+      "material_id",
+      "section_id",
+      "roll_degrees",
+      "axis_reference_vector"
+    ],
+    "rows": [
+      [
+        "c0-1",
+        "column",
+        "n0-0",
+        "n0-1",
+        "M1",
+        "C-outer",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      [
+        "c1-1",
+        "column",
+        "n1-0",
+        "n1-1",
+        "M1",
+        "C-middle",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      [
+        "c2-1",
+        "column",
+        "n2-0",
+        "n2-1",
+        "M1",
+        "C-outer",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      [
+        "b0-1",
+        "beam",
+        "n0-1",
+        "n1-1",
+        "M1",
+        "B1",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      [
+        "b1-1",
+        "beam",
+        "n1-1",
+        "n2-1",
+        "M1",
+        "B1",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ]
+    ]
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 700.0
+      },
+      "properties": {
+        "A": 0.21,
+        "Iy": 0.008574999999999998,
+        "Iz": 0.0015749999999999998,
+        "J": 0.004603782069970844
+      }
+    },
+    {
+      "id": "C-outer",
+      "name": "C-outer",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 450.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.27,
+        "Iy": 0.0081,
+        "Iz": 0.00455625,
+        "J": 0.009840743591308595
+      }
+    },
+    {
+      "id": "C-middle",
+      "name": "C-middle",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 600.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.36,
+        "Iy": 0.010799999999999997,
+        "Iz": 0.010799999999999997,
+        "J": 0.01825199999999999
+      }
+    }
+  ],
+  "loadingCases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b0-1",
+          "wz": -6
+        },
+        {
+          "id": "D-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b1-1",
+          "wz": -6
+        }
+      ]
+    },
+    {
+      "id": "W",
+      "type": "wind",
+      "loads": [
+        {
+          "id": "W-1",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "n0-1",
+          "fx": 10
+        },
+        {
+          "id": "W-2",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "n2-1",
+          "fx": 10
+        }
+      ]
+    }
+  ],
+  "linearCombinations": [
+    {
+      "id": "C0",
+      "factors": {
+        "D": 1
+      }
+    },
+    {
+      "id": "C1",
+      "factors": {
+        "D": 1,
+        "W": 1
+      }
+    }
+  ],
+  "analysisSettings": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "floorTable": [],
+  "continuityNotes": {}
+}

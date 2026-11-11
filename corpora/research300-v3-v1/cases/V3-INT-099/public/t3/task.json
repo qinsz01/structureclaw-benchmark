@@ -1,0 +1,83 @@
+{
+  "caseId": "V3-INT-099",
+  "turnId": "t3",
+  "family": "INT",
+  "designedLevel": "L4",
+  "engine": "OpenSees",
+  "kind": "project",
+  "title": "某体育综合训练馆大跨钢结构楼盖振动舒适度分析：2号分析子结构",
+  "instruction": "在上部分配梁中跨的中间节点 U1-2增加设备恒载 15 kN，沿全局 -Z，仅计入 D。保留上一轮 Q 重分布，其他已签发输入不变。",
+  "sourceId": "SRC-SPORT-2023",
+  "answerFile": "answer.json",
+  "integration": "one-way",
+  "constraints": [
+    {
+      "id": "upperVertical",
+      "absoluteLimit": 0.0128,
+      "unit": "m",
+      "scope": "All secondary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryVertical",
+      "absoluteLimit": 0.03899,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryLateral",
+      "absoluteLimit": 0.004522,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; max sqrt(ux^2+uy^2)"
+    },
+    {
+      "id": "primaryEndAction",
+      "absoluteLimit": 414.5,
+      "unit": "kN.m",
+      "scope": "All beam/column end cuts and M2/M3 components, or all axial bars when no beam/column exists; signed max-abs"
+    }
+  ],
+  "requirements": {
+    "upperSelections": [
+      {
+        "kind": "case",
+        "id": "D"
+      },
+      {
+        "kind": "case",
+        "id": "Q"
+      },
+      {
+        "kind": "case",
+        "id": "W"
+      }
+    ],
+    "primarySelections": [
+      {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      {
+        "kind": "combination",
+        "id": "WIND"
+      },
+      {
+        "kind": "combination",
+        "id": "REVERSE"
+      }
+    ],
+    "completeEnumerationRequired": false,
+    "gravityRecalculationRequired": true,
+    "oneWayTransfer": true
+  },
+  "report": [
+    "design",
+    "feasible",
+    "volume",
+    "metrics",
+    "transfers",
+    "jobIdsByModel"
+  ],
+  "attachments": [
+    "engineering-revision.md"
+  ]
+}

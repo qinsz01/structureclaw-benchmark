@@ -1,0 +1,575 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-038",
+  "modelId": "M-STD-038",
+  "referenceKind": "native-opensees",
+  "method": "native-openseespy",
+  "solver": {
+    "module": "openseespy.opensees",
+    "version": "3.7.1",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "runnerSha256": "1519c55df3a55b7483a82794b8e2f789b2090e8e9153f37895c1d0157cb69f54",
+    "referenceIoSha256": "22066f2728b59482df3da98e4bed3bb8a81edfadfab351fb90d40cc11f436717",
+    "nativeModuleSha256": "b4c234a20c235bb4a8ed9f780a9ac2d5b2534c42ad499054882ba8c8e94bed1d",
+    "nativeBinaryModule": "openseespylinux.opensees",
+    "nativeBinarySha256": "b0985e344fb76d2f445c2b3046c37676aa02d8c632d66345a4bc927a56fee25f",
+    "openseespyPackageVersion": "3.7.1.2",
+    "openseespylinuxPackageVersion": "3.7.1.2"
+  },
+  "inputHashes": {
+    "contract.json": "0256370fc4f7c420d6f705f5e74de9471beb4dc129b5217a784c36d3cf555334",
+    "reference-requests.json": "271154ac92de98bdfa660fc17739dbb9fa266beb1d8fcf78904b8d7082136eb1",
+    "model-state-1.json": "9d92cf240ac629d1253dfa99d7a6bd369c7a2048852f10a8bc613f34150fc52e"
+  },
+  "sourceHash": "a2bf6899a614f393186a192cf6903c80662be4562f77897a8f1589f38d9b8dff",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "0256370fc4f7c420d6f705f5e74de9471beb4dc129b5217a784c36d3cf555334"
+      },
+      {
+        "path": "geometry.json",
+        "sha256": "8d0420be0e9b7ff12ee8c81e4edd53ae18a3b561f8388cc773274f2b646d6c51"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "371067282a20ccaa2d4b75c21852083ab03622a76b936b638eaff9d7cb37a8c0"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "9d92cf240ac629d1253dfa99d7a6bd369c7a2048852f10a8bc613f34150fc52e"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "241fef8170704839e52753114472b4661a9d9fca372a08f098de39abb5136be0"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "1d7214171aebc1d1331528fbc812f3032af07c03a7a8ca19725a50f0b3238ae0"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "a806b6ea126b9286954da69e89a1bfce766344062d8ff8d89e4c83b680172e9b"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "271154ac92de98bdfa660fc17739dbb9fa266beb1d8fcf78904b8d7082136eb1"
+      }
+    ]
+  },
+  "sameEngineTruthStatus": "pending",
+  "nativeIndependentReview": "pending",
+  "llmEndToEnd": "not-run",
+  "nativeRole": "same-engine-candidate",
+  "warnings": [
+    "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+    "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+    "OpenSees results for a different planned engine are cross-engine diagnostics only."
+  ],
+  "checks": [
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        3.776601785241252e-15,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        4.01e-06,
+        1.0999999999999999e-07,
+        3.181e-05,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 1.616484723854228e-13,
+      "equilibriumPassed": true,
+      "nativeNodes": 12,
+      "nativeElements": 21,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "loadIntegration": "Three-point Gauss native beamPoint loads; exact linear-load work at segment endpoints",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case:LC1:node:T1:ux",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "T1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.00017325189573367907
+        },
+        {
+          "id": "case:LC1:node:T1:uz",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "T1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.00040937272108315626
+        },
+        {
+          "id": "case:LC1:node:T3:ux",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "T3"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 8.560487600847691e-05
+        },
+        {
+          "id": "case:LC1:node:T3:uz",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "T3"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.0005947499404889192
+        },
+        {
+          "id": "case:LC1:node:T4:ux",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "T4"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.540285320987478e-08
+        },
+        {
+          "id": "case:LC1:node:T4:uz",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "T4"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.00033803020255073054
+        },
+        {
+          "id": "case:LC1:member:V0:N@0.75:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "V0",
+            "positionM": 0.75,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case:LC1:member:V1:N@0.9:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "V1",
+            "positionM": 0.9,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.6666666666665106
+        },
+        {
+          "id": "case:LC1:member:V2:N@1.05:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "V2",
+            "positionM": 1.05,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case:LC1:member:V3:N@1.2:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "V3",
+            "positionM": 1.2,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -17.999999999999886
+        },
+        {
+          "id": "case:LC1:member:V4:N@1.35:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "V4",
+            "positionM": 1.35,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.13603050985211e-14
+        },
+        {
+          "id": "case:LC1:member:V5:N@1.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "V5",
+            "positionM": 1.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -6.148733565182384e-16
+        },
+        {
+          "id": "case:LC1:member:D1:N@1.74928556845:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D1",
+            "positionM": 1.7492855684535902,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -36.54063187436331
+        },
+        {
+          "id": "case:LC1:member:D2:N@1.83098334236:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D2",
+            "positionM": 1.8309833423600554,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -6.3939100844317425
+        },
+        {
+          "id": "case:LC1:member:D3:N@1.83098334236:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D3",
+            "positionM": 1.8309833423600554,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 4.795432563324017
+        },
+        {
+          "id": "case:LC1:member:D4:N@2.01804360706:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D4",
+            "positionM": 2.0180436070610566,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 22.796418524207766
+        },
+        {
+          "id": "case:LC1:member:D5:N@2.01804360706:right",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D5",
+            "positionM": 2.0180436070610566,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -31.690758866439943
+        },
+        {
+          "id": "case:LC1:node:B0:Fx",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.0658141036401503e-14
+        },
+        {
+          "id": "case:LC1:node:B0:Fz",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 18.799999999999706
+        },
+        {
+          "id": "case:LC1:node:B5:Fx",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B5"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.7763568394002505e-14
+        },
+        {
+          "id": "case:LC1:node:B5:Fz",
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B5"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 21.199999999999765
+        }
+      ],
+      "derived": [],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            3.776601785241252e-15,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            4.01e-06,
+            1.0999999999999999e-07,
+            3.181e-05,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 1.616484723854228e-13,
+          "equilibriumPassed": true,
+          "nativeNodes": 12,
+          "nativeElements": 21,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "loadIntegration": "Three-point Gauss native beamPoint loads; exact linear-load work at segment endpoints",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "LC1"
+          }
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "native-input-receipt.json",
+      "sha256": "5eeebaf76e3b0e4c336d3ecbbfec9205d1b841ac4ee1c0f9fbabc55eaab9b8a0"
+    },
+    {
+      "path": "native-solver-receipt.json",
+      "sha256": "642ef1fcab0a2082e92a12e74ea8d4fcad1fad5e67d9416a44d8a7c53a652d2d"
+    },
+    {
+      "path": "native-raw-responses.json",
+      "sha256": "09a776d3fa7018c8bedbf625669a383faad5d2eff28eb2206e1d1c6bb9863943"
+    },
+    {
+      "path": "native-checks.json",
+      "sha256": "4969364001ee9b3ee70e8dfe76e365db043c3959c36a6b989fba8a087c29e19b"
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "Unequal-flange I 500x300/200x12x20",
+      "type": "H",
+      "shape": {
+        "kind": "unequal-flange-I",
+        "H": 500,
+        "Bpositive3": 300,
+        "Bnegative3": 200,
+        "tw": 12,
+        "tf": 20,
+        "centroidFromNegative3Edge": 280.92783505154637
+      },
+      "properties": {
+        "A": 0.01552,
+        "Iy": 0.000658823972508591,
+        "Iz": 5.8399573333333325e-05,
+        "J": 1.5982933333333336e-06
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 200.0,
+        "H": 350.0
+      },
+      "properties": {
+        "A": 0.06999999999999999,
+        "Iy": 0.0007145833333333331,
+        "Iz": 0.00023333333333333336,
+        "J": 0.0006003187560738581
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows the thin arrow on each drawn member from first to second end",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "M1: E=206000 MPa, nu=0.30, G=E/[2(1+nu)], rho=7850 kg/m3. C1 is an unequal-flange I section: H=500 mm along local 3; flange widths 300 mm on +3 and 200 mm on -3; tw=12 mm and both tf=20 mm. B1 is a solid 200 by 350 mm rectangle.",
+    "C1 uses sharp corners. Its A and centroidal principal Iy/Iz are computed from the three non-overlapping rectangles; J=[(300+200)*20^3+460*12^3]/3 mm4 is the explicit thin-wall torsional input. Member lines pass through the section centroid; use the supplied uncoupled Euler-Bernoulli A/Iy/Iz/J record without additional offsets.",
+    "Columns: local 1=+Z, 2=-Y, 3=+X. Side arm: local 1=+Y, 2=-X, 3=+Z. Both column segments share the same unrolled section orientation.",
+    "Report Mx, My and Mz as global support reaction moments. Mz is a signed numerical equilibrium check against zero under first-order loading; the eccentric vertical arm load causes bending about X."
+  ],
+  "boundaryConditions": [
+    {
+      "node": "base",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "joint",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "top",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "tip",
+      "restrainedDOFs": []
+    }
+  ]
+}

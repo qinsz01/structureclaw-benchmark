@@ -1,0 +1,90 @@
+{
+  "checkedAt": "2026-10-28T02:21:54.428550+00:00",
+  "sutCommit": "db3c0b1da44fe668a6037a6c2e7f068d14354539",
+  "scope": "Targeted existing production tests, not acceptance of new cases or benchmark agent runs",
+  "testFiles": [
+    {
+      "file": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_solver_mesh.py",
+      "sha256": "7db76bb3bd9b13e48a71afb3aaa493fa138b1abcbc0346a02dcc8ad95f8116a5",
+      "exitCode": 0,
+      "summary": "33 passed in 2.58s",
+      "log": "capability-checks/test_solver_mesh.txt",
+      "logSha256": "9217a5b1cde2a764899817aa5baea42125e8595be7226ff68d94ad0b67d159d2"
+    },
+    {
+      "file": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_end_releases.py",
+      "sha256": "0b201a6f4c6af848be4edc9275008c2e7fbfcdba4c148f10aef29316c3e1b483",
+      "exitCode": 0,
+      "summary": "24 passed in 2.35s",
+      "log": "capability-checks/test_end_releases.txt",
+      "logSha256": "25568b52b5b57bf02da646af8cd6891d97814d830970d95ed7a9a64446aa3052"
+    },
+    {
+      "file": "backend/src/agent-skills/analysis/opensees-static/__tests__/test_planned_capability_combinations.py",
+      "sha256": "bf3f677fcc4b9e93f236b8ec3d3f40ed94190906a9024720f1e162f803958fe1",
+      "exitCode": 0,
+      "summary": "12 passed in 0.99s",
+      "log": "capability-checks/test_planned_capability_combinations.txt",
+      "logSha256": "7c186f013351bca4b4668cfabee8230104d94236296483d5d90c27ff251b18f7"
+    },
+    {
+      "file": "backend/src/agent-skills/analysis/opensees-dynamic/__tests__/test_dynamic_coordinate_contract.py",
+      "sha256": "dbc72da47f91848585f810771767091c6dc54d5a7c40eeb9fbd802a822619e62",
+      "exitCode": 0,
+      "summary": "7 passed in 1.07s",
+      "log": "capability-checks/test_dynamic_coordinate_contract.txt",
+      "logSha256": "6c2a502bb3434f9bb2f068a1a7db28749dad44dc29cb6533269975ad398d9502"
+    },
+    {
+      "file": "backend/src/agent-skills/analysis/opensees-dynamic/__tests__/test_shared_mass_modal.py",
+      "sha256": "f75f38fd0dc4d7fe325a5f803d37828b3a1afa3974301704879c823c45128248",
+      "exitCode": 0,
+      "summary": "20 passed in 2.50s",
+      "log": "capability-checks/test_shared_mass_modal.txt",
+      "logSha256": "9b931ab23ed775e7e31c994de270dfd7c3061212d10a8dd73d2ab7a2d2f21341"
+    },
+    {
+      "file": "backend/src/agent-skills/analysis/opensees-dynamic/__tests__/test_transient_observations.py",
+      "sha256": "d4fd0a48c02d50fdabce596946dd30effbdba6f1871cfea98c77151709170ffa",
+      "exitCode": 0,
+      "summary": "14 passed in 7.38s",
+      "log": "capability-checks/test_transient_observations.txt",
+      "logSha256": "6da67eabb01ad7877bab7bffbcac85ba3935b4dea880494081b603f90a1d2ba0"
+    }
+  ],
+  "planStatus": "planning-only-not-a-runnable-corpus",
+  "productionCodeChanged": false,
+  "newCaseAcceptances": 0,
+  "newCandidateRuns": 0,
+  "testedChecks": 110,
+  "failedChecks": 0,
+  "existingCommercialEvidence": "docs/implementation/reviews/codex-diversity300-20261027/README.md",
+  "commercialLimitation": "No new remote/native run was performed; 60 newly planned commercial cases remain unqualified.",
+  "benchmarkAdapterGap": "The previous candidate broker and evaluator are static-only; dynamic dispatch, observations and grading require benchmark extensions before trials.",
+  "inspectedBoundaryFiles": [
+    {
+      "path": "backend/src/agent-skills/analysis/runtime/opensees_shared/model.py",
+      "sha256": "3cc3f5238c3b68695662cf2e40e2bd9e7c91c9ae31a183f8fab8cc49a82b7826"
+    },
+    {
+      "path": "backend/src/agent-skills/analysis/runtime/opensees_shared/releases.py",
+      "sha256": "1536a85cffa393ef56f333662ca8c9150befca89efb1202c2f8b5c8c8e9a306a"
+    },
+    {
+      "path": "backend/src/agent-skills/analysis/opensees-dynamic/runtime.py",
+      "sha256": "92a8e87b4e3400b957c7195aa54d2efedf0c6bd33da7f9b4a59f7237537822bf"
+    },
+    {
+      "path": "backend/src/agent-skills/analysis/opensees-nonlinear/runtime.py",
+      "sha256": "af67086b40c7715f20eb71c53a42a7e0c5d6354a14da7d26131c904f8936a176"
+    }
+  ],
+  "limits": {
+    "releases": "Only supported local bending releases; no general semi-rigid, torsional or axial releases. Undefined joint rotations are unavailable, not zero.",
+    "statics": "First-order elastic line members. All 2D physical coordinates use global XZ. Truss/brace are bilateral elastic axial elements.",
+    "dynamics": "Explicit non-conflicting mass source; elastic modal or single-direction uniform-excitation linear transient. Response conventions must be explicit.",
+    "unsupported": "No full-member nonlinear, P-Delta, thermal, tension-only, cable, shell, soil contact, construction stage or rigid-offset tasks.",
+    "rigidFloor": "Implemented but excluded as a required feature in this proposal; use explicit bare frames or flexible beam grids.",
+    "truth": "Production tests support feature eligibility only; no new case has authored inputs, independent truth, blind review or candidate results."
+  }
+}

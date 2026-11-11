@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-096",
+  "inputHashes": {
+    "contract.json": "50c7b24cf95e257f3147c196dec4d16ac0c4b60bd04ac8b5e2a51f923121f3e9",
+    "reference-requests.json": "3f7d06ff9f6871586868c07b602625be44ba7ce5e1652971394dbf1198a4018e",
+    "model-state-1.json": "e9ebd1389242e30b973b569beb0b2693dc6cefc49ea6cb53ff19b617a745e9d5"
+  },
+  "sourceHash": "d2dc8f6fcddf6c1715d83c8674cc0a364dfc2bc532207e4f50390312f6832521",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "assignments.json",
+        "sha256": "16a360241a6970290cc3e3d002c40b2467db68b9eb047a18910d44b94c8d1624"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "50c7b24cf95e257f3147c196dec4d16ac0c4b60bd04ac8b5e2a51f923121f3e9"
+      },
+      {
+        "path": "drawing-elevation-XZ.png",
+        "sha256": "0893a599a5688a79d6be2edefa84ecea732fcf24c5db4a9055f4214d11cad23b"
+      },
+      {
+        "path": "drawing-elevation-XZ.svg",
+        "sha256": "07af6cbe13e613e2495617e67ac3d32a0dada1e2a0dd7acbff722e4954a39ae0"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "62db13164e30a0a3fa94ba47b237bfbb0005c740eed3509686eff489d9812cf5"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "e9ebd1389242e30b973b569beb0b2693dc6cefc49ea6cb53ff19b617a745e9d5"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "eae10eee657fd4020508c59a100aa49361393bf031d5e5ef49bd29f332815a5b"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "5ff9efcda93c54722372df7d274810d22fa73dba685fdd836be662c3dc836a21"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "3f7d06ff9f6871586868c07b602625be44ba7ce5e1652971394dbf1198a4018e"
+      },
+      {
+        "path": "section-details.png",
+        "sha256": "ccbf6f045150cfdf08e5f1f62932cc87bfde6d895db5cf3fc3a38b3dc15c8d77"
+      },
+      {
+        "path": "section-details.svg",
+        "sha256": "87dc8e9739ed380ebe92840d781e1a1a9037634cbef58fa10b11b697ace2aac2"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "base",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "lateral-support",
+            "x": 0,
+            "y": 0,
+            "z": 2.1,
+            "restraints": [
+              true,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "top",
+            "x": 0,
+            "y": 0,
+            "z": 4.2,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "lower",
+            "type": "column",
+            "nodes": [
+              "base",
+              "lateral-support"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "upper",
+            "type": "column",
+            "nodes": [
+              "lateral-support",
+              "top"
+            ],
+            "material": "M1",
+            "section": "C1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "C30",
+            "type": "concrete",
+            "E": 30000,
+            "G": 12500,
+            "nu": 0.2,
+            "rho": 2500
+          }
+        ],
+        "sections": [
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 450.0,
+              "H": 450.0
+            },
+            "properties": {
+              "A": 0.2025,
+              "Iy": 0.0034171875000000005,
+              "Iz": 0.0034171875000000005,
+              "J": 0.005775046875000001
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-top",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "top",
+                "fz": -600,
+                "fx": 30
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

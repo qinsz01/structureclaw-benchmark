@@ -1,0 +1,1142 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-042",
+  "modelId": "M-STD-042",
+  "referenceKind": "native-opensees",
+  "method": "native-openseespy",
+  "solver": {
+    "module": "openseespy.opensees",
+    "version": "3.7.1",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "runnerSha256": "1519c55df3a55b7483a82794b8e2f789b2090e8e9153f37895c1d0157cb69f54",
+    "referenceIoSha256": "22066f2728b59482df3da98e4bed3bb8a81edfadfab351fb90d40cc11f436717",
+    "nativeModuleSha256": "b4c234a20c235bb4a8ed9f780a9ac2d5b2534c42ad499054882ba8c8e94bed1d",
+    "nativeBinaryModule": "openseespylinux.opensees",
+    "nativeBinarySha256": "b0985e344fb76d2f445c2b3046c37676aa02d8c632d66345a4bc927a56fee25f",
+    "openseespyPackageVersion": "3.7.1.2",
+    "openseespylinuxPackageVersion": "3.7.1.2"
+  },
+  "inputHashes": {
+    "contract.json": "117662287249023a62f79f228e85d87f0e5f62d95067c34605444abb8fb115dd",
+    "reference-requests.json": "c88936213b99fff1364239d282e2e3e4fefdcc1045ba9b7d68606efee6702537",
+    "model-state-1.json": "42656ec262ab705b58d9e22fea1769a127d4857c23aca22d3ab9981754a3d817"
+  },
+  "sourceHash": "73e982ae3735de18f56dd3cc347b43526ba0c36be4c57a61f8856be5333e0f07",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "117662287249023a62f79f228e85d87f0e5f62d95067c34605444abb8fb115dd"
+      },
+      {
+        "path": "geometry.json",
+        "sha256": "b801cc7f90834649e8c54e742762e72546b624e2ee6f58c093d5449eef8d780a"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "eac9cb0320741f18de4effc4ca01d29d916a0db9e4da74ae45a2262e7dce7203"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "42656ec262ab705b58d9e22fea1769a127d4857c23aca22d3ab9981754a3d817"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "5ca7703ceacbee4411bafe3723d2f18bc3a3d2e3280fdabc8ad165ad7e05ce22"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "5fd20e8496c9637f58ccd3c1a18e46a66537d412c017b3b93dcce2035a66aad1"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "f61bc8dd8f99590f8f22a3ef15f3812a70a5369e0d802dd0d770f6a1d31fd51d"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "c88936213b99fff1364239d282e2e3e4fefdcc1045ba9b7d68606efee6702537"
+      }
+    ]
+  },
+  "sameEngineTruthStatus": "pending",
+  "nativeIndependentReview": "pending",
+  "llmEndToEnd": "not-run",
+  "nativeRole": "same-engine-candidate",
+  "warnings": [
+    "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+    "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+    "OpenSees results for a different planned engine are cross-engine diagnostics only."
+  ],
+  "checks": [
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        3.552713678800501e-15,
+        -4.440892098500626e-16,
+        9.325873406851315e-15,
+        3.871555386167858e-15,
+        -2.842170943040401e-14,
+        1.4210854715202004e-14
+      ],
+      "balanceTolerance": [
+        3.01e-06,
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        1.8010000000000002e-05,
+        3.4741016151377538e-06
+      ],
+      "freeResidual": 1.199040866595169e-14,
+      "equilibriumPassed": true,
+      "nativeNodes": 9,
+      "nativeElements": 27,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "loadIntegration": "Three-point Gauss native beamPoint loads; exact linear-load work at segment endpoints",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case:D:node:A2:ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.00039356423367261723
+        },
+        {
+          "id": "case:D:node:A2:uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -9.100656401734293e-06
+        },
+        {
+          "id": "case:D:node:A2:uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 9.717913581512899e-05
+        },
+        {
+          "id": "case:D:node:B2:ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.00039356423367261723
+        },
+        {
+          "id": "case:D:node:B2:uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 9.100656401734099e-06
+        },
+        {
+          "id": "case:D:node:B2:uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -9.717913581512901e-05
+        },
+        {
+          "id": "case:D:node:C2:ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "C2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0004093270329426464
+        },
+        {
+          "id": "case:D:node:C2:uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "C2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.753483536333448e-20
+        },
+        {
+          "id": "case:D:node:C2:uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "C2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.404814774377595e-20
+        },
+        {
+          "id": "case:D:member:CH1:N@1.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "CH1",
+            "positionM": 1.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 32.22368408937798
+        },
+        {
+          "id": "case:D:member:CH2:N@1.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "CH2",
+            "positionM": 1.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -32.223684089378004
+        },
+        {
+          "id": "case:D:member:CH3:N@1.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "CH3",
+            "positionM": 1.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.0514325818964486e-14
+        },
+        {
+          "id": "case:D:member:CH4:N@1.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "CH4",
+            "positionM": 1.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 10.483306796844033
+        },
+        {
+          "id": "case:D:member:CH5:N@1.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "CH5",
+            "positionM": 1.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -10.483306796844033
+        },
+        {
+          "id": "case:D:member:CH6:N@1.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "CH6",
+            "positionM": 1.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 5.403350950025253e-17
+        },
+        {
+          "id": "case:D:member:H1:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H1",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case:D:member:H2:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H2",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case:D:member:H3:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H3",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case:D:member:H4:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H4",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case:D:member:H5:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H5",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.0573454850372954
+        },
+        {
+          "id": "case:D:member:H6:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H6",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.0573454850372936
+        },
+        {
+          "id": "case:D:member:H7:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H7",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case:D:member:H8:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H8",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.977742395792041
+        },
+        {
+          "id": "case:D:member:H9:N@2:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "H9",
+            "positionM": 2.0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.9777423957920455
+        },
+        {
+          "id": "case:D:member:D1:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D1",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 12.500000000000016
+        },
+        {
+          "id": "case:D:member:D2:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D2",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -12.50000000000002
+        },
+        {
+          "id": "case:D:member:D3:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D3",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.79385985103666
+        },
+        {
+          "id": "case:D:member:D4:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D4",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.7061401489633163
+        },
+        {
+          "id": "case:D:member:D5:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D5",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.7061401489633057
+        },
+        {
+          "id": "case:D:member:D6:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D6",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 8.793859851036652
+        },
+        {
+          "id": "case:D:member:D7:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D7",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 12.500000000000009
+        },
+        {
+          "id": "case:D:member:D8:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D8",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -12.500000000000009
+        },
+        {
+          "id": "case:D:member:D9:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D9",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -7.527822005259928
+        },
+        {
+          "id": "case:D:member:D10:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D10",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 4.972177994740045
+        },
+        {
+          "id": "case:D:member:D11:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D11",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.972177994740044
+        },
+        {
+          "id": "case:D:member:D12:N@2.5:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "D12",
+            "positionM": 2.5,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 7.527822005259932
+        },
+        {
+          "id": "case:D:node:A0:Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -13.517543940414676
+        },
+        {
+          "id": "case:D:node:A0:Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -6.092564822654224
+        },
+        {
+          "id": "case:D:node:A0:Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -44.99999999999998
+        },
+        {
+          "id": "case:D:node:B0:Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -13.51754394041468
+        },
+        {
+          "id": "case:D:node:B0:Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.0925648226542295
+        },
+        {
+          "id": "case:D:node:B0:Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "B0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 45.000000000000014
+        },
+        {
+          "id": "case:D:node:C0:Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "C0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.9649121191706493
+        },
+        {
+          "id": "case:D:node:C0:Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "C0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 7.549516567451064e-15
+        },
+        {
+          "id": "case:D:node:C0:Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "C0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.7319479184152442e-14
+        }
+      ],
+      "derived": [
+        {
+          "id": "case:D:total-base:Fx",
+          "operation": "sum",
+          "operands": [
+            "case:D:node:A0:Fx",
+            "case:D:node:B0:Fx",
+            "case:D:node:C0:Fx"
+          ],
+          "unit": "kN",
+          "description": "Signed sum of Fx reactions at A0, B0 and C0 in load case D.",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -30.000000000000004,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "case:D:total-base:Fy",
+          "operation": "sum",
+          "operands": [
+            "case:D:node:A0:Fy",
+            "case:D:node:B0:Fy",
+            "case:D:node:C0:Fy"
+          ],
+          "unit": "kN",
+          "description": "Signed sum of Fy reactions at A0, B0 and C0 in load case D.",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.2878587085651816e-14,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "case:D:total-base:Fz",
+          "operation": "sum",
+          "operands": [
+            "case:D:node:A0:Fz",
+            "case:D:node:B0:Fz",
+            "case:D:node:C0:Fz"
+          ],
+          "unit": "kN",
+          "description": "Signed sum of Fz reactions at A0, B0 and C0 in load case D.",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.8207657603852567e-14,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            3.552713678800501e-15,
+            -4.440892098500626e-16,
+            9.325873406851315e-15,
+            3.871555386167858e-15,
+            -2.842170943040401e-14,
+            1.4210854715202004e-14
+          ],
+          "balanceTolerance": [
+            3.01e-06,
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            1.8010000000000002e-05,
+            3.4741016151377538e-06
+          ],
+          "freeResidual": 1.199040866595169e-14,
+          "equilibriumPassed": true,
+          "nativeNodes": 9,
+          "nativeElements": 27,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "loadIntegration": "Three-point Gauss native beamPoint loads; exact linear-load work at segment endpoints",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Euler-Bernoulli beams: elasticBeamColumn excludes shear deformation (not Timoshenko).",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "native-input-receipt.json",
+      "sha256": "41d73509510b65f8e4c21d35c8ca48981de3b5e07686998b5a0eaf88923b4268"
+    },
+    {
+      "path": "native-solver-receipt.json",
+      "sha256": "023d6a8d590bf14b205fbb18aa2511965cb6fce975d500b072af0266b355d93c"
+    },
+    {
+      "path": "native-raw-responses.json",
+      "sha256": "23e3ae7338492e99afe171c3f1411649db6621006aee47ae3f967a6325296d5e"
+    },
+    {
+      "path": "native-checks.json",
+      "sha256": "166d01e6145e78a11fcda46055efc791a93921fc508828e228e51f5e07db8d4c"
+    }
+  ]
+}

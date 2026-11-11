@@ -1,0 +1,22 @@
+Analysis and property appendix
+
+First-order linear elastic static analysis; self-weight OFF. No P-delta, rigid diaphragm, rigid offsets, stiffness reductions, or automatic combinations.
+Global XYZ, Z up. Units: m, kN, kN*m; E/G MPa, density kg/m3, A m2, Iy/Iz/J m4. Displacements m, rotations rad.
+Load components use global XYZ axes: fx/fy/fz are concentrated forces in kN; mx/my/mz are nodal moments in kN*m (right-hand rule); wx/wy/wz are distributed forces in kN/m per actual member length, not projected length. A negative z component acts along global -Z.
+XZ plane. Inactive uy/rx/rz are restrained. Local 1 runs from the labelled start to end; local 2 is global +Y; local 3 = local 1 cross local 2. Positive Ry/My follows the right-hand rule about global +Y.
+Beam/column joints are rigid and continuous unless a physical support is shown; observation nodes do not create hinges.
+
+Materials
+M1: E=206000, G=79230.7692, nu=0.3, rho=7850
+
+Sections (solid rectangular appendix; local y width B and local z depth H)
+B1: A=0.18, Iy=0.0054, Iz=0.00135, J=0.00370785937
+B2: A=0.21, Iy=0.008575, Iz=0.001575, J=0.00460378207
+
+Execute each named combination separately (case and combination namespaces are distinct):
+D: {"D": 1}
+D+L: {"D": 1, "L": 1}
+
+DXF units are metres. DXF X maps to global X; DXF Y maps to global Z; global Y=0. STRUCTURE contains physical centre lines and joint dots. SUPPORTS, LOADS and DIMENSIONS are annotation layers.
+
+Report section forces using local axes; support forces/moments use global axes. Preserve signs, selected cases/combinations and section sides.

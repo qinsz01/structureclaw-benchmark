@@ -1,0 +1,156 @@
+{
+  "title": "Complete numerical input appendix",
+  "units": {
+    "coordinates": "m",
+    "forces": "kN",
+    "moments": "kN.m",
+    "lineLoads": "kN/m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m^3",
+    "A": "m^2",
+    "Iy": "m^4",
+    "Iz": "m^4",
+    "J": "m^4",
+    "shapeDimensions": "mm",
+    "rotations": "rad",
+    "sectionRoll": "degree"
+  },
+  "coordinateConvention": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodeTable": {
+    "columns": [
+      "id",
+      "X_m",
+      "Y_m",
+      "Z_m",
+      "fixed_ux",
+      "fixed_uy",
+      "fixed_uz",
+      "fixed_rx",
+      "fixed_ry",
+      "fixed_rz"
+    ],
+    "rows": [
+      [
+        "base",
+        0,
+        0,
+        0,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        "top",
+        0,
+        0,
+        4.2,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    ]
+  },
+  "memberTable": {
+    "columns": [
+      "id",
+      "kind",
+      "start_node",
+      "end_node",
+      "material_id",
+      "section_id",
+      "roll_degrees",
+      "axis_reference_vector"
+    ],
+    "rows": [
+      [
+        "column",
+        "column",
+        "base",
+        "top",
+        "M1",
+        "C1",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ]
+    ]
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "C30",
+      "type": "concrete",
+      "E": 30000,
+      "G": 12500,
+      "nu": 0.2,
+      "rho": 2500
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 450.0,
+        "H": 450.0
+      },
+      "properties": {
+        "A": 0.2025,
+        "Iy": 0.0034171875000000005,
+        "Iz": 0.0034171875000000005,
+        "J": 0.005775046875000001
+      }
+    }
+  ],
+  "loadingCases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "top",
+          "fx": 30,
+          "fz": -600
+        }
+      ]
+    }
+  ],
+  "linearCombinations": [],
+  "analysisSettings": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "floorTable": [],
+  "continuityNotes": {}
+}

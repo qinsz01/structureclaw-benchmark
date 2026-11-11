@@ -1,0 +1,279 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "A",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "B",
+      "x": 18,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "C",
+      "x": 36,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "L",
+      "x": 0,
+      "y": 0,
+      "z": 9,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "M",
+      "x": 18,
+      "y": 0,
+      "z": 9,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "R",
+      "x": 36,
+      "y": 0,
+      "z": 9,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "cL",
+      "type": "column",
+      "nodes": [
+        "A",
+        "L"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "cM",
+      "type": "column",
+      "nodes": [
+        "B",
+        "M"
+      ],
+      "material": "M1",
+      "section": "C2"
+    },
+    {
+      "id": "cR",
+      "type": "column",
+      "nodes": [
+        "C",
+        "R"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "roofL",
+      "type": "beam",
+      "nodes": [
+        "L",
+        "M"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "roofR",
+      "type": "beam",
+      "nodes": [
+        "M",
+        "R"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    },
+    {
+      "id": "C2",
+      "name": "C2",
+      "type": "general",
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.008854166666666666,
+        "Iz": 0.008854166666666666,
+        "J": 0.008802083333333334
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "q-roofL",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roofL",
+          "wz": -6
+        },
+        {
+          "id": "q-roofR",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roofR",
+          "wz": -6
+        },
+        {
+          "id": "hoist",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "M",
+          "fx": 4.9,
+          "fz": -49
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "cL": [
+        -9,
+        0,
+        0
+      ],
+      "cM": [
+        -9,
+        0,
+        0
+      ],
+      "cR": [
+        -9,
+        0,
+        0
+      ],
+      "roofL": [
+        0,
+        0,
+        18
+      ],
+      "roofR": [
+        0,
+        0,
+        18
+      ]
+    }
+  }
+}

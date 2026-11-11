@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-003",
+  "inputHashes": {
+    "contract.json": "39cf1e93b796db21c19c61df97134324bf39735c10bad5d969641a6bfabaa842",
+    "reference-requests.json": "ef0f318cd6827f916c77fcbf9b680ce8f1d773def7e3029814334678386957df",
+    "model-state-1.json": "7a6d09baedb7edd61c1964722851156dda6a137f1667b27fab065b22f85b4a90"
+  },
+  "sourceHash": "4b70bf579aebf003d55d04a1eef46b9e2da20fc3d481b7122c5a4c82897627cf",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "39cf1e93b796db21c19c61df97134324bf39735c10bad5d969641a6bfabaa842"
+      },
+      {
+        "path": "input.png",
+        "sha256": "6ef927d3a9b00f7f4c2e5bbf60fdea93c4ea10fb0d3d0bfa27308f08765b79d3"
+      },
+      {
+        "path": "input.svg",
+        "sha256": "c30526f1e1305c7fc0cf137ecf1aced514c3e5ee7f2cf6a2c15c21b1ed0fdd8e"
+      },
+      {
+        "path": "joint-detail.png",
+        "sha256": "13b9a740e5044f3cc1adc93ff3e32f2062a14e5ca37dd23b7c198392739f1753"
+      },
+      {
+        "path": "joint-detail.svg",
+        "sha256": "81a131738295939a0cdc156271edaf01ce9c00622d13e991f230568fcbfa578f"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "7a6d09baedb7edd61c1964722851156dda6a137f1667b27fab065b22f85b4a90"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "1445eca8c6e9bb27576e96012d93c01068cc33e45412580c24b4b78ca1be96cf"
+      },
+      {
+        "path": "properties.txt",
+        "sha256": "1def5cf5c214c104d9b95bec0205a814eec03cc62f16dcd5232f38d1dade3359"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "ef0f318cd6827f916c77fcbf9b680ce8f1d773def7e3029814334678386957df"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "n0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n1",
+            "x": 1,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n2",
+            "x": 6,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n3",
+            "x": 8,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "b1",
+            "type": "beam",
+            "nodes": [
+              "n0",
+              "n1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b2",
+            "type": "beam",
+            "nodes": [
+              "n1",
+              "n2"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b3",
+            "type": "beam",
+            "nodes": [
+              "n2",
+              "n3"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 700.0
+            },
+            "properties": {
+              "A": 0.21,
+              "Iy": 0.008574999999999998,
+              "Iz": 0.0015749999999999998,
+              "J": 0.004603782069970844
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b2",
+                "wz": -15
+              },
+              {
+                "id": "D-2",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n3",
+                "fz": -10
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

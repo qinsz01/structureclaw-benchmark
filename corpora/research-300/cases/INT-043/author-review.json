@@ -1,0 +1,24 @@
+{
+  "caseId": "INT-043",
+  "sourceRowsRead": true,
+  "sourceAudit": [
+    {
+      "sourceField": "task.scenario",
+      "check": "Exact original turn count, edits, and delayed clarification retained."
+    },
+    {
+      "sourceField": "model.spec",
+      "check": "跨度18m、高7m，左铰右固，屋面向下6kN/m；左柱脚为平面铰，右柱脚固定；屋面线载仍全跨6kN/m；左柱脚平面铰、右柱脚面内固定。"
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "check": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。"
+    }
+  ],
+  "decisions": [
+    "The source leaves absolute section/material appendix unspecified. Freeze explicit E=206000 MPa, nu=0.3, G=E/(2*(1+nu)), density=7850 kg/m3; B1=0.30x0.60m, C1=0.50x0.50m solid rectangles; proportional I sections are general sections with unchanged A,J. All values are public inputs, not tuned reference values."
+  ],
+  "status": "author-checked; independent input blind review pending",
+  "native": "pending",
+  "llm": "not-run"
+}

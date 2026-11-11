@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-029",
+  "inputHashes": {
+    "contract.json": "b2cd74f54cc877789fe89eaec82f888ec34ec357f2d0d2b20d3fcf16f71970d6",
+    "reference-requests.json": "2942672da18c28f1b461a54ce56b23b088c2f3e02c6adff52fc74b6d0311a044",
+    "model-state-1.json": "4cddea3fba03215460b2abb5360eb40c740008c476718a1254f1b9c75e861837"
+  },
+  "sourceHash": "3271dfa8d729a25ee39f427df1c6eae7ff8c8a2e8dad93b6daa458778c106adc",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "b2cd74f54cc877789fe89eaec82f888ec34ec357f2d0d2b20d3fcf16f71970d6"
+      },
+      {
+        "path": "geometry.json",
+        "sha256": "0d63ad7f7777f1483ca7222e46829516c9d01cd5938811c6138d33be31896aa7"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "90cb63e6ff8cf52eba27678855c8e0b3fbffefbb0d8feca2c4df76aae9012eec"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "4cddea3fba03215460b2abb5360eb40c740008c476718a1254f1b9c75e861837"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "9be34aa377f3f26728f5dccdcd684d42647d8368e4f9a6c23aa4fa9973b377e3"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "99d84b90fc3bb9d222004d6c9720825f1edf85755cc0645e0b3821b950aecf5e"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "13b405b7f2703e241975a3385d90da4499b82a14e478823c708a496ce39b1553"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "2942672da18c28f1b461a54ce56b23b088c2f3e02c6adff52fc74b6d0311a044"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "B0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B1",
+            "x": 6,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B2",
+            "x": 12,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "T1",
+            "x": 3,
+            "y": 0,
+            "z": 1.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "T2",
+            "x": 6,
+            "y": 0,
+            "z": 3,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "T3",
+            "x": 9,
+            "y": 0,
+            "z": 1.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              true,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "BC0",
+            "type": "truss",
+            "nodes": [
+              "B0",
+              "B1"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "BC1",
+            "type": "truss",
+            "nodes": [
+              "B1",
+              "B2"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "TC0",
+            "type": "truss",
+            "nodes": [
+              "B0",
+              "T1"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "TC1",
+            "type": "truss",
+            "nodes": [
+              "T1",
+              "T2"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "TC2",
+            "type": "truss",
+            "nodes": [
+              "T2",
+              "T3"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "TC3",
+            "type": "truss",
+            "nodes": [
+              "T3",
+              "B2"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "W1",
+            "type": "truss",
+            "nodes": [
+              "T1",
+              "B1"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "W2",
+            "type": "truss",
+            "nodes": [
+              "T2",
+              "B1"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "W3",
+            "type": "truss",
+            "nodes": [
+              "T3",
+              "B1"
+            ],
+            "material": "M1",
+            "section": "T1"
+          },
+          {
+            "id": "H",
+            "type": "truss",
+            "nodes": [
+              "T1",
+              "T3"
+            ],
+            "material": "M1",
+            "section": "T1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "steel",
+            "type": "steel",
+            "E": 205000,
+            "nu": 0.3,
+            "G": 78846.15384615384,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "T1",
+            "name": "T1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 100.0,
+              "H": 100.0
+            },
+            "properties": {
+              "A": 0.01,
+              "Iy": 8.333333333333334e-06,
+              "Iz": 8.333333333333334e-06,
+              "J": 1.4083333333333335e-05
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-T1",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "T1",
+                "fz": -20
+              },
+              {
+                "id": "D-T2",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "T2",
+                "fz": -20
+              },
+              {
+                "id": "D-T3",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "T3",
+                "fz": -20
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "trussContract": "Axial-only, pin-jointed elements. Only shared endpoint IDs connect members; geometric crossings do not add nodes.",
+          "axialForceConvention": "N > 0 is tension; N < 0 is compression; report the signed value.",
+          "inactiveDofs": "uy, rx, ry and rz are suppressed at every node; free in-plane translations remain ux and uz."
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "caseId": "V3-MM-087",
+  "turnId": "t1",
+  "family": "MM",
+  "designedLevel": "L4",
+  "engine": "OpenSees",
+  "kind": "project",
+  "title": "低烈度区典型房屋建筑和桥梁抗震加固案例：钢筋混凝土框架结构房屋·校舍1：1号分析子结构",
+  "instruction": "依据首轮完整工程资料建立物理模型、转换荷载并完成 task.json 的全部设计/分析要求。",
+  "sourceId": "SRC-CQ-SCHOOL1-2020",
+  "answerFile": "answer.json",
+  "integration": "one-way",
+  "constraints": [
+    {
+      "id": "upperVertical",
+      "absoluteLimit": 0.02332,
+      "unit": "m",
+      "scope": "All secondary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryVertical",
+      "absoluteLimit": 0.001567,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryLateral",
+      "absoluteLimit": 0.0006963,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; max sqrt(ux^2+uy^2)"
+    },
+    {
+      "id": "primaryEndAction",
+      "absoluteLimit": 78.93,
+      "unit": "kN.m",
+      "scope": "All beam/column end cuts and M2/M3 components, or all axial bars when no beam/column exists; signed max-abs"
+    }
+  ],
+  "requirements": {
+    "upperSelections": [
+      {
+        "kind": "case",
+        "id": "D"
+      },
+      {
+        "kind": "case",
+        "id": "Q"
+      },
+      {
+        "kind": "case",
+        "id": "W"
+      }
+    ],
+    "primarySelections": [
+      {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      {
+        "kind": "combination",
+        "id": "WIND"
+      },
+      {
+        "kind": "combination",
+        "id": "REVERSE"
+      }
+    ],
+    "completeEnumerationRequired": false,
+    "gravityRecalculationRequired": true,
+    "oneWayTransfer": true
+  },
+  "report": [
+    "design",
+    "feasible",
+    "volume",
+    "metrics",
+    "transfers",
+    "jobIdsByModel"
+  ],
+  "attachments": [
+    "combinations.json",
+    "design-catalog.json",
+    "engineering-brief.md",
+    "interface-details.csv",
+    "load-units.json",
+    "load-zones.json",
+    "primary/connection-details.json",
+    "primary/construction-runs.csv",
+    "primary/dimensions-01.png",
+    "primary/drawing-index.csv",
+    "primary/joint-details.csv",
+    "primary/layout-01.png",
+    "primary/materials.json",
+    "primary/model-conventions.json",
+    "primary/section-families.json",
+    "source-basis.json",
+    "tool-contract.md",
+    "upper/connection-details.json",
+    "upper/construction-runs.csv",
+    "upper/dimensions-01.png",
+    "upper/drawing-index.csv",
+    "upper/joint-details.csv",
+    "upper/layout-01.png",
+    "upper/layout-02.png",
+    "upper/materials.json",
+    "upper/model-conventions.json",
+    "upper/section-families.json"
+  ]
+}

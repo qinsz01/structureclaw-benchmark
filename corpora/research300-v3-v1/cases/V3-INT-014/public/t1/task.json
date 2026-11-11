@@ -1,0 +1,113 @@
+{
+  "caseId": "V3-INT-014",
+  "turnId": "t1",
+  "family": "INT",
+  "title": "INT-091商业原生模型重组",
+  "designLevel": "L2",
+  "engine": "YJK",
+  "analysis": "static",
+  "instruction": "按本轮签发资料建立裸框架，使用指定商业引擎计算所列带符号响应。结构化交付即可。",
+  "requests": [
+    {
+      "id": "case-D--n2-2-2--ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n2-2-2"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case-D--n2-2-2--uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n2-2-2"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case-D--n2-2-2--uy",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n2-2-2"
+      },
+      "component": "uy",
+      "unit": "m"
+    },
+    {
+      "id": "case-D--n0-0-0--My",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n0-0-0"
+      },
+      "component": "My",
+      "unit": "kN.m"
+    },
+    {
+      "id": "case-D--n0-0-0--Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n0-0-0"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    }
+  ],
+  "derived": [
+    {
+      "id": "signed-response-governor",
+      "operation": "max_abs",
+      "operands": [
+        "case-D--n2-2-2--ux",
+        "case-D--n2-2-2--uz",
+        "case-D--n2-2-2--uy"
+      ],
+      "unit": "m",
+      "tiePolicy": "any"
+    }
+  ],
+  "reportIds": [
+    "case-D--n2-2-2--ux",
+    "case-D--n2-2-2--uz",
+    "case-D--n2-2-2--uy",
+    "case-D--n0-0-0--My",
+    "case-D--n0-0-0--Fz"
+  ],
+  "requireShapes": false,
+  "sourceId": null,
+  "attachments": [
+    "analysis-control.json",
+    "combinations.json",
+    "loads.json",
+    "materials.csv",
+    "materials.json",
+    "members.csv",
+    "metadata.json",
+    "model-convention.json",
+    "nodes.csv",
+    "sections.json",
+    "stories.json",
+    "tool-contract.md"
+  ]
+}

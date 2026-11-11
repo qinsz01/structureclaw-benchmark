@@ -258,69 +258,26 @@ function orderScenarios(scenarios, seed) {
   return [...scenarios.slice(offset), ...scenarios.slice(0, offset)];
 }
 
-function parseBenchmarkOptions(args) {
-  let scenarioId;
-  let outputPath;
-  let sutRoot;
-  let mode = "auto";
-  let execution = "web-stream";
-  let caseTimeoutMs = Number(process.env.LLM_BENCHMARK_CASE_TIMEOUT_MS || DEFAULT_CASE_TIMEOUT_MS);
-  let taskFamily;
-  let split;
-  let supervise = false;
-  let formal = false;
-  let repeatId = null;
-  let scenarioOrderSeed = null;
+function resolveCorpusSelection(args) {
+  let corpus = "research-300";
+  args = args.flatMap((arg) => arg.startsWith("--corpus=") ? ["--corpus", arg.slice(9)] : [arg]);
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === "--scenario" && args[i + 1]) {
-      scenarioId = args[++i];
-    } else if (args[i] === "--output" && args[i + 1]) {
-      outputPath = args[++i];
-    } else if (args[i] === "--sut-root" && args[i + 1]) {
-      sutRoot = args[++i];
-    } else if (args[i] === "--mode" && args[i + 1]) {
-      mode = args[++i];
-    } else if (args[i] === "--execution" && args[i + 1]) {
-      execution = args[++i];
-    } else if (args[i] === "--case-timeout-ms" && args[i + 1]) {
-      caseTimeoutMs = Number(args[++i]);
-    } else if (args[i] === "--repeat-id" && args[i + 1]) {
-      repeatId = Number(args[++i]);
-    } else if (args[i] === "--scenario-order-seed" && args[i + 1]) {
-      scenarioOrderSeed = args[++i];
-    } else if ((args[i] === "--family" || args[i] === "--task-family") && args[i + 1]) {
-      taskFamily = args[++i];
-    } else if (args[i] === "--split" && args[i + 1]) {
-      split = args[++i];
-    } else if (args[i] === "--supervise") {
-      supervise = true;
-    } else if (args[i] === "--formal") {
-      formal = true;
+    if (args[i] === "--corpus") {
+      if (!args[i + 1] || args[i + 1].startsWith("--")) {
+        throw Object.assign(new Error("--corpus requires a value"), { code: "usage_error" });
+      }
+      corpus = args[++i];
     }
   }
-  if (mode !== "all" && !BENCHMARK_MODES.includes(mode)) {
-    throw new Error(`Unsupported benchmark mode: ${mode}. Use one of: ${BENCHMARK_MODES.join(", ")}, all`);
+  if (corpus !== "research-300") {
+    throw Object.assign(new Error(`Unsupported corpus: ${corpus}. This benchmark uses research-300`), { code: "usage_error" });
   }
-  if (!EXECUTION_MODES.includes(execution)) {
-    throw new Error(`Unsupported execution mode: ${execution}. Use one of: ${EXECUTION_MODES.join(", ")}`);
-  }
-  if (!Number.isFinite(caseTimeoutMs) || caseTimeoutMs <= 0) {
-    throw new Error("--case-timeout-ms must be a positive number");
-  }
-  return {
-    scenarioId,
-    outputPath,
-    sutRoot,
-    mode,
-    execution,
-    caseTimeoutMs,
-    taskFamily,
-    split,
-    supervise,
-    formal,
-    repeatId,
-    scenarioOrderSeed,
-  };
+  return corpus;
+}
+
+function parseBenchmarkOptions(args) {
+  resolveCorpusSelection(args);
+  return require("./scripts/run-research300.cjs").parseResearchOptions(args);
 }
 
 function safeEndpoint(value) {
@@ -1690,282 +1647,14 @@ async function runSupervisedBenchmark(options, sutRoot, scenarios, runMetadata) 
   }
 }
 
+// Shared helpers above remain available to the external OpenClaw integration.
+// The public runner has one corpus and never initializes the historical SUT.
 async function runBenchmark(args) {
-  const options = parseBenchmarkOptions(args);
-  const sutRoot = resolveSutRoot(options.sutRoot);
-  const scenarios = orderScenarios(
-    resolveScenarioRuns(loadScenarios(options), options),
-    options.scenarioOrderSeed,
-  );
-  if (scenarios.length === 0) {
-    process.stdout.write("No benchmark scenarios matched.\n");
-    return;
-  }
-  assertFormalRunEligibility(options, sutRoot, scenarios);
-  const regressionSharedPath = path.join(sutRoot, "tests", "regression", "shared.js");
-  const { resolveRegressionContext, runBackendBuildOnce } = require(regressionSharedPath);
-  const context = resolveRegressionContext(sutRoot);
-  for (const [k, v] of Object.entries(context.env)) {
-    if (v !== undefined && v !== "") {
-      process.env[k] = v;
-    }
-  }
-  // Benchmark runs measure the configured LLM path. Product fallbacks remain
-  // available outside this runner, but must not mask provider/model failures.
-  process.env.SCLAW_BENCHMARK_LLM_ONLY = "1";
-
-  const prepareRuntime = async () => {
-    if (process.env.SCLAW_BENCHMARK_BACKEND_PREBUILT !== "1") {
-      await runBackendBuildOnce(context);
-    }
-    const { execSync } = require("node:child_process");
-    execSync("npx prisma db push --accept-data-loss", {
-      cwd: path.join(sutRoot, "backend"),
-      env: { ...process.env, ...context.env },
-      stdio: "pipe",
-    });
-  };
-
-  if (options.supervise) {
-    await prepareRuntime();
-    process.env.SCLAW_BENCHMARK_RUNTIME_PREPARED = "1";
-    const runMetadata = buildRunMetadata(options, sutRoot, scenarios);
-    process.env.SCLAW_BENCHMARK_FINGERPRINTS_JSON = JSON.stringify(runMetadata.fingerprints);
-    await runSupervisedBenchmark(options, sutRoot, scenarios, runMetadata);
-    return;
-  }
-
-  if (process.env.SCLAW_BENCHMARK_RUNTIME_PREPARED !== "1") {
-    await prepareRuntime();
-  }
-
-  process.stdout.write(`\n${"=".repeat(60)}\n`);
-  process.stdout.write(`LangGraph Agent Benchmark: ${scenarios.length} scenario run(s)\n`);
-  process.stdout.write(`Mode: ${options.mode}\n`);
-  process.stdout.write(`Execution: ${options.execution}\n`);
-  process.stdout.write(`Case timeout: ${options.caseTimeoutMs}ms\n`);
-  process.stdout.write(`SUT root: ${sutRoot}\n`);
-  process.stdout.write(`Model: ${context.env.LLM_MODEL || "(default)"}\n`);
-  process.stdout.write(`Base URL: ${context.env.LLM_BASE_URL || "(default)"}\n`);
-  process.stdout.write(`${"=".repeat(60)}\n`);
-
-  const { AgentSkillRuntime, LangGraphAgentService } = await importBackendModules(sutRoot);
-  const runtime = new AgentSkillRuntime();
-  const service = new LangGraphAgentService(runtime);
-  const solverGate = installSolverGate(service);
-  const benchmarkContext = await buildBenchmarkCapabilityContext(runtime, LangGraphAgentService);
-  const runMetadata = buildRunMetadata(options, sutRoot, scenarios);
-
-  const results = [];
-
-  for (const rawScenario of scenarios) {
-    const scenario = normalizeScenario(resolveAttachmentPaths(rawScenario));
-    const skillIds = resolveBenchmarkSkillIds(scenario, benchmarkContext.manifests);
-    const maxRetries = Math.max(0, typeof scenario.maxRetries === "number" ? scenario.maxRetries : 0);
-    let attempt = 0;
-    let lastEvaluation = null;
-    const attemptRounds = [];
-    const caseTimeout = createCaseTimeout(options.caseTimeoutMs);
-    let lastConversationId = null;
-
-    try {
-      while (attempt <= maxRetries) {
-        let feedbackPrefix = "";
-        if (attempt > 0 && lastEvaluation) {
-          feedbackPrefix = buildFeedbackFromEvaluation(lastEvaluation, scenario.locale || "zh");
-          if (feedbackPrefix) {
-            process.stdout.write(`  Feedback: ${feedbackPrefix.slice(0, 100)}...\n`);
-          }
-        }
-
-        if (attempt > 0) {
-          process.stdout.write(`  Retrying (attempt ${attempt + 1}/${maxRetries + 1})...\n`);
-        } else {
-          process.stdout.write(`\nRunning: ${scenario.id}...\n`);
-        }
-
-        const scenarioStart = Date.now();
-        let executionError = false;
-        const turnResults = [];
-        let currentTurnIndex = 0;
-        let currentTurnStart = scenarioStart;
-        let totalExecutionDurationMs = 0;
-        let resumeRequired = false;
-        const conversationId = benchmarkConversationId();
-        lastConversationId = conversationId;
-        const runScenario = prepareScenarioAttachmentsForRun(scenario, conversationId);
-
-        const prevLogLevel = process.env.LOG_LEVEL;
-        process.env.LOG_LEVEL = "warn";
-
-        try {
-          for (let i = 0; i < runScenario.turns.length; i++) {
-            currentTurnIndex = i;
-            const turn = runScenario.turns[i];
-            const turnStart = Date.now();
-            currentTurnStart = turnStart;
-
-            const messageWithFeedback = (i === 0 && feedbackPrefix)
-              ? feedbackPrefix + "\n\n" + turn.message
-              : turn.message;
-            const turnContext = buildTurnContext({
-              scenario: runScenario,
-              turn,
-              turnIndex: i,
-              benchmarkContext,
-              skillIds,
-            });
-            const visionSummaries = await buildVisionSummaries(
-              turnContext.attachments,
-              scenario.locale || "zh",
-              caseTimeout.signal,
-            );
-            if (visionSummaries.length > 0) {
-              turnContext.attachments = filterImageAttachments(turnContext.attachments);
-            }
-            const messageWithVision = attachVisionSummariesToMessage(
-              messageWithFeedback,
-              visionSummaries,
-              scenario.locale || "zh",
-              turn.engineeringSpecification
-                ?? runScenario.engineeringSpecification,
-            );
-
-            const turnExecution = await runAgentForBenchmark(service, {
-              message: messageWithVision,
-              conversationId,
-              signal: caseTimeout.signal,
-              context: turnContext,
-            }, options.execution, { resume: resumeRequired });
-            const state = turnExecution.state;
-            resumeRequired = turnExecution.resumeRequired;
-            const infrastructureToolError = findBenchmarkInfrastructureError(state);
-            if (infrastructureToolError) {
-              throw new Error(infrastructureToolError);
-            }
-            if (process.env.SCLAW_BENCHMARK_LLM_ONLY === "1") {
-              const policyViolation = findBenchmarkPolicyViolation(state);
-              if (policyViolation) {
-                throw new Error(`BENCHMARK_POLICY_VIOLATION: ${policyViolation}`);
-              }
-            }
-
-            const turnDurationMs = Date.now() - turnStart;
-            totalExecutionDurationMs += turnDurationMs;
-
-            if (turn.assertions && turn.assertions.length > 0) {
-              const turnScenario = { ...runScenario, expect: { assertions: turn.assertions } };
-              const evaluation = await evaluateScenario(turnScenario, state, turnDurationMs);
-              appendVisionUsageMetrics(evaluation, visionSummaries);
-              turnResults.push({ turnIndex: i, evaluation, executionDurationMs: turnDurationMs });
-            }
-          }
-        } catch (err) {
-          executionError = true;
-          const errorMessage = err instanceof Error ? err.message : String(err);
-          const message = caseTimeout.timedOut()
-            ? `case timed out after ${options.caseTimeoutMs}ms`
-            : errorMessage;
-          const failedTurnDurationMs = Date.now() - currentTurnStart;
-          totalExecutionDurationMs += failedTurnDurationMs;
-          process.stdout.write(`  error: ${message}\n`);
-          turnResults.push({
-            turnIndex: currentTurnIndex,
-            evaluation: failedSupervisedEvaluation(
-              scenario,
-              message,
-              failedTurnDurationMs,
-              { ...options, supervise: false },
-            ),
-            executionDurationMs: failedTurnDurationMs,
-          });
-        } finally {
-          if (prevLogLevel === undefined) {
-            delete process.env.LOG_LEVEL;
-          } else {
-            process.env.LOG_LEVEL = prevLogLevel;
-          }
-        }
-
-        const totalDurationMs = totalExecutionDurationMs;
-
-        if (turnResults.length > 0) {
-          if (scenario._multiTurn) {
-            lastEvaluation = mergeTurnResults(scenario, turnResults, totalDurationMs);
-          } else {
-            lastEvaluation = turnResults[0].evaluation;
-          }
-        }
-
-        if (lastEvaluation) {
-          attemptRounds.push({
-            attempt: attempt + 1,
-            allPassed: lastEvaluation.allPassed,
-            metrics: (lastEvaluation.metrics || []).map((m) => ({ metric: m.metric, pass: m.pass })),
-          });
-        }
-        if (lastEvaluation && lastEvaluation.allPassed) break;
-        if (executionError) break;
-        attempt += 1;
-      }
-    } finally {
-      caseTimeout.clear();
-    }
-
-    if (lastEvaluation) {
-      lastEvaluation.executionProfile = {
-        execution: options.execution,
-        mode: scenario.mode || "auto",
-        skillIds,
-        enabledToolIds: benchmarkContext.enabledToolIds,
-        sourceDataDir: process.env.SCLAW_BENCHMARK_SOURCE_DATA_DIR || null,
-        runtimeDataDir: process.env.SCLAW_DATA_DIR || null,
-        visionModel: process.env.LLM_VISION_MODEL || null,
-        analysisSkillTarget: scenario.analysisSkillTarget || "opensees-static",
-        caseTimeoutMs: options.caseTimeoutMs,
-        yjkCloseAfterRun: process.env.YJK_CLOSE_AFTER_RUN || null,
-        conversationId: lastConversationId,
-      };
-      attachSolverGateProfile(lastEvaluation, solverGate);
-      const attempts = attemptRounds.length;
-      lastEvaluation.retries = {
-        attempts,
-        maxRetries,
-        retriesUsed: Math.max(0, attempts - 1),
-        passAt1: attemptRounds[0]?.allPassed === true,
-        passAtN: lastEvaluation.allPassed === true,
-        rounds: attemptRounds,
-      };
-    }
-
-    if (!lastEvaluation) {
-      lastEvaluation = {
-        scenarioId: scenario.id,
-        description: scenario.description || "",
-        passed: 0,
-        total: 1,
-        allPassed: false,
-        metrics: [{ metric: "execution", pass: false, expected: "no evaluation produced", actual: "(none)" }],
-        durationMs: 0,
-      };
-    }
-
-    printScenarioResult(rawScenario, lastEvaluation);
-    results.push(lastEvaluation);
-    if (options.outputPath) {
-      writeJsonOutput(options.outputPath, results, { quiet: true, runMetadata, completed: false });
-    }
-  }
-
-  printSummary(results);
-
-  if (options.outputPath) {
-    writeJsonOutput(options.outputPath, results, { runMetadata, completed: true });
-  }
-
-  if (results.some((r) => !r.allPassed)) {
-    process.exitCode = 1;
-  }
+  resolveCorpusSelection(args);
+  const { runResearch300, researchExitCode } = require("./scripts/run-research300.cjs");
+  const report = await runResearch300(args);
+  process.exitCode = researchExitCode(report);
+  return report;
 }
 
 module.exports = {
@@ -1993,6 +1682,7 @@ module.exports = {
   normalizeScenario,
   normalizeScenarioMetadata,
   orderScenarios,
+  parseBenchmarkOptions,
   parseVisionSummary,
   resolveAttachmentPaths,
   runAgentLikeWeb,
@@ -2004,6 +1694,11 @@ module.exports = {
 
 if (require.main === module) {
   runBenchmark(process.argv.slice(2)).catch((err) => {
+    if (err.code === "usage_error") {
+      process.stdout.write(`${JSON.stringify({ status: "usage_error", error: { code: err.code, message: err.message } })}\n`);
+      process.exitCode = 2;
+      return;
+    }
     console.error(err);
     process.exit(1);
   });

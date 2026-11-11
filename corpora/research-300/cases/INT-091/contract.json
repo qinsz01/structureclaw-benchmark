@@ -1,0 +1,862 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "INT-091",
+  "modelId": "M-INT-091",
+  "family": "interactive_robustness",
+  "language": "中文",
+  "locale": "zh",
+  "plannedEngine": "YJK",
+  "sourcePlan": {
+    "task.inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-091（分区活载框架附加边缘水平力）。T1建立M-INT-091；T2把L从附件区域A整体移至相邻区域B，按新边界梁ID表施加，强度不变。",
+    "task.modelingFocus": "空间荷载作用区域与重复加载；荷载工况的独立状态保持",
+    "task.expectedOutput": "最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "旧A独有边梁L清零，A/B共享边按表仅一次；D全梁保持；区域无猜测；W边缘9kN不随L区域移动；D全梁线载不变。",
+    "task.prerequisite": "基础工具；多工况执行契约需验证；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "两层各3.6m，X=0/6/12m、Y=0/5/10m；D所有梁向下6kN/m；L初始仅二层西南格X=0～6/Y=0～5的四条边梁各4kN/m，区域B为东南格。",
+    "model.boundaryKey": "所有柱脚六自由度固定",
+    "model.loadKey": "两层2乘2跨，D全部梁线载，L只指定矩形分区边界梁，分配规则明示；新增W工况，屋面(x=12,y=0,z=7.2)m施加Y负向9kN，组合D+L+W",
+    "model.propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 保留独立原始工况及题定组合系数，修改组合不得覆盖原工况；保留三维六自由度/轴力单元各自约束和题定局部轴；各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "软件指定题，必须实际调用YJK完成每个可计算模型状态并取得当次结果；禁止用OpenSees结果冒充。仅显示设置/启动窗口不算完成；纯查询或单位变更可复用与未变模型一致的已验证结果。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz。 保存YJK原生工程及可复查模型导出/参数检查记录；模型改变后的新run须绑定更新后的工程，截屏只作辅助。",
+    "engine.adapterGap": "当前仅整层面载，不能逐梁保留D、按区域替换L及保留W节点侧力；须补分区到梁映射、自定义工况和组合；现接口对关闭自重、无刚性楼板及完整弹性/截面属性的逐字段映射未证明，须显式设置并核验，禁止静默采用软件默认。节点反力虽有抽取路径，仍须验证本题节点/楼层ID对应与符号。",
+    "engine.truthPlan": "每个可计算轮次由独立复核者在YJK创建参考模型并保存状态；模型改变后独立新算，纯结果查询沿用有效状态；核对力/矩平衡及适用解析结果，可用同假设OpenSees交叉校核；差异先追溯荷载分配/支座/轴向/楼板设置，不直接强求跨软件逐值相等。"
+  },
+  "modelStates": [
+    "model-state-1.json",
+    "model-state-2.json"
+  ],
+  "attachments": [
+    "input.json",
+    "regions.json",
+    "analysis-conventions-v2.txt"
+  ],
+  "turns": [
+    {
+      "instruction": "用YJK建立附件两层框架。D全梁向下6kN/m；L初始位于二层西南格区域A，四条边梁各向下4kN/m；W在n2-0-2沿全局-Y施加9kN。组合TOTAL=D+L+W。逐工况及组合报告最高层最右且Y最大的梁柱节点n2-2-2 (12,10,7.2)m的全局Ux、Uz、Uy，以及最左首层柱底n0-0-0 (0,0,0)m的全局My、Rz（即Fz）。\n每个可计算的新状态使用题定YJK引擎进行一阶线弹性分析；自重、P-delta、刚性楼板、刚域及施工阶段关闭。未明确更改的字段保持。每个数值附节点或构件、全局方向、单位、工况或组合、轮次、模型状态与可追溯运行ID。Rz表示竖向支反力Fz。保留原工况并分别计算所有明示组合。关键缺项或矛盾解决前不得编造新数值。",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input.json",
+        "regions.json",
+        "analysis-conventions-v2.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "id": "t1",
+      "requiredOutputIds": [
+        "s1--case-D--n2-2-2--ux",
+        "s1--case-D--n2-2-2--uz",
+        "s1--case-D--n2-2-2--uy",
+        "s1--case-D--n0-0-0--My",
+        "s1--case-D--n0-0-0--Fz",
+        "s1--case-L--n2-2-2--ux",
+        "s1--case-L--n2-2-2--uz",
+        "s1--case-L--n2-2-2--uy",
+        "s1--case-L--n0-0-0--My",
+        "s1--case-L--n0-0-0--Fz",
+        "s1--case-W--n2-2-2--ux",
+        "s1--case-W--n2-2-2--uz",
+        "s1--case-W--n2-2-2--uy",
+        "s1--case-W--n0-0-0--My",
+        "s1--case-W--n0-0-0--Fz",
+        "s1--combination-TOTAL--n2-2-2--ux",
+        "s1--combination-TOTAL--n2-2-2--uz",
+        "s1--combination-TOTAL--n2-2-2--uy",
+        "s1--combination-TOTAL--n0-0-0--My",
+        "s1--combination-TOTAL--n0-0-0--Fz",
+        "t1-interaction"
+      ],
+      "requiredQuantityIds": [
+        "case-D--n2-2-2--ux",
+        "case-D--n2-2-2--uz",
+        "case-D--n2-2-2--uy",
+        "case-D--n0-0-0--My",
+        "case-D--n0-0-0--Fz",
+        "case-L--n2-2-2--ux",
+        "case-L--n2-2-2--uz",
+        "case-L--n2-2-2--uy",
+        "case-L--n0-0-0--My",
+        "case-L--n0-0-0--Fz",
+        "case-W--n2-2-2--ux",
+        "case-W--n2-2-2--uz",
+        "case-W--n2-2-2--uy",
+        "case-W--n0-0-0--My",
+        "case-W--n0-0-0--Fz",
+        "combination-TOTAL--n2-2-2--ux",
+        "combination-TOTAL--n2-2-2--uz",
+        "combination-TOTAL--n2-2-2--uy",
+        "combination-TOTAL--n0-0-0--My",
+        "combination-TOTAL--n0-0-0--Fz"
+      ]
+    },
+    {
+      "instruction": "将L从区域A整体移动到东南格区域B，严格按regions.json的B梁ID表施加同样4kN/m向下线载。删除旧A独有边上的L，共享边只保留一次L。D、W及组合系数保持。重新分析。逐工况及组合报告最高层最右且Y最大的梁柱节点n2-2-2 (12,10,7.2)m的全局Ux、Uz、Uy，以及最左首层柱底n0-0-0 (0,0,0)m的全局My、Rz（即Fz）。",
+      "state": 2,
+      "expectation": "analyze",
+      "attachments": [],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "id": "t2",
+      "changedFields": [
+        "/load_cases/1/loads/0/element",
+        "/load_cases/1/loads/0/id",
+        "/load_cases/1/loads/1/element",
+        "/load_cases/1/loads/1/id",
+        "/load_cases/1/loads/2/element",
+        "/load_cases/1/loads/2/id",
+        "/load_cases/1/loads/3/element",
+        "/load_cases/1/loads/3/id"
+      ],
+      "preservedFields": [
+        "/schema_version",
+        "/unit_system",
+        "/coordinate_system",
+        "/nodes",
+        "/elements",
+        "/materials",
+        "/sections",
+        "/load_combinations",
+        "/analysis_control",
+        "/metadata",
+        "/stories"
+      ],
+      "requiredOutputIds": [
+        "s2--case-D--n2-2-2--ux",
+        "s2--case-D--n2-2-2--uz",
+        "s2--case-D--n2-2-2--uy",
+        "s2--case-D--n0-0-0--My",
+        "s2--case-D--n0-0-0--Fz",
+        "s2--case-L--n2-2-2--ux",
+        "s2--case-L--n2-2-2--uz",
+        "s2--case-L--n2-2-2--uy",
+        "s2--case-L--n0-0-0--My",
+        "s2--case-L--n0-0-0--Fz",
+        "s2--case-W--n2-2-2--ux",
+        "s2--case-W--n2-2-2--uz",
+        "s2--case-W--n2-2-2--uy",
+        "s2--case-W--n0-0-0--My",
+        "s2--case-W--n0-0-0--Fz",
+        "s2--combination-TOTAL--n2-2-2--ux",
+        "s2--combination-TOTAL--n2-2-2--uz",
+        "s2--combination-TOTAL--n2-2-2--uy",
+        "s2--combination-TOTAL--n0-0-0--My",
+        "s2--combination-TOTAL--n0-0-0--Fz",
+        "t2-interaction"
+      ],
+      "requiredQuantityIds": [
+        "case-D--n2-2-2--ux",
+        "case-D--n2-2-2--uz",
+        "case-D--n2-2-2--uy",
+        "case-D--n0-0-0--My",
+        "case-D--n0-0-0--Fz",
+        "case-L--n2-2-2--ux",
+        "case-L--n2-2-2--uz",
+        "case-L--n2-2-2--uy",
+        "case-L--n0-0-0--My",
+        "case-L--n0-0-0--Fz",
+        "case-W--n2-2-2--ux",
+        "case-W--n2-2-2--uz",
+        "case-W--n2-2-2--uy",
+        "case-W--n0-0-0--My",
+        "case-W--n0-0-0--Fz",
+        "combination-TOTAL--n2-2-2--ux",
+        "combination-TOTAL--n2-2-2--uz",
+        "combination-TOTAL--n2-2-2--uy",
+        "combination-TOTAL--n0-0-0--My",
+        "combination-TOTAL--n0-0-0--Fz"
+      ]
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "s1--case-D--n2-2-2--ux",
+      "description": "case D: n2-2-2 ux [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n2-2-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n2-2-2--uz",
+      "description": "case D: n2-2-2 uz [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n2-2-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n2-2-2--uy",
+      "description": "case D: n2-2-2 uy [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n2-2-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n0-0-0--My",
+      "description": "case D: n0-0-0 My [kN.m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n0-0-0--Fz",
+      "description": "case D: n0-0-0 Fz [kN]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-L--n2-2-2--ux",
+      "description": "case L: n2-2-2 ux [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-L--n2-2-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-L--n2-2-2--uz",
+      "description": "case L: n2-2-2 uz [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-L--n2-2-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-L--n2-2-2--uy",
+      "description": "case L: n2-2-2 uy [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-L--n2-2-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-L--n0-0-0--My",
+      "description": "case L: n0-0-0 My [kN.m]",
+      "state": 1,
+      "quantityIds": [
+        "case-L--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-L--n0-0-0--Fz",
+      "description": "case L: n0-0-0 Fz [kN]",
+      "state": 1,
+      "quantityIds": [
+        "case-L--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-W--n2-2-2--ux",
+      "description": "case W: n2-2-2 ux [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-W--n2-2-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-W--n2-2-2--uz",
+      "description": "case W: n2-2-2 uz [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-W--n2-2-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-W--n2-2-2--uy",
+      "description": "case W: n2-2-2 uy [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-W--n2-2-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-W--n0-0-0--My",
+      "description": "case W: n0-0-0 My [kN.m]",
+      "state": 1,
+      "quantityIds": [
+        "case-W--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-W--n0-0-0--Fz",
+      "description": "case W: n0-0-0 Fz [kN]",
+      "state": 1,
+      "quantityIds": [
+        "case-W--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--combination-TOTAL--n2-2-2--ux",
+      "description": "combination TOTAL: n2-2-2 ux [m]",
+      "state": 1,
+      "quantityIds": [
+        "combination-TOTAL--n2-2-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--combination-TOTAL--n2-2-2--uz",
+      "description": "combination TOTAL: n2-2-2 uz [m]",
+      "state": 1,
+      "quantityIds": [
+        "combination-TOTAL--n2-2-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--combination-TOTAL--n2-2-2--uy",
+      "description": "combination TOTAL: n2-2-2 uy [m]",
+      "state": 1,
+      "quantityIds": [
+        "combination-TOTAL--n2-2-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--combination-TOTAL--n0-0-0--My",
+      "description": "combination TOTAL: n0-0-0 My [kN.m]",
+      "state": 1,
+      "quantityIds": [
+        "combination-TOTAL--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--combination-TOTAL--n0-0-0--Fz",
+      "description": "combination TOTAL: n0-0-0 Fz [kN]",
+      "state": 1,
+      "quantityIds": [
+        "combination-TOTAL--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n2-2-2--ux",
+      "description": "case D: n2-2-2 ux [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n2-2-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n2-2-2--uz",
+      "description": "case D: n2-2-2 uz [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n2-2-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n2-2-2--uy",
+      "description": "case D: n2-2-2 uy [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n2-2-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n0-0-0--My",
+      "description": "case D: n0-0-0 My [kN.m]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-D--n0-0-0--Fz",
+      "description": "case D: n0-0-0 Fz [kN]",
+      "state": 2,
+      "quantityIds": [
+        "case-D--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-L--n2-2-2--ux",
+      "description": "case L: n2-2-2 ux [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-L--n2-2-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-L--n2-2-2--uz",
+      "description": "case L: n2-2-2 uz [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-L--n2-2-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-L--n2-2-2--uy",
+      "description": "case L: n2-2-2 uy [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-L--n2-2-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-L--n0-0-0--My",
+      "description": "case L: n0-0-0 My [kN.m]",
+      "state": 2,
+      "quantityIds": [
+        "case-L--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-L--n0-0-0--Fz",
+      "description": "case L: n0-0-0 Fz [kN]",
+      "state": 2,
+      "quantityIds": [
+        "case-L--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-W--n2-2-2--ux",
+      "description": "case W: n2-2-2 ux [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-W--n2-2-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-W--n2-2-2--uz",
+      "description": "case W: n2-2-2 uz [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-W--n2-2-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-W--n2-2-2--uy",
+      "description": "case W: n2-2-2 uy [m]",
+      "state": 2,
+      "quantityIds": [
+        "case-W--n2-2-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-W--n0-0-0--My",
+      "description": "case W: n0-0-0 My [kN.m]",
+      "state": 2,
+      "quantityIds": [
+        "case-W--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--case-W--n0-0-0--Fz",
+      "description": "case W: n0-0-0 Fz [kN]",
+      "state": 2,
+      "quantityIds": [
+        "case-W--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--combination-TOTAL--n2-2-2--ux",
+      "description": "combination TOTAL: n2-2-2 ux [m]",
+      "state": 2,
+      "quantityIds": [
+        "combination-TOTAL--n2-2-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--combination-TOTAL--n2-2-2--uz",
+      "description": "combination TOTAL: n2-2-2 uz [m]",
+      "state": 2,
+      "quantityIds": [
+        "combination-TOTAL--n2-2-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--combination-TOTAL--n2-2-2--uy",
+      "description": "combination TOTAL: n2-2-2 uy [m]",
+      "state": 2,
+      "quantityIds": [
+        "combination-TOTAL--n2-2-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--combination-TOTAL--n0-0-0--My",
+      "description": "combination TOTAL: n0-0-0 My [kN.m]",
+      "state": 2,
+      "quantityIds": [
+        "combination-TOTAL--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s2--combination-TOTAL--n0-0-0--Fz",
+      "description": "combination TOTAL: n0-0-0 Fz [kN]",
+      "state": 2,
+      "quantityIds": [
+        "combination-TOTAL--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "t1-interaction",
+      "description": "用YJK建立附件两层框架。D全梁向下6kN/m；L初始位于二层西南格区域A，四条边梁各向下4kN/m；W在n2-0-2沿全局-Y施加9kN。组合TOTAL=D+L+W。逐工况及组合报告最高层最右且Y最大的梁柱节点n2-2-2 (12,10,7.2)m的全局Ux、Uz、Uy，以及最左首层柱底n0-0-0 (0,0,0)m的全局My、Rz（即Fz）。\n每个可计算的新状态使用题定YJK引擎进行一阶线弹性分析；自重、P-delta、刚性楼板、刚域及施工阶段关闭。未明确更改的字段保持。每个数值附节点或构件、全局方向、单位、工况或组合、轮次、模型状态与可追溯运行ID。Rz表示竖向支反力Fz。保留原工况并分别计算所有明示组合。关键缺项或矛盾解决前不得编造新数值。",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "interaction"
+    },
+    {
+      "id": "t2-interaction",
+      "description": "将L从区域A整体移动到东南格区域B，严格按regions.json的B梁ID表施加同样4kN/m向下线载。删除旧A独有边上的L，共享边只保留一次L。D、W及组合系数保持。重新分析。逐工况及组合报告最高层最右且Y最大的梁柱节点n2-2-2 (12,10,7.2)m的全局Ux、Uz、Uy，以及最左首层柱底n0-0-0 (0,0,0)m的全局My、Rz（即Fz）。",
+      "state": 2,
+      "quantityIds": [],
+      "kind": "interaction"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input.json",
+        "attachment:regions.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        5,
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7,
+        8,
+        9
+      ],
+      "targets": [
+        "output:s1--case-D--n2-2-2--ux",
+        "output:s1--case-D--n2-2-2--uz",
+        "output:s1--case-D--n2-2-2--uy",
+        "output:s1--case-D--n0-0-0--My",
+        "output:s1--case-D--n0-0-0--Fz",
+        "output:s1--case-L--n2-2-2--ux",
+        "output:s1--case-L--n2-2-2--uz",
+        "output:s1--case-L--n2-2-2--uy",
+        "output:s1--case-L--n0-0-0--My",
+        "output:s1--case-L--n0-0-0--Fz",
+        "output:s1--case-W--n2-2-2--ux",
+        "output:s1--case-W--n2-2-2--uz",
+        "output:s1--case-W--n2-2-2--uy",
+        "output:s1--case-W--n0-0-0--My",
+        "output:s1--case-W--n0-0-0--Fz",
+        "output:s1--combination-TOTAL--n2-2-2--ux",
+        "output:s1--combination-TOTAL--n2-2-2--uz",
+        "output:s1--combination-TOTAL--n2-2-2--uy",
+        "output:s1--combination-TOTAL--n0-0-0--My",
+        "output:s1--combination-TOTAL--n0-0-0--Fz",
+        "output:s2--case-D--n2-2-2--ux",
+        "output:s2--case-D--n2-2-2--uz",
+        "output:s2--case-D--n2-2-2--uy",
+        "output:s2--case-D--n0-0-0--My",
+        "output:s2--case-D--n0-0-0--Fz",
+        "output:s2--case-L--n2-2-2--ux",
+        "output:s2--case-L--n2-2-2--uz",
+        "output:s2--case-L--n2-2-2--uy",
+        "output:s2--case-L--n0-0-0--My",
+        "output:s2--case-L--n0-0-0--Fz",
+        "output:s2--case-W--n2-2-2--ux",
+        "output:s2--case-W--n2-2-2--uz",
+        "output:s2--case-W--n2-2-2--uy",
+        "output:s2--case-W--n0-0-0--My",
+        "output:s2--case-W--n0-0-0--Fz",
+        "output:s2--combination-TOTAL--n2-2-2--ux",
+        "output:s2--combination-TOTAL--n2-2-2--uz",
+        "output:s2--combination-TOTAL--n2-2-2--uy",
+        "output:s2--combination-TOTAL--n0-0-0--My",
+        "output:s2--combination-TOTAL--n0-0-0--Fz",
+        "output:t1-interaction",
+        "output:t2-interaction",
+        "gate:report-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        15,
+        16,
+        17
+      ],
+      "targets": [
+        "gate:adapter-capability-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        18,
+        19,
+        20
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input.json",
+        "attachment:regions.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        21
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input.json",
+        "attachment:regions.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        22,
+        23
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input.json",
+        "attachment:regions.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        24,
+        25
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input.json",
+        "attachment:regions.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input.json",
+        "attachment:regions.json",
+        "gate:input-blind-review",
+        "attachment:analysis-conventions-v2.txt"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        35,
+        36,
+        37,
+        38
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45
+      ],
+      "targets": [
+        "gate:native-execution",
+        "gate:state-preservation",
+        "gate:report-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        46,
+        47,
+        48,
+        49
+      ],
+      "targets": [
+        "gate:adapter-capability-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        50,
+        51,
+        52,
+        53
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending",
+      "description": "Execute the named engine independently for each changed computable state and each selection; retain software version, settings, native input, run ID, successful log and raw result mapping."
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending",
+      "description": "Generate and independently review same-engine reference values; check equilibrium, signs, units and stiffness without importing the SUT path."
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending",
+      "description": "Independently reconstruct each turn from only its released public input and verify original source requirements."
+    },
+    {
+      "id": "state-preservation",
+      "status": "pending",
+      "description": "Verify target field changes, all non-target fields, undo equivalence and query-only state identity."
+    },
+    {
+      "id": "adapter-capability-review",
+      "status": "pending",
+      "description": "Exercise this case topology, loads, coordinates and selected engine; support in principle is not evidence of adapter acceptance."
+    },
+    {
+      "id": "report-completeness",
+      "status": "pending",
+      "description": "Check signed quantities in the report body, locations, directions, units, selections and current turn against structured artifacts."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "analysisConvention": {
+    "id": "commercial-linear-static-v2",
+    "bendingTheory": "Timoshenko",
+    "effectiveShearAreas": {
+      "localY": "5*A/6",
+      "localZ": "5*A/6"
+    },
+    "publicAttachment": "analysis-conventions-v2.txt"
+  }
+}

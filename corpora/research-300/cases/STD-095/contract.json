@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-095",
+  "modelId": "M-STD-095",
+  "family": "standard_workflow",
+  "language": "中文",
+  "locale": "zh",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "高4.5m、400×400mm，柱底固定，柱顶向下500kN；完整属性按公共契约随题给出。 给C30完整弹性属性，底固定且顶无横向约束；只报告一阶轴压响应。",
+    "task.modelingFocus": "轴压方向与材料截面",
+    "task.expectedOutput": "柱顶竖向位移、柱轴力、柱底竖向反力，附压缩符号说明。",
+    "task.gradingFocus": "轴压方向与材料截面；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "竖直单杆混凝土柱",
+    "model.boundaryKey": "底固定顶自由",
+    "model.loadKey": "仅顶点轴向压缩力",
+    "model.propertyKey": "C30均匀单截面；线弹性",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "逐题核验轴压方向与材料截面；输入、结果分量/位置及数值标答尚未完成验收。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；轴向缩短PL/EA解析式与轴向平衡；横向响应为零作辅助检查。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-data.json",
+    "output-requests.json",
+    "analysis-conventions.txt",
+    "appendix-decisions.txt",
+    "output-scope.json"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "规定求解引擎：OpenSees.\n用 OpenSees 分析一根高 4.5 m、400×400 mm 的 C30 混凝土柱。柱底六自由度固定；柱顶在 XZ 平面内自由且没有侧向支座。D 工况下仅在柱顶施加竖直向下 500 kN。按附件 C30 弹性参数、截面及局部轴进行一阶线弹性静力分析，自重关闭。只报告柱顶 uz、柱两端轴力 N 和柱底竖向反力 Fz，并说明压缩轴力与向下位移的符号；不进行稳定或承载力验算。\n\n使用全部公开附表，输出完整指定数值表及要求的汇总。",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-data.json",
+        "output-requests.json",
+        "analysis-conventions.txt",
+        "appendix-decisions.txt",
+        "output-scope.json"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "out-case-D-node-top-uz",
+      "description": "case-D-node-top-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-top-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-column-s0-right-N",
+      "description": "case-D-member-column-s0-right-N",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-column-s0-right-N"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-column-s4.5-left-N",
+      "description": "case-D-member-column-s4.5-left-N",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-column-s4.5-left-N"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-Fz",
+      "description": "case-D-node-base-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "interaction-1",
+      "description": "说明全局 +Z 向上、uz 负值表示向下缩短，杆轴力 N 拉为正、压为负；本题为一阶静力压缩响应。",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "interaction"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7
+      ],
+      "targets": [
+        "output:out-case-D-node-top-uz",
+        "output:out-case-D-member-column-s0-right-N",
+        "output:out-case-D-member-column-s4.5-left-N",
+        "output:out-case-D-node-base-Fz",
+        "output:interaction-1",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        8,
+        9
+      ],
+      "targets": [
+        "output:out-case-D-node-top-uz",
+        "output:out-case-D-member-column-s0-right-N",
+        "output:out-case-D-member-column-s4.5-left-N",
+        "output:out-case-D-node-base-Fz",
+        "output:interaction-1",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        10,
+        11
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        12
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        14
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        15,
+        16
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        22,
+        23
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        24
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending"
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-case-acceptance",
+      "status": "pending"
+    },
+    {
+      "id": "model-fidelity",
+      "status": "pending"
+    },
+    {
+      "id": "signed-output-completeness",
+      "status": "pending"
+    }
+  ],
+  "authoringNotes": [
+    "C30 明确采用 E=30000 MPa、nu=0.2、G=12500 MPa、rho=2500 kg/m³；柱为题定的 400×400 mm 实心矩形。",
+    "模型为 XZ 平面柱；柱顶仅有平面模型所需的 uy/rx/rz 约束，ux/uz/ry 自由。",
+    "柱轴力在首端 0 m 的右侧与末端 4.5 m 的左侧分别请求，避免把支座反力符号当作压缩轴力符号。",
+    "杆件采用一阶线弹性 Euler-Bernoulli 弯曲、轴向变形及有限 Saint-Venant 扭转刚度；不计剪切变形，自重关闭。本题不做二阶、屈曲、承载力或配筋分析。",
+    "截面 A、Iy、Iz、J 为附表中的显式 SI 数值，不以软件默认截面属性替换；采用矩形截面时 J 使用输入表给定的冻结近似值。"
+  ]
+}

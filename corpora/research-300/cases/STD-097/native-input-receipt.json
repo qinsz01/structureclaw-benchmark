@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-097",
+  "inputHashes": {
+    "contract.json": "8e580a0753da3964cb04792c21acc0712d75c99bb0ae991cb979029b3e563d50",
+    "reference-requests.json": "7d21ead9c5d2c4a1b4f671da47858b9664575dcabdb98a8bbe4167273fba55a7",
+    "model-state-1.json": "6d7364e8e71f78cc6977e1535ca74c1fa5e6418510a5253356ad8700b3088a3a"
+  },
+  "sourceHash": "1ca61efa754f56794dd7c561ffac2c1068628fce6faf7738503b90ae420edfd6",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions.txt",
+        "sha256": "4349a3fc512f0a1cb1e3a535ea7861a70b031ae94ecbc1ad2a6a17f093617236"
+      },
+      {
+        "path": "appendix-decisions.txt",
+        "sha256": "52f255068ff6df323030696b182dbceb609cf1d60ed32ab89057b814376db4cb"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "8e580a0753da3964cb04792c21acc0712d75c99bb0ae991cb979029b3e563d50"
+      },
+      {
+        "path": "input-data.json",
+        "sha256": "bbd59cdefbfded838decbd8e8cd4263a811d7cf0afb35a7c38f16905fce52b77"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "6d7364e8e71f78cc6977e1535ca74c1fa5e6418510a5253356ad8700b3088a3a"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "86cdadec97c7ff1849f29914b83bfb5bd734bb8f6110471e0c783aab33eb4041"
+      },
+      {
+        "path": "output-scope.json",
+        "sha256": "66b26377b81f4c2f7bb2356e9edbc07e9356c8103d8f9dd7bec48e91fcec2eb0"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "0bfd910fc5466a7d6bf65878ce3349a7de9bbd43e1aaee1b0f2bf26b95cbe98d"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "7d21ead9c5d2c4a1b4f671da47858b9664575dcabdb98a8bbe4167273fba55a7"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "base",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "mid",
+            "x": 0,
+            "y": 0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "top",
+            "x": 0,
+            "y": 0,
+            "z": 5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "lower-column",
+            "type": "column",
+            "nodes": [
+              "base",
+              "mid"
+            ],
+            "material": "M1",
+            "section": "HW300"
+          },
+          {
+            "id": "upper-column",
+            "type": "column",
+            "nodes": [
+              "mid",
+              "top"
+            ],
+            "material": "M1",
+            "section": "HW300"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "HW300",
+            "name": "HW300x300",
+            "type": "H",
+            "shape": {
+              "kind": "H",
+              "H": 300,
+              "B": 300,
+              "tw": 10,
+              "tf": 15
+            },
+            "properties": {
+              "A": 0.011699999999999999,
+              "Iy": 0.00019932749999999983,
+              "Iz": 6.752249999999999e-05,
+              "J": 7.649999999999999e-07
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "top",
+                "fz": -700
+              },
+              {
+                "id": "D-2",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "mid",
+                "fz": -200
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "lower-column": [
+              0,
+              1,
+              0
+            ],
+            "upper-column": [
+              0,
+              1,
+              0
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

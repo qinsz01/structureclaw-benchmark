@@ -1,0 +1,364 @@
+Input tables. X horizontal, Z upward; Y completes the right-handed system. Section shape dimensions B,H are mm; listed section properties are authoritative. Coordinates m; nodal forces kN; nodal moments kN*m; line loads kN/m; E,G MPa; A m2; Iy,Iz,J m4; density kg/m3. Restraints ordered ux,uy,uz,rx,ry,rz; true=fixed. Member local x follows the ordered end nodes. For planar XZ members local y is global +Y and local z=x cross y; bending about local y uses Iy. For spatial members the explicit reference vector defines local z by its projection normal to local x, local y=z cross x. Linear elastic first-order static analysis, self-weight OFF, no automatic loads/combinations, diaphragm, rigid offsets or P-delta. Distributed load intervals are measured in m along the actual member unless this turn explicitly leaves that basis unresolved. All omitted load components are zero. Beam-column joints are rigid unless explicitly restrained; truss elements are axial-only. Truss rotational restraints eliminate inactive bookkeeping DOFs and do not add rotational stiffness. Use OpenSees for every calculable state; rerun after a physical edit, and reuse a result for a pure query only when its state is unchanged. Retain solver version/settings, run ID, successful log, model snapshot and raw result mapping.
+Section shape dimensions B and H are mm. Members are rigidly continuous at shared nodes; only listed supports restrain planar DOFs. Use OpenSees with the explicit properties and settings. Report signed values with location, global direction, unit, case/combination and current turn. Rz is support reaction in global +Z; fixed-end My is support reaction moment about global +Y by the right-hand rule. After a physical change, run the current state and retain input, snapshot, model differences, software version/settings, run ID, success log and result mapping. Do not guess essential missing input or present historical results as the updated result.
+A continuous beam lies on global X with spans 4, 6, 5 and 4 m. Supports are a pin at x=0 and vertical rollers at x=4, 10, 15 and 19 m. The middle two spans x=4–15 m use B2; the first and fourth spans use B1. B3 is provided as a separate available section. Case D has a downward 8 kN/m UDL over the entire beam plus a separate downward 16 kN point force at fourth-span midpoint x=17 m. Case L has downward 10 kN/m only on spans 2 and 4, x=4–10 m and x=15–19 m. Prescribed combinations remain C1=D and C2=D+L. The x=17 m observation/load node is connected to both adjacent members and has no extra support.
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "n0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n1",
+      "x": 4,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n2",
+      "x": 10,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n3",
+      "x": 15,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n4",
+      "x": 17,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n5",
+      "x": 19,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "b1",
+      "type": "beam",
+      "nodes": [
+        "n0",
+        "n1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b2",
+      "type": "beam",
+      "nodes": [
+        "n1",
+        "n2"
+      ],
+      "material": "M1",
+      "section": "B2"
+    },
+    {
+      "id": "b3",
+      "type": "beam",
+      "nodes": [
+        "n2",
+        "n3"
+      ],
+      "material": "M1",
+      "section": "B2"
+    },
+    {
+      "id": "b4",
+      "type": "beam",
+      "nodes": [
+        "n3",
+        "n4"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b5",
+      "type": "beam",
+      "nodes": [
+        "n4",
+        "n5"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "B2",
+      "name": "B2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 700.0
+      },
+      "properties": {
+        "A": 0.21,
+        "Iy": 0.008574999999999998,
+        "Iz": 0.0015749999999999998,
+        "J": 0.004603782069970844
+      }
+    },
+    {
+      "id": "B3",
+      "name": "B3",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 350.0,
+        "H": 800.0
+      },
+      "properties": {
+        "A": 0.27999999999999997,
+        "Iy": 0.014933333333333335,
+        "Iz": 0.0028583333333333325,
+        "J": 0.008291641882975894
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "dead-full-b1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b1",
+          "start": 0,
+          "end": 4,
+          "wz": -8
+        },
+        {
+          "id": "dead-full-b2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b2",
+          "start": 0,
+          "end": 6,
+          "wz": -8
+        },
+        {
+          "id": "dead-full-b3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b3",
+          "start": 0,
+          "end": 5,
+          "wz": -8
+        },
+        {
+          "id": "dead-full-b4",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b4",
+          "start": 0,
+          "end": 2,
+          "wz": -8
+        },
+        {
+          "id": "dead-full-b5",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b5",
+          "start": 0,
+          "end": 2,
+          "wz": -8
+        },
+        {
+          "id": "dead-fourth-midpoint",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "n4",
+          "fz": -16
+        }
+      ]
+    },
+    {
+      "id": "L",
+      "type": "live",
+      "loads": [
+        {
+          "id": "live-second-b2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b2",
+          "start": 0,
+          "end": 6,
+          "wz": -10
+        },
+        {
+          "id": "live-fourth-b4",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b4",
+          "start": 0,
+          "end": 2,
+          "wz": -10
+        },
+        {
+          "id": "live-fourth-b5",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b5",
+          "start": 0,
+          "end": 2,
+          "wz": -10
+        }
+      ]
+    }
+  ],
+  "load_combinations": [
+    {
+      "id": "C1",
+      "factors": {
+        "D": 1
+      }
+    },
+    {
+      "id": "C2",
+      "factors": {
+        "D": 1,
+        "L": 1
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "b1": [
+        0,
+        0,
+        4
+      ],
+      "b2": [
+        0,
+        0,
+        6
+      ],
+      "b3": [
+        0,
+        0,
+        5
+      ],
+      "b4": [
+        0,
+        0,
+        2
+      ],
+      "b5": [
+        0,
+        0,
+        2
+      ]
+    }
+  }
+}

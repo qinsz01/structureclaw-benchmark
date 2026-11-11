@@ -1,4 +1,5 @@
 import type { Geometry } from './types';
+import { supportKind } from './scene-loads';
 export function Thumbnail({
   model,
   decorative = true,
@@ -21,7 +22,7 @@ export function Thumbnail({
   const plane = model.coordinate_system.plane || 'xz';
   const projected = model.nodes.map((n) => ({
     id: n.id,
-    restraints: n.restraints,
+    supportType: supportKind(model, n),
     x: spatial ? n.x * 0.83 - n.y * 0.62 : plane === 'yz' ? n.y : n.x,
     y: spatial ? -n.z + n.x * 0.28 + n.y * 0.38 : -(plane === 'xy' ? n.y : n.z),
   }));
@@ -71,28 +72,34 @@ export function Thumbnail({
       })}
       {Object.values(points).map((n) => (
         <g key={n.id}>
-          {n.restraints?.some(Boolean) &&
-            (n.restraints.every(Boolean) ? (
-              <g stroke="#7186a7" strokeWidth="1">
-                <path d={`M${n.px - 7} ${n.py + 5}h14m-12 0l-3 4m8-4l-3 4m8-4l-3 4`} />
-                <path d={`M${n.px} ${n.py}v5`} />
-              </g>
-            ) : (
-              <g>
-                <path
-                  d={`M${n.px} ${n.py + 3}l-5 8h10z`}
-                  fill="#bdcce2"
-                  stroke="#7186a7"
-                  strokeWidth="1"
-                />
-                {n.restraints.slice(0, 3).some((r) => !r) && (
-                  <g fill="#7186a7">
-                    <circle cx={n.px - 3} cy={n.py + 13} r="1.3" />
-                    <circle cx={n.px + 3} cy={n.py + 13} r="1.3" />
-                  </g>
-                )}
-              </g>
-            ))}
+          {n.supportType && (
+            <g>
+              <title>{`${n.id} · ${n.supportType} support`}</title>
+              {n.supportType === 'fixed' ? (
+                <g stroke="#7186a7" strokeWidth="1">
+                  <path d={`M${n.px - 7} ${n.py + 5}h14m-12 0l-3 4m8-4l-3 4m8-4l-3 4`} />
+                  <path d={`M${n.px} ${n.py}v5`} />
+                </g>
+              ) : n.supportType === 'rotation' || n.supportType === 'partial' ? (
+                <circle cx={n.px} cy={n.py} r="6" fill="none" stroke="#7186a7" strokeWidth="1.5" />
+              ) : (
+                <g>
+                  <path
+                    d={`M${n.px} ${n.py + 3}l-5 8h10z`}
+                    fill="#bdcce2"
+                    stroke="#7186a7"
+                    strokeWidth="1"
+                  />
+                  {n.supportType === 'roller' && (
+                    <g fill="#7186a7">
+                      <circle cx={n.px - 3} cy={n.py + 13} r="1.3" />
+                      <circle cx={n.px + 3} cy={n.py + 13} r="1.3" />
+                    </g>
+                  )}
+                </g>
+              )}
+            </g>
+          )}
           <circle cx={n.px} cy={n.py} r="2.7" fill="white" stroke="#2358df" strokeWidth="1.4" />
         </g>
       ))}

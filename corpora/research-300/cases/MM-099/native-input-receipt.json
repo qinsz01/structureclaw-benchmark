@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-099",
+  "inputHashes": {
+    "contract.json": "30d2f55b9e32eee2a94f1d34e4a5515415f9367b44ddc1abffc37d8a641652c8",
+    "reference-requests.json": "32d5621fafb1fea8f5f82cdaa7cebe0222edf5581a6797a9671e6851ab918fa4",
+    "model-state-1.json": "d6e371f6816bc0e72c1e05ff0f6fdbfdf5563051d9618850d719d56cffdbdfe4"
+  },
+  "sourceHash": "40fbe64cad213dd76e54a87307b3e5242ba9a1d365875196faf66ceabbb4e132",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "assignments.json",
+        "sha256": "ac4134dee91b5305538e998d3e4b15488e1cd59e6163f86e82cafebef8c52e3c"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "30d2f55b9e32eee2a94f1d34e4a5515415f9367b44ddc1abffc37d8a641652c8"
+      },
+      {
+        "path": "drawing-elevation-XZ.png",
+        "sha256": "5efd036d1573c1952120d36f8547673b42b5167d68943af7d6764044b5aefabf"
+      },
+      {
+        "path": "drawing-elevation-XZ.svg",
+        "sha256": "5896e8cade5044fd13254fb7d327480edbda46ebf82f5147e43a0b049a509f0e"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "aef8886e5ab8a6ec859c2dd936e1e48d2a6581bc3535e796d1d52d84ad0795fc"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "d6e371f6816bc0e72c1e05ff0f6fdbfdf5563051d9618850d719d56cffdbdfe4"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "333c4c528af8a12377a0f1890e3695fde2c92b9ebbc0c3d8b638f12fe8e053af"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "bb74d04d50142b206fa1fbf6de98bceade8243897e73137a1a2c45839a605fff"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "32d5621fafb1fea8f5f82cdaa7cebe0222edf5581a6797a9671e6851ab918fa4"
+      },
+      {
+        "path": "section-details.png",
+        "sha256": "22d6cfc61fb9881780d086e47f72e3da5b54e0e92e4395683952b189d579c5aa"
+      },
+      {
+        "path": "section-details.svg",
+        "sha256": "a3973ced76228878724489278f0d1ac8879130cb2df9fdf2b40a62ead994b1c0"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "base",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "kink",
+            "x": 0,
+            "y": 0,
+            "z": 3,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "top",
+            "x": 1,
+            "y": 0,
+            "z": 8,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "lower",
+            "type": "column",
+            "nodes": [
+              "base",
+              "kink"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "upper",
+            "type": "column",
+            "nodes": [
+              "kink",
+              "top"
+            ],
+            "material": "M1",
+            "section": "C2"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          },
+          {
+            "id": "C2",
+            "name": "C2",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 350.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.175,
+              "Iy": 0.003645833333333333,
+              "Iz": 0.0017864583333333328,
+              "J": 0.0040575733442708315
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "top",
+                "fx": 20,
+                "fz": -300
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

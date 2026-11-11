@@ -1,0 +1,40 @@
+{
+  "caseId": "P30-INT-008",
+  "turnId": "t3",
+  "engine": "OpenSees",
+  "analysis": "transient",
+  "instruction": "将同一激励强度提高25%，此次明确用m/s2给数据。模型、质量、步长和阻尼保持。",
+  "requests": [
+    {
+      "id": "F2-ux-at-0.4s",
+      "path": [
+        "timeHistory",
+        19,
+        "nodes",
+        "F2",
+        "ux"
+      ],
+      "unit": "m"
+    },
+    {
+      "id": "F2-signed-peak-ux",
+      "path": [
+        "timeHistory",
+        "*",
+        "nodes",
+        "F2",
+        "ux"
+      ],
+      "operation": "max_abs",
+      "unit": "m"
+    }
+  ],
+  "reportIds": [
+    "F2-ux-at-0.4s",
+    "F2-signed-peak-ux"
+  ],
+  "constraint": null,
+  "schemeSelections": null,
+  "requireShapes": false,
+  "sourceId": null
+}

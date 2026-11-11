@@ -1,0 +1,63 @@
+{
+  "id": "STD-055",
+  "sourceTask": {
+    "id": "STD-055",
+    "family": "standard_workflow",
+    "baseGroup": "M-STD-055",
+    "title": "两层单跨钢框架",
+    "subcategory": "面载折算与节点响应",
+    "difficulty": "L1",
+    "difficultyReason": "结构规则，受荷宽度已给定；关键是一次折算和节点结果位置。",
+    "language": "中文",
+    "inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "turns": 1,
+    "scenario": "两层各3.6m、跨6m，面载10kN/m²按6m受荷宽度折算，仅施加线载；完整属性按公共契约随题给出。 明确每层只施加60kN/m梁线载；各层左右梁柱节点分别报告，不能合成虚构刚性楼层位移。",
+    "modelingFocus": "面载不能与折算线载重复",
+    "expectedOutput": "每层左右节点X/Z位移、左右柱列层间位移差及柱脚反力。",
+    "gradingFocus": "面载不能与折算线载重复；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "origin": "旧题改编",
+    "oldPrimaryId": "frame-2story-1bay-static",
+    "oldSecondaryId": "无",
+    "reuseChange": "保留旧题主要几何与荷载，显式补齐单位、自重、观测位置和结果评分；新契约下须重新核验真值。",
+    "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立二维框架刚度解；楼层总荷载和平衡核对，逐列计算相邻层位移差。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+    "prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "STD-055",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "当前为二维钢框架题，采用 OpenSees，保留平面分析假设，不增造空间柱网。 本题重点：面载不能与折算线载重复。",
+      "executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "只施加折算后的梁线载；逐柱列位移不得替换为刚性楼层平均。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+      "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立二维框架刚度解；楼层总荷载和平衡核对，逐列计算相邻层位移差。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+      "analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+      "requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-STD-055",
+    "taskId": "STD-055",
+    "structure": "平面钢框架",
+    "dimension": "2D",
+    "difficulty": "L1",
+    "title": "两层单跨钢框架",
+    "spec": "两层各3.6m、跨6m，面载10kN/m²按6m受荷宽度折算，仅施加线载；完整属性按公共契约随题给出。 明确每层只施加60kN/m梁线载；各层左右梁柱节点分别报告，不能合成虚构刚性楼层位移。 边界：全部柱脚固定；楼层不加刚性约束。",
+    "challenge": "面载不能与折算线载重复",
+    "source": "frame-2story-1bay-static",
+    "prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "distinctness": "平面两层单跨等层高钢框架；全部柱脚固定；楼层不加刚性约束；两层同值梁线载；已按受荷宽度折算；单钢材料；梁柱分组截面",
+    "topologyKey": "平面两层单跨等层高钢框架",
+    "boundaryKey": "全部柱脚固定；楼层不加刚性约束",
+    "loadKey": "两层同值梁线载；已按受荷宽度折算",
+    "propertyKey": "单钢材料；梁柱分组截面"
+  },
+  "appendixDecisions": [
+    "Missing source material/section appendix completed with explicit solid-rectangle steel properties; this is an author decision, not a recovered source value or a numerical reference.",
+    "梁B1、柱C1；层间位移差定义为同列上节点减下节点，单位m，X和Z分量均列出；它不是层间位移角。面载说明仅用于交代60kN/m的来源，不另施加面载。"
+  ],
+  "reviewStatus": "author-inspected-independent-review-pending",
+  "native": "pending",
+  "inputBlindReview": "pending"
+}

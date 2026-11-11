@@ -1,0 +1,231 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "semantics": "global-z-up",
+      "version": 1,
+      "dimension": "2d",
+      "plane": "xz",
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "A",
+        "x": 0,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "M",
+        "x": 3,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "B",
+        "x": 6,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "L",
+        "nodes": [
+          "A",
+          "M"
+        ],
+        "type": "beam",
+        "material": "S",
+        "section": "B",
+        "releases": {
+          "i": {
+            "ry": true
+          }
+        }
+      },
+      {
+        "id": "R",
+        "nodes": [
+          "M",
+          "B"
+        ],
+        "type": "beam",
+        "material": "S",
+        "section": "B",
+        "releases": {
+          "j": {
+            "ry": true
+          }
+        }
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "C",
+        "name": "column",
+        "type": "custom",
+        "properties": {
+          "A": 0.024,
+          "Iy": 0.0003,
+          "Iz": 0.0001,
+          "J": 4e-05
+        }
+      },
+      {
+        "id": "B",
+        "name": "beam",
+        "type": "custom",
+        "properties": {
+          "A": 0.016,
+          "Iy": 0.00015,
+          "Iz": 6e-05,
+          "J": 2e-05
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "type": "distributed",
+            "element": "L",
+            "wz": -10
+          },
+          {
+            "type": "distributed",
+            "element": "R",
+            "wz": -10
+          }
+        ]
+      }
+    ],
+    "load_combinations": [],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    }
+  },
+  "kind": "static",
+  "requests": [
+    {
+      "id": "M-uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "M"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.005461165048543691
+    },
+    {
+      "id": "A-Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": 30.0
+    },
+    {
+      "id": "B-Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "B"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": 30.0
+    }
+  ],
+  "referenceChecks": [
+    {
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "method": "independent-planar-direct-stiffness",
+      "freeResidual": 0.0,
+      "dofs": 9
+    }
+  ],
+  "reportIds": [
+    "M-uz",
+    "A-Fz",
+    "B-Fz"
+  ],
+  "engine": "OpenSees"
+}

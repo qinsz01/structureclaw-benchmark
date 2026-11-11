@@ -1,0 +1,674 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-024",
+  "modelId": "M-STD-024",
+  "family": "standard_workflow",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "三跨5、5、5m，D全跨向下8kN/m，W仅中跨向上6kN/m，显式符号约定；完整属性按公共契约随题给出。 定义向上为正Z；C0=D、C1=D+W，滚支为双向约束，允许计算负反力。",
+    "task.modelingFocus": "相反方向荷载及组合不能误删为非法",
+    "task.expectedOutput": "两个组合的支反力、各跨中位移及中支座弯矩，保留结果符号。",
+    "task.gradingFocus": "相反方向荷载及组合不能误删为非法；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "多组合执行契约需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "等长三跨连续梁",
+    "model.boundaryKey": "左铰其余三支座双向竖向滚支",
+    "model.loadKey": "D全跨向下；W中跨向上；两个组合",
+    "model.propertyKey": "均匀单材料单截面",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。 荷载与观测位置可合理分段，但不改变支承/连续条件；跨内响应须含荷载项。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "向上工况、负反力和双向支座定义以及有符号组合输出须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；按有符号工况线性叠加；静力平衡与反向载荷响应一致性核验。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "geometry.json",
+    "properties.json",
+    "loads.json",
+    "output-requests.json"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Using the attached complete property and geometry tables, analyze a three-span continuous beam with spans 5, 5 and 5 m along global X. Global +Z is upward. S0 at x=0 is a pin; S1/S2/S3 at x=5/10/15 m are bilateral vertical rollers. Every support rotation about global Y remains free; the beam is continuous without end releases. All spans use M1/B1. Case D is -8 kN/m in global Z over all spans; case W is +6 kN/m in global Z only over the middle span x=5 to 10 m. Define exactly C0=D and C1=D+W. Run first-order linear static Euler-Bernoulli analysis in OpenSees with self-weight disabled. For each of C0 and C1 separately, report all four signed vertical support reactions and all horizontal support reactions, signed uz at x=2.5, 7.5 and 12.5 m, and signed local M2 on both sides of the two internal supports at x=5 and 10 m. Retain signs, including any negative reactions; the rollers restrain both vertical directions. Label every value with its combination, location and unit.\n\nUse the complete attached input tables. Global XYZ is right handed with Z upward; any planar model uses the XZ plane. All nodes listed are connected physical joints. Member local x points from i to j. In 2D local y=global +Y and local z=x cross y. In 3D local y=normalize(reference cross x), local z=x cross y; reference vectors are explicit. N is positive in tension. Signed section N/T/M2/M3 equal minus the i-end resisting action at the start and plus the j-end action at the end; V2/V3 use plus i-end and minus j-end action. Report global nodal displacements and support reactions; rotations follow the right-hand rule. Distributed loads act per actual member length, including inclined members. Use first-order linear elasticity with self-weight, rigid floors, rigid offsets, P-delta and construction stages off. Use only the specified cases and combinations. Compute every request in output-requests.json, retaining its location, side, signed component, unit and case/combination. Interior forces must include applied-load terms. Execute OpenSees and retain version, runnable input, current-model hash, run ID, actual solver log and raw result/case mapping. Report the requested results in the response body as well as structured results; independently check equilibrium. No numerical answer or native execution evidence is supplied.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "geometry.json",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "output-001",
+      "description": "Report combination:C0:node:S0:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:S0:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-002",
+      "description": "Report combination:C0:node:S1:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:S1:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-003",
+      "description": "Report combination:C0:node:S2:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:S2:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-004",
+      "description": "Report combination:C0:node:S3:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:S3:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-005",
+      "description": "Report combination:C0:node:S0:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:S0:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-006",
+      "description": "Report combination:C0:node:S1:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:S1:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-007",
+      "description": "Report combination:C0:node:S2:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:S2:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-008",
+      "description": "Report combination:C0:node:S3:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:S3:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-009",
+      "description": "Report combination:C0:node:P1:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:P1:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-010",
+      "description": "Report combination:C0:node:P2:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:P2:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-011",
+      "description": "Report combination:C0:node:P3:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:P3:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-012",
+      "description": "Report combination:C0:member:B1b:M2@2.5:left in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:member:B1b:M2@2.5:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-013",
+      "description": "Report combination:C0:member:B2a:M2@0:right in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:member:B2a:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-014",
+      "description": "Report combination:C0:member:B2b:M2@2.5:left in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:member:B2b:M2@2.5:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-015",
+      "description": "Report combination:C0:member:B3a:M2@0:right in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:member:B3a:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-016",
+      "description": "Report combination:C1:node:S0:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:S0:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-017",
+      "description": "Report combination:C1:node:S1:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:S1:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-018",
+      "description": "Report combination:C1:node:S2:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:S2:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-019",
+      "description": "Report combination:C1:node:S3:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:S3:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-020",
+      "description": "Report combination:C1:node:S0:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:S0:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-021",
+      "description": "Report combination:C1:node:S1:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:S1:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-022",
+      "description": "Report combination:C1:node:S2:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:S2:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-023",
+      "description": "Report combination:C1:node:S3:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:S3:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-024",
+      "description": "Report combination:C1:node:P1:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:P1:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-025",
+      "description": "Report combination:C1:node:P2:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:P2:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-026",
+      "description": "Report combination:C1:node:P3:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:P3:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-027",
+      "description": "Report combination:C1:member:B1b:M2@2.5:left in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:member:B1b:M2@2.5:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-028",
+      "description": "Report combination:C1:member:B2a:M2@0:right in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:member:B2a:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-029",
+      "description": "Report combination:C1:member:B2b:M2@2.5:left in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:member:B2b:M2@2.5:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-030",
+      "description": "Report combination:C1:member:B3a:M2@0:right in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:member:B3a:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "geometry.json",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "targets": [
+        "turns:t1",
+        "geometry.json",
+        "loads.json",
+        "properties.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "geometry.json",
+        "loads.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7
+      ],
+      "targets": [
+        "output-requests.json",
+        "requiredOutputs:output-001",
+        "requiredOutputs:output-002",
+        "requiredOutputs:output-003",
+        "requiredOutputs:output-004",
+        "requiredOutputs:output-005",
+        "requiredOutputs:output-006",
+        "requiredOutputs:output-007",
+        "requiredOutputs:output-008",
+        "requiredOutputs:output-009",
+        "requiredOutputs:output-010",
+        "requiredOutputs:output-011",
+        "requiredOutputs:output-012",
+        "requiredOutputs:output-013",
+        "requiredOutputs:output-014",
+        "requiredOutputs:output-015",
+        "requiredOutputs:output-016",
+        "requiredOutputs:output-017",
+        "requiredOutputs:output-018",
+        "requiredOutputs:output-019",
+        "requiredOutputs:output-020",
+        "requiredOutputs:output-021",
+        "requiredOutputs:output-022",
+        "requiredOutputs:output-023",
+        "requiredOutputs:output-024",
+        "requiredOutputs:output-025",
+        "requiredOutputs:output-026",
+        "requiredOutputs:output-027",
+        "requiredOutputs:output-028",
+        "requiredOutputs:output-029",
+        "requiredOutputs:output-030"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        8,
+        9
+      ],
+      "targets": [
+        "output-requests.json",
+        "gate:all-requested-output-scoring",
+        "gate:report-body-consistency"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        10,
+        11
+      ],
+      "targets": [
+        "properties.json",
+        "gate:input-blind-review",
+        "gate:adapter-capability-acceptance"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        12
+      ],
+      "targets": [
+        "geometry.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        13
+      ],
+      "targets": [
+        "geometry.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        14,
+        15,
+        16
+      ],
+      "targets": [
+        "loads.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        17
+      ],
+      "targets": [
+        "properties.json",
+        "geometry.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "targets": [
+        "turns:t1",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        25,
+        26
+      ],
+      "targets": [
+        "turns:t1",
+        "gate:native-execution-every-selection"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        27
+      ],
+      "targets": [
+        "turns:t1",
+        "gate:native-execution-every-selection",
+        "gate:independent-same-engine-truth"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        28,
+        29,
+        30
+      ],
+      "targets": [
+        "gate:adapter-capability-acceptance"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "targets": [
+        "reference-requests.json",
+        "gate:independent-same-engine-truth",
+        "gate:all-requested-output-scoring"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "physical-model-review",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "native-execution-every-selection",
+      "status": "pending"
+    },
+    {
+      "id": "independent-same-engine-truth",
+      "status": "pending"
+    },
+    {
+      "id": "all-requested-output-scoring",
+      "status": "pending"
+    },
+    {
+      "id": "report-body-consistency",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-capability-acceptance",
+      "status": "pending"
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run"
+}

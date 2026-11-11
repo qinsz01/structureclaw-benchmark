@@ -1,0 +1,1896 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "dimension": "2d",
+      "plane": "xz",
+      "semantics": "global-z-up",
+      "version": 1,
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "N0-0",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N1-0",
+        "x": 2.5,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "N0-1",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 1.25,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "N1-1",
+        "x": 2.5,
+        "y": 0.0,
+        "z": 1.25,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "N0-2",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 2.5,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "N1-2",
+        "x": 2.5,
+        "y": 0.0,
+        "z": 2.5,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "LOW-MID",
+        "x": 1.25,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "ROW1-MID",
+        "x": 1.25,
+        "y": 0.0,
+        "z": 1.25,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "ROW2-MID",
+        "x": 1.25,
+        "y": 0.0,
+        "z": 2.5,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "C0-1",
+        "type": "column",
+        "nodes": [
+          "N0-0",
+          "N0-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C1-1",
+        "type": "column",
+        "nodes": [
+          "N1-0",
+          "N1-1"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C0-2",
+        "type": "column",
+        "nodes": [
+          "N0-1",
+          "N0-2"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C1-2",
+        "type": "column",
+        "nodes": [
+          "N1-1",
+          "N1-2"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "LOW-a",
+        "type": "beam",
+        "nodes": [
+          "N0-0",
+          "LOW-MID"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "LOW-b",
+        "type": "beam",
+        "nodes": [
+          "LOW-MID",
+          "N1-0"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "ROW1-a",
+        "type": "beam",
+        "nodes": [
+          "N0-1",
+          "ROW1-MID"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "ROW1-b",
+        "type": "beam",
+        "nodes": [
+          "ROW1-MID",
+          "N1-1"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "ROW2-a",
+        "type": "beam",
+        "nodes": [
+          "N0-2",
+          "ROW2-MID"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "ROW2-b",
+        "type": "beam",
+        "nodes": [
+          "ROW2-MID",
+          "N1-2"
+        ],
+        "material": "S",
+        "section": "B"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "B",
+        "name": "B",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 120.0,
+          "H": 240.0
+        },
+        "properties": {
+          "A": 0.0288,
+          "Iy": 0.00013823999999999998,
+          "Iz": 3.4559999999999994e-05,
+          "J": 9.492119999999998e-05
+        }
+      },
+      {
+        "id": "C",
+        "name": "C",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 180.0,
+          "H": 300.0
+        },
+        "properties": {
+          "A": 0.054,
+          "Iy": 0.0004049999999999999,
+          "Iz": 0.0001458,
+          "J": 0.00036513125567999994
+        }
+      },
+      {
+        "id": "A",
+        "name": "A",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 60.0,
+          "H": 80.0
+        },
+        "properties": {
+          "A": 0.0048,
+          "Iy": 2.5600000000000005e-06,
+          "Iz": 1.4399999999999998e-06,
+          "J": 3.1101609374999997e-06
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "type": "nodal",
+            "node": "LOW-MID",
+            "fz": -7.0,
+            "id": "D-1",
+            "reference_frame": "global"
+          },
+          {
+            "type": "nodal",
+            "node": "ROW1-MID",
+            "fz": -5.25,
+            "id": "D-2",
+            "reference_frame": "global"
+          },
+          {
+            "type": "nodal",
+            "node": "ROW2-MID",
+            "fz": -7.0,
+            "id": "D-3",
+            "reference_frame": "global"
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "type": "nodal",
+            "node": "LOW-MID",
+            "fz": -17.7,
+            "id": "Q-1",
+            "reference_frame": "global"
+          },
+          {
+            "type": "nodal",
+            "node": "ROW1-MID",
+            "fz": -9.0,
+            "id": "Q-2",
+            "reference_frame": "global"
+          },
+          {
+            "type": "nodal",
+            "node": "ROW2-MID",
+            "fz": -17.7,
+            "id": "Q-3",
+            "reference_frame": "global"
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "type": "nodal",
+            "node": "N1-2",
+            "fx": 10.0,
+            "id": "W-1",
+            "reference_frame": "global"
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "SERVICE",
+        "factors": {
+          "D": 1.0,
+          "Q": 1.0
+        }
+      },
+      {
+        "id": "REVERSE",
+        "factors": {
+          "D": 1.0,
+          "W": -1.0
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    },
+    "metadata": {}
+  },
+  "kind": "scheme",
+  "engine": "OpenSees",
+  "derived": [],
+  "schemes": [
+    {
+      "id": "A",
+      "section": "B",
+      "properties": {
+        "A": 0.023039999999999998,
+        "Iy": 7.077888e-05,
+        "Iz": 2.7647999999999993e-05,
+        "J": 6.76001109375e-05
+      },
+      "shape": {
+        "kind": "rectangular",
+        "B": 120.0,
+        "H": 192.0
+      }
+    },
+    {
+      "id": "B",
+      "section": "B",
+      "properties": {
+        "A": 0.0288,
+        "Iy": 0.00013823999999999998,
+        "Iz": 3.4559999999999994e-05,
+        "J": 9.492119999999998e-05
+      },
+      "shape": {
+        "kind": "rectangular",
+        "B": 120.0,
+        "H": 240.0
+      }
+    },
+    {
+      "id": "C",
+      "section": "B",
+      "properties": {
+        "A": 0.034559999999999994,
+        "Iy": 0.00023887871999999993,
+        "Iz": 4.147199999999999e-05,
+        "J": 0.00012245177499999998
+      },
+      "shape": {
+        "kind": "rectangular",
+        "B": 120.0,
+        "H": 288.0
+      }
+    }
+  ],
+  "constraint": {
+    "nodes": [
+      "LOW-MID",
+      "ROW1-MID",
+      "ROW2-MID"
+    ],
+    "component": "uz",
+    "absoluteLimit": 3.7731e-05
+  },
+  "schemeSelections": [
+    "SERVICE",
+    "REVERSE"
+  ],
+  "requests": [],
+  "clarificationFields": [],
+  "referenceChecks": [
+    {
+      "method": "independent-exhaustive-finite-scheme-enumeration",
+      "schemes": 3,
+      "feasible": 0
+    }
+  ],
+  "schemeTruth": [
+    {
+      "id": "A",
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "N0-0",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "N1-0",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "N0-1",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N1-1",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N0-2",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N1-2",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "LOW-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "ROW1-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "ROW2-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "C0-1",
+            "type": "column",
+            "nodes": [
+              "N0-0",
+              "N0-1"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C1-1",
+            "type": "column",
+            "nodes": [
+              "N1-0",
+              "N1-1"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C0-2",
+            "type": "column",
+            "nodes": [
+              "N0-1",
+              "N0-2"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C1-2",
+            "type": "column",
+            "nodes": [
+              "N1-1",
+              "N1-2"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "LOW-a",
+            "type": "beam",
+            "nodes": [
+              "N0-0",
+              "LOW-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "LOW-b",
+            "type": "beam",
+            "nodes": [
+              "LOW-MID",
+              "N1-0"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW1-a",
+            "type": "beam",
+            "nodes": [
+              "N0-1",
+              "ROW1-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW1-b",
+            "type": "beam",
+            "nodes": [
+              "ROW1-MID",
+              "N1-1"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW2-a",
+            "type": "beam",
+            "nodes": [
+              "N0-2",
+              "ROW2-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW2-b",
+            "type": "beam",
+            "nodes": [
+              "ROW2-MID",
+              "N1-2"
+            ],
+            "material": "S",
+            "section": "B"
+          }
+        ],
+        "materials": [
+          {
+            "id": "S",
+            "name": "Explicit elastic steel",
+            "type": "steel",
+            "E": 206000.0,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850.0
+          }
+        ],
+        "sections": [
+          {
+            "id": "B",
+            "name": "B",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 120.0,
+              "H": 192.0
+            },
+            "properties": {
+              "A": 0.023039999999999998,
+              "Iy": 7.077888e-05,
+              "Iz": 2.7647999999999993e-05,
+              "J": 6.76001109375e-05
+            }
+          },
+          {
+            "id": "C",
+            "name": "C",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 180.0,
+              "H": 300.0
+            },
+            "properties": {
+              "A": 0.054,
+              "Iy": 0.0004049999999999999,
+              "Iz": 0.0001458,
+              "J": 0.00036513125567999994
+            }
+          },
+          {
+            "id": "A",
+            "name": "A",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 60.0,
+              "H": 80.0
+            },
+            "properties": {
+              "A": 0.0048,
+              "Iy": 2.5600000000000005e-06,
+              "Iz": 1.4399999999999998e-06,
+              "J": 3.1101609374999997e-06
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "LOW-MID",
+                "fz": -7.0,
+                "id": "D-1",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW1-MID",
+                "fz": -5.25,
+                "id": "D-2",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW2-MID",
+                "fz": -7.0,
+                "id": "D-3",
+                "reference_frame": "global"
+              }
+            ]
+          },
+          {
+            "id": "Q",
+            "type": "live",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "LOW-MID",
+                "fz": -17.7,
+                "id": "Q-1",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW1-MID",
+                "fz": -9.0,
+                "id": "Q-2",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW2-MID",
+                "fz": -17.7,
+                "id": "Q-3",
+                "reference_frame": "global"
+              }
+            ]
+          },
+          {
+            "id": "W",
+            "type": "wind",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "N1-2",
+                "fx": 10.0,
+                "id": "W-1",
+                "reference_frame": "global"
+              }
+            ]
+          }
+        ],
+        "load_combinations": [
+          {
+            "id": "SERVICE",
+            "factors": {
+              "D": 1.0,
+              "Q": 1.0
+            }
+          },
+          {
+            "id": "REVERSE",
+            "factors": {
+              "D": 1.0,
+              "W": -1.0
+            }
+          }
+        ],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "maximum": 0.00016118377788146087,
+      "volume": 0.4428,
+      "feasible": false,
+      "referenceChecks": [
+        {
+          "selection": {
+            "kind": "combination",
+            "id": "SERVICE"
+          },
+          "method": "independent-direct-stiffness",
+          "theory": "Euler-Bernoulli",
+          "freeResidual": 1.7763568394002505e-15,
+          "forceMomentBalance": [
+            -7.971054372113431e-16,
+            0.0,
+            -7.105427357601002e-15,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "dofs": 54,
+          "freeDofs": 21,
+          "factorization": "numpy-cholesky-batched",
+          "factorizationCount": 1,
+          "rightHandSides": 2,
+          "minimumScaledPivot": 0.009387704132670429,
+          "observationNodes": 0,
+          "addedMass": 0,
+          "assumptions": [
+            "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+            "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+            "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+            "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+          ]
+        },
+        {
+          "selection": {
+            "kind": "combination",
+            "id": "REVERSE"
+          },
+          "method": "independent-direct-stiffness",
+          "theory": "Euler-Bernoulli",
+          "freeResidual": 1.0791367799356522e-13,
+          "forceMomentBalance": [
+            -1.438849039914203e-13,
+            0.0,
+            3.552713678800501e-15,
+            0.0,
+            -3.623767952376511e-13,
+            0.0
+          ],
+          "dofs": 54,
+          "freeDofs": 21,
+          "factorization": "numpy-cholesky-batched",
+          "factorizationCount": 1,
+          "rightHandSides": 2,
+          "minimumScaledPivot": 0.009387704132670429,
+          "observationNodes": 0,
+          "addedMass": 0,
+          "assumptions": [
+            "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+            "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+            "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+            "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "N0-0",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "N1-0",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "N0-1",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N1-1",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N0-2",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N1-2",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "LOW-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "ROW1-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "ROW2-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "C0-1",
+            "type": "column",
+            "nodes": [
+              "N0-0",
+              "N0-1"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C1-1",
+            "type": "column",
+            "nodes": [
+              "N1-0",
+              "N1-1"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C0-2",
+            "type": "column",
+            "nodes": [
+              "N0-1",
+              "N0-2"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C1-2",
+            "type": "column",
+            "nodes": [
+              "N1-1",
+              "N1-2"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "LOW-a",
+            "type": "beam",
+            "nodes": [
+              "N0-0",
+              "LOW-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "LOW-b",
+            "type": "beam",
+            "nodes": [
+              "LOW-MID",
+              "N1-0"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW1-a",
+            "type": "beam",
+            "nodes": [
+              "N0-1",
+              "ROW1-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW1-b",
+            "type": "beam",
+            "nodes": [
+              "ROW1-MID",
+              "N1-1"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW2-a",
+            "type": "beam",
+            "nodes": [
+              "N0-2",
+              "ROW2-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW2-b",
+            "type": "beam",
+            "nodes": [
+              "ROW2-MID",
+              "N1-2"
+            ],
+            "material": "S",
+            "section": "B"
+          }
+        ],
+        "materials": [
+          {
+            "id": "S",
+            "name": "Explicit elastic steel",
+            "type": "steel",
+            "E": 206000.0,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850.0
+          }
+        ],
+        "sections": [
+          {
+            "id": "B",
+            "name": "B",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 120.0,
+              "H": 240.0
+            },
+            "properties": {
+              "A": 0.0288,
+              "Iy": 0.00013823999999999998,
+              "Iz": 3.4559999999999994e-05,
+              "J": 9.492119999999998e-05
+            }
+          },
+          {
+            "id": "C",
+            "name": "C",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 180.0,
+              "H": 300.0
+            },
+            "properties": {
+              "A": 0.054,
+              "Iy": 0.0004049999999999999,
+              "Iz": 0.0001458,
+              "J": 0.00036513125567999994
+            }
+          },
+          {
+            "id": "A",
+            "name": "A",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 60.0,
+              "H": 80.0
+            },
+            "properties": {
+              "A": 0.0048,
+              "Iy": 2.5600000000000005e-06,
+              "Iz": 1.4399999999999998e-06,
+              "J": 3.1101609374999997e-06
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "LOW-MID",
+                "fz": -7.0,
+                "id": "D-1",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW1-MID",
+                "fz": -5.25,
+                "id": "D-2",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW2-MID",
+                "fz": -7.0,
+                "id": "D-3",
+                "reference_frame": "global"
+              }
+            ]
+          },
+          {
+            "id": "Q",
+            "type": "live",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "LOW-MID",
+                "fz": -17.7,
+                "id": "Q-1",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW1-MID",
+                "fz": -9.0,
+                "id": "Q-2",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW2-MID",
+                "fz": -17.7,
+                "id": "Q-3",
+                "reference_frame": "global"
+              }
+            ]
+          },
+          {
+            "id": "W",
+            "type": "wind",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "N1-2",
+                "fx": 10.0,
+                "id": "W-1",
+                "reference_frame": "global"
+              }
+            ]
+          }
+        ],
+        "load_combinations": [
+          {
+            "id": "SERVICE",
+            "factors": {
+              "D": 1.0,
+              "Q": 1.0
+            }
+          },
+          {
+            "id": "REVERSE",
+            "factors": {
+              "D": 1.0,
+              "W": -1.0
+            }
+          }
+        ],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "maximum": 9.247174898989429e-05,
+      "volume": 0.486,
+      "feasible": false,
+      "referenceChecks": [
+        {
+          "selection": {
+            "kind": "combination",
+            "id": "SERVICE"
+          },
+          "method": "independent-direct-stiffness",
+          "theory": "Euler-Bernoulli",
+          "freeResidual": 5.531796689017621e-15,
+          "forceMomentBalance": [
+            5.275727771314464e-16,
+            0.0,
+            -1.4210854715202004e-14,
+            0.0,
+            1.4210854715202004e-14,
+            0.0
+          ],
+          "dofs": 54,
+          "freeDofs": 21,
+          "factorization": "numpy-cholesky-batched",
+          "factorizationCount": 1,
+          "rightHandSides": 2,
+          "minimumScaledPivot": 0.010502506203517337,
+          "observationNodes": 0,
+          "addedMass": 0,
+          "assumptions": [
+            "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+            "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+            "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+            "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+          ]
+        },
+        {
+          "selection": {
+            "kind": "combination",
+            "id": "REVERSE"
+          },
+          "method": "independent-direct-stiffness",
+          "theory": "Euler-Bernoulli",
+          "freeResidual": 9.439671266875393e-14,
+          "forceMomentBalance": [
+            9.237055564881302e-14,
+            0.0,
+            0.0,
+            0.0,
+            2.345901251032956e-13,
+            0.0
+          ],
+          "dofs": 54,
+          "freeDofs": 21,
+          "factorization": "numpy-cholesky-batched",
+          "factorizationCount": 1,
+          "rightHandSides": 2,
+          "minimumScaledPivot": 0.010502506203517337,
+          "observationNodes": 0,
+          "addedMass": 0,
+          "assumptions": [
+            "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+            "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+            "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+            "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "N0-0",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "N1-0",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "N0-1",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N1-1",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N0-2",
+            "x": 0.0,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "N1-2",
+            "x": 2.5,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "LOW-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 0.0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "ROW1-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 1.25,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "ROW2-MID",
+            "x": 1.25,
+            "y": 0.0,
+            "z": 2.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "C0-1",
+            "type": "column",
+            "nodes": [
+              "N0-0",
+              "N0-1"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C1-1",
+            "type": "column",
+            "nodes": [
+              "N1-0",
+              "N1-1"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C0-2",
+            "type": "column",
+            "nodes": [
+              "N0-1",
+              "N0-2"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "C1-2",
+            "type": "column",
+            "nodes": [
+              "N1-1",
+              "N1-2"
+            ],
+            "material": "S",
+            "section": "C"
+          },
+          {
+            "id": "LOW-a",
+            "type": "beam",
+            "nodes": [
+              "N0-0",
+              "LOW-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "LOW-b",
+            "type": "beam",
+            "nodes": [
+              "LOW-MID",
+              "N1-0"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW1-a",
+            "type": "beam",
+            "nodes": [
+              "N0-1",
+              "ROW1-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW1-b",
+            "type": "beam",
+            "nodes": [
+              "ROW1-MID",
+              "N1-1"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW2-a",
+            "type": "beam",
+            "nodes": [
+              "N0-2",
+              "ROW2-MID"
+            ],
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "ROW2-b",
+            "type": "beam",
+            "nodes": [
+              "ROW2-MID",
+              "N1-2"
+            ],
+            "material": "S",
+            "section": "B"
+          }
+        ],
+        "materials": [
+          {
+            "id": "S",
+            "name": "Explicit elastic steel",
+            "type": "steel",
+            "E": 206000.0,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850.0
+          }
+        ],
+        "sections": [
+          {
+            "id": "B",
+            "name": "B",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 120.0,
+              "H": 288.0
+            },
+            "properties": {
+              "A": 0.034559999999999994,
+              "Iy": 0.00023887871999999993,
+              "Iz": 4.147199999999999e-05,
+              "J": 0.00012245177499999998
+            }
+          },
+          {
+            "id": "C",
+            "name": "C",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 180.0,
+              "H": 300.0
+            },
+            "properties": {
+              "A": 0.054,
+              "Iy": 0.0004049999999999999,
+              "Iz": 0.0001458,
+              "J": 0.00036513125567999994
+            }
+          },
+          {
+            "id": "A",
+            "name": "A",
+            "type": "custom",
+            "shape": {
+              "kind": "rectangular",
+              "B": 60.0,
+              "H": 80.0
+            },
+            "properties": {
+              "A": 0.0048,
+              "Iy": 2.5600000000000005e-06,
+              "Iz": 1.4399999999999998e-06,
+              "J": 3.1101609374999997e-06
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "LOW-MID",
+                "fz": -7.0,
+                "id": "D-1",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW1-MID",
+                "fz": -5.25,
+                "id": "D-2",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW2-MID",
+                "fz": -7.0,
+                "id": "D-3",
+                "reference_frame": "global"
+              }
+            ]
+          },
+          {
+            "id": "Q",
+            "type": "live",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "LOW-MID",
+                "fz": -17.7,
+                "id": "Q-1",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW1-MID",
+                "fz": -9.0,
+                "id": "Q-2",
+                "reference_frame": "global"
+              },
+              {
+                "type": "nodal",
+                "node": "ROW2-MID",
+                "fz": -17.7,
+                "id": "Q-3",
+                "reference_frame": "global"
+              }
+            ]
+          },
+          {
+            "id": "W",
+            "type": "wind",
+            "loads": [
+              {
+                "type": "nodal",
+                "node": "N1-2",
+                "fx": 10.0,
+                "id": "W-1",
+                "reference_frame": "global"
+              }
+            ]
+          }
+        ],
+        "load_combinations": [
+          {
+            "id": "SERVICE",
+            "factors": {
+              "D": 1.0,
+              "Q": 1.0
+            }
+          },
+          {
+            "id": "REVERSE",
+            "factors": {
+              "D": 1.0,
+              "W": -1.0
+            }
+          }
+        ],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "maximum": 6.123701640189775e-05,
+      "volume": 0.5291999999999999,
+      "feasible": false,
+      "referenceChecks": [
+        {
+          "selection": {
+            "kind": "combination",
+            "id": "SERVICE"
+          },
+          "method": "independent-direct-stiffness",
+          "theory": "Euler-Bernoulli",
+          "freeResidual": 3.552713678800501e-15,
+          "forceMomentBalance": [
+            -3.85486807855546e-16,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "dofs": 54,
+          "freeDofs": 21,
+          "factorization": "numpy-cholesky-batched",
+          "factorizationCount": 1,
+          "rightHandSides": 2,
+          "minimumScaledPivot": 0.01167609813292514,
+          "observationNodes": 0,
+          "addedMass": 0,
+          "assumptions": [
+            "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+            "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+            "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+            "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+          ]
+        },
+        {
+          "selection": {
+            "kind": "combination",
+            "id": "REVERSE"
+          },
+          "method": "independent-direct-stiffness",
+          "theory": "Euler-Bernoulli",
+          "freeResidual": 9.511246643492657e-14,
+          "forceMomentBalance": [
+            -7.460698725481052e-14,
+            0.0,
+            0.0,
+            0.0,
+            -1.8807178037150152e-13,
+            0.0
+          ],
+          "dofs": 54,
+          "freeDofs": 21,
+          "factorization": "numpy-cholesky-batched",
+          "factorizationCount": 1,
+          "rightHandSides": 2,
+          "minimumScaledPivot": 0.01167609813292514,
+          "observationNodes": 0,
+          "addedMass": 0,
+          "assumptions": [
+            "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+            "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+            "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+            "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+          ]
+        }
+      ]
+    }
+  ],
+  "optimalSchemes": [],
+  "reportIds": []
+}

@@ -1,0 +1,190 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "C30",
+      "type": "concrete",
+      "E": 30000,
+      "G": 12500.0,
+      "nu": 0.2,
+      "rho": 2500
+    }
+  ],
+  "sections": [
+    {
+      "id": "Crect",
+      "name": "Crect",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 400.0,
+        "H": 700.0
+      },
+      "properties": {
+        "A": 0.27999999999999997,
+        "Iy": 0.01143333333333333,
+        "Iz": 0.0037333333333333337,
+        "J": 0.00960510009718173
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows the thin arrow on each drawn member from first to second end",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "Section detail sheets define the left rectangular strong bending direction in XZ and the right 90-degree roll. Right-column global-Y bending is local M3 after roll. Report the sign using the stated local basis."
+  ],
+  "planarConstraints": "All nodes restrain uy, rx, rz. In-plane ux, uz, ry restraints follow the support symbols; unmarked in-plane DOFs are free.",
+  "boundaryConditions": [
+    {
+      "node": "n0-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n1-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n2-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n0-1",
+      "restrainedDOFs": [
+        "uy",
+        "rx",
+        "rz"
+      ]
+    },
+    {
+      "node": "n1-1",
+      "restrainedDOFs": [
+        "uy",
+        "rx",
+        "rz"
+      ]
+    },
+    {
+      "node": "n2-1",
+      "restrainedDOFs": [
+        "uy",
+        "rx",
+        "rz"
+      ]
+    },
+    {
+      "node": "n0-2",
+      "restrainedDOFs": [
+        "uy",
+        "rx",
+        "rz"
+      ]
+    },
+    {
+      "node": "n1-2",
+      "restrainedDOFs": [
+        "uy",
+        "rx",
+        "rz"
+      ]
+    },
+    {
+      "node": "n2-2",
+      "restrainedDOFs": [
+        "uy",
+        "rx",
+        "rz"
+      ]
+    }
+  ]
+}

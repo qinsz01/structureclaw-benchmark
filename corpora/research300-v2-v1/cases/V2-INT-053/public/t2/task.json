@@ -1,0 +1,133 @@
+{
+  "caseId": "V2-INT-053",
+  "turnId": "t2",
+  "family": "INT",
+  "title": "指定工况自动自重与荷载保持",
+  "designLevel": "L2",
+  "engine": "OpenSees",
+  "analysis": "static",
+  "instruction": "仅将Q内的机械荷载增大20%，保留其他荷载、连接、支承、材料和截面。",
+  "requests": [
+    {
+      "id": "case:D:T:ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case:D:T:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case:D:A:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fx",
+      "unit": "kN"
+    },
+    {
+      "id": "case:D:A:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    },
+    {
+      "id": "combination:SERVICE:T:ux",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "combination:SERVICE:T:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "combination:SERVICE:A:Fx",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fx",
+      "unit": "kN"
+    },
+    {
+      "id": "combination:SERVICE:A:Fz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    }
+  ],
+  "derived": [],
+  "reportIds": [
+    "case:D:T:ux",
+    "case:D:T:uz",
+    "case:D:A:Fx",
+    "case:D:A:Fz",
+    "combination:SERVICE:T:ux",
+    "combination:SERVICE:T:uz",
+    "combination:SERVICE:A:Fx",
+    "combination:SERVICE:A:Fz"
+  ],
+  "requireShapes": false,
+  "sourceId": null,
+  "interactionRule": "Apply only this issued change order to the last confirmed state; retain all other prior inputs. Initial restores refer to t1.",
+  "attachments": [
+    "change-order.json"
+  ]
+}

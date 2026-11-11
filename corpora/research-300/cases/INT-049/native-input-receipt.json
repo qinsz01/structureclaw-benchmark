@@ -1,0 +1,785 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-049",
+  "inputHashes": {
+    "contract.json": "ab5245472166403a23c67d6b97759729fda652bb775c8f8d082556d657412ade",
+    "reference-requests.json": "318c568b04c1f38c9301f2afacefe5cdff44984efc161395cb23e2d9e7149ee4",
+    "model-state-1.json": "264c1454856d92bb52cb5fe0249a376e726e4286a9f9a78525fee6eec460bc6a",
+    "model-state-2.json": "1addc54bcfcd15d09262e003ba5a3465632ffc457869f21175f951afed6c1c60",
+    "model-state-3.json": "4e8d1c4bd2ee0d6a0bec59b03ff40eed216d5cf4e943b2e0132baae485fde48a"
+  },
+  "sourceHash": "ec4bcbe5915ede231cbc2392f2c11a8a157f119e1d2f91332d8332e29cf49718",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "ab5245472166403a23c67d6b97759729fda652bb775c8f8d082556d657412ade"
+      },
+      {
+        "path": "input.txt",
+        "sha256": "38cf998fd23e008e5c2d0671086ada9262a08c3d87f020552683d3e781d3379c"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "264c1454856d92bb52cb5fe0249a376e726e4286a9f9a78525fee6eec460bc6a"
+      },
+      {
+        "path": "model-state-2.json",
+        "sha256": "1addc54bcfcd15d09262e003ba5a3465632ffc457869f21175f951afed6c1c60"
+      },
+      {
+        "path": "model-state-3.json",
+        "sha256": "4e8d1c4bd2ee0d6a0bec59b03ff40eed216d5cf4e943b2e0132baae485fde48a"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "d0fddfa3479d4a532afd99817146864198244cfe56083cb828d464a94c55afc3"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "318c568b04c1f38c9301f2afacefe5cdff44984efc161395cb23e2d9e7149ee4"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 24,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "L",
+            "x": 0,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "R",
+            "x": 24,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "K",
+            "x": 10,
+            "y": 0,
+            "z": 8,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "cL",
+            "type": "column",
+            "nodes": [
+              "A",
+              "L"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "cR",
+            "type": "column",
+            "nodes": [
+              "B",
+              "R"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "slopeL",
+            "type": "beam",
+            "nodes": [
+              "L",
+              "K"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "slopeR",
+            "type": "beam",
+            "nodes": [
+              "K",
+              "R"
+            ],
+            "material": "M1",
+            "section": "B2"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "general",
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.007559999999999997,
+              "Iz": 0.0018899999999999993,
+              "J": 0.0037078593749999985
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "q-slopeL",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "slopeL",
+                "wz": -4
+              },
+              {
+                "id": "q-slopeR",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "slopeR",
+                "wz": -6
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "cL": [
+              -6,
+              0,
+              0
+            ],
+            "cR": [
+              -6,
+              0,
+              0
+            ],
+            "slopeL": [
+              -2,
+              0,
+              10
+            ],
+            "slopeR": [
+              2,
+              0,
+              14
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    },
+    {
+      "state": 2,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 24,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "L",
+            "x": 0,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "R",
+            "x": 24,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "K",
+            "x": 11,
+            "y": 0,
+            "z": 8,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "cL",
+            "type": "column",
+            "nodes": [
+              "A",
+              "L"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "cR",
+            "type": "column",
+            "nodes": [
+              "B",
+              "R"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "slopeL",
+            "type": "beam",
+            "nodes": [
+              "L",
+              "K"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "slopeR",
+            "type": "beam",
+            "nodes": [
+              "K",
+              "R"
+            ],
+            "material": "M1",
+            "section": "B2"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "general",
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.007559999999999997,
+              "Iz": 0.0018899999999999993,
+              "J": 0.0037078593749999985
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "q-slopeL",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "slopeL",
+                "wz": -4
+              },
+              {
+                "id": "q-slopeR",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "slopeR",
+                "wz": -6
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "cL": [
+              -6,
+              0,
+              0
+            ],
+            "cR": [
+              -6,
+              0,
+              0
+            ],
+            "slopeL": [
+              -2,
+              0,
+              11
+            ],
+            "slopeR": [
+              2,
+              0,
+              13
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-2.json"
+    },
+    {
+      "state": 3,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 24,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "L",
+            "x": 0,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "R",
+            "x": 24,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "K",
+            "x": 11,
+            "y": 0,
+            "z": 8,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "cL",
+            "type": "column",
+            "nodes": [
+              "A",
+              "L"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "cR",
+            "type": "column",
+            "nodes": [
+              "B",
+              "R"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "slopeL",
+            "type": "beam",
+            "nodes": [
+              "L",
+              "K"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "slopeR",
+            "type": "beam",
+            "nodes": [
+              "K",
+              "R"
+            ],
+            "material": "M1",
+            "section": "B2"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          },
+          {
+            "id": "B2",
+            "name": "B2",
+            "type": "general",
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.007559999999999997,
+              "Iz": 0.0018899999999999993,
+              "J": 0.0037078593749999985
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "q-slopeL",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "slopeL",
+                "wz": -4
+              },
+              {
+                "id": "q-slopeR",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "slopeR",
+                "wz": -7
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "cL": [
+              -6,
+              0,
+              0
+            ],
+            "cR": [
+              -6,
+              0,
+              0
+            ],
+            "slopeL": [
+              -2,
+              0,
+              11
+            ],
+            "slopeR": [
+              2,
+              0,
+              13
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-3.json"
+    }
+  ]
+}

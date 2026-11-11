@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-100",
+  "inputHashes": {
+    "contract.json": "0b2097a98885104aceee2d31149c48f46c358b5c1d495fb97012445868b891a2",
+    "reference-requests.json": "cb5d3faf47fe56513686e531c4cb285589d98e2f0b95e9261eab22724d69adba",
+    "model-state-1.json": "33f62280688532871c4a8f58ecf1a690e8417c2288d630cd342f2b994f22f8e5"
+  },
+  "sourceHash": "3d6dbfa13090da088db10b76b0daf59a7b872f7cb8fbc7e64214f3cb13315e4a",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions.txt",
+        "sha256": "b94b666f7d23ced7bfdaee28636f02bd297cc602d942a69cd6734c8713f30704"
+      },
+      {
+        "path": "appendix-decisions.txt",
+        "sha256": "7cdf1928f8f472b75908b985187d604cd10b297e4dc7888bc19392769fb00a39"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "0b2097a98885104aceee2d31149c48f46c358b5c1d495fb97012445868b891a2"
+      },
+      {
+        "path": "input-data.json",
+        "sha256": "b18741396bb7a67202c7993f4e74af95d7c214463738081e9e37b0ed54259bf0"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "33f62280688532871c4a8f58ecf1a690e8417c2288d630cd342f2b994f22f8e5"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "e216f9e1a6a93fe4b5c0d09e23c0cee472db125de8b3a22540244c263d57dd36"
+      },
+      {
+        "path": "output-scope.json",
+        "sha256": "a7d77f02be46f1a9e8233c73598e0fd95044caa1ddaa5af28218e7a4671112b5"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "80d5122a7a23a9757d457cc969899dcd254e1463d77a6a36ecaa909104f746b7"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "cb5d3faf47fe56513686e531c4cb285589d98e2f0b95e9261eab22724d69adba"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "3d",
+          "plane": null,
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "base",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "top",
+            "x": 0,
+            "y": 0,
+            "z": 5,
+            "restraints": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "id": "tip",
+            "x": 1,
+            "y": 0,
+            "z": 5,
+            "restraints": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "column",
+            "type": "column",
+            "nodes": [
+              "base",
+              "top"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "arm",
+            "type": "beam",
+            "nodes": [
+              "top",
+              "tip"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 400.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.2,
+              "Iy": 0.004166666666666667,
+              "Iz": 0.0026666666666666674,
+              "J": 0.005474167466666667
+            }
+          },
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 250.0,
+              "H": 400.0
+            },
+            "properties": {
+              "A": 0.1,
+              "Iy": 0.0013333333333333337,
+              "Iz": 0.0005208333333333333,
+              "J": 0.0012734516461690268
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "tip",
+                "fy": 10,
+                "fz": -200
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "column": [
+              1,
+              0,
+              0
+            ],
+            "arm": [
+              0,
+              0,
+              1
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

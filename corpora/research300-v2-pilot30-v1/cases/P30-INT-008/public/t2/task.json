@@ -1,0 +1,40 @@
+{
+  "caseId": "P30-INT-008",
+  "turnId": "t2",
+  "engine": "OpenSees",
+  "analysis": "transient",
+  "instruction": "确认激励单位为g。采用给定记录、步长与阻尼，执行线弹性时程。该记录是显式编制的验证激励，不是真实地震记录。",
+  "requests": [
+    {
+      "id": "F2-ux-at-0.4s",
+      "path": [
+        "timeHistory",
+        19,
+        "nodes",
+        "F2",
+        "ux"
+      ],
+      "unit": "m"
+    },
+    {
+      "id": "F2-signed-peak-ux",
+      "path": [
+        "timeHistory",
+        "*",
+        "nodes",
+        "F2",
+        "ux"
+      ],
+      "operation": "max_abs",
+      "unit": "m"
+    }
+  ],
+  "reportIds": [
+    "F2-ux-at-0.4s",
+    "F2-signed-peak-ux"
+  ],
+  "constraint": null,
+  "schemeSelections": null,
+  "requireShapes": false,
+  "sourceId": null
+}

@@ -1,0 +1,516 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "dimension": "2d",
+      "plane": "xz",
+      "semantics": "global-z-up",
+      "version": 1,
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "L0",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "U0",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 2.4,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "L1",
+        "x": 3.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "U1",
+        "x": 3.0,
+        "y": 0.0,
+        "z": 2.4,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "L2",
+        "x": 6.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "U2",
+        "x": 6.0,
+        "y": 0.0,
+        "z": 2.4,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          true,
+          true
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "V0",
+        "type": "truss",
+        "nodes": [
+          "L0",
+          "U0"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "V1",
+        "type": "truss",
+        "nodes": [
+          "L1",
+          "U1"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "V2",
+        "type": "truss",
+        "nodes": [
+          "L2",
+          "U2"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "LC0",
+        "type": "truss",
+        "nodes": [
+          "L0",
+          "L1"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "UC0",
+        "type": "truss",
+        "nodes": [
+          "U0",
+          "U1"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "D0",
+        "type": "truss",
+        "nodes": [
+          "L0",
+          "U1"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "LC1",
+        "type": "truss",
+        "nodes": [
+          "L1",
+          "L2"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "UC1",
+        "type": "truss",
+        "nodes": [
+          "U1",
+          "U2"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "D1",
+        "type": "truss",
+        "nodes": [
+          "L1",
+          "U2"
+        ],
+        "material": "S",
+        "section": "A"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "B",
+        "name": "B",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 160.0,
+          "H": 280.0
+        },
+        "properties": {
+          "A": 0.044800000000000006,
+          "Iy": 0.00029269333333333344,
+          "Iz": 9.557333333333336e-05,
+          "J": 0.0002458905624878523
+        }
+      },
+      {
+        "id": "C",
+        "name": "C",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 220.0,
+          "H": 360.0
+        },
+        "properties": {
+          "A": 0.07919999999999999,
+          "Iy": 0.0008553599999999999,
+          "Iz": 0.00031944,
+          "J": 0.0007915399436937966
+        }
+      },
+      {
+        "id": "A",
+        "name": "A",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 60.0,
+          "H": 80.0
+        },
+        "properties": {
+          "A": 0.0048,
+          "Iy": 2.5600000000000005e-06,
+          "Iz": 1.4399999999999998e-06,
+          "J": 3.1101609374999997e-06
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "id": "D-1",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "U0",
+            "fz": -7.199999999999999
+          },
+          {
+            "id": "D-2",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "U1",
+            "fz": -14.399999999999999
+          },
+          {
+            "id": "D-3",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "U2",
+            "fz": -7.199999999999999
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "id": "Q-1",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "U1",
+            "fz": -8.0
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "id": "W-1",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "U2",
+            "fx": 8.0
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "SERVICE",
+        "factors": {
+          "D": 1.0,
+          "Q": 1.0
+        }
+      },
+      {
+        "id": "REVERSE",
+        "factors": {
+          "D": 1.0,
+          "W": -1.0
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    },
+    "metadata": {}
+  },
+  "kind": "static",
+  "engine": "OpenSees",
+  "derived": [],
+  "requests": [
+    {
+      "id": "case:D:U2:ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "U2"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": 2.0970873786407772e-05
+    },
+    {
+      "id": "case:D:U1:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "U1"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.00013203133627465784
+    },
+    {
+      "id": "case:D:L0:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "L0"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -1.7763568394002505e-15
+    },
+    {
+      "id": "case:D:L0:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "L0"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 14.399999999999999
+    },
+    {
+      "id": "case:D:U2:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "U2"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -3.4951456310679615e-05
+    },
+    {
+      "id": "case:D:V0:N",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "V0",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -7.199999999999999
+    },
+    {
+      "id": "case:D:V1:N",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "V1",
+        "positionM": 0.0,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": -7.200000000000003
+    }
+  ],
+  "clarificationFields": [],
+  "referenceChecks": [
+    {
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 7.105427357601002e-15,
+      "forceMomentBalance": [
+        1.335157259832815e-15,
+        0.0,
+        -1.4210854715202004e-14,
+        0.0,
+        5.684341886080802e-14,
+        0.0
+      ],
+      "dofs": 36,
+      "freeDofs": 9,
+      "factorization": "numpy-cholesky-batched",
+      "factorizationCount": 1,
+      "rightHandSides": 1,
+      "minimumScaledPivot": 0.2650476350133486,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ]
+    }
+  ],
+  "reportIds": [
+    "case:D:U2:ux",
+    "case:D:U1:uz",
+    "case:D:L0:Fx",
+    "case:D:L0:Fz",
+    "case:D:U2:uz",
+    "case:D:V0:N",
+    "case:D:V1:N"
+  ]
+}

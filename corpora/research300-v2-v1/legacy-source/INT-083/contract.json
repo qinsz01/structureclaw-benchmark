@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "INT-083",
+  "modelId": "M-INT-083",
+  "family": "interactive_robustness",
+  "language": "中文",
+  "locale": "zh",
+  "plannedEngine": "PKPM",
+  "sourcePlan": {
+    "task.inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-083（角柱矩形截面的空间混凝土框架）。T1给M-INT-083完整空间几何，却同时要求2D平面与3D空间；T2确认采用3D。",
+    "task.modelingFocus": "梁柱属性与空间楼面荷载；截面分组的独立状态保持",
+    "task.expectedOutput": "最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "不做两个未要求模型或忽略Y向；C30梁柱属性及各层12kN/m²保持；面载只传X梁，Y梁不重复加载；角柱矩形强弱向保持，采用3D后不得转成等效正方形。",
+    "task.prerequisite": "按本题拟定 PKPM 独立重算并核验；空间局部轴需验证；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "空间框架；X向6+6m、Y向5m",
+    "model.boundaryKey": "所有柱脚六自由度固定",
+    "model.loadKey": "X向6+6m、Y向5m，两层3.6m，C30，各层12kN/m²；楼面面载单向传给X梁，受荷宽度为相邻Y半跨之和；Y梁不重复承接面载；不设默认刚性楼板；关闭自重。",
+    "model.propertyKey": "仅x=0,y=0角柱各层用400×700mm矩形截面、强轴定义显式；其他柱500×500mm",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 楼面面载仅按相邻Y半跨受荷宽度传给X梁，Y梁不重复加载；保留三维六自由度/轴力单元各自约束和题定局部轴；各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "软件指定题，必须实际调用PKPM完成每个可计算模型状态并取得当次结果；禁止用OpenSees结果冒充。仅显示设置/启动窗口不算完成；纯查询或单位变更可复用与未变模型一致的已验证结果。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右且Y最大梁柱节点Ux/Uz/Uy及最左首层柱底My/Rz。 保存PKPM原生工程及可复查模型导出/参数检查记录；模型改变后的新run须绑定更新后的工程，截屏只作辅助。",
+    "engine.adapterGap": "须验证单角柱矩形截面的局部轴及完整A/I/J保持；现楼面载映射不能直接保证仅X梁承载；现接口对关闭自重、无刚性楼板及完整弹性/截面属性的逐字段映射未证明，须显式设置并核验，禁止静默采用软件默认。PKPM现结果接口缺节点反力；本题Rz要求保留，须补原生反力结果读取路径并独立校核，不能删除目标项或用OpenSees反力冒充。",
+    "engine.truthPlan": "每个可计算轮次由独立复核者在PKPM创建参考模型并保存状态；模型改变后独立新算，纯结果查询沿用有效状态；核对力/矩平衡及适用解析结果，可用同假设OpenSees交叉校核；差异先追溯荷载分配/支座/轴向/楼板设置，不直接强求跨软件逐值相等。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-t1.json",
+    "analysis-conventions-v2.txt"
+  ],
+  "turns": [
+    {
+      "instruction": "附件给出C30混凝土框架完整三轴几何，两层各3.6m、每层面载12kN/m²。我同时要求按2D平面模型和3D空间模型分析，请先澄清应采用的唯一维度，再用PKPM完成。x=0,y=0角柱各层400×700mm，其余柱500×500mm。\n每个可计算的新状态使用题定PKPM引擎进行一阶线弹性分析；自重、P-delta、刚性楼板、刚域及施工阶段关闭。未明确更改的字段保持。每个数值附节点或构件、全局方向、单位、工况或组合、轮次、模型状态与可追溯运行ID。Rz表示竖向支反力Fz。保留原工况并分别计算所有明示组合。关键缺项或矛盾解决前不得编造新数值。",
+      "state": null,
+      "expectation": "clarify",
+      "attachments": [
+        "input-t1.json",
+        "analysis-conventions-v2.txt"
+      ],
+      "unresolvedFields": [
+        "/analysis/dimension"
+      ],
+      "expectedQuestions": [
+        "本题应采用2D平面还是3D空间分析？"
+      ],
+      "id": "t1",
+      "requiredOutputIds": [
+        "t1-interaction"
+      ],
+      "requiredQuantityIds": []
+    },
+    {
+      "instruction": "确认采用唯一的3D空间模型。保留完整Y向构件、C30记录、角柱矩形强弱轴、各层12kN/m²与仅X梁受荷规则，使用PKPM计算并报告指定结果。",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "id": "t2",
+      "requiredOutputIds": [
+        "s1--case-D--n2-1-2--ux",
+        "s1--case-D--n2-1-2--uz",
+        "s1--case-D--n2-1-2--uy",
+        "s1--case-D--n0-0-0--My",
+        "s1--case-D--n0-0-0--Fz",
+        "t2-interaction"
+      ],
+      "requiredQuantityIds": [
+        "case-D--n2-1-2--ux",
+        "case-D--n2-1-2--uz",
+        "case-D--n2-1-2--uy",
+        "case-D--n0-0-0--My",
+        "case-D--n0-0-0--Fz"
+      ]
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "s1--case-D--n2-1-2--ux",
+      "description": "case D: n2-1-2 ux [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n2-1-2--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n2-1-2--uz",
+      "description": "case D: n2-1-2 uz [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n2-1-2--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n2-1-2--uy",
+      "description": "case D: n2-1-2 uy [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n2-1-2--uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n0-0-0--My",
+      "description": "case D: n0-0-0 My [kN.m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n0-0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n0-0-0--Fz",
+      "description": "case D: n0-0-0 Fz [kN]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n0-0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "t1-interaction",
+      "description": "附件给出C30混凝土框架完整三轴几何，两层各3.6m、每层面载12kN/m²。我同时要求按2D平面模型和3D空间模型分析，请先澄清应采用的唯一维度，再用PKPM完成。x=0,y=0角柱各层400×700mm，其余柱500×500mm。\n每个可计算的新状态使用题定PKPM引擎进行一阶线弹性分析；自重、P-delta、刚性楼板、刚域及施工阶段关闭。未明确更改的字段保持。每个数值附节点或构件、全局方向、单位、工况或组合、轮次、模型状态与可追溯运行ID。Rz表示竖向支反力Fz。保留原工况并分别计算所有明示组合。关键缺项或矛盾解决前不得编造新数值。",
+      "state": null,
+      "quantityIds": [],
+      "kind": "interaction"
+    },
+    {
+      "id": "t2-interaction",
+      "description": "确认采用唯一的3D空间模型。保留完整Y向构件、C30记录、角柱矩形强弱轴、各层12kN/m²与仅X梁受荷规则，使用PKPM计算并报告指定结果。",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "interaction"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        5,
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7,
+        8,
+        9
+      ],
+      "targets": [
+        "output:s1--case-D--n2-1-2--ux",
+        "output:s1--case-D--n2-1-2--uz",
+        "output:s1--case-D--n2-1-2--uy",
+        "output:s1--case-D--n0-0-0--My",
+        "output:s1--case-D--n0-0-0--Fz",
+        "output:t1-interaction",
+        "output:t2-interaction",
+        "gate:report-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        14,
+        15,
+        16
+      ],
+      "targets": [
+        "gate:adapter-capability-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        17,
+        18
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        19
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        25,
+        26
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review",
+        "attachment:analysis-conventions-v2.txt"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        36,
+        37,
+        38,
+        39
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "targets": [
+        "gate:native-execution",
+        "gate:state-preservation",
+        "gate:report-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        47,
+        48,
+        49,
+        50,
+        51
+      ],
+      "targets": [
+        "gate:adapter-capability-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        52,
+        53,
+        54,
+        55
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending",
+      "description": "Execute the named engine independently for each changed computable state and each selection; retain software version, settings, native input, run ID, successful log and raw result mapping."
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending",
+      "description": "Generate and independently review same-engine reference values; check equilibrium, signs, units and stiffness without importing the SUT path."
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending",
+      "description": "Independently reconstruct each turn from only its released public input and verify original source requirements."
+    },
+    {
+      "id": "state-preservation",
+      "status": "pending",
+      "description": "Verify target field changes, all non-target fields, undo equivalence and query-only state identity."
+    },
+    {
+      "id": "adapter-capability-review",
+      "status": "pending",
+      "description": "Exercise this case topology, loads, coordinates and selected engine; support in principle is not evidence of adapter acceptance."
+    },
+    {
+      "id": "report-completeness",
+      "status": "pending",
+      "description": "Check signed quantities in the report body, locations, directions, units, selections and current turn against structured artifacts."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "analysisConvention": {
+    "id": "commercial-linear-static-v2",
+    "bendingTheory": "Timoshenko",
+    "effectiveShearAreas": {
+      "localY": "5*A/6",
+      "localZ": "5*A/6"
+    },
+    "publicAttachment": "analysis-conventions-v2.txt"
+  }
+}

@@ -1,0 +1,224 @@
+Input tables. X horizontal, Z upward; Y completes the right-handed system. Section shape dimensions B,H are mm; listed section properties are authoritative. Coordinates m; nodal forces kN; nodal moments kN*m; line loads kN/m; E,G MPa; A m2; Iy,Iz,J m4; density kg/m3. Restraints ordered ux,uy,uz,rx,ry,rz; true=fixed. Member local x follows the ordered end nodes. For planar XZ members local y is global +Y and local z=x cross y; bending about local y uses Iy. For spatial members the explicit reference vector defines local z by its projection normal to local x, local y=z cross x. Linear elastic first-order static analysis, self-weight OFF, no automatic loads/combinations, diaphragm, rigid offsets or P-delta. Distributed load intervals are measured in m along the actual member unless this turn explicitly leaves that basis unresolved. All omitted load components are zero. Beam-column joints are rigid unless explicitly restrained; truss elements are axial-only. Truss rotational restraints eliminate inactive bookkeeping DOFs and do not add rotational stiffness. Use OpenSees for every calculable state; rerun after a physical edit, and reuse a result for a pure query only when its state is unchanged. Retain solver version/settings, run ID, successful log, model snapshot and raw result mapping.
+Section shape dimensions B and H are in mm; all section properties use the explicit SI units stated above. Use OpenSees. Report signed values with node/location, global direction, unit, load case and current turn. Rz means the support reaction in global +Z; fixed-end My means support reaction moment about global +Y by the right-hand rule. Each change to a physical model requires a fresh run. Save input, model snapshot, version/settings, run ID, successful log and result mapping. Reuse results for a query only when traceable to the same unchanged state. Do not produce numerical answers while essential input is unresolved. Do not introduce releases, extra supports, masses, rigid zones, automatic combinations or additional loads. Connected internal nodes have no added translational support. Only explicit later edits change this input.
+A 12 m beam lies on global X. One support note says both ends fixed. A conflicting note says a pin at x=0 and a vertical roller at x=12 m. Both notes are unresolved; neither takes precedence. Case D has a downward 15 kN/m load only from x=0 to 9 m and a separate downward 50 kN point force at x=4 m. The displacement observation point is x=6 m.
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "n0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": "Unresolved: both-fixed note conflicts with pin/vertical-roller note."
+    },
+    {
+      "id": "n1",
+      "x": 4,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n2",
+      "x": 6,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n3",
+      "x": 9,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n4",
+      "x": 12,
+      "y": 0,
+      "z": 0,
+      "restraints": "Unresolved: both-fixed note conflicts with pin/vertical-roller note."
+    }
+  ],
+  "elements": [
+    {
+      "id": "b1",
+      "type": "beam",
+      "nodes": [
+        "n0",
+        "n1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b2",
+      "type": "beam",
+      "nodes": [
+        "n1",
+        "n2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b3",
+      "type": "beam",
+      "nodes": [
+        "n2",
+        "n3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b4",
+      "type": "beam",
+      "nodes": [
+        "n3",
+        "n4"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "partial-b1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b1",
+          "start": 0,
+          "end": 4,
+          "wz": -15
+        },
+        {
+          "id": "partial-b2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b2",
+          "start": 0,
+          "end": 2,
+          "wz": -15
+        },
+        {
+          "id": "partial-b3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b3",
+          "start": 0,
+          "end": 3,
+          "wz": -15
+        },
+        {
+          "id": "eccentric-point",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "n1",
+          "fz": -50
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "b1": [
+        0,
+        0,
+        4
+      ],
+      "b2": [
+        0,
+        0,
+        2
+      ],
+      "b3": [
+        0,
+        0,
+        3
+      ],
+      "b4": [
+        0,
+        0,
+        3
+      ]
+    }
+  }
+}

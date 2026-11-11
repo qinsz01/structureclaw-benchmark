@@ -1,0 +1,71 @@
+{
+  "caseId": "P30-INT-004",
+  "turnId": "t3",
+  "engine": "OpenSees",
+  "analysis": "static",
+  "instruction": "Build the two-storey one-bay frame in the attachment. Left columns are 500x350 mm, right columns 350x500 mm, with the explicit section axes. Preserve the downward 10 kN/m beam loads and the roof-right +X 20 kN force plus global +Y 12 kN.m moment. Report global Ux and Uz at the highest-storey rightmost beam-column joint, and global support My and Rz (=Fz) at the leftmost ground-level column base for every original load case and every listed combination, with signs and units.\nUse the stated OpenSees engine for every computable changed state. First-order linear elastic analysis; self-weight, P-delta, rigid diaphragms, rigid offsets and construction stages are off. Preserve all fields not explicitly changed. Report every requested signed value with node/member, global direction, unit, case/combination, turn, model state and traceable . Rz denotes the vertical support reaction Fz. Retain original cases and evaluate every listed combination separately. Resolve essential missing or contradictory inputs before reporting new numerical results.\n\n交付方式以delivery.md为准。",
+  "requests": [
+    {
+      "id": "case-D--n1-2--ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n1-2"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case-D--n1-2--uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n1-2"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case-D--n0-0--My",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n0-0"
+      },
+      "component": "My",
+      "unit": "kN.m"
+    },
+    {
+      "id": "case-D--n0-0--Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n0-0"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    }
+  ],
+  "reportIds": [
+    "case-D--n0-0--Fz",
+    "case-D--n0-0--My",
+    "case-D--n1-2--ux",
+    "case-D--n1-2--uz"
+  ],
+  "derived": [],
+  "attachments": [
+    "input.md"
+  ]
+}

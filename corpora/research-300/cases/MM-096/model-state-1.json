@@ -1,0 +1,138 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "base",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "lateral-support",
+      "x": 0,
+      "y": 0,
+      "z": 2.1,
+      "restraints": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "top",
+      "x": 0,
+      "y": 0,
+      "z": 4.2,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "lower",
+      "type": "column",
+      "nodes": [
+        "base",
+        "lateral-support"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "upper",
+      "type": "column",
+      "nodes": [
+        "lateral-support",
+        "top"
+      ],
+      "material": "M1",
+      "section": "C1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "C30",
+      "type": "concrete",
+      "E": 30000,
+      "G": 12500,
+      "nu": 0.2,
+      "rho": 2500
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 450.0,
+        "H": 450.0
+      },
+      "properties": {
+        "A": 0.2025,
+        "Iy": 0.0034171875000000005,
+        "Iz": 0.0034171875000000005,
+        "J": 0.005775046875000001
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-top",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "top",
+          "fz": -600,
+          "fx": 30
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {}
+}

@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-022",
+  "modelId": "M-STD-022",
+  "family": "standard_workflow",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "支座x=0、5、10m，梁到x=12m，全长8kN/m，外伸端10kN；完整属性按公共契约随题给出。 x=10m为支座而不是梁端，最后2m外伸段保留，端力作用x=12m。",
+    "task.modelingFocus": "连续跨、外伸段与端力同时定位",
+    "task.expectedOutput": "三支反力、两支承跨中及外伸端位移、x=10m截面弯矩。",
+    "task.gradingFocus": "连续跨、外伸段与端力同时定位；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "两跨连续梁加右侧外伸段",
+    "model.boundaryKey": "左铰中部与外伸根部竖向滚支",
+    "model.loadKey": "全长均布竖载加外伸自由端点载",
+    "model.propertyKey": "均匀单材料单截面",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。 荷载与观测位置可合理分段，但不改变支承/连续条件；跨内响应须含荷载项。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "支座之后外伸段连续建模、端部集中力及指定截面输出须验收。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立分段梁刚度法；外伸段截面平衡可手算检查，再验整体相容。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "geometry.json",
+    "properties.json",
+    "loads.json",
+    "output-requests.json"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Analyze a continuous beam in the global X-Z plane using OpenSees. Supports are at x=0, 5 and 10 m; the beam continues to the free tip at x=12 m. The left support is a pin and the other two are bilateral vertical rollers. All support rotations about Y remain free; all beam joints are continuous. Use material M1 and section B1 throughout, exactly as supplied in the public attachments. Load case D has 8 kN/m downward (global -Z) over the entire 12 m, including the overhang, and a separate 10 kN downward nodal force at the free tip x=12 m. Perform first-order linear static Euler-Bernoulli analysis with self-weight disabled. Report D: all three vertical support reactions and all horizontal support reactions; signed uz at the two supported-span midpoints x=2.5 and 7.5 m and at the free tip; and signed local M2 at the x=10 m support section on both sides. Identify locations, selection and units in the narrative and structured results.\n\nUse the complete attached input tables. Global XYZ is right handed with Z upward; any planar model uses the XZ plane. All nodes listed are connected physical joints. Member local x points from i to j. In 2D local y=global +Y and local z=x cross y. In 3D local y=normalize(reference cross x), local z=x cross y; reference vectors are explicit. N is positive in tension. Signed section N/T/M2/M3 equal minus the i-end resisting action at the start and plus the j-end action at the end; V2/V3 use plus i-end and minus j-end action. Report global nodal displacements and support reactions; rotations follow the right-hand rule. Distributed loads act per actual member length, including inclined members. Use first-order linear elasticity with self-weight, rigid floors, rigid offsets, P-delta and construction stages off. Use only the specified cases and combinations. Compute every request in output-requests.json, retaining its location, side, signed component, unit and case/combination. Interior forces must include applied-load terms. Execute OpenSees and retain version, runnable input, current-model hash, run ID, actual solver log and raw result/case mapping. Report the requested results in the response body as well as structured results; independently check equilibrium. No numerical answer or native execution evidence is supplied.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "geometry.json",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "output-001",
+      "description": "Report case:D:node:S0:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:S0:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-002",
+      "description": "Report case:D:node:S1:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:S1:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-003",
+      "description": "Report case:D:node:S2:Fz in kN",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:S2:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-004",
+      "description": "Report case:D:node:S0:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:S0:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-005",
+      "description": "Report case:D:node:S1:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:S1:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-006",
+      "description": "Report case:D:node:S2:Fx in kN",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:S2:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-007",
+      "description": "Report case:D:node:P1:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:P1:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-008",
+      "description": "Report case:D:node:P2:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:P2:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-009",
+      "description": "Report case:D:node:TIP:uz in m",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:TIP:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-010",
+      "description": "Report case:D:member:B2b:M2@2.5:left in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "case:D:member:B2b:M2@2.5:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-011",
+      "description": "Report case:D:member:OH:M2@0:right in kN.m",
+      "state": 1,
+      "quantityIds": [
+        "case:D:member:OH:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "geometry.json",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "turns:t1",
+        "geometry.json",
+        "loads.json",
+        "properties.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        5
+      ],
+      "targets": [
+        "geometry.json",
+        "loads.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "output-requests.json",
+        "requiredOutputs:output-001",
+        "requiredOutputs:output-002",
+        "requiredOutputs:output-003",
+        "requiredOutputs:output-004",
+        "requiredOutputs:output-005",
+        "requiredOutputs:output-006",
+        "requiredOutputs:output-007",
+        "requiredOutputs:output-008",
+        "requiredOutputs:output-009",
+        "requiredOutputs:output-010",
+        "requiredOutputs:output-011"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        7,
+        8
+      ],
+      "targets": [
+        "output-requests.json",
+        "gate:all-requested-output-scoring",
+        "gate:report-body-consistency"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        9,
+        10
+      ],
+      "targets": [
+        "properties.json",
+        "gate:input-blind-review",
+        "gate:adapter-capability-acceptance"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        11
+      ],
+      "targets": [
+        "geometry.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        12
+      ],
+      "targets": [
+        "geometry.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        13
+      ],
+      "targets": [
+        "loads.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        14
+      ],
+      "targets": [
+        "properties.json",
+        "geometry.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "targets": [
+        "turns:t1",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        22,
+        23
+      ],
+      "targets": [
+        "turns:t1",
+        "gate:native-execution-every-selection"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        24
+      ],
+      "targets": [
+        "turns:t1",
+        "gate:native-execution-every-selection",
+        "gate:independent-same-engine-truth"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        25,
+        26,
+        27
+      ],
+      "targets": [
+        "gate:adapter-capability-acceptance"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "targets": [
+        "reference-requests.json",
+        "gate:independent-same-engine-truth",
+        "gate:all-requested-output-scoring"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "physical-model-review",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "native-execution-every-selection",
+      "status": "pending"
+    },
+    {
+      "id": "independent-same-engine-truth",
+      "status": "pending"
+    },
+    {
+      "id": "all-requested-output-scoring",
+      "status": "pending"
+    },
+    {
+      "id": "report-body-consistency",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-capability-acceptance",
+      "status": "pending"
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run"
+}

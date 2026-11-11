@@ -1,0 +1,1197 @@
+{
+  "stories": [
+    {
+      "id": "s1",
+      "elevation": 0,
+      "height": 3.3,
+      "rigid_diaphragm": false
+    },
+    {
+      "id": "s2",
+      "elevation": 3.3,
+      "height": 3.3,
+      "rigid_diaphragm": false
+    },
+    {
+      "id": "s3",
+      "elevation": 6.6,
+      "height": 3.3000000000000007,
+      "rigid_diaphragm": false
+    }
+  ],
+  "units": {
+    "coordinates": "m",
+    "member_length": "m",
+    "E": "MPa",
+    "G": "MPa",
+    "rho": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "shape": "mm",
+    "force": "kN",
+    "moment": "kN.m",
+    "line_load": "kN/m of actual member length",
+    "rotation_angle": "degree",
+    "displacement": "m"
+  },
+  "axisDefinitions": {
+    "globalAxes": "Right-handed XYZ; Z upward.",
+    "planarAxes": "XZ plane: local x = i to j, local y = global +Y, local z = x cross y.",
+    "spatialAxes": "local x = i to j; y = normalize(reference cross x); z = x cross y; reference vectors are explicit per member.",
+    "sectionRoll": "y_new=cos(theta)*y+sin(theta)*z; z_new=-sin(theta)*y+cos(theta)*z; theta in degrees.",
+    "reactionNaming": "Rz in the task means vertical support force Fz, not nodal rotation rz."
+  },
+  "analysisMethod": "First-order linear elastic Timoshenko beam/column and axial-only truss analysis.",
+  "loadTransfer": "楼面面载全局向下，仅按相邻Y半跨之和作为受荷宽度传给X梁；Y梁不承接该面载，不另以板面荷载重复施加，不设刚性楼板。",
+  "floorPressureUnit": "kN/m2",
+  "floorPressure": [
+    10,
+    10,
+    10
+  ],
+  "outputDefinition": "逐一报告全部明示工况及组合：最高层实际梁柱节点中先取X最大、再取Y最大的节点Ux、Uz、Uy；最底层先取X最小、再取Y最小的柱底全局支反力矩My及竖向反力Rz=Fz。采用带符号的m、kN.m、kN，标明节点、方向、工况或组合及当前轮次；外挑自由端不是梁柱节点。",
+  "executionEvidence": "各变更状态保存题定引擎的实际输入或原生工程、软件版本、有效设置、运行ID、成功日志以及原始结果到节点/构件/工况的映射；截屏或其他引擎结果不能替代执行证据。保留原始工况并单独执行明示组合。",
+  "verbalBayStatement": "X向两跨、Y向一跨。此文字与节点坐标表不一致，尚未确认优先项。",
+  "documentType": "Public engineering input tables",
+  "nodeTable": [
+    {
+      "id": "n0-0-0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "n0-1-0",
+      "x": 0,
+      "y": 5,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "n0-2-0",
+      "x": 0,
+      "y": 10,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "n1-0-0",
+      "x": 6,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "n1-1-0",
+      "x": 6,
+      "y": 5,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "n1-2-0",
+      "x": 6,
+      "y": 10,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "n0-0-1",
+      "x": 0,
+      "y": 0,
+      "z": 3.3,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n0-1-1",
+      "x": 0,
+      "y": 5,
+      "z": 3.3,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n0-2-1",
+      "x": 0,
+      "y": 10,
+      "z": 3.3,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-0-1",
+      "x": 6,
+      "y": 0,
+      "z": 3.3,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-1-1",
+      "x": 6,
+      "y": 5,
+      "z": 3.3,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-2-1",
+      "x": 6,
+      "y": 10,
+      "z": 3.3,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n0-0-2",
+      "x": 0,
+      "y": 0,
+      "z": 6.6,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n0-1-2",
+      "x": 0,
+      "y": 5,
+      "z": 6.6,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n0-2-2",
+      "x": 0,
+      "y": 10,
+      "z": 6.6,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-0-2",
+      "x": 6,
+      "y": 0,
+      "z": 6.6,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-1-2",
+      "x": 6,
+      "y": 5,
+      "z": 6.6,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-2-2",
+      "x": 6,
+      "y": 10,
+      "z": 6.6,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n0-0-3",
+      "x": 0,
+      "y": 0,
+      "z": 9.9,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n0-1-3",
+      "x": 0,
+      "y": 5,
+      "z": 9.9,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n0-2-3",
+      "x": 0,
+      "y": 10,
+      "z": 9.9,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-0-3",
+      "x": 6,
+      "y": 0,
+      "z": 9.9,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-1-3",
+      "x": 6,
+      "y": 5,
+      "z": 9.9,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "n1-2-3",
+      "x": 6,
+      "y": 10,
+      "z": 9.9,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "tip-0",
+      "x": 7.2,
+      "y": 0,
+      "z": 9.9,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "tip-2",
+      "x": 7.2,
+      "y": 10,
+      "z": 9.9,
+      "restraints": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  "memberTable": [
+    {
+      "id": "c0-0-1",
+      "type": "column",
+      "nodes": [
+        "n0-0-0",
+        "n0-0-1"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-0-1",
+      "type": "beam",
+      "nodes": [
+        "n0-0-1",
+        "n1-0-1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "y0-0-1",
+      "type": "beam",
+      "nodes": [
+        "n0-0-1",
+        "n0-1-1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c0-1-1",
+      "type": "column",
+      "nodes": [
+        "n0-1-0",
+        "n0-1-1"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-1-1",
+      "type": "beam",
+      "nodes": [
+        "n0-1-1",
+        "n1-1-1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "y0-1-1",
+      "type": "beam",
+      "nodes": [
+        "n0-1-1",
+        "n0-2-1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c0-2-1",
+      "type": "column",
+      "nodes": [
+        "n0-2-0",
+        "n0-2-1"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-2-1",
+      "type": "beam",
+      "nodes": [
+        "n0-2-1",
+        "n1-2-1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-0-1",
+      "type": "column",
+      "nodes": [
+        "n1-0-0",
+        "n1-0-1"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "y1-0-1",
+      "type": "beam",
+      "nodes": [
+        "n1-0-1",
+        "n1-1-1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-1-1",
+      "type": "column",
+      "nodes": [
+        "n1-1-0",
+        "n1-1-1"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "y1-1-1",
+      "type": "beam",
+      "nodes": [
+        "n1-1-1",
+        "n1-2-1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-2-1",
+      "type": "column",
+      "nodes": [
+        "n1-2-0",
+        "n1-2-1"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "c0-0-2",
+      "type": "column",
+      "nodes": [
+        "n0-0-1",
+        "n0-0-2"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-0-2",
+      "type": "beam",
+      "nodes": [
+        "n0-0-2",
+        "n1-0-2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "y0-0-2",
+      "type": "beam",
+      "nodes": [
+        "n0-0-2",
+        "n0-1-2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c0-1-2",
+      "type": "column",
+      "nodes": [
+        "n0-1-1",
+        "n0-1-2"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-1-2",
+      "type": "beam",
+      "nodes": [
+        "n0-1-2",
+        "n1-1-2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "y0-1-2",
+      "type": "beam",
+      "nodes": [
+        "n0-1-2",
+        "n0-2-2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c0-2-2",
+      "type": "column",
+      "nodes": [
+        "n0-2-1",
+        "n0-2-2"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-2-2",
+      "type": "beam",
+      "nodes": [
+        "n0-2-2",
+        "n1-2-2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-0-2",
+      "type": "column",
+      "nodes": [
+        "n1-0-1",
+        "n1-0-2"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "y1-0-2",
+      "type": "beam",
+      "nodes": [
+        "n1-0-2",
+        "n1-1-2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-1-2",
+      "type": "column",
+      "nodes": [
+        "n1-1-1",
+        "n1-1-2"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "y1-1-2",
+      "type": "beam",
+      "nodes": [
+        "n1-1-2",
+        "n1-2-2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-2-2",
+      "type": "column",
+      "nodes": [
+        "n1-2-1",
+        "n1-2-2"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "c0-0-3",
+      "type": "column",
+      "nodes": [
+        "n0-0-2",
+        "n0-0-3"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-0-3",
+      "type": "beam",
+      "nodes": [
+        "n0-0-3",
+        "n1-0-3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "y0-0-3",
+      "type": "beam",
+      "nodes": [
+        "n0-0-3",
+        "n0-1-3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c0-1-3",
+      "type": "column",
+      "nodes": [
+        "n0-1-2",
+        "n0-1-3"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-1-3",
+      "type": "beam",
+      "nodes": [
+        "n0-1-3",
+        "n1-1-3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "y0-1-3",
+      "type": "beam",
+      "nodes": [
+        "n0-1-3",
+        "n0-2-3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c0-2-3",
+      "type": "column",
+      "nodes": [
+        "n0-2-2",
+        "n0-2-3"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "x0-2-3",
+      "type": "beam",
+      "nodes": [
+        "n0-2-3",
+        "n1-2-3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-0-3",
+      "type": "column",
+      "nodes": [
+        "n1-0-2",
+        "n1-0-3"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "y1-0-3",
+      "type": "beam",
+      "nodes": [
+        "n1-0-3",
+        "n1-1-3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-1-3",
+      "type": "column",
+      "nodes": [
+        "n1-1-2",
+        "n1-1-3"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "y1-1-3",
+      "type": "beam",
+      "nodes": [
+        "n1-1-3",
+        "n1-2-3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "c1-2-3",
+      "type": "column",
+      "nodes": [
+        "n1-2-2",
+        "n1-2-3"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "overhang-0",
+      "type": "beam",
+      "nodes": [
+        "n1-0-3",
+        "tip-0"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "overhang-2",
+      "type": "beam",
+      "nodes": [
+        "n1-2-3",
+        "tip-2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materialTable": [
+    {
+      "id": "M1",
+      "name": "Elastic steel",
+      "type": "steel",
+      "E": 200000,
+      "G": 76923.07692307692,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sectionTable": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    }
+  ],
+  "loadCaseTable": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-x0-0-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-0-1",
+          "wz": -25.0
+        },
+        {
+          "id": "D-x0-1-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-1-1",
+          "wz": -50.0
+        },
+        {
+          "id": "D-x0-2-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-2-1",
+          "wz": -25.0
+        },
+        {
+          "id": "D-x0-0-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-0-2",
+          "wz": -25.0
+        },
+        {
+          "id": "D-x0-1-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-1-2",
+          "wz": -50.0
+        },
+        {
+          "id": "D-x0-2-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-2-2",
+          "wz": -25.0
+        },
+        {
+          "id": "D-x0-0-3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-0-3",
+          "wz": -25.0
+        },
+        {
+          "id": "D-x0-1-3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-1-3",
+          "wz": -50.0
+        },
+        {
+          "id": "D-x0-2-3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "x0-2-3",
+          "wz": -25.0
+        },
+        {
+          "id": "tip-force-0",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "tip-0",
+          "fz": -5
+        },
+        {
+          "id": "tip-force-2",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "tip-2",
+          "fz": -5
+        }
+      ]
+    }
+  ],
+  "combinationTable": [],
+  "analysisSettings": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinateContract": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "memberAxisData": {
+    "elementReferenceVectors": {
+      "c0-0-1": [
+        1,
+        0,
+        0
+      ],
+      "x0-0-1": [
+        0,
+        0,
+        1
+      ],
+      "y0-0-1": [
+        0,
+        0,
+        1
+      ],
+      "c0-1-1": [
+        1,
+        0,
+        0
+      ],
+      "x0-1-1": [
+        0,
+        0,
+        1
+      ],
+      "y0-1-1": [
+        0,
+        0,
+        1
+      ],
+      "c0-2-1": [
+        1,
+        0,
+        0
+      ],
+      "x0-2-1": [
+        0,
+        0,
+        1
+      ],
+      "c1-0-1": [
+        1,
+        0,
+        0
+      ],
+      "y1-0-1": [
+        0,
+        0,
+        1
+      ],
+      "c1-1-1": [
+        1,
+        0,
+        0
+      ],
+      "y1-1-1": [
+        0,
+        0,
+        1
+      ],
+      "c1-2-1": [
+        1,
+        0,
+        0
+      ],
+      "c0-0-2": [
+        1,
+        0,
+        0
+      ],
+      "x0-0-2": [
+        0,
+        0,
+        1
+      ],
+      "y0-0-2": [
+        0,
+        0,
+        1
+      ],
+      "c0-1-2": [
+        1,
+        0,
+        0
+      ],
+      "x0-1-2": [
+        0,
+        0,
+        1
+      ],
+      "y0-1-2": [
+        0,
+        0,
+        1
+      ],
+      "c0-2-2": [
+        1,
+        0,
+        0
+      ],
+      "x0-2-2": [
+        0,
+        0,
+        1
+      ],
+      "c1-0-2": [
+        1,
+        0,
+        0
+      ],
+      "y1-0-2": [
+        0,
+        0,
+        1
+      ],
+      "c1-1-2": [
+        1,
+        0,
+        0
+      ],
+      "y1-1-2": [
+        0,
+        0,
+        1
+      ],
+      "c1-2-2": [
+        1,
+        0,
+        0
+      ],
+      "c0-0-3": [
+        1,
+        0,
+        0
+      ],
+      "x0-0-3": [
+        0,
+        0,
+        1
+      ],
+      "y0-0-3": [
+        0,
+        0,
+        1
+      ],
+      "c0-1-3": [
+        1,
+        0,
+        0
+      ],
+      "x0-1-3": [
+        0,
+        0,
+        1
+      ],
+      "y0-1-3": [
+        0,
+        0,
+        1
+      ],
+      "c0-2-3": [
+        1,
+        0,
+        0
+      ],
+      "x0-2-3": [
+        0,
+        0,
+        1
+      ],
+      "c1-0-3": [
+        1,
+        0,
+        0
+      ],
+      "y1-0-3": [
+        0,
+        0,
+        1
+      ],
+      "c1-1-3": [
+        1,
+        0,
+        0
+      ],
+      "y1-1-3": [
+        0,
+        0,
+        1
+      ],
+      "c1-2-3": [
+        1,
+        0,
+        0
+      ],
+      "overhang-0": [
+        0,
+        0,
+        1
+      ],
+      "overhang-2": [
+        0,
+        0,
+        1
+      ]
+    }
+  }
+}

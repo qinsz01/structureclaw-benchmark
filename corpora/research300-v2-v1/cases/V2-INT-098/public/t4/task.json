@@ -1,0 +1,51 @@
+{
+  "caseId": "V2-INT-098",
+  "turnId": "t4",
+  "family": "INT",
+  "title": "低烈度区典型房屋建筑和桥梁抗震加固案例：单层混凝土工业厂房：子问题2：有限截面方案与约束比选",
+  "designLevel": "L4",
+  "engine": "OpenSees",
+  "analysis": "scheme",
+  "instruction": "仅将D内机械荷载增加10%，保留Q增载以及最近截面/限值。",
+  "requests": [],
+  "derived": [],
+  "reportIds": [],
+  "requireShapes": false,
+  "sourceId": "SRC-SH-RC-2020",
+  "constraint": {
+    "nodes": [
+      "OBS-B0-1",
+      "OBS-B1-1",
+      "OBS-B2-1",
+      "OBS-B0-2",
+      "OBS-B1-2",
+      "OBS-B2-2"
+    ],
+    "component": "uz",
+    "absoluteLimit": 0.0002340792
+  },
+  "schemeSelections": [
+    "SERVICE",
+    "REVERSE"
+  ],
+  "authoringBasis": [
+    [
+      "来源 SRC-SH-RC-2020；新增3.85m夹层的局部两层框架：柱位置与楼面梁参数明确给定，不假称原图完整复现。",
+      "来源事实：SRC-SH-RC-2020-F1 上海机械厂房改创业园办公楼，原单层主体7.7m，横向18m、纵向60m、双坡屋面。；SRC-SH-RC-2020-F2 改造增加3.85m结构层、新柱梁板，并以新增柱间支撑改善侧向刚度。；SRC-SH-RC-2020-F3 改造后表中结构高度7.680m，与工程概况7.700m略有差异。",
+      "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+      "作者材料：未开裂线弹性RC，E=30000MPa，nu=0.2，G=12500MPa，rho=2500kg/m³。",
+      "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+      "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+      "3.85m新增楼层及7.7m主体来自来源；新增柱位置由作者取6+6+6m，两个层高均3.85m，忽略原表7.68m的不同基准。",
+      "公开受荷：D对recipe中全部指定梁，p=4.0kN/m²；Q对列出的交替梁，p=2.0kN/m²；分担宽4.0m。未列构件不重复分配面载。",
+      "W为最高自由节点上题给等效横力10kN；3D另加全局y向4kN，不声称原工程风压规范计算结果。",
+      "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+      "截面尺寸(m)：B=0.32×0.65, C=0.5×0.65, A=0.09×0.11",
+      "位移限值为题设的线弹性方案筛选条件，不是规范安全结论；数值在候选运行前固定。"
+    ]
+  ],
+  "interactionRule": "Apply only this issued change order to the last confirmed state; retain all other prior inputs. Initial restores refer to t1.",
+  "attachments": [
+    "change-order.json"
+  ]
+}

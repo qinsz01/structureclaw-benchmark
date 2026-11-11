@@ -1,0 +1,61 @@
+{
+  "sourceTask": {
+    "id": "INT-059",
+    "family": "interactive_robustness",
+    "baseGroup": "M-INT-059",
+    "title": "楼面荷载已折算时不重复",
+    "subcategory": "量纲澄清后计算",
+    "difficulty": "L2",
+    "difficultyReason": "面载和等效线载并列容易被重复施加",
+    "language": "中文",
+    "inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "turns": 2,
+    "scenario": "T1所用独立模型为M-INT-059（左右柱不同刚度的面载框架）。T1给M-INT-059并列8kN/m²及48kN/m，但未说明两项关系；T2确认48是8乘6m的同一荷载。",
+    "modelingFocus": "普通刚接框架与门架标签分开；截面分组的独立状态保持",
+    "expectedOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "gradingFocus": "最终仅48kN/m一次；不施加96或再次乘6；固定柱脚不变；柱刚度不对称保持，屋面48kN/m只施加一次；若已有信息可唯一推得缺项，接受说明依据后直接完成，否则再澄清。",
+    "origin": "旧题改编",
+    "oldPrimaryId": "robust-frame-unit-area-line-load",
+    "oldSecondaryId": "无",
+    "reuseChange": "旧题交互机制迁入M-INT-059；补齐属性、完成计算与更新不变量；本行轮次为新契约，旧数字不直接沿用。该题已有独立物理改动，不与其他任务共享模型。",
+    "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+    "prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "INT-059",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "2D平面钢框架的量纲澄清后计算，重点是普通刚接框架与门架标签分开，用显式杆系模型核对状态与响应。",
+      "executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "未逐题验收；前置检查项：基础工具，并核对量纲澄清后计算后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+      "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+      "requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-INT-059",
+    "taskId": "INT-059",
+    "structure": "平面钢框架",
+    "dimension": "2D",
+    "difficulty": "L2",
+    "title": "左右柱不同刚度的面载框架",
+    "spec": "跨6m、高4.5m，屋面8kN/m²按6m受荷宽度折算，两柱脚固定；左柱C1、右柱C2，C2的Iy/Iz为C1的1.3倍、面积相同，梁仍B1；所有柱脚面内三自由度固定。",
+    "challenge": "普通刚接框架与门架标签分开；截面分组需与交互状态独立保持",
+    "source": "re-frame-simple-1s1b-mechanics",
+    "prerequisite": "基础工具",
+    "distinctness": "相对原结构锚点新增/修改截面分组：左柱C1、右柱C2，C2的Iy/Iz为C1的1.3倍、面积相同，梁仍B1",
+    "topologyKey": "平面钢框架；跨6m、高4.5m",
+    "boundaryKey": "所有柱脚面内三自由度固定",
+    "loadKey": "跨6m、高4.5m，屋面8kN/m²按6m受荷宽度折算，两柱脚固定",
+    "propertyKey": "左柱C1、右柱C2，C2的Iy/Iz为C1的1.3倍、面积相同，梁仍B1"
+  },
+  "authorReview": {
+    "sourceInspection": "Initial public load relationship is null and contains both original intensities without author resolution. Source permits a justified unique inference; explicit acceptance alternative records it. Final gravity only 48 kN/m; right-column inertia ratio 1.3 retained.",
+    "appendixCompletion": "Source supplies no complete numerical section/material appendix. Explicit steel E=206000 MPa, nu=0.3, G=E/2.6, rho=7850 kg/m3; base B1=300x600 mm, C1=500x500 mm solid rectangles, unless the case-specific public table overrides. A/Iy/Iz/J are explicit, not engine defaults. UDL uses actual member length; sections are linear elastic engineering inputs, not design-code defaults.",
+    "reviewStatus": "Author checked source topology, supports, load magnitudes/locations and turn sequence. Independent blind reconstruction and native execution pending."
+  },
+  "validationStatus": "Structural checks only; independent input review, numerical reference and native execution remain pending."
+}

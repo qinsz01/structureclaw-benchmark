@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-004",
+  "inputHashes": {
+    "contract.json": "15cf7a99bd2075bce655929c60378d417e9bcd484ed11bb4f4adb369b2222b96",
+    "reference-requests.json": "d994910bb1d0b511caaacea8c259d486094c066d312b9e6e47a24172ed35a8f7",
+    "model-state-1.json": "5b2dbf1a395497ee26e33db423a20322a571e94578e46f589253a51844e6f853"
+  },
+  "sourceHash": "6ab2fedcc7023374aea96addd9044612a38d6a3cf904ae26fcdf372a26c53777",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "15cf7a99bd2075bce655929c60378d417e9bcd484ed11bb4f4adb369b2222b96"
+      },
+      {
+        "path": "input-tables.txt",
+        "sha256": "d9f98bc3ea588f2240bb4b15c5bdee3feef31a5525620772753c0a47077983fa"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "5b2dbf1a395497ee26e33db423a20322a571e94578e46f589253a51844e6f853"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "734deff0ec4fdc024f1220dcb7bec7dc4ecd13ba37fe72e499728c92431dcae5"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "d994910bb1d0b511caaacea8c259d486094c066d312b9e6e47a24172ed35a8f7"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "n0",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n1",
+            "x": 4,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n2",
+            "x": 6,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n3",
+            "x": 9,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "n4",
+            "x": 12,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              false,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "b1",
+            "type": "beam",
+            "nodes": [
+              "n0",
+              "n1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b2",
+            "type": "beam",
+            "nodes": [
+              "n1",
+              "n2"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b3",
+            "type": "beam",
+            "nodes": [
+              "n2",
+              "n3"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "b4",
+            "type": "beam",
+            "nodes": [
+              "n3",
+              "n4"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "partial-b1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b1",
+                "start": 0,
+                "end": 4,
+                "wz": -15
+              },
+              {
+                "id": "partial-b2",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b2",
+                "start": 0,
+                "end": 2,
+                "wz": -15
+              },
+              {
+                "id": "partial-b3",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "b3",
+                "start": 0,
+                "end": 3,
+                "wz": -15
+              },
+              {
+                "id": "eccentric-point",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "n1",
+                "fz": -50
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "b1": [
+              0,
+              0,
+              4
+            ],
+            "b2": [
+              0,
+              0,
+              2
+            ],
+            "b3": [
+              0,
+              0,
+              3
+            ],
+            "b4": [
+              0,
+              0,
+              3
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

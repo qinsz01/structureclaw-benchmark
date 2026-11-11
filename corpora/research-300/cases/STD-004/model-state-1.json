@@ -1,0 +1,190 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "N0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "N1",
+      "x": 4,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "N2",
+      "x": 6,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "N3",
+      "x": 12,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "E01",
+      "type": "beam",
+      "nodes": [
+        "N0",
+        "N1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "E02",
+      "type": "beam",
+      "nodes": [
+        "N1",
+        "N2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "E03",
+      "type": "beam",
+      "nodes": [
+        "N2",
+        "N3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "E01",
+          "start": 0,
+          "end": 4.0,
+          "wz": -15
+        },
+        {
+          "id": "D-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "E02",
+          "start": 0,
+          "end": 2.0,
+          "wz": -15
+        },
+        {
+          "id": "D-3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "E03",
+          "start": 0,
+          "end": 6.0,
+          "wz": -15
+        },
+        {
+          "id": "D-4",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "N1",
+          "fx": 0,
+          "fz": -50,
+          "my": 0
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {}
+}

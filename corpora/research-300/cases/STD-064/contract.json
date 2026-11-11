@@ -1,0 +1,534 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-064",
+  "modelId": "M-STD-064",
+  "family": "standard_workflow",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "两层各3.6m、单跨6m，两层右侧各外挑1.5m，外挑与主梁不同载荷；完整属性按公共契约随题给出。 主跨各10kN/m，两个外挑段各5kN/m；外挑根部与楼层梁柱节点刚接。",
+    "task.modelingFocus": "悬挑连接与楼层加载区域",
+    "task.expectedOutput": "两层悬挑端竖向位移、根部弯矩、左右柱顶位移及柱脚反力。",
+    "task.gradingFocus": "悬挑连接与楼层加载区域；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "平面两层单跨框架；两层右侧均外挑",
+    "model.boundaryKey": "柱脚固定；外挑端自由",
+    "model.loadKey": "主跨与外挑各自不同线载",
+    "model.propertyKey": "单钢材料；梁柱分组截面",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "各层真实外挑几何与主跨/外挑不同线载映射须验收。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立框架刚度法；悬挑段局部静力平衡与整体系平衡，观测点加密复核。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-data.json",
+    "output-requests.json",
+    "analysis-conventions.txt",
+    "output-scope.json",
+    "appendix-decisions.txt"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Required solver: OpenSees.\nAnalyze the attached two-story single-bay steel frame in OpenSees. Each story is 3.6 m high and the main span is 6 m. A 1.5 m overhang extends rightward from the beam-column joint on each floor, with a rigid root and a free tip. Both column bases are fixed. In case D, each main-span beam carries 10 kN/m downward and each overhang carries 5 kN/m downward. Report the vertical displacement uz of both free tips, M2 at both overhang roots, ux/uz/ry at each left and right floor column top, and Fx/Fz/My at both bases. Use the attached properties and axes with first-order linear elastic static analysis and self-weight disabled.\n\nUse all public appendices. Report the complete requested numerical table and the required summaries.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-data.json",
+        "output-requests.json",
+        "analysis-conventions.txt",
+        "output-scope.json",
+        "appendix-decisions.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "out-D-node-tip-1-uz",
+      "description": "D-node-tip-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "D-node-tip-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-tip-2-uz",
+      "description": "D-node-tip-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "D-node-tip-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-member-overhang-1-i-M2",
+      "description": "D-member-overhang-1-i-M2",
+      "state": 1,
+      "quantityIds": [
+        "D-member-overhang-1-i-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-member-overhang-2-i-M2",
+      "description": "D-member-overhang-2-i-M2",
+      "state": 1,
+      "quantityIds": [
+        "D-member-overhang-2-i-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-1-ux",
+      "description": "D-node-n0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-1-uz",
+      "description": "D-node-n0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-1-ry",
+      "description": "D-node-n0-1-ry",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-1-ry"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-1-ux",
+      "description": "D-node-n1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-1-uz",
+      "description": "D-node-n1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-1-ry",
+      "description": "D-node-n1-1-ry",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-1-ry"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-2-ux",
+      "description": "D-node-n0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-2-uz",
+      "description": "D-node-n0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-2-ry",
+      "description": "D-node-n0-2-ry",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-2-ry"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-2-ux",
+      "description": "D-node-n1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-2-uz",
+      "description": "D-node-n1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-2-ry",
+      "description": "D-node-n1-2-ry",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-2-ry"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-0-Fx",
+      "description": "D-node-n0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-0-Fz",
+      "description": "D-node-n0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n0-0-My",
+      "description": "D-node-n0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-0-Fx",
+      "description": "D-node-n1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-0-Fz",
+      "description": "D-node-n1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-D-node-n1-0-My",
+      "description": "D-node-n1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "D-node-n1-0-My"
+      ],
+      "kind": "numerical"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7
+      ],
+      "targets": [
+        "output:out-D-node-tip-1-uz",
+        "output:out-D-node-tip-2-uz",
+        "output:out-D-member-overhang-1-i-M2",
+        "output:out-D-member-overhang-2-i-M2",
+        "output:out-D-node-n0-1-ux",
+        "output:out-D-node-n0-1-uz",
+        "output:out-D-node-n0-1-ry",
+        "output:out-D-node-n1-1-ux",
+        "output:out-D-node-n1-1-uz",
+        "output:out-D-node-n1-1-ry",
+        "output:out-D-node-n0-2-ux",
+        "output:out-D-node-n0-2-uz",
+        "output:out-D-node-n0-2-ry",
+        "output:out-D-node-n1-2-ux",
+        "output:out-D-node-n1-2-uz",
+        "output:out-D-node-n1-2-ry",
+        "output:out-D-node-n0-0-Fx",
+        "output:out-D-node-n0-0-Fz",
+        "output:out-D-node-n0-0-My",
+        "output:out-D-node-n1-0-Fx",
+        "output:out-D-node-n1-0-Fz",
+        "output:out-D-node-n1-0-My",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        8,
+        9
+      ],
+      "targets": [
+        "output:out-D-node-tip-1-uz",
+        "output:out-D-node-tip-2-uz",
+        "output:out-D-member-overhang-1-i-M2",
+        "output:out-D-member-overhang-2-i-M2",
+        "output:out-D-node-n0-1-ux",
+        "output:out-D-node-n0-1-uz",
+        "output:out-D-node-n0-1-ry",
+        "output:out-D-node-n1-1-ux",
+        "output:out-D-node-n1-1-uz",
+        "output:out-D-node-n1-1-ry",
+        "output:out-D-node-n0-2-ux",
+        "output:out-D-node-n0-2-uz",
+        "output:out-D-node-n0-2-ry",
+        "output:out-D-node-n1-2-ux",
+        "output:out-D-node-n1-2-uz",
+        "output:out-D-node-n1-2-ry",
+        "output:out-D-node-n0-0-Fx",
+        "output:out-D-node-n0-0-Fz",
+        "output:out-D-node-n0-0-My",
+        "output:out-D-node-n1-0-Fx",
+        "output:out-D-node-n1-0-Fz",
+        "output:out-D-node-n1-0-My",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        10,
+        11
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        12,
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        14,
+        15
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        16
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        17,
+        18
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        24,
+        25
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        26
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        27,
+        28,
+        29
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending"
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-case-acceptance",
+      "status": "pending"
+    },
+    {
+      "id": "model-fidelity",
+      "status": "pending"
+    },
+    {
+      "id": "signed-output-completeness",
+      "status": "pending"
+    }
+  ],
+  "authoringNotes": [
+    "The appendix supplies Q355 material and explicit B1 beam/overhang and C1 column properties.",
+    "Root moment means the local M2 section force on the overhang side at position 0 m, side right; each overhang is rigidly connected to its own floor joint.",
+    "The 10 and 5 kN/m loads are applied once to their respective 6 m and 1.5 m member regions.",
+    "Frame members use linear elastic Euler-Bernoulli bending and axial deformation. No shear deformation, end releases, member mass or additional loads are introduced. Beam/column joints and supports follow the explicit input table.",
+    "The supplied torsion constant J is the frozen rectangular-section approximation in input-data.json. Use the numerical A, Iy, Iz and J values supplied, with local y and z as stated in analysis-conventions.txt."
+  ]
+}

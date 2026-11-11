@@ -1,0 +1,283 @@
+{
+  "title": "完整数值输入附表",
+  "units": {
+    "coordinates": "m",
+    "forces": "kN",
+    "moments": "kN.m",
+    "lineLoads": "kN/m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m^3",
+    "A": "m^2",
+    "Iy": "m^4",
+    "Iz": "m^4",
+    "J": "m^4",
+    "shapeDimensions": "mm",
+    "rotations": "rad",
+    "sectionRoll": "degree"
+  },
+  "coordinateConvention": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodeTable": {
+    "columns": [
+      "id",
+      "X_m",
+      "Y_m",
+      "Z_m",
+      "fixed_ux",
+      "fixed_uy",
+      "fixed_uz",
+      "fixed_rx",
+      "fixed_ry",
+      "fixed_rz"
+    ],
+    "rows": [
+      [
+        "base-L",
+        0,
+        0,
+        0,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        "eave-L",
+        0,
+        0,
+        6,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      [
+        "ridge",
+        9,
+        0,
+        7.5,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      [
+        "eave-R",
+        18,
+        0,
+        6,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      [
+        "base-R",
+        18,
+        0,
+        0,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    ]
+  },
+  "memberTable": {
+    "columns": [
+      "id",
+      "kind",
+      "start_node",
+      "end_node",
+      "material_id",
+      "section_id",
+      "roll_degrees",
+      "axis_reference_vector"
+    ],
+    "rows": [
+      [
+        "column-L",
+        "column",
+        "base-L",
+        "eave-L",
+        "M1",
+        "C1",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      [
+        "slope-L",
+        "beam",
+        "eave-L",
+        "ridge",
+        "M1",
+        "B1",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      [
+        "slope-R",
+        "beam",
+        "ridge",
+        "eave-R",
+        "M1",
+        "B1",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      [
+        "column-R",
+        "column",
+        "base-R",
+        "eave-R",
+        "M1",
+        "C1",
+        0,
+        [
+          0,
+          1,
+          0
+        ]
+      ]
+    ]
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    }
+  ],
+  "loadingCases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "slope-L",
+          "wz": -6
+        },
+        {
+          "id": "D-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "slope-R",
+          "wz": -6
+        }
+      ]
+    },
+    {
+      "id": "W",
+      "type": "wind",
+      "loads": [
+        {
+          "id": "W-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "slope-R",
+          "wz": 8
+        }
+      ]
+    }
+  ],
+  "linearCombinations": [
+    {
+      "id": "C0",
+      "factors": {
+        "D": 1
+      }
+    },
+    {
+      "id": "C1",
+      "factors": {
+        "D": 1,
+        "W": 1
+      }
+    }
+  ],
+  "analysisSettings": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "floorTable": [],
+  "continuityNotes": {}
+}

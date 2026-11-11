@@ -1,0 +1,286 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Steel M1",
+      "type": "steel",
+      "E": 206000.0,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850.0
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "B2",
+      "name": "B2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 700.0
+      },
+      "properties": {
+        "A": 0.21,
+        "Iy": 0.008574999999999998,
+        "Iz": 0.0015749999999999998,
+        "J": 0.004603782069970844
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows each structural DXF LINE from its start point (group codes 10/20/30) to its end point (11/21/31), reconciled across the labelled orthographic views",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "First-floor D pressure is 10 kN/m² and second-floor D pressure is 8 kN/m². Distribute each only to actual X beams using adjacent retained Y half-spans. Y beams receive no duplicate floor load.",
+    "All gravity loads and the two global force components at the marked corner act together in basic case D. Architectural grid, enclosure and equipment layers do not define structural members or supports."
+  ],
+  "boundaryConditions": [
+    {
+      "node": "n0-0-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n0-1-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n0-2-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n1-0-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n1-1-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n1-2-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n2-0-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n2-1-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n2-2-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n0-0-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n0-1-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n0-2-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-0-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-1-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-2-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-0-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-1-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-2-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n0-0-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n0-1-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n0-2-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-0-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-1-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-2-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-0-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-1-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-2-2",
+      "restrainedDOFs": []
+    }
+  ],
+  "dxfMapping": {
+    "units": "m",
+    "structuralLayers": "Read physical members from S-BEAM/S-COLUMN lines and match S-MEMBER-TAG/S-NODE-TAG labels. A-WALL, A-COLUMN and A-EQUIPMENT outlines are nonstructural distractors, not members or connections. A-DIM and A-SUPPORT are annotations; support DOFs are specified in boundaryConditions.",
+    "viewTransform": "Architectural orthographic view j has CAD horizontal offset 40*j m; subtract that offset and use the named drawing axes. Structural 2D DXF maps (CAD X,CAD Y,CAD Z)=(global X,global Z,0). Structural 3D DXF uses global XYZ.",
+    "connectivity": "Reconcile repeated node/member labels across views into one physical graph; intersections connect only at labelled nodes. Section-detail sheets show properties and member assignments, not structural geometry."
+  }
+}

@@ -1,0 +1,311 @@
+{
+  "kind": "static",
+  "engine": "OpenSees",
+  "requests": [
+    {
+      "id": "D-x5-uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n2"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.00027109732322321396
+    },
+    {
+      "id": "D-x0-My",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n0"
+      },
+      "component": "My",
+      "unit": "kN*m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -73.15000000000003
+    },
+    {
+      "id": "D-x10-My",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n5"
+      },
+      "component": "My",
+      "unit": "kN*m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": 77.35000000000001
+    }
+  ],
+  "derived": [],
+  "clarificationFields": [],
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "dimension": "2d",
+      "plane": "xz",
+      "semantics": "global-z-up",
+      "version": 1,
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "n0",
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "n1",
+        "x": 2,
+        "y": 0,
+        "z": 0,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "n2",
+        "x": 5,
+        "y": 0,
+        "z": 0,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "n3",
+        "x": 7,
+        "y": 0,
+        "z": 0,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "n4",
+        "x": 8,
+        "y": 0,
+        "z": 0,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "n5",
+        "x": 10,
+        "y": 0,
+        "z": 0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "b1",
+        "type": "beam",
+        "nodes": [
+          "n0",
+          "n1"
+        ],
+        "material": "M1",
+        "section": "B1"
+      },
+      {
+        "id": "b2",
+        "type": "beam",
+        "nodes": [
+          "n1",
+          "n2"
+        ],
+        "material": "M1",
+        "section": "B1"
+      },
+      {
+        "id": "b3",
+        "type": "beam",
+        "nodes": [
+          "n2",
+          "n3"
+        ],
+        "material": "M1",
+        "section": "B1"
+      },
+      {
+        "id": "b4",
+        "type": "beam",
+        "nodes": [
+          "n3",
+          "n4"
+        ],
+        "material": "M1",
+        "section": "B1"
+      },
+      {
+        "id": "b5",
+        "type": "beam",
+        "nodes": [
+          "n4",
+          "n5"
+        ],
+        "material": "M1",
+        "section": "B1"
+      }
+    ],
+    "materials": [
+      {
+        "id": "M1",
+        "name": "Q355",
+        "type": "steel",
+        "E": 206000,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850
+      }
+    ],
+    "sections": [
+      {
+        "id": "B1",
+        "name": "B1",
+        "type": "rectangular",
+        "shape": {
+          "kind": "rectangular",
+          "B": 276.0,
+          "H": 552.0
+        },
+        "properties": {
+          "A": 0.152352,
+          "Iy": 0.003868521984,
+          "Iz": 0.000967130496,
+          "J": 0.00265628435292
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "id": "left-point",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "n1",
+            "fz": -35
+          },
+          {
+            "id": "right-point",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "n3",
+            "fz": -45
+          }
+        ]
+      }
+    ],
+    "load_combinations": [],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    },
+    "metadata": {
+      "elementReferenceVectors": {
+        "b1": [
+          0,
+          0,
+          2
+        ],
+        "b2": [
+          0,
+          0,
+          3
+        ],
+        "b3": [
+          0,
+          0,
+          2
+        ],
+        "b4": [
+          0,
+          0,
+          1
+        ],
+        "b5": [
+          0,
+          0,
+          2
+        ]
+      }
+    }
+  },
+  "reportIds": [
+    "D-x0-My",
+    "D-x10-My",
+    "D-x5-uz"
+  ]
+}

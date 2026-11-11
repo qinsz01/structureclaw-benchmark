@@ -1,0 +1,61 @@
+{
+  "sourceTask": {
+    "id": "INT-100",
+    "family": "interactive_robustness",
+    "baseGroup": "M-INT-100",
+    "title": "偏心短臂方向改动后撤销",
+    "subcategory": "空间几何修改与撤销",
+    "difficulty": "L3",
+    "difficultyReason": "实际偏心方向改变影响三维弯扭耦合且需要可追溯撤销",
+    "language": "英文",
+    "inputForm": "文本3轮＋完整属性附件（仅暂缺项除外）",
+    "turns": 3,
+    "scenario": "T1所用独立模型为M-INT-100（柱短臂模型的中柱横向力）。T1建立M-INT-100；T2将顶端短臂从X正向1m改Y正向1m，端力向量仍全局Z负200、Y正10kN；T3撤销几何改动。",
+    "modelingFocus": "真实偏心几何与空间荷载，不用未声明刚臂简化；荷载位置的独立状态保持",
+    "expectedOutput": "短梁自由端Ux/Uy/Uz及柱底My/Mz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "gradingFocus": "最终短臂恢复X向；端力随端点移动但方向不旋转；柱高5m和刚接关系不变；短臂方向修改/撤销均不移动或旋转柱中部16kN力。",
+    "origin": "新增",
+    "oldPrimaryId": "无",
+    "oldSecondaryId": "无",
+    "reuseChange": "新增交互场景；独立起始模型来源另见M-INT-100，不把同基础模型计为旧交互题沿用。该题已有独立物理改动，不与其他任务共享模型。",
+    "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+    "prerequisite": "空间梁柱连接需验证；逐轮状态与目标/非目标差异评测待实现",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "INT-100",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "柱与偏心短臂修改/撤销时保持全局端力，属于空间梁柱力学",
+      "executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "未逐题验收；前置检查项：空间梁柱连接需验证，并核对空间几何修改与撤销后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+      "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 保留三维六自由度/轴力单元各自约束和题定局部轴；各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+      "requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：短梁自由端Ux/Uy/Uz及柱底My/Mz。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-INT-100",
+    "taskId": "INT-100",
+    "structure": "柱",
+    "dimension": "3D",
+    "difficulty": "L3",
+    "title": "柱短臂模型的中柱横向力",
+    "spec": "柱高5m，柱顶沿X向刚接1m短梁，短梁端向下200kN及Y向10kN；柱z=2.5m处另设连续节点施加X正向16kN，与短梁端两分量独立。",
+    "challenge": "真实偏心几何与空间荷载，不用未声明刚臂简化；荷载位置需与交互状态独立保持",
+    "source": "无",
+    "prerequisite": "空间梁柱连接需验证",
+    "distinctness": "相对原结构锚点新增/修改荷载位置：柱z=2.5m处另设连续节点施加X正向16kN，与短梁端两分量独立",
+    "topologyKey": "柱；柱高5m",
+    "boundaryKey": "柱底六自由度固定（2D取面内有效约束），上端自由",
+    "loadKey": "柱高5m，柱顶沿X向刚接1m短梁，短梁端向下200kN及Y向10kN；柱z=2.5m处另设连续节点施加X正向16kN，与短梁端两分量独立",
+    "propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值"
+  },
+  "authorReview": {
+    "sourceInspection": "True 1 m deformable beam with explicit section, not an undeclared rigid offset. Arm reference global +Z remains valid after X→Y reorientation. T3 is byte-equivalent physical state to T1; column midpoint remains connected at 2.5 m with +X 16 kN.",
+    "appendixCompletion": "Source supplies no complete numerical section/material appendix. Explicit steel E=206000 MPa, nu=0.3, G=E/2.6, rho=7850 kg/m3; base B1=300x600 mm, C1=500x500 mm solid rectangles, unless the case-specific public table overrides. A/Iy/Iz/J are explicit, not engine defaults. UDL uses actual member length; sections are linear elastic engineering inputs, not design-code defaults.",
+    "reviewStatus": "Author checked source topology, supports, load magnitudes/locations and turn sequence. Independent blind reconstruction and native execution pending."
+  },
+  "validationStatus": "Structural checks only; independent input review, numerical reference and native execution remain pending."
+}

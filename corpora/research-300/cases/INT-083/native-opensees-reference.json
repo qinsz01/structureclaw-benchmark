@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-083",
+  "modelId": "M-INT-083",
+  "referenceKind": "native-opensees",
+  "method": "native-openseespy",
+  "solver": {
+    "module": "openseespy.opensees",
+    "version": "3.7.1",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "runnerSha256": "cdda4e5b51596485c32100b1426c58f98830470bc0ab555ff1c477b3083eb9d7",
+    "referenceIoSha256": "22066f2728b59482df3da98e4bed3bb8a81edfadfab351fb90d40cc11f436717",
+    "nativeModuleSha256": "b4c234a20c235bb4a8ed9f780a9ac2d5b2534c42ad499054882ba8c8e94bed1d",
+    "nativeBinaryModule": "openseespylinux.opensees",
+    "nativeBinarySha256": "b0985e344fb76d2f445c2b3046c37676aa02d8c632d66345a4bc927a56fee25f",
+    "openseespyPackageVersion": "3.7.1.2",
+    "openseespylinuxPackageVersion": "3.7.1.2"
+  },
+  "inputHashes": {
+    "contract.json": "aab89a56cec6971f92d753f764bc9b51242af1b5e5b09be68bfaa0fe929ef748",
+    "reference-requests.json": "c0f48ddfbe462cb91f995cb215bbeaa288c298402357b41e8b6327d9d9e50614",
+    "model-state-1.json": "1cbf776a35dff6f46037c58a533f1d8066246870ac545cafa09b1065ef3403ae"
+  },
+  "sourceHash": "dc37d9d25e21d33e26f6a501744241b19a062e7a6c7f5ccc0b19a0a8720d51d4",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions-v2.txt",
+        "sha256": "c9303e7eb89248c6abb62f30788c19ac7142a4f4fdba164d01c94ff975c1cde8"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "aab89a56cec6971f92d753f764bc9b51242af1b5e5b09be68bfaa0fe929ef748"
+      },
+      {
+        "path": "input-t1.json",
+        "sha256": "a72531c8dba1ac85a1cd7dbd86e10b463126a21a59356a25398cbcfb54837a3e"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "1cbf776a35dff6f46037c58a533f1d8066246870ac545cafa09b1065ef3403ae"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "3912f70307ebab9c9112fd8d63241607182c028315c4c3b8c795f544ada7d4e8"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "c0f48ddfbe462cb91f995cb215bbeaa288c298402357b41e8b6327d9d9e50614"
+      }
+    ]
+  },
+  "sameEngineTruthStatus": "pending",
+  "nativeIndependentReview": "pending",
+  "llmEndToEnd": "not-run",
+  "nativeRole": "cross-engine-diagnostic",
+  "theory": "Timoshenko",
+  "warnings": [
+    "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+    "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+    "OpenSees results for a different planned engine are cross-engine diagnostics only."
+  ],
+  "checks": [
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        1.0907941216942163e-14,
+        1.3877787807814457e-17,
+        4.547473508864641e-13,
+        -4.547473508864641e-13,
+        -1.8189894035458565e-12,
+        -1.482147737874584e-14
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        0.00014401,
+        0.00036000999999999996,
+        0.00086401,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 2.2737367544323206e-13,
+      "equilibriumPassed": true,
+      "nativeNodes": 18,
+      "nativeElements": 26,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.2333333333333333,
+          "Asz": 0.2333333333333333
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "c0-0-2": {
+          "Asy": 0.2333333333333333,
+          "Asz": 0.2333333333333333
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c0-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c2-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        }
+      },
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case-D--n2-1-2--ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -7.887322693096691e-06
+        },
+        {
+          "id": "case-D--n2-1-2--uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.00012177913012531496
+        },
+        {
+          "id": "case-D--n2-1-2--uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.3294093545379772e-05
+        },
+        {
+          "id": "case-D--n0-0-0--My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 14.076892682764466
+        },
+        {
+          "id": "case-D--n0-0-0--Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 173.11552533464172
+        }
+      ],
+      "derived": [],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            1.0907941216942163e-14,
+            1.3877787807814457e-17,
+            4.547473508864641e-13,
+            -4.547473508864641e-13,
+            -1.8189894035458565e-12,
+            -1.482147737874584e-14
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            0.00014401,
+            0.00036000999999999996,
+            0.00086401,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 2.2737367544323206e-13,
+          "equilibriumPassed": true,
+          "nativeNodes": 18,
+          "nativeElements": 26,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.2333333333333333,
+              "Asz": 0.2333333333333333
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y2-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "c0-0-2": {
+              "Asy": 0.2333333333333333,
+              "Asz": 0.2333333333333333
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c0-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y2-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c2-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ]
+    }
+  ],
+  "analysisConvention": {
+    "id": "commercial-linear-static-v2",
+    "bendingTheory": "Timoshenko",
+    "effectiveShearAreas": {
+      "localY": "5*A/6",
+      "localZ": "5*A/6"
+    },
+    "publicAttachment": "analysis-conventions-v2.txt"
+  },
+  "notCommercialScoringTruth": true,
+  "artifacts": [
+    {
+      "path": "native-input-receipt.json",
+      "sha256": "03ab7db00bb0811e75babb4bbf49472b9206b9626c73141ebf71649034d9a8c4"
+    },
+    {
+      "path": "native-solver-receipt.json",
+      "sha256": "74a17e652b1008c3f6755c73856d553ea2b5c92fd51c82003c15f909268f29c0"
+    },
+    {
+      "path": "native-raw-responses.json",
+      "sha256": "7731846e6f377b18ff7966086992a414575f7dc13c31c5f6163f29669ff02a67"
+    },
+    {
+      "path": "native-checks.json",
+      "sha256": "bd66484912508bcdece8056174b9d40b971cb2d828f190ca85e252db0c3828df"
+    }
+  ]
+}

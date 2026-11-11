@@ -1,0 +1,52 @@
+{
+  "caseId": "V2-INT-096",
+  "turnId": "t5",
+  "family": "INT",
+  "title": "洛阳钢构工程：洛阳卓扬春都生物科技钢结构厂房：子问题2：有限截面方案与约束比选",
+  "designLevel": "L4",
+  "engine": "OpenSees",
+  "analysis": "scheme",
+  "instruction": "只撤销第2轮Q增载，保留第4轮D增载和其他最近输入。",
+  "requests": [],
+  "derived": [],
+  "reportIds": [],
+  "requireShapes": false,
+  "sourceId": "SRC-LUOYANG-2022",
+  "constraint": {
+    "nodes": [
+      "OBS-L0-0",
+      "OBS-L1-0",
+      "OBS-L0-1",
+      "OBS-L1-1",
+      "OBS-X0",
+      "OBS-X1",
+      "OBS-X2"
+    ],
+    "component": "uz",
+    "absoluteLimit": 9.702240000000001e-05
+  },
+  "schemeSelections": [
+    "SERVICE",
+    "REVERSE"
+  ],
+  "authoringBasis": [
+    [
+      "来源 SRC-LUOYANG-2022；纵向两跨柱列局部构架：7.7+7.7m，显式声明端部截断及刚接等效。",
+      "来源事实：SRC-LUOYANG-2022-F1 项目为宜阳县香鹿山镇联合生产车间，单层门式刚架并有局部夹层。；SRC-LUOYANG-2022-F2 三跨24.46+25+24.46m，柱距7.7m，柱顶8.5m。；SRC-LUOYANG-2022-F3 钢柱、梁及连接板为Q355B。",
+      "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+      "作者材料：线弹性钢，E=206000MPa，nu=0.3，G=E/[2(1+nu)]，rho=7850kg/m³。",
+      "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+      "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+      "截取首横跨24.46m内的两列纵向柱及7.7+7.7m两柱距；作者将纵横顶梁均设刚接，纵向每列受荷带宽2.5m，横梁不重复分配该面荷载。",
+      "公开受荷：D对recipe中全部指定梁，p=0.8kN/m²；Q对列出的交替梁，p=0.5kN/m²；分担宽2.5m。未列构件不重复分配面载。",
+      "W为最高自由节点上题给等效横力10kN；3D另加全局y向4kN，不声称原工程风压规范计算结果。",
+      "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+      "截面尺寸(m)：B=0.24×0.56, C=0.36×0.6, A=0.08×0.11",
+      "位移限值为题设的线弹性方案筛选条件，不是规范安全结论；数值在候选运行前固定。"
+    ]
+  ],
+  "interactionRule": "Apply only this issued change order to the last confirmed state; retain all other prior inputs. Initial restores refer to t1.",
+  "attachments": [
+    "change-order.json"
+  ]
+}

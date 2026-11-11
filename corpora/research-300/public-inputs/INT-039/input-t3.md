@@ -1,0 +1,34 @@
+## Section a4 t3 — 单位
+
+|Field|Value|
+|---|---|
+|shape|mm|
+|A|m2|
+|Iy|m4|
+|Iz|m4|
+|J|m4|
+
+## Section a4 t3 — 截面
+
+|Field|Value|
+|---|---|
+|id|A4|
+|name|A4|
+|type|rectangular|
+
+## Section a4 t3 — 截面 — Shape
+
+|Field|Value|
+|---|---|
+|kind|rectangular|
+|B|100.0|
+|H|100.0|
+
+## Section a4 t3 — 截面 — Properties
+
+|Field|Value|
+|---|---|
+|A|0.010000000000000002|
+|Iy|8.333333333333335e-06|
+|Iz|8.333333333333335e-06|
+|J|1.4083333333333338e-05|

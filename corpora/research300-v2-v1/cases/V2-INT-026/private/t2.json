@@ -1,0 +1,379 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "semantics": "global-z-up",
+      "version": 1,
+      "dimension": "2d",
+      "plane": "xz",
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "A",
+        "x": 0,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "M",
+        "x": 3,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "B",
+        "x": 6,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "L",
+        "nodes": [
+          "A",
+          "M"
+        ],
+        "type": "beam",
+        "material": "S",
+        "section": "B",
+        "releases": {
+          "i": {
+            "ry": true
+          }
+        }
+      },
+      {
+        "id": "R",
+        "nodes": [
+          "M",
+          "B"
+        ],
+        "type": "beam",
+        "material": "S",
+        "section": "B",
+        "releases": {
+          "j": {
+            "ry": true
+          }
+        }
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "C",
+        "name": "column",
+        "type": "custom",
+        "properties": {
+          "A": 0.024,
+          "Iy": 0.0003,
+          "Iz": 0.0001,
+          "J": 4e-05
+        }
+      },
+      {
+        "id": "B",
+        "name": "beam",
+        "type": "custom",
+        "properties": {
+          "A": 0.016,
+          "Iy": 0.00015,
+          "Iz": 6e-05,
+          "J": 2e-05
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "type": "distributed",
+            "element": "L",
+            "wz": -10
+          },
+          {
+            "type": "distributed",
+            "element": "R",
+            "wz": -10
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "type": "distributed",
+            "element": "L",
+            "wz": -12.0
+          },
+          {
+            "type": "distributed",
+            "element": "R",
+            "wz": -12.0
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "type": "nodal",
+            "node": "B",
+            "fx": 3.0
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "SERVICE",
+        "factors": {
+          "D": 1,
+          "Q": 1
+        }
+      },
+      {
+        "id": "REVERSE",
+        "factors": {
+          "D": 1,
+          "W": -1
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    }
+  },
+  "kind": "static",
+  "engine": "OpenSees",
+  "derived": [],
+  "requests": [
+    {
+      "id": "case:D:B:ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "B"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": 0.0
+    },
+    {
+      "id": "case:D:M:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "M"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.005461165048543691
+    },
+    {
+      "id": "case:D:A:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 0.0
+    },
+    {
+      "id": "case:D:A:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 30.0
+    },
+    {
+      "id": "combination:SERVICE:B:ux",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "B"
+      },
+      "component": "ux",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": 0.0
+    },
+    {
+      "id": "combination:SERVICE:M:uz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "M"
+      },
+      "component": "uz",
+      "unit": "m",
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "value": -0.012014563106796121
+    },
+    {
+      "id": "combination:SERVICE:A:Fx",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fx",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 0.0
+    },
+    {
+      "id": "combination:SERVICE:A:Fz",
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "location": {
+        "kind": "node",
+        "id": "A"
+      },
+      "component": "Fz",
+      "unit": "kN",
+      "tolerance": {
+        "absolute": 1e-06,
+        "relative": 1e-06
+      },
+      "value": 66.0
+    }
+  ],
+  "clarificationFields": [],
+  "referenceChecks": [
+    {
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "method": "independent-planar-direct-stiffness",
+      "freeResidual": 0.0,
+      "dofs": 9
+    },
+    {
+      "selection": {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      "method": "independent-planar-direct-stiffness",
+      "freeResidual": 0.0,
+      "dofs": 9
+    }
+  ],
+  "reportIds": [
+    "case:D:B:ux",
+    "case:D:M:uz",
+    "case:D:A:Fx",
+    "case:D:A:Fz",
+    "combination:SERVICE:B:ux",
+    "combination:SERVICE:M:uz",
+    "combination:SERVICE:A:Fx",
+    "combination:SERVICE:A:Fz"
+  ]
+}

@@ -1,0 +1,1074 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "semantics": "global-z-up",
+      "version": 1,
+      "dimension": "2d",
+      "plane": "xz",
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "A",
+        "x": 0,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "B",
+        "x": 2.6,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "P",
+        "x": 0,
+        "y": 0.0,
+        "z": 1.5,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "M",
+        "x": 1.3,
+        "y": 0.0,
+        "z": 1.848334,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "id": "Q",
+        "x": 2.6,
+        "y": 0.0,
+        "z": 2.196668,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": "CP",
+        "nodes": [
+          "A",
+          "P"
+        ],
+        "type": "column",
+        "material": "S",
+        "section": "C",
+        "releases": {
+          "j": {
+            "ry": true
+          }
+        }
+      },
+      {
+        "id": "CQ",
+        "nodes": [
+          "B",
+          "Q"
+        ],
+        "type": "column",
+        "material": "S",
+        "section": "C",
+        "releases": {
+          "j": {
+            "ry": true
+          }
+        }
+      },
+      {
+        "id": "R1",
+        "nodes": [
+          "P",
+          "M"
+        ],
+        "type": "beam",
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "R2",
+        "nodes": [
+          "M",
+          "Q"
+        ],
+        "type": "beam",
+        "material": "S",
+        "section": "B"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "C",
+        "name": "column",
+        "type": "custom",
+        "properties": {
+          "A": 0.006,
+          "Iy": 5.000000000000001e-06,
+          "Iz": 1.7999999999999997e-06,
+          "J": 1.2521648000000002e-05
+        }
+      },
+      {
+        "id": "B",
+        "name": "beam",
+        "type": "custom",
+        "properties": {
+          "A": 0.0072,
+          "Iy": 8.639999999999999e-06,
+          "Iz": 2.1599999999999996e-06,
+          "J": 2.3730299999999995e-05
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "type": "distributed",
+            "element": "R1",
+            "wz": -1.19
+          },
+          {
+            "type": "distributed",
+            "element": "R2",
+            "wz": -1.19
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "type": "distributed",
+            "element": "R1",
+            "wx": -0.7039878026788564,
+            "wz": 2.627318247506266
+          },
+          {
+            "type": "distributed",
+            "element": "R2",
+            "wx": -0.7039878026788564,
+            "wz": 2.627318247506266
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "type": "distributed",
+            "element": "R1",
+            "wz": -2.38
+          },
+          {
+            "type": "distributed",
+            "element": "R2",
+            "wz": -2.38
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "UP",
+        "factors": {
+          "D": 1,
+          "W": 1
+        }
+      },
+      {
+        "id": "DOWN",
+        "factors": {
+          "D": 1,
+          "Q": 1
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false
+    }
+  },
+  "kind": "scheme",
+  "requests": [],
+  "constraint": {
+    "nodes": [
+      "M"
+    ],
+    "component": "uz",
+    "absoluteLimit": 0.0006
+  },
+  "schemeSelections": [
+    "DOWN"
+  ],
+  "referenceChecks": [
+    {
+      "method": "independent-exhaustive-finite-scheme-enumeration",
+      "feasible": 1,
+      "schemes": 3
+    }
+  ],
+  "schemeTruth": [
+    {
+      "id": "A",
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "semantics": "global-z-up",
+          "version": 1,
+          "dimension": "2d",
+          "plane": "xz",
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0.0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 2.6,
+            "y": 0.0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "P",
+            "x": 0,
+            "y": 0.0,
+            "z": 1.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "M",
+            "x": 1.3,
+            "y": 0.0,
+            "z": 1.848334,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "Q",
+            "x": 2.6,
+            "y": 0.0,
+            "z": 2.196668,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "CP",
+            "nodes": [
+              "A",
+              "P"
+            ],
+            "type": "column",
+            "material": "S",
+            "section": "C",
+            "releases": {
+              "j": {
+                "ry": true
+              }
+            }
+          },
+          {
+            "id": "CQ",
+            "nodes": [
+              "B",
+              "Q"
+            ],
+            "type": "column",
+            "material": "S",
+            "section": "C",
+            "releases": {
+              "j": {
+                "ry": true
+              }
+            }
+          },
+          {
+            "id": "R1",
+            "nodes": [
+              "P",
+              "M"
+            ],
+            "type": "beam",
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "R2",
+            "nodes": [
+              "M",
+              "Q"
+            ],
+            "type": "beam",
+            "material": "S",
+            "section": "B"
+          }
+        ],
+        "materials": [
+          {
+            "id": "S",
+            "name": "Explicit elastic steel",
+            "type": "steel",
+            "E": 206000.0,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850.0
+          }
+        ],
+        "sections": [
+          {
+            "id": "C",
+            "name": "column",
+            "type": "custom",
+            "properties": {
+              "A": 0.006,
+              "Iy": 5.000000000000001e-06,
+              "Iz": 1.7999999999999997e-06,
+              "J": 1.2521648000000002e-05
+            }
+          },
+          {
+            "id": "B",
+            "name": "beam",
+            "type": "custom",
+            "properties": {
+              "A": 0.0072,
+              "Iy": 8.639999999999999e-06,
+              "Iz": 2.1599999999999996e-06,
+              "J": 2.3730299999999995e-05
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wz": -1.19
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wz": -1.19
+              }
+            ]
+          },
+          {
+            "id": "W",
+            "type": "wind",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wx": -0.7039878026788564,
+                "wz": 2.627318247506266
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wx": -0.7039878026788564,
+                "wz": 2.627318247506266
+              }
+            ]
+          },
+          {
+            "id": "Q",
+            "type": "live",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wz": -2.38
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wz": -2.38
+              }
+            ]
+          }
+        ],
+        "load_combinations": [
+          {
+            "id": "UP",
+            "factors": {
+              "D": 1,
+              "W": 1
+            }
+          },
+          {
+            "id": "DOWN",
+            "factors": {
+              "D": 1,
+              "Q": 1
+            }
+          }
+        ],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        }
+      },
+      "maximum": 0.001286511701711058,
+      "volume": 0.04156037828302845,
+      "feasible": false
+    },
+    {
+      "id": "B",
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "semantics": "global-z-up",
+          "version": 1,
+          "dimension": "2d",
+          "plane": "xz",
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0.0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 2.6,
+            "y": 0.0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "P",
+            "x": 0,
+            "y": 0.0,
+            "z": 1.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "M",
+            "x": 1.3,
+            "y": 0.0,
+            "z": 1.848334,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "Q",
+            "x": 2.6,
+            "y": 0.0,
+            "z": 2.196668,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "CP",
+            "nodes": [
+              "A",
+              "P"
+            ],
+            "type": "column",
+            "material": "S",
+            "section": "C",
+            "releases": {
+              "j": {
+                "ry": true
+              }
+            }
+          },
+          {
+            "id": "CQ",
+            "nodes": [
+              "B",
+              "Q"
+            ],
+            "type": "column",
+            "material": "S",
+            "section": "C",
+            "releases": {
+              "j": {
+                "ry": true
+              }
+            }
+          },
+          {
+            "id": "R1",
+            "nodes": [
+              "P",
+              "M"
+            ],
+            "type": "beam",
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "R2",
+            "nodes": [
+              "M",
+              "Q"
+            ],
+            "type": "beam",
+            "material": "S",
+            "section": "B"
+          }
+        ],
+        "materials": [
+          {
+            "id": "S",
+            "name": "Explicit elastic steel",
+            "type": "steel",
+            "E": 206000.0,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850.0
+          }
+        ],
+        "sections": [
+          {
+            "id": "C",
+            "name": "column",
+            "type": "custom",
+            "properties": {
+              "A": 0.006,
+              "Iy": 5.000000000000001e-06,
+              "Iz": 1.7999999999999997e-06,
+              "J": 1.2521648000000002e-05
+            }
+          },
+          {
+            "id": "B",
+            "name": "beam",
+            "type": "custom",
+            "properties": {
+              "A": 0.009800000000000001,
+              "Iy": 1.6006666666666674e-05,
+              "Iz": 4.0016666666666684e-06,
+              "J": 4.396331041666668e-05
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wz": -1.19
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wz": -1.19
+              }
+            ]
+          },
+          {
+            "id": "W",
+            "type": "wind",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wx": -0.7039878026788564,
+                "wz": 2.627318247506266
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wx": -0.7039878026788564,
+                "wz": 2.627318247506266
+              }
+            ]
+          },
+          {
+            "id": "Q",
+            "type": "live",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wz": -2.38
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wz": -2.38
+              }
+            ]
+          }
+        ],
+        "load_combinations": [
+          {
+            "id": "UP",
+            "factors": {
+              "D": 1,
+              "W": 1
+            }
+          },
+          {
+            "id": "DOWN",
+            "factors": {
+              "D": 1,
+              "Q": 1
+            }
+          }
+        ],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        }
+      },
+      "maximum": 0.0006977621708115052,
+      "volume": 0.048558845329677615,
+      "feasible": false
+    },
+    {
+      "id": "C",
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "semantics": "global-z-up",
+          "version": 1,
+          "dimension": "2d",
+          "plane": "xz",
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0.0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 2.6,
+            "y": 0.0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "P",
+            "x": 0,
+            "y": 0.0,
+            "z": 1.5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "M",
+            "x": 1.3,
+            "y": 0.0,
+            "z": 1.848334,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "Q",
+            "x": 2.6,
+            "y": 0.0,
+            "z": 2.196668,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "CP",
+            "nodes": [
+              "A",
+              "P"
+            ],
+            "type": "column",
+            "material": "S",
+            "section": "C",
+            "releases": {
+              "j": {
+                "ry": true
+              }
+            }
+          },
+          {
+            "id": "CQ",
+            "nodes": [
+              "B",
+              "Q"
+            ],
+            "type": "column",
+            "material": "S",
+            "section": "C",
+            "releases": {
+              "j": {
+                "ry": true
+              }
+            }
+          },
+          {
+            "id": "R1",
+            "nodes": [
+              "P",
+              "M"
+            ],
+            "type": "beam",
+            "material": "S",
+            "section": "B"
+          },
+          {
+            "id": "R2",
+            "nodes": [
+              "M",
+              "Q"
+            ],
+            "type": "beam",
+            "material": "S",
+            "section": "B"
+          }
+        ],
+        "materials": [
+          {
+            "id": "S",
+            "name": "Explicit elastic steel",
+            "type": "steel",
+            "E": 206000.0,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850.0
+          }
+        ],
+        "sections": [
+          {
+            "id": "C",
+            "name": "column",
+            "type": "custom",
+            "properties": {
+              "A": 0.006,
+              "Iy": 5.000000000000001e-06,
+              "Iz": 1.7999999999999997e-06,
+              "J": 1.2521648000000002e-05
+            }
+          },
+          {
+            "id": "B",
+            "name": "beam",
+            "type": "custom",
+            "properties": {
+              "A": 0.0128,
+              "Iy": 2.730666666666667e-05,
+              "Iz": 6.826666666666668e-06,
+              "J": 7.499946666666669e-05
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wz": -1.19
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wz": -1.19
+              }
+            ]
+          },
+          {
+            "id": "W",
+            "type": "wind",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wx": -0.7039878026788564,
+                "wz": 2.627318247506266
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wx": -0.7039878026788564,
+                "wz": 2.627318247506266
+              }
+            ]
+          },
+          {
+            "id": "Q",
+            "type": "live",
+            "loads": [
+              {
+                "type": "distributed",
+                "element": "R1",
+                "wz": -2.38
+              },
+              {
+                "type": "distributed",
+                "element": "R2",
+                "wz": -2.38
+              }
+            ]
+          }
+        ],
+        "load_combinations": [
+          {
+            "id": "UP",
+            "factors": {
+              "D": 1,
+              "W": 1
+            }
+          },
+          {
+            "id": "DOWN",
+            "factors": {
+              "D": 1,
+              "Q": 1
+            }
+          }
+        ],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        }
+      },
+      "maximum": 0.00041200792599203396,
+      "volume": 0.056633999614272804,
+      "feasible": true
+    }
+  ],
+  "optimalSchemes": [
+    "C"
+  ],
+  "schemes": [
+    {
+      "id": "A",
+      "section": "B",
+      "b": 0.06,
+      "h": 0.12
+    },
+    {
+      "id": "B",
+      "section": "B",
+      "b": 0.07,
+      "h": 0.14
+    },
+    {
+      "id": "C",
+      "section": "B",
+      "b": 0.08,
+      "h": 0.16
+    }
+  ],
+  "reportIds": [],
+  "engine": "OpenSees"
+}

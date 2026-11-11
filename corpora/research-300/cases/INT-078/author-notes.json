@@ -1,0 +1,78 @@
+{
+  "sourceTask": {
+    "id": "INT-078",
+    "family": "interactive_robustness",
+    "baseGroup": "M-INT-078",
+    "title": "反向侧力工况替换",
+    "subcategory": "带符号工况更新",
+    "difficulty": "L3",
+    "difficultyReason": "正负侧力分开存储且组合引用不能串用",
+    "language": "英文",
+    "inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "turns": 2,
+    "scenario": "T1所用独立模型为M-INT-078（正反侧力框架中层梁局部附加恒载）。T1建立M-INT-078；T2仅W-各层侧力强度增加20%，方向仍负，D与W+保持。",
+    "modelingFocus": "正反向工况不能被绝对值化；荷载分布的独立状态保持",
+    "expectedOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "gradingFocus": "W-数值乘1.2但不改正；三个组合引用正确；不得覆盖W+或重力；D局部附加线载不随W-放大改变或反号。",
+    "origin": "新增",
+    "oldPrimaryId": "无",
+    "oldSecondaryId": "无",
+    "reuseChange": "新增交互场景；独立起始模型来源另见M-INT-078，不把同基础模型计为旧交互题沿用。该题已有独立物理改动，不与其他任务共享模型。",
+    "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+    "prerequisite": "多组合执行契约需验证；逐轮状态与目标/非目标差异评测待实现",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "INT-078",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "2D平面混凝土框架的带符号工况更新，重点是正反向工况不能被绝对值化，用显式杆系模型核对状态与响应。",
+      "executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "未逐题验收；前置检查项：多组合执行契约需验证，并核对带符号工况更新后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+      "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 保留独立原始工况及题定组合系数，修改组合不得覆盖原工况；各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+      "requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-INT-078",
+    "taskId": "INT-078",
+    "structure": "平面混凝土框架",
+    "dimension": "2D",
+    "difficulty": "L3",
+    "title": "正反侧力框架中层梁局部附加恒载",
+    "spec": "三层单跨6m，D各层不同，W+与W-独立，题定三组组合；D在第二层梁左半跨x=0～3m另向下5kN/m，原分层D仍保留；所有柱脚面内三自由度固定；三层各3.6m，柱线x=0/6m；D梁载自下向上12/10/8kN/m；右节点W+的X力10/15/20kN、W-反号；组合D、D+W+、D+W-。",
+    "challenge": "正反向工况不能被绝对值化；荷载分布需与交互状态独立保持",
+    "source": "无",
+    "prerequisite": "多组合执行契约需验证",
+    "distinctness": "相对原结构锚点新增/修改荷载分布：D在第二层梁左半跨x=0～3m另向下5kN/m，原分层D仍保留",
+    "topologyKey": "三层各3.6m，柱线x=0/6m；D梁载自下向上12/10/8kN/m；右节点W+的X力10/15/20kN、W-反号；组合D、D+W+、D+W-。",
+    "boundaryKey": "所有柱脚面内三自由度固定",
+    "loadKey": "三层单跨6m，D各层不同，W+与W-独立，题定三组组合；D在第二层梁左半跨x=0～3m另向下5kN/m，原分层D仍保留",
+    "propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值"
+  },
+  "authorReview": {
+    "appendixDecisions": [
+      "Source: three 3.6 m storeys, one 6 m bay. D UDLs bottom-to-top -12/-10/-8 kN/m; additional second-storey left-half -5 kN/m from x=0 to 3 m. W+ right-node forces +10/+15/+20 kN; W- initially their negatives.",
+      "Missing appendix completed with C30, 500x500 mm columns and 300x600 mm beams.",
+      "Source combination IDs are retained literally: D, D+W+, D+W-. Case D and combination D are independently requested using different selection kinds.",
+      "Turn 2 changes only W- fx values by factor 1.2; all remain negative. Neither gravity loads nor W+ nor combination coefficients change."
+    ],
+    "physicalConventions": [
+      "XZ plane, XYZ Z-up, Euler-Bernoulli linear elasticity, rigid beam-column joints.",
+      "All column bases restrain ux/uz/ry. Planar nodes restrain uy/rx/rz; supports are fully fixed.",
+      "No self-weight, rigid diaphragms, rigid offsets, P-delta or construction stages.",
+      "Rectangular sections use A=B*H, Iy=B*H^3/12, Iz=H*B^3/12 in metres. The explicit Saint-Venant J from the primitive is the frozen appendix value.",
+      "At zero roll, local x points i-to-j, local y=global +Y, local z=x cross y. Positive roll uses the supplied right-hand local-axis transform.",
+      "Rz in the source denotes vertical support force Fz; My is global support moment about +Y."
+    ],
+    "pending": [
+      "Independent input-blind review",
+      "Native OpenSees execution and adapter acceptance",
+      "Independent same-engine numerical truth",
+      "LLM end-to-end execution"
+    ]
+  },
+  "validationStatus": "Structural checks only; independent input review, numerical reference and native execution remain pending."
+}

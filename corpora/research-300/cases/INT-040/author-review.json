@@ -1,0 +1,16 @@
+{
+  "caseId": "INT-040",
+  "sourceRowsRead": true,
+  "sourceAudit": [
+    "Four exact spatial nodes,six axial elements,AD only strengthened; apexFz=-20; six independent final translation constraints, all truss rotations inactive."
+  ],
+  "decisions": [
+    "Use exact equilateral-base expressions with floating-point sqrt(3) evaluations in hidden/public coordinate tables. No apex or support geometry is invented.",
+    "M1 E206000 MPa,nu0.3,G=E/[2(1+nu)],rho7850 kg/m3; ordinary A1 is0.10x0.10 m. AD area ratio1.5 is source-prescribed; unused Iy,Iz,J are completed at1.5 times A1.",
+    "Initial B uy is null everywhere in public inputs and the total support-translation count is not disclosed. Final translations are A XYZ,B YZ,C Z. Fixed rotational bookkeeping does not create physical bending constraints.",
+    "Left-support reaction is interpreted as all three translational reaction components at A; bottom-edge axial output is explicitly AB."
+  ],
+  "status": "author-checked; independent input blind review pending",
+  "native": "pending",
+  "llm": "not-run"
+}

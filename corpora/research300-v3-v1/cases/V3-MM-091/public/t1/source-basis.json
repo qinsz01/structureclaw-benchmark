@@ -1,0 +1,107 @@
+{
+  "source": {
+    "sourceId": "SRC-JIANGSU-2023",
+    "kind": "real-project-report",
+    "realProjectEligible": true,
+    "projectGroup": "jiangsu-five-span-factory",
+    "title": "PKPM结构V2全新三维门刚项目实测：江苏某工业厂房设计",
+    "url": "https://help.pkpm.cn/admin/ms/detail?SiteID=123&id=5385&type=sourceBook",
+    "publicationDate": "2023-10-12",
+    "authors": [
+      "PKPM结构"
+    ],
+    "publisher": "PKPM 官方",
+    "constructionStatus": "design or project report; construction completion not independently verified",
+    "evidenceStatus": "primary-source-read",
+    "evidence": [
+      {
+        "url": "https://help.pkpm.cn/admin/ms/detail?SiteID=123&id=5385&type=sourceBook",
+        "locator": "工程概况、§4 吊车建模",
+        "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+      }
+    ],
+    "geometryHint": {
+      "type": "frame",
+      "spansM": [
+        8,
+        8
+      ],
+      "heightM": 11.35,
+      "tributaryWidthM": 8,
+      "craneLevelM": 7.5,
+      "transverseBayCount": 5,
+      "roofSlope": 0.05,
+      "factRefs": [
+        "SRC-JIANGSU-2023-F1",
+        "SRC-JIANGSU-2023-F2",
+        "SRC-JIANGSU-2023-F3"
+      ]
+    },
+    "facts": [
+      {
+        "factId": "SRC-JIANGSU-2023-F1",
+        "statement": "江苏某五跨工业厂房；檐口11.35m、柱距8m、屋面坡度5%。",
+        "locator": "工程概况第1段"
+      },
+      {
+        "factId": "SRC-JIANGSU-2023-F2",
+        "statement": "每跨两台5t吊车；吊车柱脚按刚接，抗风柱脚按铰接。",
+        "locator": "工程概况第1段"
+      },
+      {
+        "factId": "SRC-JIANGSU-2023-F3",
+        "statement": "吊车建模标高7.5m。",
+        "locator": "§4 吊车建模"
+      }
+    ],
+    "subproblemProposals": [
+      {
+        "subproblemId": "SRC-JIANGSU-2023-P1",
+        "description": "纵向相邻柱列的两跨局部框架：柱距8+8m、柱高11.35m，明确侧向体系简化。",
+        "maxTaskVariants": 2
+      },
+      {
+        "subproblemId": "SRC-JIANGSU-2023-P2",
+        "description": "含7.5m吊车作用点的单根阶梯柱/带横梁局部构架：用题给等效节点力，检查反力及分段内力。",
+        "maxTaskVariants": 2
+      },
+      {
+        "subproblemId": "SRC-JIANGSU-2023-P3",
+        "description": "抗风柱局部构件：柱脚铰支、顶部水平约束，题面补足稳定约束及风压折算宽度。",
+        "maxTaskVariants": 2
+      }
+    ],
+    "maxCases": 6,
+    "authoredAssumptions": [
+      "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+      "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+      "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+      "8m是纵向柱距，不是原报告五个横向跨的跨度。吊车吨位不能直接当成各节点荷载；题面单列等效轮压。"
+    ],
+    "excludedEffects": [
+      "材料或几何非线性、屈曲、承载力及规范合规判断",
+      "楼板/墙/壳、地基土和桩基、节点实体连接",
+      "受拉单向杆、索、预应力及施工阶段模拟",
+      "移动吊车、轮压影响线、疲劳、原工程受拉支撑"
+    ],
+    "dataConflicts": [
+      "正文建筑面积1849m²与112m×112m互相矛盾；面积及整体平面长宽全部弃用。"
+    ],
+    "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+    "evidenceHashes": []
+  },
+  "authoredAssumptions": [
+    "来源 SRC-JIANGSU-2023；纵向相邻柱列的两跨局部框架：柱距8+8m、柱高11.35m，明确侧向体系简化。",
+    "来源事实：SRC-JIANGSU-2023-F1 江苏某五跨工业厂房；檐口11.35m、柱距8m、屋面坡度5%。；SRC-JIANGSU-2023-F2 每跨两台5t吊车；吊车柱脚按刚接，抗风柱脚按铰接。；SRC-JIANGSU-2023-F3 吊车建模标高7.5m。",
+    "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+    "作者材料：线弹性钢，E=206000MPa，nu=0.3，G=E/[2(1+nu)]，rho=7850kg/m³。",
+    "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+    "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+    "8m是纵向柱距，不是五个横向跨度；作者采用纵向两跨刚接框架，屋面受荷带宽8m。",
+    "公开受荷：D对recipe中全部指定梁，p=0.8kN/m²；Q对列出的交替梁，p=0.5kN/m²；分担宽8.0m。未列构件不重复分配面载。",
+    "W为最高自由节点上题给等效横力10kN；3D另加全局y向4kN，不声称原工程风压规范计算结果。",
+    "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+    "截面尺寸(m)：B=0.22×0.48, C=0.32×0.55, A=0.07×0.1"
+  ],
+  "adaptation": "This is an explicitly authored engineering subproblem, including a new distribution beam where applicable, not the original full building or its design certification."
+}

@@ -1,0 +1,35 @@
+{
+  "caseId": "INT-033",
+  "sourceRowsRead": true,
+  "sourceAudit": [
+    {
+      "source": "planning/capability-coverage-300.json",
+      "row": "INT-033"
+    },
+    {
+      "source": "planning/sources/all-tasks-engines-v2.json",
+      "row": "INT-033"
+    },
+    {
+      "source": "planning/sources/all-models-engines-v2.json",
+      "row": "M-INT-033"
+    },
+    {
+      "sourceRequirementsRetained": true,
+      "requirementCount": 43
+    }
+  ],
+  "decisions": [
+    "E=205000 MPa, nu=0.3, rho=7850 kg/m3 and base A=0.01 m2 retain the explicit property records for linked legacy trusses; these same values are frozen author completions for new trusses lacking an original property appendix. G=E/[2(1+nu)].",
+    "The missing full section appendix is frozen as generic rod properties Iy=Iz=1e-5 m4 and J=2e-5 m4 for every section. These unused transverse properties do not supply bending stiffness to axial-only elements. Only A is multiplied by the source area factors.",
+    "All nodes constrain inactive uy,rx,ry,rz. The left pin also constrains ux,uz; the right roller constrains uz. Rotations are bookkeeping constraints, not flexural member or joint stiffness.",
+    "Load case D is the sole explicit source loading, with no automatic combinations or self-weight. Requested left reaction means its active in-plane Fx,Fz components; other reaction components are identically zero.",
+    "All STRUCT line endpoints were read from fixtures/drawings/truss-simple-tri.dxf and retained. The original four-node loading is replaced only by the source-specified B1,B3 loads.",
+    "T1 has a complete calculable model: analyze and report the five defined baseline quantities while asking the additional maximum-force scope question. clarificationBlocksAnalysis=false applies only to that unresolved output scope. T2 queries the same physical state after scope resolution and may reuse its traceable result; no physical edit or second hidden state is invented.",
+    "All 21 member forces remain reference operands for the governing signed maximum. The report requires the five source baseline quantities and the derived maximum, not an additional table of every operand.",
+    "The maximum-absolute-force request uses tiePolicy=any: any physically tied governing member (or all co-governors) may be reported with that member's signed force, tension/compression and exact case. Existing frozen tolerances and declared operand order are unchanged; signed values are not replaced by magnitudes."
+  ],
+  "status": "author-checked; independent input blind review pending",
+  "native": "pending",
+  "llm": "not-run"
+}

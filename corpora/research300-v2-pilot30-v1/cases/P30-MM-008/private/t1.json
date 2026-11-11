@@ -1,0 +1,274 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "semantics": "global-z-up",
+      "version": 1,
+      "dimension": "2d",
+      "plane": "xz",
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "A",
+        "x": 0,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "F1",
+        "x": 0,
+        "y": 0.0,
+        "z": 3,
+        "restraints": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        "mass": 10.0
+      },
+      {
+        "id": "F2",
+        "x": 0,
+        "y": 0.0,
+        "z": 6.8,
+        "restraints": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        "mass": 7.0
+      }
+    ],
+    "elements": [
+      {
+        "id": "C1",
+        "nodes": [
+          "A",
+          "F1"
+        ],
+        "type": "column",
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C2",
+        "nodes": [
+          "F1",
+          "F2"
+        ],
+        "type": "column",
+        "material": "S",
+        "section": "C"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "C",
+        "name": "column",
+        "type": "custom",
+        "properties": {
+          "A": 0.024,
+          "Iy": 0.0003,
+          "Iz": 0.0001,
+          "J": 4e-05
+        }
+      },
+      {
+        "id": "B",
+        "name": "beam",
+        "type": "custom",
+        "properties": {
+          "A": 0.016,
+          "Iy": 0.00015,
+          "Iz": 6e-05,
+          "J": 2e-05
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": []
+      }
+    ],
+    "load_combinations": [],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false,
+      "mass_source": "nodal",
+      "mass_directions": [
+        "x"
+      ]
+    }
+  },
+  "kind": "modal",
+  "requests": [
+    {
+      "id": "mode-1-period",
+      "path": [
+        "modes",
+        0,
+        "period"
+      ],
+      "unit": "s",
+      "value": 0.7152171288837756,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-1-frequency",
+      "path": [
+        "modes",
+        0,
+        "frequency"
+      ],
+      "unit": "Hz",
+      "value": 1.3981768047986756,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-1-effectiveMass",
+      "path": [
+        "modes",
+        0,
+        "effectiveMass"
+      ],
+      "unit": "tonne",
+      "value": 11.956291479358661,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-period",
+      "path": [
+        "modes",
+        1,
+        "period"
+      ],
+      "unit": "s",
+      "value": 0.12097741098514606,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-frequency",
+      "path": [
+        "modes",
+        1,
+        "frequency"
+      ],
+      "unit": "Hz",
+      "value": 8.266005958110501,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-effectiveMass",
+      "path": [
+        "modes",
+        1,
+        "effectiveMass"
+      ],
+      "unit": "tonne",
+      "value": 5.043708520641341,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    }
+  ],
+  "parameters": {
+    "analysisType": "modal",
+    "numModes": 2,
+    "direction": "x"
+  },
+  "requireShapes": true,
+  "referenceChecks": [
+    {
+      "method": "independent-condensed-K-M-eigenproblem",
+      "periods": [
+        0.7152171288837756,
+        0.12097741098514606
+      ]
+    }
+  ],
+  "modalTruth": {
+    "shape": {
+      "A": [
+        0.0,
+        0.0
+      ],
+      "F1": [
+        -0.09287053307794972,
+        -0.3022830860068381
+      ],
+      "F2": [
+        -0.361297392513262,
+        0.11100151809890163
+      ]
+    },
+    "masses": {
+      "A": 0,
+      "F1": 10.0,
+      "F2": 7.0
+    }
+  },
+  "reportIds": [
+    "mode-1-period",
+    "mode-1-frequency",
+    "mode-1-effectiveMass",
+    "mode-2-period",
+    "mode-2-frequency",
+    "mode-2-effectiveMass"
+  ],
+  "engine": "OpenSees"
+}

@@ -1,0 +1,99 @@
+{
+  "units": {
+    "E": "MPa",
+    "G": "MPa",
+    "rho": "kg/m3",
+    "shape": "mm",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4"
+  },
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "steel",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "A1",
+      "name": "A1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 109.54451150103323,
+        "H": 109.54451150103323
+      },
+      "properties": {
+        "A": 0.012,
+        "Iy": 1.2e-05,
+        "Iz": 1.2e-05,
+        "J": 2.0280000000000002e-05
+      }
+    },
+    {
+      "id": "A2",
+      "name": "A2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 100.0,
+        "H": 100.0
+      },
+      "properties": {
+        "A": 0.01,
+        "Iy": 8.333333333333334e-06,
+        "Iz": 8.333333333333334e-06,
+        "J": 1.4083333333333335e-05
+      }
+    },
+    {
+      "id": "A3",
+      "name": "A3",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 77.45966692414834,
+        "H": 77.45966692414834
+      },
+      "properties": {
+        "A": 0.006,
+        "Iy": 3e-06,
+        "Iz": 3e-06,
+        "J": 5.070000000000001e-06
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "load_combinations": [],
+  "localAxes": {},
+  "analysis": "first-order linear elastic Euler-Bernoulli frame and axial-only truss",
+  "restraintConvention": "[ux,uy,uz,rx,ry,rz]; true = zero prescribed displacement; false = free active DOF; planar inactive DOFs and truss rotations are explicitly suppressed",
+  "sectionRollConvention": "ey_new=cos(theta)*ey+sin(theta)*ez; ez_new=-sin(theta)*ey+cos(theta)*ez; theta in degrees about i-to-j"
+}

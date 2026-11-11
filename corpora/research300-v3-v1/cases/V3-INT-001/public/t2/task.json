@@ -1,0 +1,101 @@
+{
+  "caseId": "V3-INT-001",
+  "turnId": "t2",
+  "family": "INT",
+  "title": "INT-079商业原生模型重组",
+  "designLevel": "L1",
+  "engine": "PKPM",
+  "analysis": "query",
+  "instruction": "按本轮局部修订单更新；未变更输入保持。若本轮仅查询，复用前轮真实作业并重新报告指定结果。",
+  "requests": [
+    {
+      "id": "case-D--n1-1-2--ux",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n1-1-2"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case-D--n1-1-2--uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n1-1-2"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case-D--n1-1-2--uy",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n1-1-2"
+      },
+      "component": "uy",
+      "unit": "m"
+    },
+    {
+      "id": "case-D--n0-0-0--My",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n0-0-0"
+      },
+      "component": "My",
+      "unit": "kN.m"
+    },
+    {
+      "id": "case-D--n0-0-0--Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n0-0-0"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    }
+  ],
+  "derived": [
+    {
+      "id": "signed-current-vertical-envelope",
+      "operation": "max_abs",
+      "operands": [
+        "case-D--n1-1-2--uz"
+      ],
+      "unit": "m",
+      "tiePolicy": "any"
+    }
+  ],
+  "reportIds": [
+    "case-D--n1-1-2--ux",
+    "case-D--n1-1-2--uz",
+    "case-D--n1-1-2--uy",
+    "case-D--n0-0-0--My",
+    "case-D--n0-0-0--Fz"
+  ],
+  "requireShapes": false,
+  "sourceId": null,
+  "interactionRule": "Apply only this issued change order to the last confirmed state; retain all other prior inputs. Initial restores refer to t1.",
+  "attachments": [
+    "change-order.json"
+  ]
+}

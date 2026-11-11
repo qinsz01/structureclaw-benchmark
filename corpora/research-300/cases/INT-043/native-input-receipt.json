@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-043",
+  "inputHashes": {
+    "contract.json": "521a62ca27cc88bf08445952c1a4e24ab8aa6e24f17ad207539d6fd8e9575f48",
+    "reference-requests.json": "293367097993c52bd5a97c5f2a6cca56979fc37c52020776ba5c3c44c2f04f21",
+    "model-state-1.json": "f51e94ecf3eeb0270d4800a3f59b39c4d553a5451b32f2b406370234f2d301de",
+    "model-state-2.json": "6400b5525fe393acc0f7a3cae98749aae579930aed52f961432e25181c09f4fd"
+  },
+  "sourceHash": "6564f0ebd5adeaebd884cb8ae706d458d5f58c1fd16e80858f3329bdb20da94d",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "521a62ca27cc88bf08445952c1a4e24ab8aa6e24f17ad207539d6fd8e9575f48"
+      },
+      {
+        "path": "input.txt",
+        "sha256": "f8c9977ae96ec675fd34a6a54f15386b4fac402ebb41a30cd8e8203461ac0206"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "f51e94ecf3eeb0270d4800a3f59b39c4d553a5451b32f2b406370234f2d301de"
+      },
+      {
+        "path": "model-state-2.json",
+        "sha256": "6400b5525fe393acc0f7a3cae98749aae579930aed52f961432e25181c09f4fd"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "fd2e13a2c3f4cd99bb1c5672bb281cc497a82822aa85c8ed9ffdd50793662c13"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "293367097993c52bd5a97c5f2a6cca56979fc37c52020776ba5c3c44c2f04f21"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 18,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "L",
+            "x": 0,
+            "y": 0,
+            "z": 7,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "R",
+            "x": 18,
+            "y": 0,
+            "z": 7,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "cL",
+            "type": "column",
+            "nodes": [
+              "A",
+              "L"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "cR",
+            "type": "column",
+            "nodes": [
+              "B",
+              "R"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "roof",
+            "type": "beam",
+            "nodes": [
+              "L",
+              "R"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "q-roof",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "roof",
+                "wz": -6
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "cL": [
+              -7,
+              0,
+              0
+            ],
+            "cR": [
+              -7,
+              0,
+              0
+            ],
+            "roof": [
+              0,
+              0,
+              18
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    },
+    {
+      "state": 2,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "A",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "B",
+            "x": 18,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "L",
+            "x": 0,
+            "y": 0,
+            "z": 9,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "R",
+            "x": 18,
+            "y": 0,
+            "z": 9,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "cL",
+            "type": "column",
+            "nodes": [
+              "A",
+              "L"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "cR",
+            "type": "column",
+            "nodes": [
+              "B",
+              "R"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "roof",
+            "type": "beam",
+            "nodes": [
+              "L",
+              "R"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "q-roof",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "roof",
+                "wz": -6
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "cL": [
+              -9,
+              0,
+              0
+            ],
+            "cR": [
+              -9,
+              0,
+              0
+            ],
+            "roof": [
+              0,
+              0,
+              18
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-2.json"
+    }
+  ]
+}

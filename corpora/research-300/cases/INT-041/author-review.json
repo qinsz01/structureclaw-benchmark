@@ -1,0 +1,25 @@
+{
+  "caseId": "INT-041",
+  "sourceRowsRead": true,
+  "sourceAudit": [
+    {
+      "sourceField": "task.scenario",
+      "check": "Exact original turn count, edits, and delayed clarification retained."
+    },
+    {
+      "sourceField": "model.spec",
+      "check": "底面6m×6m，顶点偏离中心，高3m，底边杆加四斜杆，四底节点固定，顶点双向荷载；底四角(0,0,0)/(6,0,0)/(6,6,0)/(0,6,0)m，顶点(2,3,3)m；顶点至底角(6,6,0)m的斜杆面积2A，其余底边及斜杆A；顶点Fx=20kN、Fz=-30kN；各底点三平移约束。"
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "check": "顶点(2,3,3)m的Ux/Uz/Uy，左支承反力及附表指定首根下弦/底边杆轴力；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。"
+    }
+  ],
+  "decisions": [
+    "The source leaves absolute section/material appendix unspecified. Freeze explicit E=206000 MPa, nu=0.3, G=E/(2*(1+nu)), density=7850 kg/m3; B1=0.30x0.60m, C1=0.50x0.50m solid rectangles; proportional I sections are general sections with unchanged A,J. All values are public inputs, not tuned reference values.",
+    "A=0.01 m2; CP=0.02 m2. All unused truss rotations fixed only as inactive DOFs; only translations carry truss stiffness. Left support is A=(0,0,0), first base rod AB."
+  ],
+  "status": "author-checked; independent input blind review pending",
+  "native": "pending",
+  "llm": "not-run"
+}

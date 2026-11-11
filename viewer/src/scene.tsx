@@ -8,6 +8,12 @@ import { formatNumber } from './data';
 import { words } from './i18n';
 import { Thumbnail } from './thumbnail';
 import type { Pick } from './reference-math';
+import {
+  forceLoadPoints,
+  nodalMomentGlyphs,
+  supportKind,
+  visibleSupportRestraints,
+} from './scene-loads';
 
 export default function Scene({
   model,
@@ -55,6 +61,7 @@ export default function Scene({
   const [selected, setSelected] = useState<Raw | null>(null);
   const [full, setFull] = useState(false);
   const activeLoadType = model.load_cases.find((c) => c.id === loadCase)?.type;
+  const momentLabels = nodalMomentGlyphs(model, loadCase, 1).map((moment) => moment.label);
   const floorLoads = (model.stories || []).flatMap((story) =>
     (story.floor_loads || [])
       .filter((load) => load.type === activeLoadType)
@@ -205,6 +212,8 @@ export default function Scene({
     }
     for (const n of model.nodes) {
       const p = positions[n.id];
+      const physicalRestraints = visibleSupportRestraints(model, n);
+      const supportType = supportKind(model, n);
       const mesh = new THREE.Mesh(
         new THREE.SphereGeometry(span * 0.009, 14, 10),
         material(resultPick?.kind === 'node' && resultPick.entity === n.id ? '#e07820' : '#2358df'),
@@ -227,23 +236,33 @@ export default function Scene({
             .map((r, i) => (r ? model.coordinate_system.dof_order[i] : null))
             .filter(Boolean)
             .join(', ') || t.free,
+        [locale === 'zh' ? '物理约束（不含非参与自由度）' : 'Physical restraints (active DOFs)']:
+          physicalRestraints
+            .map((restrained, index) =>
+              restrained ? model.coordinate_system.dof_order[index] : null,
+            )
+            .filter(Boolean)
+            .join(', ') || t.free,
       };
       pickable.push(mesh);
       if (labels) text(n.id, p.clone().add(new THREE.Vector3(0, 0, span * 0.035)), '#203858');
-      if (n.restraints?.some(Boolean)) {
-        const fixed = n.restraints.every(Boolean);
+      if (supportType) {
+        const fixed = supportType === 'fixed';
+        const constraintMarker = supportType === 'rotation' || supportType === 'partial';
         const support = new THREE.Mesh(
-          fixed
-            ? new THREE.BoxGeometry(span * 0.036, span * 0.036, span * 0.022)
-            : new THREE.ConeGeometry(span * 0.025, span * 0.033, 4),
+          constraintMarker
+            ? new THREE.TorusGeometry(span * 0.022, span * 0.003, 8, 24)
+            : fixed
+              ? new THREE.BoxGeometry(span * 0.036, span * 0.036, span * 0.022)
+              : new THREE.ConeGeometry(span * 0.025, span * 0.033, 4),
           material('#a3b5cc'),
         );
         if (!fixed) support.rotation.x = Math.PI / 2;
-        support.position.copy(p).add(new THREE.Vector3(0, 0, -span * 0.021));
+        support.position.copy(p).add(new THREE.Vector3(0, 0, constraintMarker ? 0 : -span * 0.021));
         support.userData.details = mesh.userData.details;
         scene.add(support);
         pickable.push(support);
-        if (!fixed && n.restraints.slice(0, 3).some((r) => !r)) {
+        if (supportType === 'roller') {
           for (const offset of [-0.011, 0.011]) {
             const roller = new THREE.Mesh(
               new THREE.SphereGeometry(span * 0.006, 10, 8),
@@ -256,7 +275,8 @@ export default function Scene({
           }
         }
         // Axis ticks expose exact translational constraints; detailed DOFs remain selectable.
-        n.restraints.slice(0, 3).forEach((restrained, i) => {
+        ['ux', 'uy', 'uz'].forEach((dof, i) => {
+          const restrained = physicalRestraints[model.coordinate_system.dof_order.indexOf(dof)];
           if (restrained) {
             const v = new THREE.Vector3().setComponent(i, span * 0.033);
             line(p.clone().sub(v), p.clone().add(v), span * 0.002, '#859ab7');
@@ -275,15 +295,7 @@ export default function Scene({
         if (!force.length()) continue;
         const dir = force.clone().normalize();
         const length = span * 0.12;
-        const e = model.elements.find((e) => e.id === load.element);
-        const points =
-          distributed && e
-            ? [0, 0.25, 0.5, 0.75, 1].map((u) =>
-                positions[e.nodes[0]].clone().lerp(positions[e.nodes[1]], u),
-              )
-            : load.node && positions[load.node]
-              ? [positions[load.node]]
-              : [];
+        const points = forceLoadPoints(model, load).map((point) => new THREE.Vector3(...point));
         for (const tip of points) {
           const start = tip.clone().addScaledVector(dir, -length);
           scene.add(
@@ -310,6 +322,25 @@ export default function Scene({
             );
           }
         }
+      }
+    if (loads)
+      for (const moment of nodalMomentGlyphs(model, loadCase, span * 0.05)) {
+        const points = moment.points.map((point) => new THREE.Vector3(...point));
+        for (let index = 1; index < points.length; index++)
+          line(points[index - 1], points[index], span * 0.0017, '#9a5cb5');
+        const tangent = new THREE.Vector3(...moment.tangent);
+        const tip = points.at(-1)!;
+        scene.add(
+          new THREE.ArrowHelper(
+            tangent,
+            tip.clone().addScaledVector(tangent, -span * 0.024),
+            span * 0.024,
+            '#9a5cb5',
+            span * 0.022,
+            span * 0.013,
+          ),
+        );
+        if (labels) text(moment.label, new THREE.Vector3(...moment.labelPosition), '#85439f');
       }
     if (loads)
       for (const floor of floorLoads) {
@@ -656,6 +687,12 @@ export default function Scene({
           {t.supports}
           <i className="dot amber" />
           {t.loads}
+          {momentLabels.length > 0 && (
+            <>
+              <i className="dot" style={{ background: '#9a5cb5' }} />
+              {locale === 'zh' ? '节点力矩' : 'Nodal moments'}
+            </>
+          )}
         </span>
         <button onClick={() => exporter.current()} disabled={fallback}>
           {t.export} ↗
@@ -674,6 +711,18 @@ export default function Scene({
       </div>
       {loads && (
         <div className="load-note">
+          {momentLabels.length > 0 && (
+            <div className="floor-loads">
+              <strong>
+                {locale === 'zh'
+                  ? '节点力矩：曲箭头按标示全局轴的右手方向'
+                  : 'Nodal moments: curved arrows follow the labelled global axis by the right-hand rule'}
+              </strong>
+              {momentLabels.map((label, index) => (
+                <span key={`${label}-${index}`}>{label}</span>
+              ))}
+            </div>
+          )}
           {floorLoads.length > 0 && (
             <div className="floor-loads">
               <strong>{t.floorLoads}</strong>

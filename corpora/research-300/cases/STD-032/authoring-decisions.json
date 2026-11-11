@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "case": "STD-032",
+  "notes": [
+    "The 11-node, 19-bar topology, E=205000 MPa and A=0.01 m² preserve the immutable std-truss-tri-en source.",
+    "The new corpus explicitly disables self-weight and requests fresh LC1 results; no legacy answer is reused.",
+    "The property appendix completes each area A as a solid square with side sqrt(A), Iy=Iz=A²/12 and J=0.14083333333333334 A². These are explicit authored section properties. All elements remain axial-only trusses; bending and torsion constants are inactive and axial stiffness remains EA.",
+    "Author-only independent connectivity/stability check: {'nodes': 11, 'members': 19, 'freeTranslations': 19, 'compatibilityRank': 19}; native execution, numerical reference and blind input review remain pending.",
+    {
+      "sourcePath": "scenarios/standard_workflow/std-truss-tri-en.json",
+      "sourceSha256": "cdd23616d62f3bcd6b9f7ae05cd354d7c335e5fa13ae7486a87b4f215cf27d20",
+      "retained": "Geometry, topology, supports, nodal loads, E and A",
+      "newCorpusContract": "Self-weight disabled; only the LC1 load case; no default combination or legacy answer reused."
+    }
+  ],
+  "appendixPolicy": "Numerical properties and any missing source connection table are explicit author decisions. They are inputs, not solver defaults or validated answers.",
+  "tolerancePolicy": "Absolute 1e-8 plus relative 1e-6 in each declared output unit, frozen before candidate runs.",
+  "sourceReview": "Author source comparison recorded separately; independent input-blind review pending.",
+  "referenceStatus": "Requests only; no reference values authored."
+}

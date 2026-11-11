@@ -1,0 +1,1067 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-019",
+  "modelId": "M-STD-019",
+  "family": "standard_workflow",
+  "language": "中文",
+  "locale": "zh",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "跨度4、6、4m，D全跨8kN/m，L1仅中跨、L2仅两边跨各10kN/m，题定三个组合；完整属性按公共契约随题给出。 明确C0=D、C1=D+L1、C2=D+L2；各工况独立，非按规范自动选系数。",
+    "task.modelingFocus": "工况独立保存和组合系数正确",
+    "task.expectedOutput": "每组合四支反力、三跨中位移及中支座弯矩；输出控制组合标识。",
+    "task.gradingFocus": "工况独立保存和组合系数正确；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "多组合执行契约需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "三跨连续梁；左右等跨中跨较长",
+    "model.boundaryKey": "左铰其余三支座竖向滚支",
+    "model.loadKey": "D全跨；L1中跨；L2两边跨；三个组合",
+    "model.propertyKey": "均匀单材料单截面",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。 荷载与观测位置可合理分段，但不改变支承/连续条件；跨内响应须含荷载项。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "三个独立工况和题定三个组合的保存、叠加及标签须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；分别求三个单位工况的独立刚度解，再按系数叠加；验证每个组合平衡。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "geometry.json",
+    "properties.json",
+    "loads.json",
+    "output-requests.json"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "三跨连续梁跨度4、6、4m，支座x=0、4、10、14m，左铰其余竖向滚支。D为全梁向下8kN/m；独立工况L1仅中跨向下10kN/m，L2仅两边跨向下10kN/m。仅使用C0=D、C1=D+L1、C2=D+L2，不自动加入规范系数。每组合报告四支反力、三跨中Z位移及两个中支座弯矩；逐位置逐分量比较三个组合的绝对值最大值，保留带符号结果和控制组合标识。绝对值相等时，按C0、C1、C2顺序选取首个控制组合。\n\n完整输入见附件。全局XYZ为右手系，Z向上；平面结构位于XZ面。表列节点均为实际连通节点。构件局部x由i端指向j端；二维局部y为全局+Y，局部z=x×y；三维局部y=归一化(reference×x)，局部z=x×y，参考向量逐杆给出。N拉为正；截面N/T/M2/M3在i端取节点抵抗力的负值，在j端取正值；V2/V3在i端取正值、j端取负值。节点位移和支反力按全局分量，转角服从右手定则。线载按构件实际长度计，斜杆亦然。一阶线弹性，自重、刚性楼板、刚域、二阶和施工阶段关闭；仅使用题定工况及组合。逐项完成output-requests.json中所有请求，保留位置、截面侧别、正负号、分量、单位、工况/组合。跨内内力恢复须计入荷载项。实际运行OpenSees，保留版本、可运行输入、当前模型哈希、运行ID、实际求解日志及原始结果/工况对应关系。正文和结构化结果均须给出题定结果，并独立检查平衡。附件不提供数值答案或原生执行证据。",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "geometry.json",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "output-001",
+      "description": "报告 combination:C0:node:N0:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N0:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-002",
+      "description": "报告 combination:C0:node:N0:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N0:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-003",
+      "description": "报告 combination:C0:node:N2:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N2:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-004",
+      "description": "报告 combination:C0:node:N2:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N2:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-005",
+      "description": "报告 combination:C0:node:N4:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N4:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-006",
+      "description": "报告 combination:C0:node:N4:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N4:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-007",
+      "description": "报告 combination:C0:node:N6:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N6:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-008",
+      "description": "报告 combination:C0:node:N6:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N6:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-009",
+      "description": "报告 combination:C0:node:N1:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N1:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-010",
+      "description": "报告 combination:C0:node:N3:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N3:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-011",
+      "description": "报告 combination:C0:node:N5:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:node:N5:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-012",
+      "description": "报告 combination:C0:member:E02:M2@2:left，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:member:E02:M2@2:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-013",
+      "description": "报告 combination:C0:member:E03:M2@0:right，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:member:E03:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-014",
+      "description": "报告 combination:C0:member:E04:M2@3:left，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:member:E04:M2@3:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-015",
+      "description": "报告 combination:C0:member:E05:M2@0:right，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C0:member:E05:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-016",
+      "description": "报告 combination:C1:node:N0:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N0:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-017",
+      "description": "报告 combination:C1:node:N0:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N0:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-018",
+      "description": "报告 combination:C1:node:N2:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N2:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-019",
+      "description": "报告 combination:C1:node:N2:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N2:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-020",
+      "description": "报告 combination:C1:node:N4:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N4:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-021",
+      "description": "报告 combination:C1:node:N4:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N4:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-022",
+      "description": "报告 combination:C1:node:N6:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N6:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-023",
+      "description": "报告 combination:C1:node:N6:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N6:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-024",
+      "description": "报告 combination:C1:node:N1:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N1:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-025",
+      "description": "报告 combination:C1:node:N3:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N3:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-026",
+      "description": "报告 combination:C1:node:N5:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:node:N5:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-027",
+      "description": "报告 combination:C1:member:E02:M2@2:left，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:member:E02:M2@2:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-028",
+      "description": "报告 combination:C1:member:E03:M2@0:right，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:member:E03:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-029",
+      "description": "报告 combination:C1:member:E04:M2@3:left，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:member:E04:M2@3:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-030",
+      "description": "报告 combination:C1:member:E05:M2@0:right，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C1:member:E05:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-031",
+      "description": "报告 combination:C2:node:N0:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N0:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-032",
+      "description": "报告 combination:C2:node:N0:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N0:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-033",
+      "description": "报告 combination:C2:node:N2:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N2:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-034",
+      "description": "报告 combination:C2:node:N2:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N2:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-035",
+      "description": "报告 combination:C2:node:N4:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N4:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-036",
+      "description": "报告 combination:C2:node:N4:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N4:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-037",
+      "description": "报告 combination:C2:node:N6:Fx，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N6:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-038",
+      "description": "报告 combination:C2:node:N6:Fz，单位 kN",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N6:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-039",
+      "description": "报告 combination:C2:node:N1:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N1:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-040",
+      "description": "报告 combination:C2:node:N3:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N3:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-041",
+      "description": "报告 combination:C2:node:N5:uz，单位 m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:node:N5:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-042",
+      "description": "报告 combination:C2:member:E02:M2@2:left，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:member:E02:M2@2:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-043",
+      "description": "报告 combination:C2:member:E03:M2@0:right，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:member:E03:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-044",
+      "description": "报告 combination:C2:member:E04:M2@3:left，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:member:E04:M2@3:left"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-045",
+      "description": "报告 combination:C2:member:E05:M2@0:right，单位 kN.m",
+      "state": 1,
+      "quantityIds": [
+        "combination:C2:member:E05:M2@0:right"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N0:Fx",
+      "description": "node:N0:Fx 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N0:Fx"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N0:Fz",
+      "description": "node:N0:Fz 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N0:Fz"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N2:Fx",
+      "description": "node:N2:Fx 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N2:Fx"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N2:Fz",
+      "description": "node:N2:Fz 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N2:Fz"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N4:Fx",
+      "description": "node:N4:Fx 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N4:Fx"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N4:Fz",
+      "description": "node:N4:Fz 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N4:Fz"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N6:Fx",
+      "description": "node:N6:Fx 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N6:Fx"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N6:Fz",
+      "description": "node:N6:Fz 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N6:Fz"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N1:uz",
+      "description": "node:N1:uz 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N1:uz"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N3:uz",
+      "description": "node:N3:uz 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N3:uz"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:node:N5:uz",
+      "description": "node:N5:uz 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:node:N5:uz"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:member:E02:M2@2:left",
+      "description": "member:E02:M2@2:left 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:member:E02:M2@2:left"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:member:E03:M2@0:right",
+      "description": "member:E03:M2@0:right 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:member:E03:M2@0:right"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:member:E04:M2@3:left",
+      "description": "member:E04:M2@3:left 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:member:E04:M2@3:left"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "output-derived-governing:member:E05:M2@0:right",
+      "description": "member:E05:M2@0:right 三个组合中绝对值最大的带符号值及控制组合；绝对值相等时按C0、C1、C2顺序取首个。",
+      "state": 1,
+      "quantityIds": [
+        "governing:member:E05:M2@0:right"
+      ],
+      "kind": "derived",
+      "turnIds": [
+        "t1"
+      ]
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "geometry.json",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "targets": [
+        "turns:t1",
+        "geometry.json",
+        "loads.json",
+        "properties.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "geometry.json",
+        "loads.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7,
+        8
+      ],
+      "targets": [
+        "output-requests.json",
+        "requiredOutputs:output-001",
+        "requiredOutputs:output-002",
+        "requiredOutputs:output-003",
+        "requiredOutputs:output-004",
+        "requiredOutputs:output-005",
+        "requiredOutputs:output-006",
+        "requiredOutputs:output-007",
+        "requiredOutputs:output-008",
+        "requiredOutputs:output-009",
+        "requiredOutputs:output-010",
+        "requiredOutputs:output-011",
+        "requiredOutputs:output-012",
+        "requiredOutputs:output-013",
+        "requiredOutputs:output-014",
+        "requiredOutputs:output-015",
+        "requiredOutputs:output-016",
+        "requiredOutputs:output-017",
+        "requiredOutputs:output-018",
+        "requiredOutputs:output-019",
+        "requiredOutputs:output-020",
+        "requiredOutputs:output-021",
+        "requiredOutputs:output-022",
+        "requiredOutputs:output-023",
+        "requiredOutputs:output-024",
+        "requiredOutputs:output-025",
+        "requiredOutputs:output-026",
+        "requiredOutputs:output-027",
+        "requiredOutputs:output-028",
+        "requiredOutputs:output-029",
+        "requiredOutputs:output-030",
+        "requiredOutputs:output-031",
+        "requiredOutputs:output-032",
+        "requiredOutputs:output-033",
+        "requiredOutputs:output-034",
+        "requiredOutputs:output-035",
+        "requiredOutputs:output-036",
+        "requiredOutputs:output-037",
+        "requiredOutputs:output-038",
+        "requiredOutputs:output-039",
+        "requiredOutputs:output-040",
+        "requiredOutputs:output-041",
+        "requiredOutputs:output-042",
+        "requiredOutputs:output-043",
+        "requiredOutputs:output-044",
+        "requiredOutputs:output-045",
+        "requiredOutputs:output-derived-governing:node:N0:Fx",
+        "requiredOutputs:output-derived-governing:node:N0:Fz",
+        "requiredOutputs:output-derived-governing:node:N2:Fx",
+        "requiredOutputs:output-derived-governing:node:N2:Fz",
+        "requiredOutputs:output-derived-governing:node:N4:Fx",
+        "requiredOutputs:output-derived-governing:node:N4:Fz",
+        "requiredOutputs:output-derived-governing:node:N6:Fx",
+        "requiredOutputs:output-derived-governing:node:N6:Fz",
+        "requiredOutputs:output-derived-governing:node:N1:uz",
+        "requiredOutputs:output-derived-governing:node:N3:uz",
+        "requiredOutputs:output-derived-governing:node:N5:uz",
+        "requiredOutputs:output-derived-governing:member:E02:M2@2:left",
+        "requiredOutputs:output-derived-governing:member:E03:M2@0:right",
+        "requiredOutputs:output-derived-governing:member:E04:M2@3:left",
+        "requiredOutputs:output-derived-governing:member:E05:M2@0:right"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        9,
+        10
+      ],
+      "targets": [
+        "output-requests.json",
+        "gate:all-requested-output-scoring",
+        "gate:report-body-consistency"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        11,
+        12
+      ],
+      "targets": [
+        "properties.json",
+        "gate:input-blind-review",
+        "gate:adapter-capability-acceptance"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        13,
+        14
+      ],
+      "targets": [
+        "geometry.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        15
+      ],
+      "targets": [
+        "geometry.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "targets": [
+        "loads.json",
+        "gate:physical-model-review"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        20
+      ],
+      "targets": [
+        "properties.json",
+        "geometry.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "targets": [
+        "turns:t1",
+        "properties.json",
+        "loads.json",
+        "output-requests.json"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        28,
+        29
+      ],
+      "targets": [
+        "turns:t1",
+        "gate:native-execution-every-selection"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        30
+      ],
+      "targets": [
+        "turns:t1",
+        "gate:native-execution-every-selection",
+        "gate:independent-same-engine-truth"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        31,
+        32,
+        33
+      ],
+      "targets": [
+        "gate:adapter-capability-acceptance"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        34,
+        35,
+        36,
+        37,
+        38
+      ],
+      "targets": [
+        "reference-requests.json",
+        "gate:independent-same-engine-truth",
+        "gate:all-requested-output-scoring"
+      ],
+      "notes": "Mapping identifies authored evidence and pending acceptance gates; mapping alone does not validate execution, fidelity, output scoring or independent review."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "physical-model-review",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "native-execution-every-selection",
+      "status": "pending"
+    },
+    {
+      "id": "independent-same-engine-truth",
+      "status": "pending"
+    },
+    {
+      "id": "all-requested-output-scoring",
+      "status": "pending"
+    },
+    {
+      "id": "report-body-consistency",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-capability-acceptance",
+      "status": "pending"
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run"
+}

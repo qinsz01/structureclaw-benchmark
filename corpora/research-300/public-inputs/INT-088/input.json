@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "edition": "current",
+  "caseId": "INT-088",
+  "baseSourceHash": "702ac1cc83babc73dec5db221fbbec51bade58f5fd0e780d676a5a6012b419f5",
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Analyze the attached three-dimensional frame in OpenSees. Keep D, W-X and W-Y as separate cases, and evaluate combinations D, D+WX and D+WY with the listed unit factors. All first-story beams use B1; all roof beams use B2 with the same area and 0.8 times B1 Iy and Iz. Report the specified responses for every case and combination.\nUse the stated OpenSees engine for every computable changed state. First-order linear elastic analysis; self-weight, P-delta, rigid diaphragms, rigid offsets and construction stages are off. Preserve all fields not explicitly changed. Report every requested signed value with node/member, global direction, unit, case/combination, turn, model state and traceable . Rz denotes the vertical support reaction Fz. Retain original cases and evaluate every listed combination separately. Resolve essential missing or contradictory inputs before reporting new numerical results.",
+      "attachments": [
+        {
+          "name": "input.md",
+          "source": "edition",
+          "path": "input.md",
+          "sha256": "fff8a6b855958e428016cfd500c80804acee5c7f3d2c8f0be62dab53b491f2d0"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "instruction": "Increase only every W-X nodal force by 20% from its current initial value. Preserve W-Y, gravity loads, all three combination factors, materials and section groups. Rerun and report the current responses for every selection.",
+      "attachments": []
+    },
+    {
+      "id": "t3",
+      "instruction": "Reverse only every W-Y nodal force. Retain the 20% W-X increase, gravity and all combination factors and properties. Rerun and report current responses.",
+      "attachments": []
+    },
+    {
+      "id": "t4",
+      "instruction": "Undo only the immediately preceding W-Y reversal from turn 3. Keep the W-X increase from turn 2, retain gravity, combinations and section groups, and rerun the restored current state. Report every requested response.",
+      "attachments": []
+    }
+  ]
+}

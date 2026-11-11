@@ -1,0 +1,5052 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-088",
+  "modelId": "M-STD-088",
+  "family": "standard_workflow",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "YJK",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "两层2乘1跨，重力与X/Y侧力分别给定，三个组合；完整属性按公共契约随题给出。 跨长X为6+6m、Y为5m，层高3.6m；D梁8kN/m，右后角逐层Wx=10/20kN、Wy=8/16kN；求D、D+Wx、D+Wy。",
+    "task.modelingFocus": "两个水平分量及组合响应定位",
+    "task.expectedOutput": "同一角点每层X/Y位移、各柱列双向层间差、柱脚反力向量及控制组合标识。",
+    "task.gradingFocus": "两个水平分量及组合响应定位；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "多组合执行契约需验证；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "空间两层X两跨Y一跨框架",
+    "model.boundaryKey": "全部柱脚六自由度固定",
+    "model.loadKey": "D梁线载；Wx/Wy右后角分层侧力；三个组合",
+    "model.propertyKey": "单钢材料；梁柱分组截面及局部轴",
+    "engine.analysisContract": "保留题定几何、材料截面、边界、全部目标输出及一阶线弹性静力；自重关闭，不新增刚性楼板、刚域或默认组合。梁线载/单向受荷宽度严格按题，禁止自动双向传载或面线载叠加；原生 DL/LL、坐标轴、单位、工况/组合须有显式对应。",
+    "engine.executionRequirement": "拟要求真实 YJK 原生建模和求解，并交付关联本题的项目、计算日志及原始结果；OpenSees 替代或仅生成兼容文件不能计作原生计算完成。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：YJK 版本、独立模型/项目标识、节点构件属性及荷载审计表、原生计算日志、原始结果文件；位移/端力/反力逐项关联模型、构件、工况与单位。",
+    "engine.adapterGap": "现有输入仅楼面 DL/LL，缺题定右后角逐层 X/Y 节点侧力；D、D+Wx、D+Wy 的显式组合映射未验证，须补输入和结果索引。另须验收自重关闭、无刚性楼板、轴系/单位及题定工况到原生设置的映射；未实际运行。",
+    "engine.truthPlan": "拟在 YJK 中独立建模并人工审定输入、版本和分析设置，生成本题全部要求的位移/内力/反力同引擎标答；独立 D/Wx/Wy 杆系解和叠加，逐项复核双向基底剪力与倾覆力矩。旧值仅作线索，不直接继承；跨引擎仅校核，不以 OpenSees 唯一判卷。尚未生成。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-data.json",
+    "output-requests.json",
+    "analysis-conventions.txt",
+    "analysis-conventions-v2.txt"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Required solver: YJK.\nUse YJK native analysis for a two-story steel space frame with X bays 6+6 m, Y bay 5 m and 3.6 m story heights. All six bases are fixed in six DOFs. D is 8 kN/m downward on every floor beam. At the right rear corner (12,5), apply Wx in +X: 10 kN at floor 1 and 20 kN at floor 2; Wy is a separate +Y case with 8 and 16 kN at those same levels. Analyze combinations C0=D, CX=D+Wx and CY=D+Wy independently. Report X/Y corner displacements at both levels, X/Y story differences on all column lines, six-component base reactions and the governing combination for each requested displacement, drift and reaction component. Retain the signed value of each maximum-absolute response.\n\nUse all public appendices. Report the complete requested numerical table and the required summaries.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-data.json",
+        "output-requests.json",
+        "analysis-conventions.txt",
+        "analysis-conventions-v2.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "out-combination-C0-node-n0-0-1-ux",
+      "description": "combination-C0-node-n0-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-1-uy",
+      "description": "combination-C0-node-n0-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-1-uz",
+      "description": "combination-C0-node-n0-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-0-ux",
+      "description": "combination-C0-node-n0-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-0-uy",
+      "description": "combination-C0-node-n0-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-1-ux",
+      "description": "combination-C0-node-n0-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-1-uy",
+      "description": "combination-C0-node-n0-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-1-uz",
+      "description": "combination-C0-node-n0-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-0-ux",
+      "description": "combination-C0-node-n0-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-0-uy",
+      "description": "combination-C0-node-n0-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-1-ux",
+      "description": "combination-C0-node-n1-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-1-uy",
+      "description": "combination-C0-node-n1-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-1-uz",
+      "description": "combination-C0-node-n1-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-0-ux",
+      "description": "combination-C0-node-n1-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-0-uy",
+      "description": "combination-C0-node-n1-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-1-ux",
+      "description": "combination-C0-node-n1-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-1-uy",
+      "description": "combination-C0-node-n1-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-1-uz",
+      "description": "combination-C0-node-n1-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-0-ux",
+      "description": "combination-C0-node-n1-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-0-uy",
+      "description": "combination-C0-node-n1-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-1-ux",
+      "description": "combination-C0-node-n2-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-1-uy",
+      "description": "combination-C0-node-n2-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-1-uz",
+      "description": "combination-C0-node-n2-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-0-ux",
+      "description": "combination-C0-node-n2-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-0-uy",
+      "description": "combination-C0-node-n2-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-1-ux",
+      "description": "combination-C0-node-n2-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-1-uy",
+      "description": "combination-C0-node-n2-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-1-uz",
+      "description": "combination-C0-node-n2-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-0-ux",
+      "description": "combination-C0-node-n2-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-0-uy",
+      "description": "combination-C0-node-n2-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-2-ux",
+      "description": "combination-C0-node-n0-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-2-uy",
+      "description": "combination-C0-node-n0-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-2-uz",
+      "description": "combination-C0-node-n0-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-2-ux",
+      "description": "combination-C0-node-n0-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-2-uy",
+      "description": "combination-C0-node-n0-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-2-uz",
+      "description": "combination-C0-node-n0-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-2-ux",
+      "description": "combination-C0-node-n1-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-2-uy",
+      "description": "combination-C0-node-n1-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-2-uz",
+      "description": "combination-C0-node-n1-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-2-ux",
+      "description": "combination-C0-node-n1-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-2-uy",
+      "description": "combination-C0-node-n1-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-2-uz",
+      "description": "combination-C0-node-n1-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-2-ux",
+      "description": "combination-C0-node-n2-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-2-uy",
+      "description": "combination-C0-node-n2-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-2-uz",
+      "description": "combination-C0-node-n2-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-2-ux",
+      "description": "combination-C0-node-n2-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-2-uy",
+      "description": "combination-C0-node-n2-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-2-uz",
+      "description": "combination-C0-node-n2-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-0-Fx",
+      "description": "combination-C0-node-n0-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-0-Fy",
+      "description": "combination-C0-node-n0-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-0-Fz",
+      "description": "combination-C0-node-n0-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-0-Mx",
+      "description": "combination-C0-node-n0-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-0-My",
+      "description": "combination-C0-node-n0-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-0-0-Mz",
+      "description": "combination-C0-node-n0-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-0-Fx",
+      "description": "combination-C0-node-n0-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-0-Fy",
+      "description": "combination-C0-node-n0-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-0-Fz",
+      "description": "combination-C0-node-n0-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-0-Mx",
+      "description": "combination-C0-node-n0-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-0-My",
+      "description": "combination-C0-node-n0-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n0-1-0-Mz",
+      "description": "combination-C0-node-n0-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n0-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-0-Fx",
+      "description": "combination-C0-node-n1-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-0-Fy",
+      "description": "combination-C0-node-n1-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-0-Fz",
+      "description": "combination-C0-node-n1-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-0-Mx",
+      "description": "combination-C0-node-n1-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-0-My",
+      "description": "combination-C0-node-n1-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-0-0-Mz",
+      "description": "combination-C0-node-n1-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-0-Fx",
+      "description": "combination-C0-node-n1-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-0-Fy",
+      "description": "combination-C0-node-n1-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-0-Fz",
+      "description": "combination-C0-node-n1-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-0-Mx",
+      "description": "combination-C0-node-n1-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-0-My",
+      "description": "combination-C0-node-n1-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n1-1-0-Mz",
+      "description": "combination-C0-node-n1-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n1-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-0-Fx",
+      "description": "combination-C0-node-n2-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-0-Fy",
+      "description": "combination-C0-node-n2-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-0-Fz",
+      "description": "combination-C0-node-n2-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-0-Mx",
+      "description": "combination-C0-node-n2-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-0-My",
+      "description": "combination-C0-node-n2-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-0-0-Mz",
+      "description": "combination-C0-node-n2-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-0-Fx",
+      "description": "combination-C0-node-n2-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-0-Fy",
+      "description": "combination-C0-node-n2-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-0-Fz",
+      "description": "combination-C0-node-n2-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-0-Mx",
+      "description": "combination-C0-node-n2-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-0-My",
+      "description": "combination-C0-node-n2-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-C0-node-n2-1-0-Mz",
+      "description": "combination-C0-node-n2-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-C0-node-n2-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-1-ux",
+      "description": "combination-CX-node-n0-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-1-uy",
+      "description": "combination-CX-node-n0-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-1-uz",
+      "description": "combination-CX-node-n0-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-0-ux",
+      "description": "combination-CX-node-n0-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-0-uy",
+      "description": "combination-CX-node-n0-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-1-ux",
+      "description": "combination-CX-node-n0-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-1-uy",
+      "description": "combination-CX-node-n0-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-1-uz",
+      "description": "combination-CX-node-n0-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-0-ux",
+      "description": "combination-CX-node-n0-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-0-uy",
+      "description": "combination-CX-node-n0-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-1-ux",
+      "description": "combination-CX-node-n1-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-1-uy",
+      "description": "combination-CX-node-n1-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-1-uz",
+      "description": "combination-CX-node-n1-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-0-ux",
+      "description": "combination-CX-node-n1-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-0-uy",
+      "description": "combination-CX-node-n1-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-1-ux",
+      "description": "combination-CX-node-n1-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-1-uy",
+      "description": "combination-CX-node-n1-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-1-uz",
+      "description": "combination-CX-node-n1-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-0-ux",
+      "description": "combination-CX-node-n1-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-0-uy",
+      "description": "combination-CX-node-n1-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-1-ux",
+      "description": "combination-CX-node-n2-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-1-uy",
+      "description": "combination-CX-node-n2-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-1-uz",
+      "description": "combination-CX-node-n2-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-0-ux",
+      "description": "combination-CX-node-n2-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-0-uy",
+      "description": "combination-CX-node-n2-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-1-ux",
+      "description": "combination-CX-node-n2-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-1-uy",
+      "description": "combination-CX-node-n2-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-1-uz",
+      "description": "combination-CX-node-n2-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-0-ux",
+      "description": "combination-CX-node-n2-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-0-uy",
+      "description": "combination-CX-node-n2-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-2-ux",
+      "description": "combination-CX-node-n0-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-2-uy",
+      "description": "combination-CX-node-n0-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-2-uz",
+      "description": "combination-CX-node-n0-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-2-ux",
+      "description": "combination-CX-node-n0-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-2-uy",
+      "description": "combination-CX-node-n0-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-2-uz",
+      "description": "combination-CX-node-n0-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-2-ux",
+      "description": "combination-CX-node-n1-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-2-uy",
+      "description": "combination-CX-node-n1-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-2-uz",
+      "description": "combination-CX-node-n1-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-2-ux",
+      "description": "combination-CX-node-n1-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-2-uy",
+      "description": "combination-CX-node-n1-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-2-uz",
+      "description": "combination-CX-node-n1-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-2-ux",
+      "description": "combination-CX-node-n2-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-2-uy",
+      "description": "combination-CX-node-n2-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-2-uz",
+      "description": "combination-CX-node-n2-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-2-ux",
+      "description": "combination-CX-node-n2-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-2-uy",
+      "description": "combination-CX-node-n2-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-2-uz",
+      "description": "combination-CX-node-n2-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-0-Fx",
+      "description": "combination-CX-node-n0-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-0-Fy",
+      "description": "combination-CX-node-n0-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-0-Fz",
+      "description": "combination-CX-node-n0-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-0-Mx",
+      "description": "combination-CX-node-n0-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-0-My",
+      "description": "combination-CX-node-n0-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-0-0-Mz",
+      "description": "combination-CX-node-n0-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-0-Fx",
+      "description": "combination-CX-node-n0-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-0-Fy",
+      "description": "combination-CX-node-n0-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-0-Fz",
+      "description": "combination-CX-node-n0-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-0-Mx",
+      "description": "combination-CX-node-n0-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-0-My",
+      "description": "combination-CX-node-n0-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n0-1-0-Mz",
+      "description": "combination-CX-node-n0-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n0-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-0-Fx",
+      "description": "combination-CX-node-n1-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-0-Fy",
+      "description": "combination-CX-node-n1-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-0-Fz",
+      "description": "combination-CX-node-n1-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-0-Mx",
+      "description": "combination-CX-node-n1-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-0-My",
+      "description": "combination-CX-node-n1-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-0-0-Mz",
+      "description": "combination-CX-node-n1-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-0-Fx",
+      "description": "combination-CX-node-n1-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-0-Fy",
+      "description": "combination-CX-node-n1-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-0-Fz",
+      "description": "combination-CX-node-n1-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-0-Mx",
+      "description": "combination-CX-node-n1-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-0-My",
+      "description": "combination-CX-node-n1-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n1-1-0-Mz",
+      "description": "combination-CX-node-n1-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n1-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-0-Fx",
+      "description": "combination-CX-node-n2-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-0-Fy",
+      "description": "combination-CX-node-n2-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-0-Fz",
+      "description": "combination-CX-node-n2-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-0-Mx",
+      "description": "combination-CX-node-n2-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-0-My",
+      "description": "combination-CX-node-n2-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-0-0-Mz",
+      "description": "combination-CX-node-n2-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-0-Fx",
+      "description": "combination-CX-node-n2-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-0-Fy",
+      "description": "combination-CX-node-n2-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-0-Fz",
+      "description": "combination-CX-node-n2-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-0-Mx",
+      "description": "combination-CX-node-n2-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-0-My",
+      "description": "combination-CX-node-n2-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CX-node-n2-1-0-Mz",
+      "description": "combination-CX-node-n2-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CX-node-n2-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-1-ux",
+      "description": "combination-CY-node-n0-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-1-uy",
+      "description": "combination-CY-node-n0-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-1-uz",
+      "description": "combination-CY-node-n0-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-0-ux",
+      "description": "combination-CY-node-n0-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-0-uy",
+      "description": "combination-CY-node-n0-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-1-ux",
+      "description": "combination-CY-node-n0-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-1-uy",
+      "description": "combination-CY-node-n0-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-1-uz",
+      "description": "combination-CY-node-n0-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-0-ux",
+      "description": "combination-CY-node-n0-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-0-uy",
+      "description": "combination-CY-node-n0-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-1-ux",
+      "description": "combination-CY-node-n1-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-1-uy",
+      "description": "combination-CY-node-n1-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-1-uz",
+      "description": "combination-CY-node-n1-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-0-ux",
+      "description": "combination-CY-node-n1-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-0-uy",
+      "description": "combination-CY-node-n1-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-1-ux",
+      "description": "combination-CY-node-n1-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-1-uy",
+      "description": "combination-CY-node-n1-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-1-uz",
+      "description": "combination-CY-node-n1-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-0-ux",
+      "description": "combination-CY-node-n1-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-0-uy",
+      "description": "combination-CY-node-n1-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-1-ux",
+      "description": "combination-CY-node-n2-0-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-1-uy",
+      "description": "combination-CY-node-n2-0-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-1-uz",
+      "description": "combination-CY-node-n2-0-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-0-ux",
+      "description": "combination-CY-node-n2-0-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-0-uy",
+      "description": "combination-CY-node-n2-0-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-1-ux",
+      "description": "combination-CY-node-n2-1-1-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-1-uy",
+      "description": "combination-CY-node-n2-1-1-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-1-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-1-uz",
+      "description": "combination-CY-node-n2-1-1-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-0-ux",
+      "description": "combination-CY-node-n2-1-0-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-0-uy",
+      "description": "combination-CY-node-n2-1-0-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-0-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-2-ux",
+      "description": "combination-CY-node-n0-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-2-uy",
+      "description": "combination-CY-node-n0-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-2-uz",
+      "description": "combination-CY-node-n0-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-2-ux",
+      "description": "combination-CY-node-n0-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-2-uy",
+      "description": "combination-CY-node-n0-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-2-uz",
+      "description": "combination-CY-node-n0-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-2-ux",
+      "description": "combination-CY-node-n1-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-2-uy",
+      "description": "combination-CY-node-n1-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-2-uz",
+      "description": "combination-CY-node-n1-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-2-ux",
+      "description": "combination-CY-node-n1-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-2-uy",
+      "description": "combination-CY-node-n1-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-2-uz",
+      "description": "combination-CY-node-n1-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-2-ux",
+      "description": "combination-CY-node-n2-0-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-2-uy",
+      "description": "combination-CY-node-n2-0-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-2-uz",
+      "description": "combination-CY-node-n2-0-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-2-ux",
+      "description": "combination-CY-node-n2-1-2-ux",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-2-uy",
+      "description": "combination-CY-node-n2-1-2-uy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-2-uy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-2-uz",
+      "description": "combination-CY-node-n2-1-2-uz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-0-Fx",
+      "description": "combination-CY-node-n0-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-0-Fy",
+      "description": "combination-CY-node-n0-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-0-Fz",
+      "description": "combination-CY-node-n0-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-0-Mx",
+      "description": "combination-CY-node-n0-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-0-My",
+      "description": "combination-CY-node-n0-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-0-0-Mz",
+      "description": "combination-CY-node-n0-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-0-Fx",
+      "description": "combination-CY-node-n0-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-0-Fy",
+      "description": "combination-CY-node-n0-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-0-Fz",
+      "description": "combination-CY-node-n0-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-0-Mx",
+      "description": "combination-CY-node-n0-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-0-My",
+      "description": "combination-CY-node-n0-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n0-1-0-Mz",
+      "description": "combination-CY-node-n0-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n0-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-0-Fx",
+      "description": "combination-CY-node-n1-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-0-Fy",
+      "description": "combination-CY-node-n1-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-0-Fz",
+      "description": "combination-CY-node-n1-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-0-Mx",
+      "description": "combination-CY-node-n1-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-0-My",
+      "description": "combination-CY-node-n1-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-0-0-Mz",
+      "description": "combination-CY-node-n1-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-0-Fx",
+      "description": "combination-CY-node-n1-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-0-Fy",
+      "description": "combination-CY-node-n1-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-0-Fz",
+      "description": "combination-CY-node-n1-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-0-Mx",
+      "description": "combination-CY-node-n1-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-0-My",
+      "description": "combination-CY-node-n1-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n1-1-0-Mz",
+      "description": "combination-CY-node-n1-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n1-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-0-Fx",
+      "description": "combination-CY-node-n2-0-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-0-Fy",
+      "description": "combination-CY-node-n2-0-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-0-Fz",
+      "description": "combination-CY-node-n2-0-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-0-Mx",
+      "description": "combination-CY-node-n2-0-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-0-My",
+      "description": "combination-CY-node-n2-0-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-0-0-Mz",
+      "description": "combination-CY-node-n2-0-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-0-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-0-Fx",
+      "description": "combination-CY-node-n2-1-0-Fx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-0-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-0-Fy",
+      "description": "combination-CY-node-n2-1-0-Fy",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-0-Fy"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-0-Fz",
+      "description": "combination-CY-node-n2-1-0-Fz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-0-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-0-Mx",
+      "description": "combination-CY-node-n2-1-0-Mx",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-0-Mx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-0-My",
+      "description": "combination-CY-node-n2-1-0-My",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-0-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-combination-CY-node-n2-1-0-Mz",
+      "description": "combination-CY-node-n2-1-0-Mz",
+      "state": 1,
+      "quantityIds": [
+        "combination-CY-node-n2-1-0-Mz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-C0-drift-n0-0-0-n0-0-1-ux",
+      "description": "n0-0-1 minus n0-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n0-0-0-n0-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n0-0-0-n0-0-1-uy",
+      "description": "n0-0-1 minus n0-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n0-0-0-n0-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n0-1-0-n0-1-1-ux",
+      "description": "n0-1-1 minus n0-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n0-1-0-n0-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n0-1-0-n0-1-1-uy",
+      "description": "n0-1-1 minus n0-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n0-1-0-n0-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n1-0-0-n1-0-1-ux",
+      "description": "n1-0-1 minus n1-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n1-0-0-n1-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n1-0-0-n1-0-1-uy",
+      "description": "n1-0-1 minus n1-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n1-0-0-n1-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n1-1-0-n1-1-1-ux",
+      "description": "n1-1-1 minus n1-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n1-1-0-n1-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n1-1-0-n1-1-1-uy",
+      "description": "n1-1-1 minus n1-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n1-1-0-n1-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n2-0-0-n2-0-1-ux",
+      "description": "n2-0-1 minus n2-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n2-0-0-n2-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n2-0-0-n2-0-1-uy",
+      "description": "n2-0-1 minus n2-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n2-0-0-n2-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n2-1-0-n2-1-1-ux",
+      "description": "n2-1-1 minus n2-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n2-1-0-n2-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n2-1-0-n2-1-1-uy",
+      "description": "n2-1-1 minus n2-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n2-1-0-n2-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n0-0-1-n0-0-2-ux",
+      "description": "n0-0-2 minus n0-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n0-0-1-n0-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n0-0-1-n0-0-2-uy",
+      "description": "n0-0-2 minus n0-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n0-0-1-n0-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n0-1-1-n0-1-2-ux",
+      "description": "n0-1-2 minus n0-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n0-1-1-n0-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n0-1-1-n0-1-2-uy",
+      "description": "n0-1-2 minus n0-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n0-1-1-n0-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n1-0-1-n1-0-2-ux",
+      "description": "n1-0-2 minus n1-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n1-0-1-n1-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n1-0-1-n1-0-2-uy",
+      "description": "n1-0-2 minus n1-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n1-0-1-n1-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n1-1-1-n1-1-2-ux",
+      "description": "n1-1-2 minus n1-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n1-1-1-n1-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n1-1-1-n1-1-2-uy",
+      "description": "n1-1-2 minus n1-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n1-1-1-n1-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n2-0-1-n2-0-2-ux",
+      "description": "n2-0-2 minus n2-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n2-0-1-n2-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n2-0-1-n2-0-2-uy",
+      "description": "n2-0-2 minus n2-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n2-0-1-n2-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n2-1-1-n2-1-2-ux",
+      "description": "n2-1-2 minus n2-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n2-1-1-n2-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-C0-drift-n2-1-1-n2-1-2-uy",
+      "description": "n2-1-2 minus n2-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "C0-drift-n2-1-1-n2-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n0-0-0-n0-0-1-ux",
+      "description": "n0-0-1 minus n0-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n0-0-0-n0-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n0-0-0-n0-0-1-uy",
+      "description": "n0-0-1 minus n0-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n0-0-0-n0-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n0-1-0-n0-1-1-ux",
+      "description": "n0-1-1 minus n0-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n0-1-0-n0-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n0-1-0-n0-1-1-uy",
+      "description": "n0-1-1 minus n0-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n0-1-0-n0-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n1-0-0-n1-0-1-ux",
+      "description": "n1-0-1 minus n1-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n1-0-0-n1-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n1-0-0-n1-0-1-uy",
+      "description": "n1-0-1 minus n1-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n1-0-0-n1-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n1-1-0-n1-1-1-ux",
+      "description": "n1-1-1 minus n1-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n1-1-0-n1-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n1-1-0-n1-1-1-uy",
+      "description": "n1-1-1 minus n1-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n1-1-0-n1-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n2-0-0-n2-0-1-ux",
+      "description": "n2-0-1 minus n2-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n2-0-0-n2-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n2-0-0-n2-0-1-uy",
+      "description": "n2-0-1 minus n2-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n2-0-0-n2-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n2-1-0-n2-1-1-ux",
+      "description": "n2-1-1 minus n2-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n2-1-0-n2-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n2-1-0-n2-1-1-uy",
+      "description": "n2-1-1 minus n2-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n2-1-0-n2-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n0-0-1-n0-0-2-ux",
+      "description": "n0-0-2 minus n0-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n0-0-1-n0-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n0-0-1-n0-0-2-uy",
+      "description": "n0-0-2 minus n0-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n0-0-1-n0-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n0-1-1-n0-1-2-ux",
+      "description": "n0-1-2 minus n0-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n0-1-1-n0-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n0-1-1-n0-1-2-uy",
+      "description": "n0-1-2 minus n0-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n0-1-1-n0-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n1-0-1-n1-0-2-ux",
+      "description": "n1-0-2 minus n1-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n1-0-1-n1-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n1-0-1-n1-0-2-uy",
+      "description": "n1-0-2 minus n1-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n1-0-1-n1-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n1-1-1-n1-1-2-ux",
+      "description": "n1-1-2 minus n1-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n1-1-1-n1-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n1-1-1-n1-1-2-uy",
+      "description": "n1-1-2 minus n1-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n1-1-1-n1-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n2-0-1-n2-0-2-ux",
+      "description": "n2-0-2 minus n2-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n2-0-1-n2-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n2-0-1-n2-0-2-uy",
+      "description": "n2-0-2 minus n2-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n2-0-1-n2-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n2-1-1-n2-1-2-ux",
+      "description": "n2-1-2 minus n2-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n2-1-1-n2-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CX-drift-n2-1-1-n2-1-2-uy",
+      "description": "n2-1-2 minus n2-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CX-drift-n2-1-1-n2-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n0-0-0-n0-0-1-ux",
+      "description": "n0-0-1 minus n0-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n0-0-0-n0-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n0-0-0-n0-0-1-uy",
+      "description": "n0-0-1 minus n0-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n0-0-0-n0-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n0-1-0-n0-1-1-ux",
+      "description": "n0-1-1 minus n0-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n0-1-0-n0-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n0-1-0-n0-1-1-uy",
+      "description": "n0-1-1 minus n0-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n0-1-0-n0-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n1-0-0-n1-0-1-ux",
+      "description": "n1-0-1 minus n1-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n1-0-0-n1-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n1-0-0-n1-0-1-uy",
+      "description": "n1-0-1 minus n1-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n1-0-0-n1-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n1-1-0-n1-1-1-ux",
+      "description": "n1-1-1 minus n1-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n1-1-0-n1-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n1-1-0-n1-1-1-uy",
+      "description": "n1-1-1 minus n1-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n1-1-0-n1-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n2-0-0-n2-0-1-ux",
+      "description": "n2-0-1 minus n2-0-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n2-0-0-n2-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n2-0-0-n2-0-1-uy",
+      "description": "n2-0-1 minus n2-0-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n2-0-0-n2-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n2-1-0-n2-1-1-ux",
+      "description": "n2-1-1 minus n2-1-0: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n2-1-0-n2-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n2-1-0-n2-1-1-uy",
+      "description": "n2-1-1 minus n2-1-0: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n2-1-0-n2-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n0-0-1-n0-0-2-ux",
+      "description": "n0-0-2 minus n0-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n0-0-1-n0-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n0-0-1-n0-0-2-uy",
+      "description": "n0-0-2 minus n0-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n0-0-1-n0-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n0-1-1-n0-1-2-ux",
+      "description": "n0-1-2 minus n0-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n0-1-1-n0-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n0-1-1-n0-1-2-uy",
+      "description": "n0-1-2 minus n0-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n0-1-1-n0-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n1-0-1-n1-0-2-ux",
+      "description": "n1-0-2 minus n1-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n1-0-1-n1-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n1-0-1-n1-0-2-uy",
+      "description": "n1-0-2 minus n1-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n1-0-1-n1-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n1-1-1-n1-1-2-ux",
+      "description": "n1-1-2 minus n1-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n1-1-1-n1-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n1-1-1-n1-1-2-uy",
+      "description": "n1-1-2 minus n1-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n1-1-1-n1-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n2-0-1-n2-0-2-ux",
+      "description": "n2-0-2 minus n2-0-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n2-0-1-n2-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n2-0-1-n2-0-2-uy",
+      "description": "n2-0-2 minus n2-0-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n2-0-1-n2-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n2-1-1-n2-1-2-ux",
+      "description": "n2-1-2 minus n2-1-1: ux; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n2-1-1-n2-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-CY-drift-n2-1-1-n2-1-2-uy",
+      "description": "n2-1-2 minus n2-1-1: uy; signed story displacement difference",
+      "state": 1,
+      "quantityIds": [
+        "CY-drift-n2-1-1-n2-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-1-ux",
+      "description": "Governing signed ux at n0-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-1-uy",
+      "description": "Governing signed uy at n0-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-1-uz",
+      "description": "Governing signed uz at n0-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-1-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-0-ux",
+      "description": "Governing signed ux at n0-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-0-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-0-uy",
+      "description": "Governing signed uy at n0-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-0-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-1-ux",
+      "description": "Governing signed ux at n0-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-1-uy",
+      "description": "Governing signed uy at n0-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-1-uz",
+      "description": "Governing signed uz at n0-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-1-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-0-ux",
+      "description": "Governing signed ux at n0-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-0-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-0-uy",
+      "description": "Governing signed uy at n0-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-0-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-1-ux",
+      "description": "Governing signed ux at n1-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-1-uy",
+      "description": "Governing signed uy at n1-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-1-uz",
+      "description": "Governing signed uz at n1-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-1-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-0-ux",
+      "description": "Governing signed ux at n1-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-0-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-0-uy",
+      "description": "Governing signed uy at n1-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-0-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-1-ux",
+      "description": "Governing signed ux at n1-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-1-uy",
+      "description": "Governing signed uy at n1-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-1-uz",
+      "description": "Governing signed uz at n1-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-1-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-0-ux",
+      "description": "Governing signed ux at n1-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-0-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-0-uy",
+      "description": "Governing signed uy at n1-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-0-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-1-ux",
+      "description": "Governing signed ux at n2-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-1-uy",
+      "description": "Governing signed uy at n2-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-1-uz",
+      "description": "Governing signed uz at n2-0-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-1-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-0-ux",
+      "description": "Governing signed ux at n2-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-0-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-0-uy",
+      "description": "Governing signed uy at n2-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-0-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-1-ux",
+      "description": "Governing signed ux at n2-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-1-uy",
+      "description": "Governing signed uy at n2-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-1-uz",
+      "description": "Governing signed uz at n2-1-1; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-1-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-0-ux",
+      "description": "Governing signed ux at n2-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-0-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-0-uy",
+      "description": "Governing signed uy at n2-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-0-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-2-ux",
+      "description": "Governing signed ux at n0-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-2-uy",
+      "description": "Governing signed uy at n0-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-2-uz",
+      "description": "Governing signed uz at n0-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-2-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-2-ux",
+      "description": "Governing signed ux at n0-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-2-uy",
+      "description": "Governing signed uy at n0-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-2-uz",
+      "description": "Governing signed uz at n0-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-2-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-2-ux",
+      "description": "Governing signed ux at n1-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-2-uy",
+      "description": "Governing signed uy at n1-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-2-uz",
+      "description": "Governing signed uz at n1-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-2-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-2-ux",
+      "description": "Governing signed ux at n1-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-2-uy",
+      "description": "Governing signed uy at n1-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-2-uz",
+      "description": "Governing signed uz at n1-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-2-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-2-ux",
+      "description": "Governing signed ux at n2-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-2-uy",
+      "description": "Governing signed uy at n2-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-2-uz",
+      "description": "Governing signed uz at n2-0-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-2-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-2-ux",
+      "description": "Governing signed ux at n2-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-2-uy",
+      "description": "Governing signed uy at n2-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-2-uz",
+      "description": "Governing signed uz at n2-1-2; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-2-uz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-0-Fx",
+      "description": "Governing signed Fx at n0-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-0-Fx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-0-Fy",
+      "description": "Governing signed Fy at n0-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-0-Fy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-0-Fz",
+      "description": "Governing signed Fz at n0-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-0-Fz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-0-Mx",
+      "description": "Governing signed Mx at n0-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-0-Mx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-0-My",
+      "description": "Governing signed My at n0-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-0-My"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-0-0-Mz",
+      "description": "Governing signed Mz at n0-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-0-0-Mz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-0-Fx",
+      "description": "Governing signed Fx at n0-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-0-Fx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-0-Fy",
+      "description": "Governing signed Fy at n0-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-0-Fy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-0-Fz",
+      "description": "Governing signed Fz at n0-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-0-Fz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-0-Mx",
+      "description": "Governing signed Mx at n0-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-0-Mx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-0-My",
+      "description": "Governing signed My at n0-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-0-My"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n0-1-0-Mz",
+      "description": "Governing signed Mz at n0-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n0-1-0-Mz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-0-Fx",
+      "description": "Governing signed Fx at n1-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-0-Fx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-0-Fy",
+      "description": "Governing signed Fy at n1-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-0-Fy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-0-Fz",
+      "description": "Governing signed Fz at n1-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-0-Fz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-0-Mx",
+      "description": "Governing signed Mx at n1-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-0-Mx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-0-My",
+      "description": "Governing signed My at n1-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-0-My"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-0-0-Mz",
+      "description": "Governing signed Mz at n1-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-0-0-Mz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-0-Fx",
+      "description": "Governing signed Fx at n1-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-0-Fx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-0-Fy",
+      "description": "Governing signed Fy at n1-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-0-Fy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-0-Fz",
+      "description": "Governing signed Fz at n1-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-0-Fz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-0-Mx",
+      "description": "Governing signed Mx at n1-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-0-Mx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-0-My",
+      "description": "Governing signed My at n1-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-0-My"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n1-1-0-Mz",
+      "description": "Governing signed Mz at n1-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n1-1-0-Mz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-0-Fx",
+      "description": "Governing signed Fx at n2-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-0-Fx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-0-Fy",
+      "description": "Governing signed Fy at n2-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-0-Fy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-0-Fz",
+      "description": "Governing signed Fz at n2-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-0-Fz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-0-Mx",
+      "description": "Governing signed Mx at n2-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-0-Mx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-0-My",
+      "description": "Governing signed My at n2-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-0-My"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-0-0-Mz",
+      "description": "Governing signed Mz at n2-0-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-0-0-Mz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-0-Fx",
+      "description": "Governing signed Fx at n2-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-0-Fx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-0-Fy",
+      "description": "Governing signed Fy at n2-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-0-Fy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-0-Fz",
+      "description": "Governing signed Fz at n2-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-0-Fz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-0-Mx",
+      "description": "Governing signed Mx at n2-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-0-Mx"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-0-My",
+      "description": "Governing signed My at n2-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-0-My"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-n2-1-0-Mz",
+      "description": "Governing signed Mz at n2-1-0; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-n2-1-0-Mz"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n0-0-0-n0-0-1-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n0-0-0-n0-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n0-0-0-n0-0-1-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n0-0-0-n0-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n0-1-0-n0-1-1-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n0-1-0-n0-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n0-1-0-n0-1-1-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n0-1-0-n0-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n1-0-0-n1-0-1-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n1-0-0-n1-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n1-0-0-n1-0-1-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n1-0-0-n1-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n1-1-0-n1-1-1-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n1-1-0-n1-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n1-1-0-n1-1-1-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n1-1-0-n1-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n2-0-0-n2-0-1-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n2-0-0-n2-0-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n2-0-0-n2-0-1-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n2-0-0-n2-0-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n2-1-0-n2-1-1-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n2-1-0-n2-1-1-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n2-1-0-n2-1-1-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n2-1-0-n2-1-1-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n0-0-1-n0-0-2-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n0-0-1-n0-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n0-0-1-n0-0-2-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n0-0-1-n0-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n0-1-1-n0-1-2-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n0-1-1-n0-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n0-1-1-n0-1-2-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n0-1-1-n0-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n1-0-1-n1-0-2-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n1-0-1-n1-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n1-0-1-n1-0-2-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n1-0-1-n1-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n1-1-1-n1-1-2-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n1-1-1-n1-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n1-1-1-n1-1-2-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n1-1-1-n1-1-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n2-0-1-n2-0-2-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n2-0-1-n2-0-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n2-0-1-n2-0-2-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n2-0-1-n2-0-2-uy"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n2-1-1-n2-1-2-ux",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n2-1-1-n2-1-2-ux"
+      ],
+      "kind": "derived"
+    },
+    {
+      "id": "out-governing-drift-n2-1-1-n2-1-2-uy",
+      "description": "Governing signed story displacement difference; retain combination",
+      "state": 1,
+      "quantityIds": [
+        "governing-drift-n2-1-1-n2-1-2-uy"
+      ],
+      "kind": "derived"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        7
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        8
+      ],
+      "targets": [
+        "output:out-combination-C0-node-n0-0-1-ux",
+        "output:out-combination-C0-node-n0-0-1-uy",
+        "output:out-combination-C0-node-n0-0-1-uz",
+        "output:out-combination-C0-node-n0-0-0-ux",
+        "output:out-combination-C0-node-n0-0-0-uy",
+        "output:out-combination-C0-node-n0-1-1-ux",
+        "output:out-combination-C0-node-n0-1-1-uy",
+        "output:out-combination-C0-node-n0-1-1-uz",
+        "output:out-combination-C0-node-n0-1-0-ux",
+        "output:out-combination-C0-node-n0-1-0-uy",
+        "output:out-combination-C0-node-n1-0-1-ux",
+        "output:out-combination-C0-node-n1-0-1-uy",
+        "output:out-combination-C0-node-n1-0-1-uz",
+        "output:out-combination-C0-node-n1-0-0-ux",
+        "output:out-combination-C0-node-n1-0-0-uy",
+        "output:out-combination-C0-node-n1-1-1-ux",
+        "output:out-combination-C0-node-n1-1-1-uy",
+        "output:out-combination-C0-node-n1-1-1-uz",
+        "output:out-combination-C0-node-n1-1-0-ux",
+        "output:out-combination-C0-node-n1-1-0-uy",
+        "output:out-combination-C0-node-n2-0-1-ux",
+        "output:out-combination-C0-node-n2-0-1-uy",
+        "output:out-combination-C0-node-n2-0-1-uz",
+        "output:out-combination-C0-node-n2-0-0-ux",
+        "output:out-combination-C0-node-n2-0-0-uy",
+        "output:out-combination-C0-node-n2-1-1-ux",
+        "output:out-combination-C0-node-n2-1-1-uy",
+        "output:out-combination-C0-node-n2-1-1-uz",
+        "output:out-combination-C0-node-n2-1-0-ux",
+        "output:out-combination-C0-node-n2-1-0-uy",
+        "output:out-combination-C0-node-n0-0-2-ux",
+        "output:out-combination-C0-node-n0-0-2-uy",
+        "output:out-combination-C0-node-n0-0-2-uz",
+        "output:out-combination-C0-node-n0-1-2-ux",
+        "output:out-combination-C0-node-n0-1-2-uy",
+        "output:out-combination-C0-node-n0-1-2-uz",
+        "output:out-combination-C0-node-n1-0-2-ux",
+        "output:out-combination-C0-node-n1-0-2-uy",
+        "output:out-combination-C0-node-n1-0-2-uz",
+        "output:out-combination-C0-node-n1-1-2-ux",
+        "output:out-combination-C0-node-n1-1-2-uy",
+        "output:out-combination-C0-node-n1-1-2-uz",
+        "output:out-combination-C0-node-n2-0-2-ux",
+        "output:out-combination-C0-node-n2-0-2-uy",
+        "output:out-combination-C0-node-n2-0-2-uz",
+        "output:out-combination-C0-node-n2-1-2-ux",
+        "output:out-combination-C0-node-n2-1-2-uy",
+        "output:out-combination-C0-node-n2-1-2-uz",
+        "output:out-combination-C0-node-n0-0-0-Fx",
+        "output:out-combination-C0-node-n0-0-0-Fy",
+        "output:out-combination-C0-node-n0-0-0-Fz",
+        "output:out-combination-C0-node-n0-0-0-Mx",
+        "output:out-combination-C0-node-n0-0-0-My",
+        "output:out-combination-C0-node-n0-0-0-Mz",
+        "output:out-combination-C0-node-n0-1-0-Fx",
+        "output:out-combination-C0-node-n0-1-0-Fy",
+        "output:out-combination-C0-node-n0-1-0-Fz",
+        "output:out-combination-C0-node-n0-1-0-Mx",
+        "output:out-combination-C0-node-n0-1-0-My",
+        "output:out-combination-C0-node-n0-1-0-Mz",
+        "output:out-combination-C0-node-n1-0-0-Fx",
+        "output:out-combination-C0-node-n1-0-0-Fy",
+        "output:out-combination-C0-node-n1-0-0-Fz",
+        "output:out-combination-C0-node-n1-0-0-Mx",
+        "output:out-combination-C0-node-n1-0-0-My",
+        "output:out-combination-C0-node-n1-0-0-Mz",
+        "output:out-combination-C0-node-n1-1-0-Fx",
+        "output:out-combination-C0-node-n1-1-0-Fy",
+        "output:out-combination-C0-node-n1-1-0-Fz",
+        "output:out-combination-C0-node-n1-1-0-Mx",
+        "output:out-combination-C0-node-n1-1-0-My",
+        "output:out-combination-C0-node-n1-1-0-Mz",
+        "output:out-combination-C0-node-n2-0-0-Fx",
+        "output:out-combination-C0-node-n2-0-0-Fy",
+        "output:out-combination-C0-node-n2-0-0-Fz",
+        "output:out-combination-C0-node-n2-0-0-Mx",
+        "output:out-combination-C0-node-n2-0-0-My",
+        "output:out-combination-C0-node-n2-0-0-Mz",
+        "output:out-combination-C0-node-n2-1-0-Fx",
+        "output:out-combination-C0-node-n2-1-0-Fy",
+        "output:out-combination-C0-node-n2-1-0-Fz",
+        "output:out-combination-C0-node-n2-1-0-Mx",
+        "output:out-combination-C0-node-n2-1-0-My",
+        "output:out-combination-C0-node-n2-1-0-Mz",
+        "output:out-combination-CX-node-n0-0-1-ux",
+        "output:out-combination-CX-node-n0-0-1-uy",
+        "output:out-combination-CX-node-n0-0-1-uz",
+        "output:out-combination-CX-node-n0-0-0-ux",
+        "output:out-combination-CX-node-n0-0-0-uy",
+        "output:out-combination-CX-node-n0-1-1-ux",
+        "output:out-combination-CX-node-n0-1-1-uy",
+        "output:out-combination-CX-node-n0-1-1-uz",
+        "output:out-combination-CX-node-n0-1-0-ux",
+        "output:out-combination-CX-node-n0-1-0-uy",
+        "output:out-combination-CX-node-n1-0-1-ux",
+        "output:out-combination-CX-node-n1-0-1-uy",
+        "output:out-combination-CX-node-n1-0-1-uz",
+        "output:out-combination-CX-node-n1-0-0-ux",
+        "output:out-combination-CX-node-n1-0-0-uy",
+        "output:out-combination-CX-node-n1-1-1-ux",
+        "output:out-combination-CX-node-n1-1-1-uy",
+        "output:out-combination-CX-node-n1-1-1-uz",
+        "output:out-combination-CX-node-n1-1-0-ux",
+        "output:out-combination-CX-node-n1-1-0-uy",
+        "output:out-combination-CX-node-n2-0-1-ux",
+        "output:out-combination-CX-node-n2-0-1-uy",
+        "output:out-combination-CX-node-n2-0-1-uz",
+        "output:out-combination-CX-node-n2-0-0-ux",
+        "output:out-combination-CX-node-n2-0-0-uy",
+        "output:out-combination-CX-node-n2-1-1-ux",
+        "output:out-combination-CX-node-n2-1-1-uy",
+        "output:out-combination-CX-node-n2-1-1-uz",
+        "output:out-combination-CX-node-n2-1-0-ux",
+        "output:out-combination-CX-node-n2-1-0-uy",
+        "output:out-combination-CX-node-n0-0-2-ux",
+        "output:out-combination-CX-node-n0-0-2-uy",
+        "output:out-combination-CX-node-n0-0-2-uz",
+        "output:out-combination-CX-node-n0-1-2-ux",
+        "output:out-combination-CX-node-n0-1-2-uy",
+        "output:out-combination-CX-node-n0-1-2-uz",
+        "output:out-combination-CX-node-n1-0-2-ux",
+        "output:out-combination-CX-node-n1-0-2-uy",
+        "output:out-combination-CX-node-n1-0-2-uz",
+        "output:out-combination-CX-node-n1-1-2-ux",
+        "output:out-combination-CX-node-n1-1-2-uy",
+        "output:out-combination-CX-node-n1-1-2-uz",
+        "output:out-combination-CX-node-n2-0-2-ux",
+        "output:out-combination-CX-node-n2-0-2-uy",
+        "output:out-combination-CX-node-n2-0-2-uz",
+        "output:out-combination-CX-node-n2-1-2-ux",
+        "output:out-combination-CX-node-n2-1-2-uy",
+        "output:out-combination-CX-node-n2-1-2-uz",
+        "output:out-combination-CX-node-n0-0-0-Fx",
+        "output:out-combination-CX-node-n0-0-0-Fy",
+        "output:out-combination-CX-node-n0-0-0-Fz",
+        "output:out-combination-CX-node-n0-0-0-Mx",
+        "output:out-combination-CX-node-n0-0-0-My",
+        "output:out-combination-CX-node-n0-0-0-Mz",
+        "output:out-combination-CX-node-n0-1-0-Fx",
+        "output:out-combination-CX-node-n0-1-0-Fy",
+        "output:out-combination-CX-node-n0-1-0-Fz",
+        "output:out-combination-CX-node-n0-1-0-Mx",
+        "output:out-combination-CX-node-n0-1-0-My",
+        "output:out-combination-CX-node-n0-1-0-Mz",
+        "output:out-combination-CX-node-n1-0-0-Fx",
+        "output:out-combination-CX-node-n1-0-0-Fy",
+        "output:out-combination-CX-node-n1-0-0-Fz",
+        "output:out-combination-CX-node-n1-0-0-Mx",
+        "output:out-combination-CX-node-n1-0-0-My",
+        "output:out-combination-CX-node-n1-0-0-Mz",
+        "output:out-combination-CX-node-n1-1-0-Fx",
+        "output:out-combination-CX-node-n1-1-0-Fy",
+        "output:out-combination-CX-node-n1-1-0-Fz",
+        "output:out-combination-CX-node-n1-1-0-Mx",
+        "output:out-combination-CX-node-n1-1-0-My",
+        "output:out-combination-CX-node-n1-1-0-Mz",
+        "output:out-combination-CX-node-n2-0-0-Fx",
+        "output:out-combination-CX-node-n2-0-0-Fy",
+        "output:out-combination-CX-node-n2-0-0-Fz",
+        "output:out-combination-CX-node-n2-0-0-Mx",
+        "output:out-combination-CX-node-n2-0-0-My",
+        "output:out-combination-CX-node-n2-0-0-Mz",
+        "output:out-combination-CX-node-n2-1-0-Fx",
+        "output:out-combination-CX-node-n2-1-0-Fy",
+        "output:out-combination-CX-node-n2-1-0-Fz",
+        "output:out-combination-CX-node-n2-1-0-Mx",
+        "output:out-combination-CX-node-n2-1-0-My",
+        "output:out-combination-CX-node-n2-1-0-Mz",
+        "output:out-combination-CY-node-n0-0-1-ux",
+        "output:out-combination-CY-node-n0-0-1-uy",
+        "output:out-combination-CY-node-n0-0-1-uz",
+        "output:out-combination-CY-node-n0-0-0-ux",
+        "output:out-combination-CY-node-n0-0-0-uy",
+        "output:out-combination-CY-node-n0-1-1-ux",
+        "output:out-combination-CY-node-n0-1-1-uy",
+        "output:out-combination-CY-node-n0-1-1-uz",
+        "output:out-combination-CY-node-n0-1-0-ux",
+        "output:out-combination-CY-node-n0-1-0-uy",
+        "output:out-combination-CY-node-n1-0-1-ux",
+        "output:out-combination-CY-node-n1-0-1-uy",
+        "output:out-combination-CY-node-n1-0-1-uz",
+        "output:out-combination-CY-node-n1-0-0-ux",
+        "output:out-combination-CY-node-n1-0-0-uy",
+        "output:out-combination-CY-node-n1-1-1-ux",
+        "output:out-combination-CY-node-n1-1-1-uy",
+        "output:out-combination-CY-node-n1-1-1-uz",
+        "output:out-combination-CY-node-n1-1-0-ux",
+        "output:out-combination-CY-node-n1-1-0-uy",
+        "output:out-combination-CY-node-n2-0-1-ux",
+        "output:out-combination-CY-node-n2-0-1-uy",
+        "output:out-combination-CY-node-n2-0-1-uz",
+        "output:out-combination-CY-node-n2-0-0-ux",
+        "output:out-combination-CY-node-n2-0-0-uy",
+        "output:out-combination-CY-node-n2-1-1-ux",
+        "output:out-combination-CY-node-n2-1-1-uy",
+        "output:out-combination-CY-node-n2-1-1-uz",
+        "output:out-combination-CY-node-n2-1-0-ux",
+        "output:out-combination-CY-node-n2-1-0-uy",
+        "output:out-combination-CY-node-n0-0-2-ux",
+        "output:out-combination-CY-node-n0-0-2-uy",
+        "output:out-combination-CY-node-n0-0-2-uz",
+        "output:out-combination-CY-node-n0-1-2-ux",
+        "output:out-combination-CY-node-n0-1-2-uy",
+        "output:out-combination-CY-node-n0-1-2-uz",
+        "output:out-combination-CY-node-n1-0-2-ux",
+        "output:out-combination-CY-node-n1-0-2-uy",
+        "output:out-combination-CY-node-n1-0-2-uz",
+        "output:out-combination-CY-node-n1-1-2-ux",
+        "output:out-combination-CY-node-n1-1-2-uy",
+        "output:out-combination-CY-node-n1-1-2-uz",
+        "output:out-combination-CY-node-n2-0-2-ux",
+        "output:out-combination-CY-node-n2-0-2-uy",
+        "output:out-combination-CY-node-n2-0-2-uz",
+        "output:out-combination-CY-node-n2-1-2-ux",
+        "output:out-combination-CY-node-n2-1-2-uy",
+        "output:out-combination-CY-node-n2-1-2-uz",
+        "output:out-combination-CY-node-n0-0-0-Fx",
+        "output:out-combination-CY-node-n0-0-0-Fy",
+        "output:out-combination-CY-node-n0-0-0-Fz",
+        "output:out-combination-CY-node-n0-0-0-Mx",
+        "output:out-combination-CY-node-n0-0-0-My",
+        "output:out-combination-CY-node-n0-0-0-Mz",
+        "output:out-combination-CY-node-n0-1-0-Fx",
+        "output:out-combination-CY-node-n0-1-0-Fy",
+        "output:out-combination-CY-node-n0-1-0-Fz",
+        "output:out-combination-CY-node-n0-1-0-Mx",
+        "output:out-combination-CY-node-n0-1-0-My",
+        "output:out-combination-CY-node-n0-1-0-Mz",
+        "output:out-combination-CY-node-n1-0-0-Fx",
+        "output:out-combination-CY-node-n1-0-0-Fy",
+        "output:out-combination-CY-node-n1-0-0-Fz",
+        "output:out-combination-CY-node-n1-0-0-Mx",
+        "output:out-combination-CY-node-n1-0-0-My",
+        "output:out-combination-CY-node-n1-0-0-Mz",
+        "output:out-combination-CY-node-n1-1-0-Fx",
+        "output:out-combination-CY-node-n1-1-0-Fy",
+        "output:out-combination-CY-node-n1-1-0-Fz",
+        "output:out-combination-CY-node-n1-1-0-Mx",
+        "output:out-combination-CY-node-n1-1-0-My",
+        "output:out-combination-CY-node-n1-1-0-Mz",
+        "output:out-combination-CY-node-n2-0-0-Fx",
+        "output:out-combination-CY-node-n2-0-0-Fy",
+        "output:out-combination-CY-node-n2-0-0-Fz",
+        "output:out-combination-CY-node-n2-0-0-Mx",
+        "output:out-combination-CY-node-n2-0-0-My",
+        "output:out-combination-CY-node-n2-0-0-Mz",
+        "output:out-combination-CY-node-n2-1-0-Fx",
+        "output:out-combination-CY-node-n2-1-0-Fy",
+        "output:out-combination-CY-node-n2-1-0-Fz",
+        "output:out-combination-CY-node-n2-1-0-Mx",
+        "output:out-combination-CY-node-n2-1-0-My",
+        "output:out-combination-CY-node-n2-1-0-Mz",
+        "output:out-C0-drift-n0-0-0-n0-0-1-ux",
+        "output:out-C0-drift-n0-0-0-n0-0-1-uy",
+        "output:out-C0-drift-n0-1-0-n0-1-1-ux",
+        "output:out-C0-drift-n0-1-0-n0-1-1-uy",
+        "output:out-C0-drift-n1-0-0-n1-0-1-ux",
+        "output:out-C0-drift-n1-0-0-n1-0-1-uy",
+        "output:out-C0-drift-n1-1-0-n1-1-1-ux",
+        "output:out-C0-drift-n1-1-0-n1-1-1-uy",
+        "output:out-C0-drift-n2-0-0-n2-0-1-ux",
+        "output:out-C0-drift-n2-0-0-n2-0-1-uy",
+        "output:out-C0-drift-n2-1-0-n2-1-1-ux",
+        "output:out-C0-drift-n2-1-0-n2-1-1-uy",
+        "output:out-C0-drift-n0-0-1-n0-0-2-ux",
+        "output:out-C0-drift-n0-0-1-n0-0-2-uy",
+        "output:out-C0-drift-n0-1-1-n0-1-2-ux",
+        "output:out-C0-drift-n0-1-1-n0-1-2-uy",
+        "output:out-C0-drift-n1-0-1-n1-0-2-ux",
+        "output:out-C0-drift-n1-0-1-n1-0-2-uy",
+        "output:out-C0-drift-n1-1-1-n1-1-2-ux",
+        "output:out-C0-drift-n1-1-1-n1-1-2-uy",
+        "output:out-C0-drift-n2-0-1-n2-0-2-ux",
+        "output:out-C0-drift-n2-0-1-n2-0-2-uy",
+        "output:out-C0-drift-n2-1-1-n2-1-2-ux",
+        "output:out-C0-drift-n2-1-1-n2-1-2-uy",
+        "output:out-CX-drift-n0-0-0-n0-0-1-ux",
+        "output:out-CX-drift-n0-0-0-n0-0-1-uy",
+        "output:out-CX-drift-n0-1-0-n0-1-1-ux",
+        "output:out-CX-drift-n0-1-0-n0-1-1-uy",
+        "output:out-CX-drift-n1-0-0-n1-0-1-ux",
+        "output:out-CX-drift-n1-0-0-n1-0-1-uy",
+        "output:out-CX-drift-n1-1-0-n1-1-1-ux",
+        "output:out-CX-drift-n1-1-0-n1-1-1-uy",
+        "output:out-CX-drift-n2-0-0-n2-0-1-ux",
+        "output:out-CX-drift-n2-0-0-n2-0-1-uy",
+        "output:out-CX-drift-n2-1-0-n2-1-1-ux",
+        "output:out-CX-drift-n2-1-0-n2-1-1-uy",
+        "output:out-CX-drift-n0-0-1-n0-0-2-ux",
+        "output:out-CX-drift-n0-0-1-n0-0-2-uy",
+        "output:out-CX-drift-n0-1-1-n0-1-2-ux",
+        "output:out-CX-drift-n0-1-1-n0-1-2-uy",
+        "output:out-CX-drift-n1-0-1-n1-0-2-ux",
+        "output:out-CX-drift-n1-0-1-n1-0-2-uy",
+        "output:out-CX-drift-n1-1-1-n1-1-2-ux",
+        "output:out-CX-drift-n1-1-1-n1-1-2-uy",
+        "output:out-CX-drift-n2-0-1-n2-0-2-ux",
+        "output:out-CX-drift-n2-0-1-n2-0-2-uy",
+        "output:out-CX-drift-n2-1-1-n2-1-2-ux",
+        "output:out-CX-drift-n2-1-1-n2-1-2-uy",
+        "output:out-CY-drift-n0-0-0-n0-0-1-ux",
+        "output:out-CY-drift-n0-0-0-n0-0-1-uy",
+        "output:out-CY-drift-n0-1-0-n0-1-1-ux",
+        "output:out-CY-drift-n0-1-0-n0-1-1-uy",
+        "output:out-CY-drift-n1-0-0-n1-0-1-ux",
+        "output:out-CY-drift-n1-0-0-n1-0-1-uy",
+        "output:out-CY-drift-n1-1-0-n1-1-1-ux",
+        "output:out-CY-drift-n1-1-0-n1-1-1-uy",
+        "output:out-CY-drift-n2-0-0-n2-0-1-ux",
+        "output:out-CY-drift-n2-0-0-n2-0-1-uy",
+        "output:out-CY-drift-n2-1-0-n2-1-1-ux",
+        "output:out-CY-drift-n2-1-0-n2-1-1-uy",
+        "output:out-CY-drift-n0-0-1-n0-0-2-ux",
+        "output:out-CY-drift-n0-0-1-n0-0-2-uy",
+        "output:out-CY-drift-n0-1-1-n0-1-2-ux",
+        "output:out-CY-drift-n0-1-1-n0-1-2-uy",
+        "output:out-CY-drift-n1-0-1-n1-0-2-ux",
+        "output:out-CY-drift-n1-0-1-n1-0-2-uy",
+        "output:out-CY-drift-n1-1-1-n1-1-2-ux",
+        "output:out-CY-drift-n1-1-1-n1-1-2-uy",
+        "output:out-CY-drift-n2-0-1-n2-0-2-ux",
+        "output:out-CY-drift-n2-0-1-n2-0-2-uy",
+        "output:out-CY-drift-n2-1-1-n2-1-2-ux",
+        "output:out-CY-drift-n2-1-1-n2-1-2-uy",
+        "output:out-governing-n0-0-1-ux",
+        "output:out-governing-n0-0-1-uy",
+        "output:out-governing-n0-0-1-uz",
+        "output:out-governing-n0-0-0-ux",
+        "output:out-governing-n0-0-0-uy",
+        "output:out-governing-n0-1-1-ux",
+        "output:out-governing-n0-1-1-uy",
+        "output:out-governing-n0-1-1-uz",
+        "output:out-governing-n0-1-0-ux",
+        "output:out-governing-n0-1-0-uy",
+        "output:out-governing-n1-0-1-ux",
+        "output:out-governing-n1-0-1-uy",
+        "output:out-governing-n1-0-1-uz",
+        "output:out-governing-n1-0-0-ux",
+        "output:out-governing-n1-0-0-uy",
+        "output:out-governing-n1-1-1-ux",
+        "output:out-governing-n1-1-1-uy",
+        "output:out-governing-n1-1-1-uz",
+        "output:out-governing-n1-1-0-ux",
+        "output:out-governing-n1-1-0-uy",
+        "output:out-governing-n2-0-1-ux",
+        "output:out-governing-n2-0-1-uy",
+        "output:out-governing-n2-0-1-uz",
+        "output:out-governing-n2-0-0-ux",
+        "output:out-governing-n2-0-0-uy",
+        "output:out-governing-n2-1-1-ux",
+        "output:out-governing-n2-1-1-uy",
+        "output:out-governing-n2-1-1-uz",
+        "output:out-governing-n2-1-0-ux",
+        "output:out-governing-n2-1-0-uy",
+        "output:out-governing-n0-0-2-ux",
+        "output:out-governing-n0-0-2-uy",
+        "output:out-governing-n0-0-2-uz",
+        "output:out-governing-n0-1-2-ux",
+        "output:out-governing-n0-1-2-uy",
+        "output:out-governing-n0-1-2-uz",
+        "output:out-governing-n1-0-2-ux",
+        "output:out-governing-n1-0-2-uy",
+        "output:out-governing-n1-0-2-uz",
+        "output:out-governing-n1-1-2-ux",
+        "output:out-governing-n1-1-2-uy",
+        "output:out-governing-n1-1-2-uz",
+        "output:out-governing-n2-0-2-ux",
+        "output:out-governing-n2-0-2-uy",
+        "output:out-governing-n2-0-2-uz",
+        "output:out-governing-n2-1-2-ux",
+        "output:out-governing-n2-1-2-uy",
+        "output:out-governing-n2-1-2-uz",
+        "output:out-governing-n0-0-0-Fx",
+        "output:out-governing-n0-0-0-Fy",
+        "output:out-governing-n0-0-0-Fz",
+        "output:out-governing-n0-0-0-Mx",
+        "output:out-governing-n0-0-0-My",
+        "output:out-governing-n0-0-0-Mz",
+        "output:out-governing-n0-1-0-Fx",
+        "output:out-governing-n0-1-0-Fy",
+        "output:out-governing-n0-1-0-Fz",
+        "output:out-governing-n0-1-0-Mx",
+        "output:out-governing-n0-1-0-My",
+        "output:out-governing-n0-1-0-Mz",
+        "output:out-governing-n1-0-0-Fx",
+        "output:out-governing-n1-0-0-Fy",
+        "output:out-governing-n1-0-0-Fz",
+        "output:out-governing-n1-0-0-Mx",
+        "output:out-governing-n1-0-0-My",
+        "output:out-governing-n1-0-0-Mz",
+        "output:out-governing-n1-1-0-Fx",
+        "output:out-governing-n1-1-0-Fy",
+        "output:out-governing-n1-1-0-Fz",
+        "output:out-governing-n1-1-0-Mx",
+        "output:out-governing-n1-1-0-My",
+        "output:out-governing-n1-1-0-Mz",
+        "output:out-governing-n2-0-0-Fx",
+        "output:out-governing-n2-0-0-Fy",
+        "output:out-governing-n2-0-0-Fz",
+        "output:out-governing-n2-0-0-Mx",
+        "output:out-governing-n2-0-0-My",
+        "output:out-governing-n2-0-0-Mz",
+        "output:out-governing-n2-1-0-Fx",
+        "output:out-governing-n2-1-0-Fy",
+        "output:out-governing-n2-1-0-Fz",
+        "output:out-governing-n2-1-0-Mx",
+        "output:out-governing-n2-1-0-My",
+        "output:out-governing-n2-1-0-Mz",
+        "output:out-governing-drift-n0-0-0-n0-0-1-ux",
+        "output:out-governing-drift-n0-0-0-n0-0-1-uy",
+        "output:out-governing-drift-n0-1-0-n0-1-1-ux",
+        "output:out-governing-drift-n0-1-0-n0-1-1-uy",
+        "output:out-governing-drift-n1-0-0-n1-0-1-ux",
+        "output:out-governing-drift-n1-0-0-n1-0-1-uy",
+        "output:out-governing-drift-n1-1-0-n1-1-1-ux",
+        "output:out-governing-drift-n1-1-0-n1-1-1-uy",
+        "output:out-governing-drift-n2-0-0-n2-0-1-ux",
+        "output:out-governing-drift-n2-0-0-n2-0-1-uy",
+        "output:out-governing-drift-n2-1-0-n2-1-1-ux",
+        "output:out-governing-drift-n2-1-0-n2-1-1-uy",
+        "output:out-governing-drift-n0-0-1-n0-0-2-ux",
+        "output:out-governing-drift-n0-0-1-n0-0-2-uy",
+        "output:out-governing-drift-n0-1-1-n0-1-2-ux",
+        "output:out-governing-drift-n0-1-1-n0-1-2-uy",
+        "output:out-governing-drift-n1-0-1-n1-0-2-ux",
+        "output:out-governing-drift-n1-0-1-n1-0-2-uy",
+        "output:out-governing-drift-n1-1-1-n1-1-2-ux",
+        "output:out-governing-drift-n1-1-1-n1-1-2-uy",
+        "output:out-governing-drift-n2-0-1-n2-0-2-ux",
+        "output:out-governing-drift-n2-0-1-n2-0-2-uy",
+        "output:out-governing-drift-n2-1-1-n2-1-2-ux",
+        "output:out-governing-drift-n2-1-1-n2-1-2-uy",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        9,
+        10
+      ],
+      "targets": [
+        "output:out-combination-C0-node-n0-0-1-ux",
+        "output:out-combination-C0-node-n0-0-1-uy",
+        "output:out-combination-C0-node-n0-0-1-uz",
+        "output:out-combination-C0-node-n0-0-0-ux",
+        "output:out-combination-C0-node-n0-0-0-uy",
+        "output:out-combination-C0-node-n0-1-1-ux",
+        "output:out-combination-C0-node-n0-1-1-uy",
+        "output:out-combination-C0-node-n0-1-1-uz",
+        "output:out-combination-C0-node-n0-1-0-ux",
+        "output:out-combination-C0-node-n0-1-0-uy",
+        "output:out-combination-C0-node-n1-0-1-ux",
+        "output:out-combination-C0-node-n1-0-1-uy",
+        "output:out-combination-C0-node-n1-0-1-uz",
+        "output:out-combination-C0-node-n1-0-0-ux",
+        "output:out-combination-C0-node-n1-0-0-uy",
+        "output:out-combination-C0-node-n1-1-1-ux",
+        "output:out-combination-C0-node-n1-1-1-uy",
+        "output:out-combination-C0-node-n1-1-1-uz",
+        "output:out-combination-C0-node-n1-1-0-ux",
+        "output:out-combination-C0-node-n1-1-0-uy",
+        "output:out-combination-C0-node-n2-0-1-ux",
+        "output:out-combination-C0-node-n2-0-1-uy",
+        "output:out-combination-C0-node-n2-0-1-uz",
+        "output:out-combination-C0-node-n2-0-0-ux",
+        "output:out-combination-C0-node-n2-0-0-uy",
+        "output:out-combination-C0-node-n2-1-1-ux",
+        "output:out-combination-C0-node-n2-1-1-uy",
+        "output:out-combination-C0-node-n2-1-1-uz",
+        "output:out-combination-C0-node-n2-1-0-ux",
+        "output:out-combination-C0-node-n2-1-0-uy",
+        "output:out-combination-C0-node-n0-0-2-ux",
+        "output:out-combination-C0-node-n0-0-2-uy",
+        "output:out-combination-C0-node-n0-0-2-uz",
+        "output:out-combination-C0-node-n0-1-2-ux",
+        "output:out-combination-C0-node-n0-1-2-uy",
+        "output:out-combination-C0-node-n0-1-2-uz",
+        "output:out-combination-C0-node-n1-0-2-ux",
+        "output:out-combination-C0-node-n1-0-2-uy",
+        "output:out-combination-C0-node-n1-0-2-uz",
+        "output:out-combination-C0-node-n1-1-2-ux",
+        "output:out-combination-C0-node-n1-1-2-uy",
+        "output:out-combination-C0-node-n1-1-2-uz",
+        "output:out-combination-C0-node-n2-0-2-ux",
+        "output:out-combination-C0-node-n2-0-2-uy",
+        "output:out-combination-C0-node-n2-0-2-uz",
+        "output:out-combination-C0-node-n2-1-2-ux",
+        "output:out-combination-C0-node-n2-1-2-uy",
+        "output:out-combination-C0-node-n2-1-2-uz",
+        "output:out-combination-C0-node-n0-0-0-Fx",
+        "output:out-combination-C0-node-n0-0-0-Fy",
+        "output:out-combination-C0-node-n0-0-0-Fz",
+        "output:out-combination-C0-node-n0-0-0-Mx",
+        "output:out-combination-C0-node-n0-0-0-My",
+        "output:out-combination-C0-node-n0-0-0-Mz",
+        "output:out-combination-C0-node-n0-1-0-Fx",
+        "output:out-combination-C0-node-n0-1-0-Fy",
+        "output:out-combination-C0-node-n0-1-0-Fz",
+        "output:out-combination-C0-node-n0-1-0-Mx",
+        "output:out-combination-C0-node-n0-1-0-My",
+        "output:out-combination-C0-node-n0-1-0-Mz",
+        "output:out-combination-C0-node-n1-0-0-Fx",
+        "output:out-combination-C0-node-n1-0-0-Fy",
+        "output:out-combination-C0-node-n1-0-0-Fz",
+        "output:out-combination-C0-node-n1-0-0-Mx",
+        "output:out-combination-C0-node-n1-0-0-My",
+        "output:out-combination-C0-node-n1-0-0-Mz",
+        "output:out-combination-C0-node-n1-1-0-Fx",
+        "output:out-combination-C0-node-n1-1-0-Fy",
+        "output:out-combination-C0-node-n1-1-0-Fz",
+        "output:out-combination-C0-node-n1-1-0-Mx",
+        "output:out-combination-C0-node-n1-1-0-My",
+        "output:out-combination-C0-node-n1-1-0-Mz",
+        "output:out-combination-C0-node-n2-0-0-Fx",
+        "output:out-combination-C0-node-n2-0-0-Fy",
+        "output:out-combination-C0-node-n2-0-0-Fz",
+        "output:out-combination-C0-node-n2-0-0-Mx",
+        "output:out-combination-C0-node-n2-0-0-My",
+        "output:out-combination-C0-node-n2-0-0-Mz",
+        "output:out-combination-C0-node-n2-1-0-Fx",
+        "output:out-combination-C0-node-n2-1-0-Fy",
+        "output:out-combination-C0-node-n2-1-0-Fz",
+        "output:out-combination-C0-node-n2-1-0-Mx",
+        "output:out-combination-C0-node-n2-1-0-My",
+        "output:out-combination-C0-node-n2-1-0-Mz",
+        "output:out-combination-CX-node-n0-0-1-ux",
+        "output:out-combination-CX-node-n0-0-1-uy",
+        "output:out-combination-CX-node-n0-0-1-uz",
+        "output:out-combination-CX-node-n0-0-0-ux",
+        "output:out-combination-CX-node-n0-0-0-uy",
+        "output:out-combination-CX-node-n0-1-1-ux",
+        "output:out-combination-CX-node-n0-1-1-uy",
+        "output:out-combination-CX-node-n0-1-1-uz",
+        "output:out-combination-CX-node-n0-1-0-ux",
+        "output:out-combination-CX-node-n0-1-0-uy",
+        "output:out-combination-CX-node-n1-0-1-ux",
+        "output:out-combination-CX-node-n1-0-1-uy",
+        "output:out-combination-CX-node-n1-0-1-uz",
+        "output:out-combination-CX-node-n1-0-0-ux",
+        "output:out-combination-CX-node-n1-0-0-uy",
+        "output:out-combination-CX-node-n1-1-1-ux",
+        "output:out-combination-CX-node-n1-1-1-uy",
+        "output:out-combination-CX-node-n1-1-1-uz",
+        "output:out-combination-CX-node-n1-1-0-ux",
+        "output:out-combination-CX-node-n1-1-0-uy",
+        "output:out-combination-CX-node-n2-0-1-ux",
+        "output:out-combination-CX-node-n2-0-1-uy",
+        "output:out-combination-CX-node-n2-0-1-uz",
+        "output:out-combination-CX-node-n2-0-0-ux",
+        "output:out-combination-CX-node-n2-0-0-uy",
+        "output:out-combination-CX-node-n2-1-1-ux",
+        "output:out-combination-CX-node-n2-1-1-uy",
+        "output:out-combination-CX-node-n2-1-1-uz",
+        "output:out-combination-CX-node-n2-1-0-ux",
+        "output:out-combination-CX-node-n2-1-0-uy",
+        "output:out-combination-CX-node-n0-0-2-ux",
+        "output:out-combination-CX-node-n0-0-2-uy",
+        "output:out-combination-CX-node-n0-0-2-uz",
+        "output:out-combination-CX-node-n0-1-2-ux",
+        "output:out-combination-CX-node-n0-1-2-uy",
+        "output:out-combination-CX-node-n0-1-2-uz",
+        "output:out-combination-CX-node-n1-0-2-ux",
+        "output:out-combination-CX-node-n1-0-2-uy",
+        "output:out-combination-CX-node-n1-0-2-uz",
+        "output:out-combination-CX-node-n1-1-2-ux",
+        "output:out-combination-CX-node-n1-1-2-uy",
+        "output:out-combination-CX-node-n1-1-2-uz",
+        "output:out-combination-CX-node-n2-0-2-ux",
+        "output:out-combination-CX-node-n2-0-2-uy",
+        "output:out-combination-CX-node-n2-0-2-uz",
+        "output:out-combination-CX-node-n2-1-2-ux",
+        "output:out-combination-CX-node-n2-1-2-uy",
+        "output:out-combination-CX-node-n2-1-2-uz",
+        "output:out-combination-CX-node-n0-0-0-Fx",
+        "output:out-combination-CX-node-n0-0-0-Fy",
+        "output:out-combination-CX-node-n0-0-0-Fz",
+        "output:out-combination-CX-node-n0-0-0-Mx",
+        "output:out-combination-CX-node-n0-0-0-My",
+        "output:out-combination-CX-node-n0-0-0-Mz",
+        "output:out-combination-CX-node-n0-1-0-Fx",
+        "output:out-combination-CX-node-n0-1-0-Fy",
+        "output:out-combination-CX-node-n0-1-0-Fz",
+        "output:out-combination-CX-node-n0-1-0-Mx",
+        "output:out-combination-CX-node-n0-1-0-My",
+        "output:out-combination-CX-node-n0-1-0-Mz",
+        "output:out-combination-CX-node-n1-0-0-Fx",
+        "output:out-combination-CX-node-n1-0-0-Fy",
+        "output:out-combination-CX-node-n1-0-0-Fz",
+        "output:out-combination-CX-node-n1-0-0-Mx",
+        "output:out-combination-CX-node-n1-0-0-My",
+        "output:out-combination-CX-node-n1-0-0-Mz",
+        "output:out-combination-CX-node-n1-1-0-Fx",
+        "output:out-combination-CX-node-n1-1-0-Fy",
+        "output:out-combination-CX-node-n1-1-0-Fz",
+        "output:out-combination-CX-node-n1-1-0-Mx",
+        "output:out-combination-CX-node-n1-1-0-My",
+        "output:out-combination-CX-node-n1-1-0-Mz",
+        "output:out-combination-CX-node-n2-0-0-Fx",
+        "output:out-combination-CX-node-n2-0-0-Fy",
+        "output:out-combination-CX-node-n2-0-0-Fz",
+        "output:out-combination-CX-node-n2-0-0-Mx",
+        "output:out-combination-CX-node-n2-0-0-My",
+        "output:out-combination-CX-node-n2-0-0-Mz",
+        "output:out-combination-CX-node-n2-1-0-Fx",
+        "output:out-combination-CX-node-n2-1-0-Fy",
+        "output:out-combination-CX-node-n2-1-0-Fz",
+        "output:out-combination-CX-node-n2-1-0-Mx",
+        "output:out-combination-CX-node-n2-1-0-My",
+        "output:out-combination-CX-node-n2-1-0-Mz",
+        "output:out-combination-CY-node-n0-0-1-ux",
+        "output:out-combination-CY-node-n0-0-1-uy",
+        "output:out-combination-CY-node-n0-0-1-uz",
+        "output:out-combination-CY-node-n0-0-0-ux",
+        "output:out-combination-CY-node-n0-0-0-uy",
+        "output:out-combination-CY-node-n0-1-1-ux",
+        "output:out-combination-CY-node-n0-1-1-uy",
+        "output:out-combination-CY-node-n0-1-1-uz",
+        "output:out-combination-CY-node-n0-1-0-ux",
+        "output:out-combination-CY-node-n0-1-0-uy",
+        "output:out-combination-CY-node-n1-0-1-ux",
+        "output:out-combination-CY-node-n1-0-1-uy",
+        "output:out-combination-CY-node-n1-0-1-uz",
+        "output:out-combination-CY-node-n1-0-0-ux",
+        "output:out-combination-CY-node-n1-0-0-uy",
+        "output:out-combination-CY-node-n1-1-1-ux",
+        "output:out-combination-CY-node-n1-1-1-uy",
+        "output:out-combination-CY-node-n1-1-1-uz",
+        "output:out-combination-CY-node-n1-1-0-ux",
+        "output:out-combination-CY-node-n1-1-0-uy",
+        "output:out-combination-CY-node-n2-0-1-ux",
+        "output:out-combination-CY-node-n2-0-1-uy",
+        "output:out-combination-CY-node-n2-0-1-uz",
+        "output:out-combination-CY-node-n2-0-0-ux",
+        "output:out-combination-CY-node-n2-0-0-uy",
+        "output:out-combination-CY-node-n2-1-1-ux",
+        "output:out-combination-CY-node-n2-1-1-uy",
+        "output:out-combination-CY-node-n2-1-1-uz",
+        "output:out-combination-CY-node-n2-1-0-ux",
+        "output:out-combination-CY-node-n2-1-0-uy",
+        "output:out-combination-CY-node-n0-0-2-ux",
+        "output:out-combination-CY-node-n0-0-2-uy",
+        "output:out-combination-CY-node-n0-0-2-uz",
+        "output:out-combination-CY-node-n0-1-2-ux",
+        "output:out-combination-CY-node-n0-1-2-uy",
+        "output:out-combination-CY-node-n0-1-2-uz",
+        "output:out-combination-CY-node-n1-0-2-ux",
+        "output:out-combination-CY-node-n1-0-2-uy",
+        "output:out-combination-CY-node-n1-0-2-uz",
+        "output:out-combination-CY-node-n1-1-2-ux",
+        "output:out-combination-CY-node-n1-1-2-uy",
+        "output:out-combination-CY-node-n1-1-2-uz",
+        "output:out-combination-CY-node-n2-0-2-ux",
+        "output:out-combination-CY-node-n2-0-2-uy",
+        "output:out-combination-CY-node-n2-0-2-uz",
+        "output:out-combination-CY-node-n2-1-2-ux",
+        "output:out-combination-CY-node-n2-1-2-uy",
+        "output:out-combination-CY-node-n2-1-2-uz",
+        "output:out-combination-CY-node-n0-0-0-Fx",
+        "output:out-combination-CY-node-n0-0-0-Fy",
+        "output:out-combination-CY-node-n0-0-0-Fz",
+        "output:out-combination-CY-node-n0-0-0-Mx",
+        "output:out-combination-CY-node-n0-0-0-My",
+        "output:out-combination-CY-node-n0-0-0-Mz",
+        "output:out-combination-CY-node-n0-1-0-Fx",
+        "output:out-combination-CY-node-n0-1-0-Fy",
+        "output:out-combination-CY-node-n0-1-0-Fz",
+        "output:out-combination-CY-node-n0-1-0-Mx",
+        "output:out-combination-CY-node-n0-1-0-My",
+        "output:out-combination-CY-node-n0-1-0-Mz",
+        "output:out-combination-CY-node-n1-0-0-Fx",
+        "output:out-combination-CY-node-n1-0-0-Fy",
+        "output:out-combination-CY-node-n1-0-0-Fz",
+        "output:out-combination-CY-node-n1-0-0-Mx",
+        "output:out-combination-CY-node-n1-0-0-My",
+        "output:out-combination-CY-node-n1-0-0-Mz",
+        "output:out-combination-CY-node-n1-1-0-Fx",
+        "output:out-combination-CY-node-n1-1-0-Fy",
+        "output:out-combination-CY-node-n1-1-0-Fz",
+        "output:out-combination-CY-node-n1-1-0-Mx",
+        "output:out-combination-CY-node-n1-1-0-My",
+        "output:out-combination-CY-node-n1-1-0-Mz",
+        "output:out-combination-CY-node-n2-0-0-Fx",
+        "output:out-combination-CY-node-n2-0-0-Fy",
+        "output:out-combination-CY-node-n2-0-0-Fz",
+        "output:out-combination-CY-node-n2-0-0-Mx",
+        "output:out-combination-CY-node-n2-0-0-My",
+        "output:out-combination-CY-node-n2-0-0-Mz",
+        "output:out-combination-CY-node-n2-1-0-Fx",
+        "output:out-combination-CY-node-n2-1-0-Fy",
+        "output:out-combination-CY-node-n2-1-0-Fz",
+        "output:out-combination-CY-node-n2-1-0-Mx",
+        "output:out-combination-CY-node-n2-1-0-My",
+        "output:out-combination-CY-node-n2-1-0-Mz",
+        "output:out-C0-drift-n0-0-0-n0-0-1-ux",
+        "output:out-C0-drift-n0-0-0-n0-0-1-uy",
+        "output:out-C0-drift-n0-1-0-n0-1-1-ux",
+        "output:out-C0-drift-n0-1-0-n0-1-1-uy",
+        "output:out-C0-drift-n1-0-0-n1-0-1-ux",
+        "output:out-C0-drift-n1-0-0-n1-0-1-uy",
+        "output:out-C0-drift-n1-1-0-n1-1-1-ux",
+        "output:out-C0-drift-n1-1-0-n1-1-1-uy",
+        "output:out-C0-drift-n2-0-0-n2-0-1-ux",
+        "output:out-C0-drift-n2-0-0-n2-0-1-uy",
+        "output:out-C0-drift-n2-1-0-n2-1-1-ux",
+        "output:out-C0-drift-n2-1-0-n2-1-1-uy",
+        "output:out-C0-drift-n0-0-1-n0-0-2-ux",
+        "output:out-C0-drift-n0-0-1-n0-0-2-uy",
+        "output:out-C0-drift-n0-1-1-n0-1-2-ux",
+        "output:out-C0-drift-n0-1-1-n0-1-2-uy",
+        "output:out-C0-drift-n1-0-1-n1-0-2-ux",
+        "output:out-C0-drift-n1-0-1-n1-0-2-uy",
+        "output:out-C0-drift-n1-1-1-n1-1-2-ux",
+        "output:out-C0-drift-n1-1-1-n1-1-2-uy",
+        "output:out-C0-drift-n2-0-1-n2-0-2-ux",
+        "output:out-C0-drift-n2-0-1-n2-0-2-uy",
+        "output:out-C0-drift-n2-1-1-n2-1-2-ux",
+        "output:out-C0-drift-n2-1-1-n2-1-2-uy",
+        "output:out-CX-drift-n0-0-0-n0-0-1-ux",
+        "output:out-CX-drift-n0-0-0-n0-0-1-uy",
+        "output:out-CX-drift-n0-1-0-n0-1-1-ux",
+        "output:out-CX-drift-n0-1-0-n0-1-1-uy",
+        "output:out-CX-drift-n1-0-0-n1-0-1-ux",
+        "output:out-CX-drift-n1-0-0-n1-0-1-uy",
+        "output:out-CX-drift-n1-1-0-n1-1-1-ux",
+        "output:out-CX-drift-n1-1-0-n1-1-1-uy",
+        "output:out-CX-drift-n2-0-0-n2-0-1-ux",
+        "output:out-CX-drift-n2-0-0-n2-0-1-uy",
+        "output:out-CX-drift-n2-1-0-n2-1-1-ux",
+        "output:out-CX-drift-n2-1-0-n2-1-1-uy",
+        "output:out-CX-drift-n0-0-1-n0-0-2-ux",
+        "output:out-CX-drift-n0-0-1-n0-0-2-uy",
+        "output:out-CX-drift-n0-1-1-n0-1-2-ux",
+        "output:out-CX-drift-n0-1-1-n0-1-2-uy",
+        "output:out-CX-drift-n1-0-1-n1-0-2-ux",
+        "output:out-CX-drift-n1-0-1-n1-0-2-uy",
+        "output:out-CX-drift-n1-1-1-n1-1-2-ux",
+        "output:out-CX-drift-n1-1-1-n1-1-2-uy",
+        "output:out-CX-drift-n2-0-1-n2-0-2-ux",
+        "output:out-CX-drift-n2-0-1-n2-0-2-uy",
+        "output:out-CX-drift-n2-1-1-n2-1-2-ux",
+        "output:out-CX-drift-n2-1-1-n2-1-2-uy",
+        "output:out-CY-drift-n0-0-0-n0-0-1-ux",
+        "output:out-CY-drift-n0-0-0-n0-0-1-uy",
+        "output:out-CY-drift-n0-1-0-n0-1-1-ux",
+        "output:out-CY-drift-n0-1-0-n0-1-1-uy",
+        "output:out-CY-drift-n1-0-0-n1-0-1-ux",
+        "output:out-CY-drift-n1-0-0-n1-0-1-uy",
+        "output:out-CY-drift-n1-1-0-n1-1-1-ux",
+        "output:out-CY-drift-n1-1-0-n1-1-1-uy",
+        "output:out-CY-drift-n2-0-0-n2-0-1-ux",
+        "output:out-CY-drift-n2-0-0-n2-0-1-uy",
+        "output:out-CY-drift-n2-1-0-n2-1-1-ux",
+        "output:out-CY-drift-n2-1-0-n2-1-1-uy",
+        "output:out-CY-drift-n0-0-1-n0-0-2-ux",
+        "output:out-CY-drift-n0-0-1-n0-0-2-uy",
+        "output:out-CY-drift-n0-1-1-n0-1-2-ux",
+        "output:out-CY-drift-n0-1-1-n0-1-2-uy",
+        "output:out-CY-drift-n1-0-1-n1-0-2-ux",
+        "output:out-CY-drift-n1-0-1-n1-0-2-uy",
+        "output:out-CY-drift-n1-1-1-n1-1-2-ux",
+        "output:out-CY-drift-n1-1-1-n1-1-2-uy",
+        "output:out-CY-drift-n2-0-1-n2-0-2-ux",
+        "output:out-CY-drift-n2-0-1-n2-0-2-uy",
+        "output:out-CY-drift-n2-1-1-n2-1-2-ux",
+        "output:out-CY-drift-n2-1-1-n2-1-2-uy",
+        "output:out-governing-n0-0-1-ux",
+        "output:out-governing-n0-0-1-uy",
+        "output:out-governing-n0-0-1-uz",
+        "output:out-governing-n0-0-0-ux",
+        "output:out-governing-n0-0-0-uy",
+        "output:out-governing-n0-1-1-ux",
+        "output:out-governing-n0-1-1-uy",
+        "output:out-governing-n0-1-1-uz",
+        "output:out-governing-n0-1-0-ux",
+        "output:out-governing-n0-1-0-uy",
+        "output:out-governing-n1-0-1-ux",
+        "output:out-governing-n1-0-1-uy",
+        "output:out-governing-n1-0-1-uz",
+        "output:out-governing-n1-0-0-ux",
+        "output:out-governing-n1-0-0-uy",
+        "output:out-governing-n1-1-1-ux",
+        "output:out-governing-n1-1-1-uy",
+        "output:out-governing-n1-1-1-uz",
+        "output:out-governing-n1-1-0-ux",
+        "output:out-governing-n1-1-0-uy",
+        "output:out-governing-n2-0-1-ux",
+        "output:out-governing-n2-0-1-uy",
+        "output:out-governing-n2-0-1-uz",
+        "output:out-governing-n2-0-0-ux",
+        "output:out-governing-n2-0-0-uy",
+        "output:out-governing-n2-1-1-ux",
+        "output:out-governing-n2-1-1-uy",
+        "output:out-governing-n2-1-1-uz",
+        "output:out-governing-n2-1-0-ux",
+        "output:out-governing-n2-1-0-uy",
+        "output:out-governing-n0-0-2-ux",
+        "output:out-governing-n0-0-2-uy",
+        "output:out-governing-n0-0-2-uz",
+        "output:out-governing-n0-1-2-ux",
+        "output:out-governing-n0-1-2-uy",
+        "output:out-governing-n0-1-2-uz",
+        "output:out-governing-n1-0-2-ux",
+        "output:out-governing-n1-0-2-uy",
+        "output:out-governing-n1-0-2-uz",
+        "output:out-governing-n1-1-2-ux",
+        "output:out-governing-n1-1-2-uy",
+        "output:out-governing-n1-1-2-uz",
+        "output:out-governing-n2-0-2-ux",
+        "output:out-governing-n2-0-2-uy",
+        "output:out-governing-n2-0-2-uz",
+        "output:out-governing-n2-1-2-ux",
+        "output:out-governing-n2-1-2-uy",
+        "output:out-governing-n2-1-2-uz",
+        "output:out-governing-n0-0-0-Fx",
+        "output:out-governing-n0-0-0-Fy",
+        "output:out-governing-n0-0-0-Fz",
+        "output:out-governing-n0-0-0-Mx",
+        "output:out-governing-n0-0-0-My",
+        "output:out-governing-n0-0-0-Mz",
+        "output:out-governing-n0-1-0-Fx",
+        "output:out-governing-n0-1-0-Fy",
+        "output:out-governing-n0-1-0-Fz",
+        "output:out-governing-n0-1-0-Mx",
+        "output:out-governing-n0-1-0-My",
+        "output:out-governing-n0-1-0-Mz",
+        "output:out-governing-n1-0-0-Fx",
+        "output:out-governing-n1-0-0-Fy",
+        "output:out-governing-n1-0-0-Fz",
+        "output:out-governing-n1-0-0-Mx",
+        "output:out-governing-n1-0-0-My",
+        "output:out-governing-n1-0-0-Mz",
+        "output:out-governing-n1-1-0-Fx",
+        "output:out-governing-n1-1-0-Fy",
+        "output:out-governing-n1-1-0-Fz",
+        "output:out-governing-n1-1-0-Mx",
+        "output:out-governing-n1-1-0-My",
+        "output:out-governing-n1-1-0-Mz",
+        "output:out-governing-n2-0-0-Fx",
+        "output:out-governing-n2-0-0-Fy",
+        "output:out-governing-n2-0-0-Fz",
+        "output:out-governing-n2-0-0-Mx",
+        "output:out-governing-n2-0-0-My",
+        "output:out-governing-n2-0-0-Mz",
+        "output:out-governing-n2-1-0-Fx",
+        "output:out-governing-n2-1-0-Fy",
+        "output:out-governing-n2-1-0-Fz",
+        "output:out-governing-n2-1-0-Mx",
+        "output:out-governing-n2-1-0-My",
+        "output:out-governing-n2-1-0-Mz",
+        "output:out-governing-drift-n0-0-0-n0-0-1-ux",
+        "output:out-governing-drift-n0-0-0-n0-0-1-uy",
+        "output:out-governing-drift-n0-1-0-n0-1-1-ux",
+        "output:out-governing-drift-n0-1-0-n0-1-1-uy",
+        "output:out-governing-drift-n1-0-0-n1-0-1-ux",
+        "output:out-governing-drift-n1-0-0-n1-0-1-uy",
+        "output:out-governing-drift-n1-1-0-n1-1-1-ux",
+        "output:out-governing-drift-n1-1-0-n1-1-1-uy",
+        "output:out-governing-drift-n2-0-0-n2-0-1-ux",
+        "output:out-governing-drift-n2-0-0-n2-0-1-uy",
+        "output:out-governing-drift-n2-1-0-n2-1-1-ux",
+        "output:out-governing-drift-n2-1-0-n2-1-1-uy",
+        "output:out-governing-drift-n0-0-1-n0-0-2-ux",
+        "output:out-governing-drift-n0-0-1-n0-0-2-uy",
+        "output:out-governing-drift-n0-1-1-n0-1-2-ux",
+        "output:out-governing-drift-n0-1-1-n0-1-2-uy",
+        "output:out-governing-drift-n1-0-1-n1-0-2-ux",
+        "output:out-governing-drift-n1-0-1-n1-0-2-uy",
+        "output:out-governing-drift-n1-1-1-n1-1-2-ux",
+        "output:out-governing-drift-n1-1-1-n1-1-2-uy",
+        "output:out-governing-drift-n2-0-1-n2-0-2-ux",
+        "output:out-governing-drift-n2-0-1-n2-0-2-uy",
+        "output:out-governing-drift-n2-1-1-n2-1-2-ux",
+        "output:out-governing-drift-n2-1-1-n2-1-2-uy",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        11,
+        12
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        14
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        15,
+        16,
+        17
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        18,
+        19
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity",
+        "attachment:analysis-conventions-v2.txt"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        24,
+        25
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        26,
+        27
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        28,
+        29,
+        30,
+        31
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending"
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-case-acceptance",
+      "status": "pending"
+    },
+    {
+      "id": "model-fidelity",
+      "status": "pending"
+    },
+    {
+      "id": "signed-output-completeness",
+      "status": "pending"
+    }
+  ],
+  "authoringNotes": [
+    "The source leaves the property appendix to the author. Frozen sections: X beams B1 solid rectangle 300x600 mm, Y beams B2 solid rectangle 300x700 mm, columns C1 solid square 500x500 mm. E/G, A/Iy/Iz/J and local reference vectors are explicit in public input; no section catalog or solver defaults apply.",
+    "All story drift requests are signed upper-node displacement minus lower-node displacement, for every existing column line. No diaphragm average replaces column-line results.",
+    "Broad source terms such as representative beam/column end forces are resolved by requesting all relevant members, rather than omitting an unspecified representative location."
+  ],
+  "analysisConvention": {
+    "id": "commercial-linear-static-v2",
+    "bendingTheory": "Timoshenko",
+    "effectiveShearAreas": {
+      "localY": "5*A/6",
+      "localZ": "5*A/6"
+    },
+    "publicAttachment": "analysis-conventions-v2.txt"
+  }
+}

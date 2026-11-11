@@ -1,0 +1,339 @@
+{
+  "caseId": "P30-STD-003",
+  "turnId": "t1",
+  "engine": "OpenSees",
+  "analysis": "static",
+  "instruction": "Build the 12 m span, 2.5 m high parallel-chord truss with four 3 m panels from the complete attached tables. Each panel has both diagonal members DU1-DU4 and DD1-DD4. Their geometric crossings have no node, no connection and no shared degrees of freedom; retain each diagonal as one endpoint-to-endpoint truss member. Keep all five verticals. B0 is pinned and B4 is a roller free in global X. Apply 10 kN downward only at T1, T2 and T3. All members are axial-only elastic bars capable of tension and compression. Run first-order static analysis with OpenSees and self-weight off. For LC1 report ux and uz for every top node T0-T4, N for all eight crossing diagonals, and Fx and Fz at both supports. Include an explicit statement that the four crossing points are not connections. Use m and kN, with tension-positive N.\n\nThe property appendix completes each area A as a solid square with side sqrt(A), Iy=Iz=A²/12 and J=0.14083333333333334 A². These are explicit authored section properties. All elements remain axial-only trusses; bending and torsion constants are inactive and axial stiffness remains EA.\n\nUse the complete attached input tables. Global XYZ is right handed with Z upward; any planar model uses the XZ plane. All nodes listed are connected physical joints. Member local x points from i to j. In 2D local y=global +Y and local z=x cross y. In 3D local y=normalize(reference cross x), local z=x cross y; reference vectors are explicit. N is positive in tension. Signed section N/T/M2/M3 equal minus the i-end resisting action at the start and plus the j-end action at the end; V2/V3 use plus i-end and minus j-end action. Report global nodal displacements and support reactions; rotations follow the right-hand rule. Distributed loads act per actual member length, including inclined members. Use first-order linear elasticity with self-weight, rigid floors, rigid offsets, P-delta and construction stages off. Use only the specified cases and combinations. Compute every request in input.md, retaining its location, side, signed component, unit and case/combination. Interior forces must include applied-load terms. Execute OpenSees and retain version, runnable input, actual solver log and raw result/case mapping. Report the requested results in the response body as well as structured results; independently check equilibrium. No numerical answer or native execution evidence is supplied.\n\n交付方式以delivery.md为准。",
+  "requests": [
+    {
+      "id": "case:LC1:node:T0:ux",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T0"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T0:uz",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T0"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T1:ux",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T1"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T1:uz",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T1"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T2:ux",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T2"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T2:uz",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T2"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T3:ux",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T3"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T3:uz",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T3"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T4:ux",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T4"
+      },
+      "component": "ux",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:node:T4:uz",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "T4"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case:LC1:member:DU1:N@1.95256241898:right",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "member",
+        "id": "DU1",
+        "positionM": 1.9525624189766635,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:member:DD1:N@1.95256241898:right",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "member",
+        "id": "DD1",
+        "positionM": 1.9525624189766635,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:member:DU2:N@1.95256241898:right",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "member",
+        "id": "DU2",
+        "positionM": 1.9525624189766635,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:member:DD2:N@1.95256241898:right",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "member",
+        "id": "DD2",
+        "positionM": 1.9525624189766635,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:member:DU3:N@1.95256241898:right",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "member",
+        "id": "DU3",
+        "positionM": 1.9525624189766635,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:member:DD3:N@1.95256241898:right",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "member",
+        "id": "DD3",
+        "positionM": 1.9525624189766635,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:member:DU4:N@1.95256241898:right",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "member",
+        "id": "DU4",
+        "positionM": 1.9525624189766635,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:member:DD4:N@1.95256241898:right",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "member",
+        "id": "DD4",
+        "positionM": 1.9525624189766635,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:node:B0:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "B0"
+      },
+      "component": "Fx",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:node:B0:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "B0"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:node:B4:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "B4"
+      },
+      "component": "Fx",
+      "unit": "kN"
+    },
+    {
+      "id": "case:LC1:node:B4:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "LC1"
+      },
+      "location": {
+        "kind": "node",
+        "id": "B4"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    }
+  ],
+  "reportIds": [
+    "case:LC1:member:DD1:N@1.95256241898:right",
+    "case:LC1:member:DD2:N@1.95256241898:right",
+    "case:LC1:member:DD3:N@1.95256241898:right",
+    "case:LC1:member:DD4:N@1.95256241898:right",
+    "case:LC1:member:DU1:N@1.95256241898:right",
+    "case:LC1:member:DU2:N@1.95256241898:right",
+    "case:LC1:member:DU3:N@1.95256241898:right",
+    "case:LC1:member:DU4:N@1.95256241898:right",
+    "case:LC1:node:B0:Fx",
+    "case:LC1:node:B0:Fz",
+    "case:LC1:node:B4:Fx",
+    "case:LC1:node:B4:Fz",
+    "case:LC1:node:T0:ux",
+    "case:LC1:node:T0:uz",
+    "case:LC1:node:T1:ux",
+    "case:LC1:node:T1:uz",
+    "case:LC1:node:T2:ux",
+    "case:LC1:node:T2:uz",
+    "case:LC1:node:T3:ux",
+    "case:LC1:node:T3:uz",
+    "case:LC1:node:T4:ux",
+    "case:LC1:node:T4:uz"
+  ],
+  "derived": [],
+  "attachments": [
+    "input.md"
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "title": "Complete numerical input appendix",
+  "units": {
+    "coordinates": "m",
+    "forces": "kN",
+    "moments": "kN.m",
+    "lineLoads": "kN/m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m^3",
+    "A": "m^2",
+    "Iy": "m^4",
+    "Iz": "m^4",
+    "J": "m^4",
+    "shapeDimensions": "mm",
+    "rotations": "rad",
+    "sectionRoll": "degree"
+  },
+  "coordinateConvention": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodeTable": {
+    "columns": [
+      "id",
+      "X_m",
+      "Y_m",
+      "Z_m",
+      "fixed_ux",
+      "fixed_uy",
+      "fixed_uz",
+      "fixed_rx",
+      "fixed_ry",
+      "fixed_rz"
+    ],
+    "rows": [
+      [
+        "base",
+        0,
+        0,
+        0,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        "top",
+        0,
+        0,
+        5,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        "tip",
+        1,
+        0,
+        5,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    ]
+  },
+  "memberTable": {
+    "columns": [
+      "id",
+      "kind",
+      "start_node",
+      "end_node",
+      "material_id",
+      "section_id",
+      "roll_degrees",
+      "axis_reference_vector"
+    ],
+    "rows": [
+      [
+        "column",
+        "column",
+        "base",
+        "top",
+        "M1",
+        "C1",
+        0,
+        [
+          1,
+          0,
+          0
+        ]
+      ],
+      [
+        "arm",
+        "beam",
+        "top",
+        "tip",
+        "M1",
+        "B1",
+        0,
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    ]
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 400.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.2,
+        "Iy": 0.004166666666666667,
+        "Iz": 0.0026666666666666674,
+        "J": 0.005474167466666667
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 250.0,
+        "H": 400.0
+      },
+      "properties": {
+        "A": 0.1,
+        "Iy": 0.0013333333333333337,
+        "Iz": 0.0005208333333333333,
+        "J": 0.0012734516461690268
+      }
+    }
+  ],
+  "loadingCases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "tip",
+          "fy": 10,
+          "fz": -200
+        }
+      ]
+    }
+  ],
+  "linearCombinations": [],
+  "analysisSettings": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "floorTable": [],
+  "continuityNotes": {}
+}

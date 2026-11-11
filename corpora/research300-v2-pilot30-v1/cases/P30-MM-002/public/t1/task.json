@@ -1,0 +1,114 @@
+{
+  "caseId": "P30-MM-002",
+  "turnId": "t1",
+  "engine": "OpenSees",
+  "analysis": "static",
+  "instruction": "Reconstruct from the drawing and execute OpenSees. Clarify essential gaps or conflicts first. Report the following signed results with units and cases/combinations; include consistent model/result figures:\n- Global Uz at upper midspan joint U2\n- Signed axial forces in all four rods meeting first-panel centre C0; tension positive\n- Force equilibrium at C0 along its two independent crossing-diagonal directions\n\n交付方式以delivery.md为准。",
+  "requests": [
+    {
+      "id": "D-U2-uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "U2"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "D-X0BL-N",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "X0BL",
+        "positionM": 0.9762812094883317,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "D-X0TL-N",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "X0TL",
+        "positionM": 0.9762812094883317,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "D-X0BR-N",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "X0BR",
+        "positionM": 0.9762812094883317,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    },
+    {
+      "id": "D-X0TR-N",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "X0TR",
+        "positionM": 0.9762812094883317,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    }
+  ],
+  "reportIds": [
+    "D-U2-uz",
+    "D-X0BL-N",
+    "D-X0BR-N",
+    "D-X0TL-N",
+    "D-X0TR-N"
+  ],
+  "derived": [
+    {
+      "id": "D-C0-diagonal-up-balance",
+      "operation": "difference",
+      "operands": [
+        "D-X0BL-N",
+        "D-X0TR-N"
+      ],
+      "unit": "kN",
+      "description": "Opposite collinear rods X0BL and X0TR must have equal signed axial force at C0."
+    },
+    {
+      "id": "D-C0-diagonal-down-balance",
+      "operation": "difference",
+      "operands": [
+        "D-X0TL-N",
+        "D-X0BR-N"
+      ],
+      "unit": "kN",
+      "description": "Opposite collinear rods X0TL and X0BR must have equal signed axial force at C0."
+    }
+  ],
+  "attachments": [
+    "drawing.dxf"
+  ]
+}

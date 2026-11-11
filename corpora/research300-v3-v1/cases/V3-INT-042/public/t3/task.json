@@ -1,0 +1,48 @@
+{
+  "caseId": "V3-INT-042",
+  "turnId": "t3",
+  "family": "INT",
+  "designedLevel": "L3",
+  "engine": "OpenSees",
+  "kind": "transient",
+  "title": "梁柱与双向轴力杆混合体系：构造16：显式节点质量线弹性时程",
+  "instruction": "在屋面离 X=6.7 m 最近的节点（相同距离取 Z 最高，再取 |Y| 最小）增加设备恒载 23 kN，沿全局 -Z，仅计入 D。保留上一轮 Q 重分布，其他已签发输入不变。 由本轮 D 与规定比例 Q 重新推导参与 X 向质量；即使总活荷载不变也不能沿用原质量分布。",
+  "sourceId": null,
+  "answerFile": "answer.json",
+  "requests": [
+    {
+      "id": "J012-ux-at-sample",
+      "path": [
+        "timeHistory",
+        39,
+        "nodes",
+        "J012",
+        "ux"
+      ],
+      "unit": "m"
+    },
+    {
+      "id": "J012-signed-peak-ux",
+      "path": [
+        "timeHistory",
+        "*",
+        "nodes",
+        "J012",
+        "ux"
+      ],
+      "operation": "max_abs",
+      "unit": "m"
+    }
+  ],
+  "reportIds": [
+    "J012-ux-at-sample",
+    "J012-signed-peak-ux"
+  ],
+  "requireShapes": false,
+  "reportMassTotal": true,
+  "attachments": [
+    "analysis-parameters.json",
+    "engineering-revision.md",
+    "excitation.csv"
+  ]
+}

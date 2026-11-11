@@ -1,0 +1,3425 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-086",
+  "modelId": "M-STD-086",
+  "referenceKind": "native-opensees",
+  "method": "native-openseespy",
+  "solver": {
+    "module": "openseespy.opensees",
+    "version": "3.7.1",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "runnerSha256": "cdda4e5b51596485c32100b1426c58f98830470bc0ab555ff1c477b3083eb9d7",
+    "referenceIoSha256": "22066f2728b59482df3da98e4bed3bb8a81edfadfab351fb90d40cc11f436717",
+    "nativeModuleSha256": "b4c234a20c235bb4a8ed9f780a9ac2d5b2534c42ad499054882ba8c8e94bed1d",
+    "nativeBinaryModule": "openseespylinux.opensees",
+    "nativeBinarySha256": "b0985e344fb76d2f445c2b3046c37676aa02d8c632d66345a4bc927a56fee25f",
+    "openseespyPackageVersion": "3.7.1.2",
+    "openseespylinuxPackageVersion": "3.7.1.2"
+  },
+  "inputHashes": {
+    "contract.json": "feb5833eb37dd18f69ed312d69de2d271ede8f1448776dfceac8f986806dbe5e",
+    "reference-requests.json": "61b34e3e97b72a6d919b6ce6b39497d20f8f74e541546cc4b3e818bccfa2da8c",
+    "model-state-1.json": "68e65f4659a25f625bb9fe676245d8e4ab2083b3d536bb38151f72935b6985d8"
+  },
+  "sourceHash": "e7296205873323836b158dc16cfb74daf18f8286922caf027c31124525fd331e",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions-v2.txt",
+        "sha256": "9629fdf21147ce9e824418679e65d181a1a6b30d8bc5e79ab81d9d39f3d51ed9"
+      },
+      {
+        "path": "analysis-conventions.txt",
+        "sha256": "738b28632be690bc467293d5f419f5b16193a7e2761d6b529519c54312bc1d02"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "feb5833eb37dd18f69ed312d69de2d271ede8f1448776dfceac8f986806dbe5e"
+      },
+      {
+        "path": "input-data.json",
+        "sha256": "051f775920f117d375a23b64c5f155df2fb6d4b5117a4001fd87401e6ab67aee"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "68e65f4659a25f625bb9fe676245d8e4ab2083b3d536bb38151f72935b6985d8"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "57f765a485024262688e8c10ba3f1403b758ae9dd2b575663846611365db50cf"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "5a8c159dfc145e6bf0cefafb23adc5597d324209c1d7b01d1509917ec173e4c3"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "61b34e3e97b72a6d919b6ce6b39497d20f8f74e541546cc4b3e818bccfa2da8c"
+      }
+    ]
+  },
+  "sameEngineTruthStatus": "pending",
+  "nativeIndependentReview": "pending",
+  "llmEndToEnd": "not-run",
+  "nativeRole": "cross-engine-diagnostic",
+  "theory": "Timoshenko",
+  "warnings": [
+    "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+    "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+    "OpenSees results for a different planned engine are cross-engine diagnostics only."
+  ],
+  "checks": [
+    {
+      "method": "native-openseespy",
+      "forceMomentBalance": [
+        -1.8769708010069053e-15,
+        1.0928757898653885e-16,
+        1.1368683772161603e-13,
+        0.0,
+        0.0,
+        -1.0434361708000495e-14
+      ],
+      "balanceTolerance": [
+        1.0999999999999999e-07,
+        1.0999999999999999e-07,
+        8.800999999999999e-05,
+        0.00037201,
+        0.00045120999999999996,
+        1.0999999999999999e-07
+      ],
+      "freeResidual": 3.126388037344441e-13,
+      "equilibriumPassed": true,
+      "nativeNodes": 24,
+      "nativeElements": 36,
+      "addedMass": 0.0,
+      "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+      "theory": "Timoshenko",
+      "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+      "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+      "assumptions": [
+        "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+        "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+        "OpenSees results for a different planned engine are cross-engine diagnostics only."
+      ],
+      "effectiveShearAreasM2": {
+        "c0-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-1": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c0-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-1": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c0-2-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-2-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-0-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-1": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c1-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-1-1": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-1": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c1-2-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "c2-0-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-0-1": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c2-1-1": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "c0-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-0-2": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c0-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y0-1-2": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c0-2-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x0-2-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "c1-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-0-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-0-2": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c1-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "x1-1-2": {
+          "Asy": 0.15,
+          "Asz": 0.15
+        },
+        "y1-1-2": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c1-2-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "c2-0-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        },
+        "y2-0-2": {
+          "Asy": 0.17500000000000002,
+          "Asz": 0.17500000000000002
+        },
+        "c2-1-2": {
+          "Asy": 0.20833333333333334,
+          "Asz": 0.20833333333333334
+        }
+      },
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": 1,
+      "model": "model-state-1.json",
+      "quantities": [
+        {
+          "id": "case-D-node-n0-0-1-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -9.503428129756965e-07
+        },
+        {
+          "id": "case-D-node-n0-0-1-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-1"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.1783198511631057e-07
+        },
+        {
+          "id": "case-D-node-n0-0-1-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -5.759089068715997e-06
+        },
+        {
+          "id": "case-D-node-n0-0-0-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n0-0-0-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n0-1-1-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.0867186628386914e-06
+        },
+        {
+          "id": "case-D-node-n0-1-1-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-1"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.587850556323985e-08
+        },
+        {
+          "id": "case-D-node-n0-1-1-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -9.18720595836365e-06
+        },
+        {
+          "id": "case-D-node-n0-1-0-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-0"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n0-1-0-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-0"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n0-2-1-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.5331102241649053e-07
+        },
+        {
+          "id": "case-D-node-n0-2-1-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-1"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.4667808807206846e-07
+        },
+        {
+          "id": "case-D-node-n0-2-1-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -5.930902814279162e-06
+        },
+        {
+          "id": "case-D-node-n0-2-0-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-0"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n0-2-0-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-0"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n1-0-1-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.5037149334094495e-07
+        },
+        {
+          "id": "case-D-node-n1-0-1-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-1"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.218546521099549e-07
+        },
+        {
+          "id": "case-D-node-n1-0-1-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -9.71187867974818e-06
+        },
+        {
+          "id": "case-D-node-n1-0-0-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-0"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n1-0-0-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-0"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n1-1-1-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.616367526741665e-07
+        },
+        {
+          "id": "case-D-node-n1-1-1-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-1"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.680120832659648e-07
+        },
+        {
+          "id": "case-D-node-n1-1-1-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.3001535858487919e-05
+        },
+        {
+          "id": "case-D-node-n1-1-0-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-0"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n1-1-0-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-0"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n1-2-1-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.085665368374705e-07
+        },
+        {
+          "id": "case-D-node-n1-2-1-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-1"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.2049539104701055e-07
+        },
+        {
+          "id": "case-D-node-n1-2-1-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -5.9923867735629286e-06
+        },
+        {
+          "id": "case-D-node-n1-2-0-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-0"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n1-2-0-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-0"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n2-0-1-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.501945982875036e-07
+        },
+        {
+          "id": "case-D-node-n2-0-1-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-1"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.4129692029389e-07
+        },
+        {
+          "id": "case-D-node-n2-0-1-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -5.955069965667488e-06
+        },
+        {
+          "id": "case-D-node-n2-0-0-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-0"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n2-0-0-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-0"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n2-1-1-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 5.384794306289529e-07
+        },
+        {
+          "id": "case-D-node-n2-1-1-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-1"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.5995967632066042e-07
+        },
+        {
+          "id": "case-D-node-n2-1-1-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -5.976493987970796e-06
+        },
+        {
+          "id": "case-D-node-n2-1-0-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-0"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n2-1-0-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-0"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        },
+        {
+          "id": "case-D-node-n0-0-2-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 9.642264738305901e-07
+        },
+        {
+          "id": "case-D-node-n0-0-2-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.945246427491925e-07
+        },
+        {
+          "id": "case-D-node-n0-0-2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.576186430565972e-06
+        },
+        {
+          "id": "case-D-node-n0-1-2-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.229768597945884e-08
+        },
+        {
+          "id": "case-D-node-n0-1-2-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.6185459565510058e-07
+        },
+        {
+          "id": "case-D-node-n0-1-2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.380809984072517e-05
+        },
+        {
+          "id": "case-D-node-n0-2-2-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.5711767343359502e-06
+        },
+        {
+          "id": "case-D-node-n0-2-2-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -7.187329342091567e-07
+        },
+        {
+          "id": "case-D-node-n0-2-2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.865112679636867e-06
+        },
+        {
+          "id": "case-D-node-n1-0-2-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.358909292534597e-07
+        },
+        {
+          "id": "case-D-node-n1-0-2-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.309124615970847e-06
+        },
+        {
+          "id": "case-D-node-n1-0-2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.4606849577886036e-05
+        },
+        {
+          "id": "case-D-node-n1-1-2-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.319167590616253e-06
+        },
+        {
+          "id": "case-D-node-n1-1-2-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.9017009087486927e-06
+        },
+        {
+          "id": "case-D-node-n1-1-2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.9622972785803343e-05
+        },
+        {
+          "id": "case-D-node-n1-2-2-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.1192121143247857e-07
+        },
+        {
+          "id": "case-D-node-n1-2-2-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.4876421915661818e-06
+        },
+        {
+          "id": "case-D-node-n1-2-2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.962179129040846e-06
+        },
+        {
+          "id": "case-D-node-n2-0-2-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.636089076012304e-06
+        },
+        {
+          "id": "case-D-node-n2-0-2-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.665089721005577e-07
+        },
+        {
+          "id": "case-D-node-n2-0-2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.898460881753228e-06
+        },
+        {
+          "id": "case-D-node-n2-1-2-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.6352419170472328e-06
+        },
+        {
+          "id": "case-D-node-n2-1-2-uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.6673018997234004e-07
+        },
+        {
+          "id": "case-D-node-n2-1-2-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.931983334782709e-06
+        },
+        {
+          "id": "case-D-node-n0-0-0-Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.1374996790741028
+        },
+        {
+          "id": "case-D-node-n0-0-0-Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.978851312934455
+        },
+        {
+          "id": "case-D-node-n0-0-0-Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 82.3869686219094
+        },
+        {
+          "id": "case-D-node-n0-0-0-Mx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Mx",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.372344985007618
+        },
+        {
+          "id": "case-D-node-n0-0-0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.8090526578187323
+        },
+        {
+          "id": "case-D-node-n0-0-0-Mz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-0-0"
+          },
+          "component": "Mz",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0006843183590064201
+        },
+        {
+          "id": "case-D-node-n0-1-0-Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.119848990348647
+        },
+        {
+          "id": "case-D-node-n0-1-0-Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.021164466105555366
+        },
+        {
+          "id": "case-D-node-n0-1-0-Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 131.42808523770222
+        },
+        {
+          "id": "case-D-node-n0-1-0-Mx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-0"
+          },
+          "component": "Mx",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.03885229680483405
+        },
+        {
+          "id": "case-D-node-n0-1-0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.8110894522448824
+        },
+        {
+          "id": "case-D-node-n0-1-0-Mz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-1-0"
+          },
+          "component": "Mz",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.011621617410075433
+        },
+        {
+          "id": "case-D-node-n0-2-0-Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.0985991461926488
+        },
+        {
+          "id": "case-D-node-n0-2-0-Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.9482402498775084
+        },
+        {
+          "id": "case-D-node-n0-2-0-Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 84.84485970427136
+        },
+        {
+          "id": "case-D-node-n0-2-0-Mx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-0"
+          },
+          "component": "Mx",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.3083785488534194
+        },
+        {
+          "id": "case-D-node-n0-2-0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 3.6649240810266432
+        },
+        {
+          "id": "case-D-node-n0-2-0-Mz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0-2-0"
+          },
+          "component": "Mz",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.025200027640973677
+        },
+        {
+          "id": "case-D-node-n1-0-0-Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.026626486722625867
+        },
+        {
+          "id": "case-D-node-n1-0-0-Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.0116971500991134
+        },
+        {
+          "id": "case-D-node-n1-0-0-Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 138.93382000195314
+        },
+        {
+          "id": "case-D-node-n1-0-0-Mx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-0"
+          },
+          "component": "Mx",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.4774693610916385
+        },
+        {
+          "id": "case-D-node-n1-0-0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0558878154720833
+        },
+        {
+          "id": "case-D-node-n1-0-0-Mz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-0-0"
+          },
+          "component": "Mz",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.005610339798676951
+        },
+        {
+          "id": "case-D-node-n1-1-0-Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.06405128509625556
+        },
+        {
+          "id": "case-D-node-n1-1-0-Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.0473199196773703
+        },
+        {
+          "id": "case-D-node-n1-1-0-Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 185.99419353114664
+        },
+        {
+          "id": "case-D-node-n1-1-0-Mx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-0"
+          },
+          "component": "Mx",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.022415297859678218
+        },
+        {
+          "id": "case-D-node-n1-1-0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.031228450561620602
+        },
+        {
+          "id": "case-D-node-n1-1-0-Mz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-1-0"
+          },
+          "component": "Mz",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.005972560873585589
+        },
+        {
+          "id": "case-D-node-n1-2-0-Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.042175592005724
+        },
+        {
+          "id": "case-D-node-n1-2-0-Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.0554410450180196
+        },
+        {
+          "id": "case-D-node-n1-2-0-Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 85.72442189958079
+        },
+        {
+          "id": "case-D-node-n1-2-0-Mx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-0"
+          },
+          "component": "Mx",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.372354143243063
+        },
+        {
+          "id": "case-D-node-n1-2-0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.6415168973851397
+        },
+        {
+          "id": "case-D-node-n1-2-0-Mz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1-2-0"
+          },
+          "component": "Mz",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.029518821595655248
+        },
+        {
+          "id": "case-D-node-n2-0-0-Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.0998153844353173
+        },
+        {
+          "id": "case-D-node-n2-0-0-Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.0238205383685397
+        },
+        {
+          "id": "case-D-node-n2-0-0-Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 85.19058423107657
+        },
+        {
+          "id": "case-D-node-n2-0-0-Mx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-0"
+          },
+          "component": "Mx",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.3954546277429287
+        },
+        {
+          "id": "case-D-node-n2-0-0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.7154957176682815
+        },
+        {
+          "id": "case-D-node-n2-0-0-Mz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-0-0"
+          },
+          "component": "Mz",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.014316742306338802
+        },
+        {
+          "id": "case-D-node-n2-1-0-Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-0"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.176532040800706
+        },
+        {
+          "id": "case-D-node-n2-1-0-Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-0"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.9845322529347826
+        },
+        {
+          "id": "case-D-node-n2-1-0-Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-0"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 85.49706677236
+        },
+        {
+          "id": "case-D-node-n2-1-0-Mx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-0"
+          },
+          "component": "Mx",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.336260131844625
+        },
+        {
+          "id": "case-D-node-n2-1-0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-0"
+          },
+          "component": "My",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.786288303626219
+        },
+        {
+          "id": "case-D-node-n2-1-0-Mz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2-1-0"
+          },
+          "component": "Mz",
+          "unit": "kN.m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.01758293727436053
+        }
+      ],
+      "derived": [
+        {
+          "id": "D-drift-n0-0-0-n0-0-1-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-0-1-ux",
+            "case-D-node-n0-0-0-ux"
+          ],
+          "unit": "m",
+          "description": "n0-0-1 minus n0-0-0: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -9.503428129756965e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-0-0-n0-0-1-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-0-1-uy",
+            "case-D-node-n0-0-0-uy"
+          ],
+          "unit": "m",
+          "description": "n0-0-1 minus n0-0-0: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.1783198511631057e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-1-0-n0-1-1-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-1-1-ux",
+            "case-D-node-n0-1-0-ux"
+          ],
+          "unit": "m",
+          "description": "n0-1-1 minus n0-1-0: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.0867186628386914e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-1-0-n0-1-1-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-1-1-uy",
+            "case-D-node-n0-1-0-uy"
+          ],
+          "unit": "m",
+          "description": "n0-1-1 minus n0-1-0: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.587850556323985e-08,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-2-0-n0-2-1-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-2-1-ux",
+            "case-D-node-n0-2-0-ux"
+          ],
+          "unit": "m",
+          "description": "n0-2-1 minus n0-2-0: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.5331102241649053e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-2-0-n0-2-1-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-2-1-uy",
+            "case-D-node-n0-2-0-uy"
+          ],
+          "unit": "m",
+          "description": "n0-2-1 minus n0-2-0: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.4667808807206846e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-0-0-n1-0-1-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-0-1-ux",
+            "case-D-node-n1-0-0-ux"
+          ],
+          "unit": "m",
+          "description": "n1-0-1 minus n1-0-0: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.5037149334094495e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-0-0-n1-0-1-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-0-1-uy",
+            "case-D-node-n1-0-0-uy"
+          ],
+          "unit": "m",
+          "description": "n1-0-1 minus n1-0-0: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.218546521099549e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-1-0-n1-1-1-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-1-1-ux",
+            "case-D-node-n1-1-0-ux"
+          ],
+          "unit": "m",
+          "description": "n1-1-1 minus n1-1-0: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.616367526741665e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-1-0-n1-1-1-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-1-1-uy",
+            "case-D-node-n1-1-0-uy"
+          ],
+          "unit": "m",
+          "description": "n1-1-1 minus n1-1-0: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.680120832659648e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-2-0-n1-2-1-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-2-1-ux",
+            "case-D-node-n1-2-0-ux"
+          ],
+          "unit": "m",
+          "description": "n1-2-1 minus n1-2-0: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.085665368374705e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-2-0-n1-2-1-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-2-1-uy",
+            "case-D-node-n1-2-0-uy"
+          ],
+          "unit": "m",
+          "description": "n1-2-1 minus n1-2-0: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.2049539104701055e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n2-0-0-n2-0-1-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n2-0-1-ux",
+            "case-D-node-n2-0-0-ux"
+          ],
+          "unit": "m",
+          "description": "n2-0-1 minus n2-0-0: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.501945982875036e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n2-0-0-n2-0-1-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n2-0-1-uy",
+            "case-D-node-n2-0-0-uy"
+          ],
+          "unit": "m",
+          "description": "n2-0-1 minus n2-0-0: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.4129692029389e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n2-1-0-n2-1-1-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n2-1-1-ux",
+            "case-D-node-n2-1-0-ux"
+          ],
+          "unit": "m",
+          "description": "n2-1-1 minus n2-1-0: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 5.384794306289529e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n2-1-0-n2-1-1-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n2-1-1-uy",
+            "case-D-node-n2-1-0-uy"
+          ],
+          "unit": "m",
+          "description": "n2-1-1 minus n2-1-0: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.5995967632066042e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-0-1-n0-0-2-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-0-2-ux",
+            "case-D-node-n0-0-1-ux"
+          ],
+          "unit": "m",
+          "description": "n0-0-2 minus n0-0-1: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.9145692868062865e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-0-1-n0-0-2-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-0-2-uy",
+            "case-D-node-n0-0-1-uy"
+          ],
+          "unit": "m",
+          "description": "n0-0-2 minus n0-0-1: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 8.123566278655031e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-1-1-n0-1-2-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-1-2-ux",
+            "case-D-node-n0-1-1-ux"
+          ],
+          "unit": "m",
+          "description": "n0-1-2 minus n0-1-1: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.1090163488181503e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-1-1-n0-1-2-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-1-2-uy",
+            "case-D-node-n0-1-1-uy"
+          ],
+          "unit": "m",
+          "description": "n0-1-2 minus n0-1-1: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -7.597609009186072e-08,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-2-1-n0-2-2-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-2-2-ux",
+            "case-D-node-n0-2-1-ux"
+          ],
+          "unit": "m",
+          "description": "n0-2-2 minus n0-2-1: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 1.9244877567524406e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n0-2-1-n0-2-2-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n0-2-2-uy",
+            "case-D-node-n0-2-1-uy"
+          ],
+          "unit": "m",
+          "description": "n0-2-2 minus n0-2-1: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -9.654110222812252e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-0-1-n1-0-2-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-0-2-ux",
+            "case-D-node-n1-0-1-ux"
+          ],
+          "unit": "m",
+          "description": "n1-0-2 minus n1-0-1: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.8551943591251473e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-0-1-n1-0-2-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-0-2-uy",
+            "case-D-node-n1-0-1-uy"
+          ],
+          "unit": "m",
+          "description": "n1-0-2 minus n1-0-1: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.872699638608922e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-1-1-n1-1-2-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-1-2-ux",
+            "case-D-node-n1-1-1-ux"
+          ],
+          "unit": "m",
+          "description": "n1-1-2 minus n1-1-1: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.0575308379420865e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-1-1-n1-1-2-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-1-2-uy",
+            "case-D-node-n1-1-1-uy"
+          ],
+          "unit": "m",
+          "description": "n1-1-2 minus n1-1-1: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.4336888254827278e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-2-1-n1-2-2-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-2-2-ux",
+            "case-D-node-n1-2-1-ux"
+          ],
+          "unit": "m",
+          "description": "n1-2-2 minus n1-2-1: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.966453254049919e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n1-2-1-n1-2-2-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n1-2-2-uy",
+            "case-D-node-n1-2-1-uy"
+          ],
+          "unit": "m",
+          "description": "n1-2-2 minus n1-2-1: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.367146800519171e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n2-0-1-n2-0-2-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n2-0-2-ux",
+            "case-D-node-n2-0-1-ux"
+          ],
+          "unit": "m",
+          "description": "n2-0-2 minus n2-0-1: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -2.2862836742998076e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n2-0-1-n2-0-2-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n2-0-2-uy",
+            "case-D-node-n2-0-1-uy"
+          ],
+          "unit": "m",
+          "description": "n2-0-2 minus n2-0-1: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.078058923944477e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n2-1-1-n2-1-2-ux",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n2-1-2-ux",
+            "case-D-node-n2-1-1-ux"
+          ],
+          "unit": "m",
+          "description": "n2-1-2 minus n2-1-1: ux; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -3.173721347676186e-06,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        },
+        {
+          "id": "D-drift-n2-1-1-n2-1-2-uy",
+          "operation": "difference",
+          "operands": [
+            "case-D-node-n2-1-2-uy",
+            "case-D-node-n2-1-1-uy"
+          ],
+          "unit": "m",
+          "description": "n2-1-2 minus n2-1-1: uy; signed story displacement difference",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.2668986629300046e-07,
+          "operandSelections": [
+            {
+              "kind": "case",
+              "id": "D"
+            },
+            {
+              "kind": "case",
+              "id": "D"
+            }
+          ],
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ],
+      "checks": [
+        {
+          "method": "native-openseespy",
+          "forceMomentBalance": [
+            -1.8769708010069053e-15,
+            1.0928757898653885e-16,
+            1.1368683772161603e-13,
+            0.0,
+            0.0,
+            -1.0434361708000495e-14
+          ],
+          "balanceTolerance": [
+            1.0999999999999999e-07,
+            1.0999999999999999e-07,
+            8.800999999999999e-05,
+            0.00037201,
+            0.00045120999999999996,
+            1.0999999999999999e-07
+          ],
+          "freeResidual": 3.126388037344441e-13,
+          "equilibriumPassed": true,
+          "nativeNodes": 24,
+          "nativeElements": 36,
+          "addedMass": 0.0,
+          "massPolicy": "No nodal or element mass; linear static, self_weight=false",
+          "theory": "Timoshenko",
+          "loadIntegration": "Native beamUniform loads on true piecewise-constant segments",
+          "stationPolicy": "Connected beam observation nodes; exact native linear-truss interpolation",
+          "assumptions": [
+            "Linear elastic Timoshenko beams: native ElasticTimoshenkoBeam with explicit member shear areas in m².",
+            "Authored tolerances are preserved; this numerical run does not establish independently reviewed native truth.",
+            "OpenSees results for a different planned engine are cross-engine diagnostics only."
+          ],
+          "effectiveShearAreasM2": {
+            "c0-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-1": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c0-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-1": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c0-2-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-2-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-0-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-1": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c1-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-1-1": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-1": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c1-2-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "c2-0-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y2-0-1": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c2-1-1": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "c0-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-0-2": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c0-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y0-1-2": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c0-2-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x0-2-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "c1-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-0-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-0-2": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c1-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "x1-1-2": {
+              "Asy": 0.15,
+              "Asz": 0.15
+            },
+            "y1-1-2": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c1-2-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "c2-0-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            },
+            "y2-0-2": {
+              "Asy": 0.17500000000000002,
+              "Asz": 0.17500000000000002
+            },
+            "c2-1-2": {
+              "Asy": 0.20833333333333334,
+              "Asz": 0.20833333333333334
+            }
+          },
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          }
+        }
+      ]
+    }
+  ],
+  "analysisConvention": {
+    "id": "commercial-linear-static-v2",
+    "bendingTheory": "Timoshenko",
+    "effectiveShearAreas": {
+      "localY": "5*A/6",
+      "localZ": "5*A/6"
+    },
+    "publicAttachment": "analysis-conventions-v2.txt"
+  },
+  "notCommercialScoringTruth": true,
+  "artifacts": [
+    {
+      "path": "native-input-receipt.json",
+      "sha256": "79bf5c10c0b9f4afd2faab9921a8332303d28ea6fdf7b875058e3aefa5939691"
+    },
+    {
+      "path": "native-solver-receipt.json",
+      "sha256": "617cc0e64b2bd5e9d5be367215390d4f73b58688a6b1507a328c6a50c4f8771c"
+    },
+    {
+      "path": "native-raw-responses.json",
+      "sha256": "9208f997e1cd4e6f4f943d93ef959ff4b230f578487ddecbd4b3d204a2675af3"
+    },
+    {
+      "path": "native-checks.json",
+      "sha256": "188be7eef8742c36dec57c1a97c21eb316ca1c070aa33cd2ae7f1affbd9fb543"
+    }
+  ]
+}

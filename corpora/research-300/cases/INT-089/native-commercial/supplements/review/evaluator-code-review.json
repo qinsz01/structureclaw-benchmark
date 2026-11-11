@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "codex:/root/commercial_yjk_mapping",
+  "status": "reviewed-no-blocking-findings",
+  "scope": "Offline JavaScript reference precision arithmetic, frozen-reference trust boundary, native certificate qualification, engine/selection/model/endpoint scope, report unit conversion and strict diagnostic retention. This is not an input blind review, vendor arithmetic proof or end-to-end acceptance.",
+  "policy": {
+    "id": "native-f32-recovery-scale-v1",
+    "evaluatorVersion": "research300-evaluator-v2",
+    "acceptanceRegionChanges": true,
+    "nativeArithmeticBound": false,
+    "comparison": "abs(actual-reference) <= frozenAbsolute + gamma_(2*n-1) * sum(abs(canonicalTerms)) + frozenRelative * abs(reference)",
+    "unitRoundoff": "2^-24",
+    "gamma": "k*u/(1-k*u), k=2*n-1",
+    "budgetSource": "Only independently frozen reference engineeringPrecision; candidate-result uncertainty declarations are ignored.",
+    "originalValuesAndTolerances": "Comparator retains the original scalar and tolerance; strict pass/fail and failures are reported separately.",
+    "qualifiedApplication": "PKPM raw member inward endpoints from a single native basic case at factor one. Reaction, displacement, combination and derived propagation remain outside this policy."
+  },
+  "findings": [
+    {
+      "id": "precision-scope-001",
+      "status": "resolved",
+      "severity": "medium",
+      "before": "A missing/derived rawTrace and an interior member station could receive a recovery allowance. Reproduced with positionM=1.5 and nativeBasicFactors DL:2,LL:1.",
+      "resolution": "validatePrecisionScope checks original SDK endpoint trace, typed source selection, single source/native unit factors and raw term, node order/end/side; evaluation/reference/native validation additionally checks the actual frozen-model endpoint.",
+      "verification": "Reviewed current helper and all three call sites; new raw-scope and rehashed-certificate tests passed."
+    },
+    {
+      "id": "precision-engine-002",
+      "status": "resolved",
+      "severity": "medium",
+      "before": "PKPM scope was checked in reference readiness but not independently in the commercial native qualification gate.",
+      "resolution": "Native gate explicitly requires PKPM and no derived propagation, and binds trace nativeRun/model SHA and certificate recovery nativeRun to the state.",
+      "verification": "Added one YJK rehash regression. It passes on current sources and fails when only the native-gate PKPM condition is removed in an in-memory module."
+    }
+  ],
+  "checks": [
+    "Precision metadata recomputes gamma, term count, absolute scale and allowance; finite numbers, fixed roundoff/policy flags and certificate digest are mandatory.",
+    "Candidate scoring projection equality includes precision metadata and raw trace; named native review binds the exact candidate and authored source.",
+    "Certificate must be present in retained native artifacts, hash-match, identify PKPM/case/source/state/typed selector, and match exact precision/location/component/unit and nativeRun.",
+    "Trace sourceModelSha256 is checked against current frozen model bytes; ordered sourceEndNodes, station and side are checked against model geometry.",
+    "Execution engine/model/state/source/result fingerprints and requested identity/unit/sign checks remain in place.",
+    "Report outputUnits scale value, absolute tolerance, canonical terms and recovery budget together; certificate digest remains the original frozen proof identity.",
+    "Primitive execution and report comparisons retain strict pass/fail alongside engineering-policy results.",
+    "No derived propagation is authorized; the current policy does not silently alter extrema/co-governor rules."
+  ],
+  "validation": [
+    {
+      "command": "node --test lib/reference-precision.test.cjs lib/reference-precision-binding.test.cjs lib/research300-evaluation.test.cjs",
+      "exitCode": 0,
+      "tests": 86,
+      "passed": 86,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "in-memory mutation",
+      "changedCondition": "if(contract.plannedEngine!=='PKPM'||array(state.derived).length) -> if(array(state.derived).length)",
+      "test": "YJK native gate rejects PKPM precision even after every enclosing binding is rehashed",
+      "exitCode": 1,
+      "expectedFailure": "nativeVerified became true; assertion expected false",
+      "productionFilesChanged": false
+    }
+  ],
+  "reviewedFiles": [
+    {
+      "path": "lib/reference-precision.cjs",
+      "sha256": "a26775026083d6c4ca2e4d2df35261e15aaf5641009addaecc03749a5c39acb2"
+    },
+    {
+      "path": "lib/requested-quantities.cjs",
+      "sha256": "d472c7031d5656259c36b60cc7a1730421d33b7df1eb80b497d3c03b806f6591"
+    },
+    {
+      "path": "lib/research300-evaluation.cjs",
+      "sha256": "bcd4f1ff5108990add33b5205c3ce3dc78318a8f49ed686392558fac03016052"
+    },
+    {
+      "path": "lib/research300-validation.cjs",
+      "sha256": "9a9d37ab2854fc6cee370134a64c3648b5a197548b0c02a82cd9586bb719b794"
+    },
+    {
+      "path": "lib/reference-precision.test.cjs",
+      "sha256": "5caf538c14450a41189ddbd4ccb27ad75b18a2e07fe613966ee5fdaac94a4105"
+    },
+    {
+      "path": "lib/reference-precision-binding.test.cjs",
+      "sha256": "1888de34fcbf2716cdca872df67e24f288c525d0eefb4076dea06d5547e8370e"
+    },
+    {
+      "path": "lib/research300-evaluation.test.cjs",
+      "sha256": "adf818213effa13b1388d8ac19df73fc01bd9c3eacae5c1f02e8b0a8dc0a626c"
+    }
+  ],
+  "changesByReviewer": [
+    "Added only the YJK native-gate rehash negative test to lib/reference-precision-binding.test.cjs.",
+    "Wrote this review report."
+  ],
+  "limitations": [
+    "The policy explicitly widens engineering acceptance; it is not an inferred bound on opaque vendor arithmetic.",
+    "Certificate term generation and its physical evidence require the separate named numerical review; JavaScript verifies their binding and arithmetic metadata.",
+    "Sign cannot be distinguished mathematically when the declared acceptance interval straddles zero; the policy does not claim otherwise.",
+    "No full repository suite or remote/native solver was run for this review. No corpus, exporter or production JavaScript was edited by this reviewer."
+  ]
+}

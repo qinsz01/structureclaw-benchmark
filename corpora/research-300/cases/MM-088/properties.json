@@ -1,0 +1,108 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Steel M1",
+      "type": "steel",
+      "E": 206000.0,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850.0
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "A1",
+      "name": "A1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 100.0,
+        "H": 100.0
+      },
+      "properties": {
+        "A": 0.010000000000000002,
+        "Iy": 8.333333333333335e-06,
+        "Iz": 8.333333333333335e-06,
+        "J": 1.4083333333333338e-05
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows the thin arrow on each drawn member from first to second end",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "The marked roof-brace carries axial force only. A crossing without a connection symbol transfers no force between crossing members; the brace is connected only at its two labeled endpoints.",
+    "Execute combinations D, D+WX and D+WY separately using the listed unit factors. Report top-node Ux/Uy and tension-positive brace N for each; D is the baseline and both lateral combinations are required.",
+    "The 8 kN/m D load acts along every actual beam in global -Z, per metre of actual member length. No gravity line load is assigned to the axial-only brace."
+  ]
+}

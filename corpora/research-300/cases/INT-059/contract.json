@@ -1,0 +1,380 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "INT-059",
+  "modelId": "M-INT-059",
+  "family": "interactive_robustness",
+  "language": "中文",
+  "locale": "zh",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-059（左右柱不同刚度的面载框架）。T1给M-INT-059并列8kN/m²及48kN/m，但未说明两项关系；T2确认48是8乘6m的同一荷载。",
+    "task.modelingFocus": "普通刚接框架与门架标签分开；截面分组的独立状态保持",
+    "task.expectedOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "最终仅48kN/m一次；不施加96或再次乘6；固定柱脚不变；柱刚度不对称保持，屋面48kN/m只施加一次；若已有信息可唯一推得缺项，接受说明依据后直接完成，否则再澄清。",
+    "task.prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "平面钢框架；跨6m、高4.5m",
+    "model.boundaryKey": "所有柱脚面内三自由度固定",
+    "model.loadKey": "跨6m、高4.5m，屋面8kN/m²按6m受荷宽度折算，两柱脚固定",
+    "model.propertyKey": "左柱C1、右柱C2，C2的Iy/Iz为C1的1.3倍、面积相同，梁仍B1",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz。",
+    "engine.adapterGap": "未逐题验收；前置检查项：基础工具，并核对量纲澄清后计算后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+    "engine.truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-t1.json"
+  ],
+  "turns": [
+    {
+      "instruction": "跨6m高4.5m固定脚框架，左右柱面积相同但右柱Iy/Iz为左柱1.3倍。屋面输入列出8kN/m²、受荷宽6m及48kN/m，但未说明是否同一荷载。请计算。按每个明示工况与组合，报告最高层最右梁柱节点全局Ux、Uz，及最左柱脚全局支座弯矩My和竖向反力Fz（Rz）。\n每个可计算的新状态使用题定OpenSees引擎进行一阶线弹性分析；自重、P-delta、刚性楼板、刚域及施工阶段关闭。未明确更改的字段保持。每个数值附节点或构件、全局方向、单位、工况或组合、轮次、模型状态与可追溯运行ID。Rz表示竖向支反力Fz。保留原工况并分别计算所有明示组合。关键缺项或矛盾解决前不得编造新数值。",
+      "state": null,
+      "expectation": "clarify",
+      "attachments": [
+        "input-t1.json"
+      ],
+      "unresolvedFields": [
+        "roofLoads.relationship"
+      ],
+      "expectedQuestions": [
+        "48kN/m是否由8kN/m²乘6m折算的同一荷载？"
+      ],
+      "acceptedAlternative": "若说明已给数据足以唯一确定二者为同一荷载，可直接采用48kN/m一次；不得叠加。",
+      "id": "t1",
+      "requiredOutputIds": [
+        "t1-interaction"
+      ],
+      "requiredQuantityIds": []
+    },
+    {
+      "instruction": "确认48kN/m就是8kN/m²×6m的同一荷载，只施加一次，其他输入保持。按每个明示工况与组合，报告最高层最右梁柱节点全局Ux、Uz，及最左柱脚全局支座弯矩My和竖向反力Fz（Rz）。",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "id": "t2",
+      "requiredOutputIds": [
+        "s1--case-D--n1-1--ux",
+        "s1--case-D--n1-1--uz",
+        "s1--case-D--n0-0--My",
+        "s1--case-D--n0-0--Fz",
+        "t2-interaction"
+      ],
+      "requiredQuantityIds": [
+        "case-D--n1-1--ux",
+        "case-D--n1-1--uz",
+        "case-D--n0-0--My",
+        "case-D--n0-0--Fz"
+      ]
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "s1--case-D--n1-1--ux",
+      "description": "case D: n1-1 ux [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n1-1--ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n1-1--uz",
+      "description": "case D: n1-1 uz [m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n1-1--uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n0-0--My",
+      "description": "case D: n0-0 My [kN.m]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n0-0--My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "s1--case-D--n0-0--Fz",
+      "description": "case D: n0-0 Fz [kN]",
+      "state": 1,
+      "quantityIds": [
+        "case-D--n0-0--Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "t1-interaction",
+      "description": "跨6m高4.5m固定脚框架，左右柱面积相同但右柱Iy/Iz为左柱1.3倍。屋面输入列出8kN/m²、受荷宽6m及48kN/m，但未说明是否同一荷载。请计算。按每个明示工况与组合，报告最高层最右梁柱节点全局Ux、Uz，及最左柱脚全局支座弯矩My和竖向反力Fz（Rz）。\n每个可计算的新状态使用题定OpenSees引擎进行一阶线弹性分析；自重、P-delta、刚性楼板、刚域及施工阶段关闭。未明确更改的字段保持。每个数值附节点或构件、全局方向、单位、工况或组合、轮次、模型状态与可追溯运行ID。Rz表示竖向支反力Fz。保留原工况并分别计算所有明示组合。关键缺项或矛盾解决前不得编造新数值。",
+      "state": null,
+      "quantityIds": [],
+      "kind": "interaction"
+    },
+    {
+      "id": "t2-interaction",
+      "description": "确认48kN/m就是8kN/m²×6m的同一荷载，只施加一次，其他输入保持。按每个明示工况与组合，报告最高层最右梁柱节点全局Ux、Uz，及最左柱脚全局支座弯矩My和竖向反力Fz（Rz）。",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "interaction"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        5,
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7,
+        8,
+        9
+      ],
+      "targets": [
+        "output:s1--case-D--n1-1--ux",
+        "output:s1--case-D--n1-1--uz",
+        "output:s1--case-D--n0-0--My",
+        "output:s1--case-D--n0-0--Fz",
+        "output:t1-interaction",
+        "output:t2-interaction",
+        "gate:report-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-preservation",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        15,
+        16
+      ],
+      "targets": [
+        "gate:adapter-capability-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        17,
+        18
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        19
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        20
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        21
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "attachment:input-t1.json",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        29,
+        30,
+        31,
+        32
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "targets": [
+        "gate:native-execution",
+        "gate:state-preservation",
+        "gate:report-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        38,
+        39,
+        40
+      ],
+      "targets": [
+        "gate:adapter-capability-review"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        41,
+        42,
+        43
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable gates remain pending. See author-notes.json for case-specific source review and appendix choices."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending",
+      "description": "Execute the named engine independently for each changed computable state and each selection; retain software version, settings, native input, run ID, successful log and raw result mapping."
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending",
+      "description": "Generate and independently review same-engine reference values; check equilibrium, signs, units and stiffness without importing the SUT path."
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending",
+      "description": "Independently reconstruct each turn from only its released public input and verify original source requirements."
+    },
+    {
+      "id": "state-preservation",
+      "status": "pending",
+      "description": "Verify target field changes, all non-target fields, undo equivalence and query-only state identity."
+    },
+    {
+      "id": "adapter-capability-review",
+      "status": "pending",
+      "description": "Exercise this case topology, loads, coordinates and selected engine; support in principle is not evidence of adapter acceptance."
+    },
+    {
+      "id": "report-completeness",
+      "status": "pending",
+      "description": "Check signed quantities in the report body, locations, directions, units, selections and current turn against structured artifacts."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run"
+}

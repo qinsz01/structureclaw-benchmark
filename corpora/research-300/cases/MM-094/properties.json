@@ -1,0 +1,214 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 350.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.175,
+        "Iy": 0.003645833333333333,
+        "Iz": 0.0017864583333333328,
+        "J": 0.0040575733442708315
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 250.0,
+        "H": 450.0
+      },
+      "properties": {
+        "A": 0.1125,
+        "Iy": 0.0018984375000000002,
+        "Iz": 0.0005859375,
+        "J": 0.0015299494051021186
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows the thin arrow on each drawn member from first to second end",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "The drawings use right-handed source axes (u,v,w), with +v upward. Convert coordinates, translation constraints, force vectors and moment vectors by (X,Y,Z)=(u,-w,v). Report all requested results in global XYZ axes.",
+    "Input vectors in the drawing use source axes: the marked point force is (Fu,Fv,Fw)=(10,-20,5) kN. The marked uniform beam loads are (qu,qv,qw)=(0,-8,0) kN/m of actual beam length.",
+    "M1: E=206000 MPa, nu=0.30, G=E/[2(1+nu)], rho=7850 kg/m3. Solid rectangular sections: C1 350 by 500 mm and B1 250 by 450 mm.",
+    "Local axis 1 runs from first to second node; axis 2 is normalized r cross 1 and axis 3 is 1 cross 2. In source components, column reference r=(1,0,0), beam reference r=(0,1,0). Report all six global support reaction components at the marked rear-right base."
+  ],
+  "boundaryConditions": [
+    {
+      "node": "n0-0-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n0-1-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n1-0-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n1-1-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n2-0-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n2-1-0",
+      "restrainedDOFs": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "node": "n0-0-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n0-1-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-0-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-1-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-0-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-1-1",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n0-0-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n0-1-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-0-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n1-1-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-0-2",
+      "restrainedDOFs": []
+    },
+    {
+      "node": "n2-1-2",
+      "restrainedDOFs": []
+    }
+  ],
+  "sourceCoordinateMapping": {
+    "source": "right-handed (u,v,w), v upward",
+    "global": "(X,Y,Z)=(u,-w,v)",
+    "force": "(Fx,Fy,Fz)=(Fu,-Fw,Fv)"
+  }
+}

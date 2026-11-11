@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-053",
+  "inputHashes": {
+    "contract.json": "a9fe0b1e5cc26cf2cff9a90c106662c7c8790be9e5635bead90c568e81c2af1f",
+    "reference-requests.json": "f7e64c84812494d841e58cce4154d0ce5b78b327bfc14b33fb1645314325297d",
+    "model-state-1.json": "59bf647f37bd10a6e5ef8c017eb868f8becc2ec6665f5092d6018ed22e6dcaa8"
+  },
+  "sourceHash": "dcad7c928d0654431f8d5221e82f42cd8b69d93a59b149122632fa535b46d3fb",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions.txt",
+        "sha256": "4349a3fc512f0a1cb1e3a535ea7861a70b031ae94ecbc1ad2a6a17f093617236"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "a9fe0b1e5cc26cf2cff9a90c106662c7c8790be9e5635bead90c568e81c2af1f"
+      },
+      {
+        "path": "input-data.json",
+        "sha256": "5f8b57a07451ba7440fbef6cddc46db463b9c29409b4c4b26ee45546216b2c7d"
+      },
+      {
+        "path": "input-decisions.txt",
+        "sha256": "44ccd60f6cc23cc6b61fb8e7228bd609f9e803a5fd24cd774fc266a657689cf9"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "59bf647f37bd10a6e5ef8c017eb868f8becc2ec6665f5092d6018ed22e6dcaa8"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "8b0a34fc52e999b7bdf225eb2c0af79ac81a2054b6c0ec8e470891304d917fec"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "2ac214fccd6398bd2eed878bc84d1c0592a9cde5b1197585473102b96ca9e352"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "f7e64c84812494d841e58cce4154d0ce5b78b327bfc14b33fb1645314325297d"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "roof-n0",
+            "x": 0,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "roof-n1",
+            "x": 16,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "base-L",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "base-R",
+            "x": 16,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "roof-1",
+            "type": "beam",
+            "nodes": [
+              "roof-n0",
+              "roof-n1"
+            ],
+            "material": "M1",
+            "section": "B1"
+          },
+          {
+            "id": "column-L",
+            "type": "column",
+            "nodes": [
+              "base-L",
+              "roof-n0"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "column-R",
+            "type": "column",
+            "nodes": [
+              "base-R",
+              "roof-n1"
+            ],
+            "material": "M1",
+            "section": "C1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 300.0,
+              "H": 600.0
+            },
+            "properties": {
+              "A": 0.18,
+              "Iy": 0.0053999999999999986,
+              "Iz": 0.0013499999999999996,
+              "J": 0.0037078593749999985
+            }
+          },
+          {
+            "id": "C1",
+            "name": "C1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 500.0,
+              "H": 500.0
+            },
+            "properties": {
+              "A": 0.25,
+              "Iy": 0.005208333333333333,
+              "Iz": 0.005208333333333333,
+              "J": 0.008802083333333334
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "distributed",
+                "element": "roof-1",
+                "wz": -5
+              },
+              {
+                "id": "D-2",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "roof-n1",
+                "fx": 20
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "roof-1": [
+              0,
+              1,
+              0
+            ],
+            "column-L": [
+              0,
+              1,
+              0
+            ],
+            "column-R": [
+              0,
+              1,
+              0
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

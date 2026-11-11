@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "edition": "current",
+  "caseId": "INT-074",
+  "baseSourceHash": "1cfc0aa1c457afc341403efbfdad9bd34207c13be3f39052b6705145d6cb088b",
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Build the two-storey one-bay frame in the attachment. Left columns are 500x350 mm, right columns 350x500 mm, with the explicit section axes. Preserve the downward 10 kN/m beam loads and the roof-right +X 20 kN force plus global +Y 12 kN.m moment. Report global Ux and Uz at the highest-storey rightmost beam-column joint, and global support My and Rz (=Fz) at the leftmost ground-level column base for every original load case and every listed combination, with signs and units.\nUse the stated OpenSees engine for every computable changed state. First-order linear elastic analysis; self-weight, P-delta, rigid diaphragms, rigid offsets and construction stages are off. Preserve all fields not explicitly changed. Report every requested signed value with node/member, global direction, unit, case/combination, turn, model state and traceable . Rz denotes the vertical support reaction Fz. Retain original cases and evaluate every listed combination separately. Resolve essential missing or contradictory inputs before reporting new numerical results.",
+      "attachments": [
+        {
+          "name": "input.md",
+          "source": "edition",
+          "path": "input.md",
+          "sha256": "061bc68e63a63b2c2e11996117f0b01602e84597147fc704f6595b13390c6960"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "instruction": "Rotate only the two left-column local section bases by +90 degrees about their i-to-j axes using the attachment transformation, then rerun. Keep the section property records unchanged and use the rotated bending stiffness. Do not rotate the global nodal load or moment. Report global Ux and Uz at the highest-storey rightmost beam-column joint, and global support My and Rz (=Fz) at the leftmost ground-level column base for every original load case and every listed combination, with signs and units.",
+      "attachments": []
+    },
+    {
+      "id": "t3",
+      "instruction": "Undo only the preceding left-column rotation: restore both left-column rotation angles to their original zero-degree values and rerun. The two right columns, all other properties, and every load remain unchanged. Report global Ux and Uz at the highest-storey rightmost beam-column joint, and global support My and Rz (=Fz) at the leftmost ground-level column base for every original load case and every listed combination, with signs and units.",
+      "attachments": []
+    }
+  ]
+}

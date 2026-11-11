@@ -1,0 +1,63 @@
+{
+  "id": "STD-058",
+  "sourceTask": {
+    "id": "STD-058",
+    "family": "standard_workflow",
+    "baseGroup": "M-STD-058",
+    "title": "单层单跨侧向框架",
+    "subcategory": "基础侧向刚架",
+    "difficulty": "L1",
+    "difficultyReason": "单层单跨边界及荷载明确；generic路由名称不构成高难度。",
+    "language": "英文",
+    "inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "turns": 1,
+    "scenario": "跨6m、高4m、两柱脚固定，右上节点X向50kN；完整属性按公共契约随题给出。 右上节点单独施加50kN，不把两柱顶当作刚性楼板耦合。",
+    "modelingFocus": "完整物理框架不因generic而升级难度",
+    "expectedOutput": "左右柱顶X位移、屋面端力、两柱脚剪力和弯矩。",
+    "gradingFocus": "完整物理框架不因generic而升级难度；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "origin": "旧题改编",
+    "oldPrimaryId": "std-generic-single-bay-lateral",
+    "oldSecondaryId": "无",
+    "reuseChange": "保留旧题主要几何与荷载，显式补齐单位、自重、观测位置和结果评分；新契约下须重新核验真值。",
+    "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立二维框架解；侧向合力和倾覆力矩平衡，端部节点平衡复核。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+    "prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "STD-058",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "当前为二维钢框架题，采用 OpenSees，保留平面分析假设，不增造空间柱网。 本题重点：完整物理框架不因generic而升级难度。",
+      "executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "逐题核验完整物理框架不因generic而升级难度；输入、结果分量/位置及数值标答尚未完成验收。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+      "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立二维框架解；侧向合力和倾覆力矩平衡，端部节点平衡复核。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+      "analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+      "requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-STD-058",
+    "taskId": "STD-058",
+    "structure": "平面钢框架",
+    "dimension": "2D",
+    "difficulty": "L1",
+    "title": "单层单跨侧向框架",
+    "spec": "跨6m、高4m、两柱脚固定，右上节点X向50kN；完整属性按公共契约随题给出。 右上节点单独施加50kN，不把两柱顶当作刚性楼板耦合。 边界：两个柱脚固定。",
+    "challenge": "完整物理框架不因generic而升级难度",
+    "source": "std-generic-single-bay-lateral",
+    "prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "distinctness": "平面单层单跨刚接钢框架；两个柱脚固定；仅右上节点水平集中力；单钢材料；梁柱分组截面",
+    "topologyKey": "平面单层单跨刚接钢框架",
+    "boundaryKey": "两个柱脚固定",
+    "loadKey": "仅右上节点水平集中力",
+    "propertyKey": "单钢材料；梁柱分组截面"
+  },
+  "appendixDecisions": [
+    "Missing source material/section appendix completed with explicit solid-rectangle steel properties; this is an author decision, not a recovered source value or a numerical reference.",
+    "Beam B1 is 0.30 m by 0.60 m and columns C1 are 0.50 m square. The single static case is named D as a case label even though its only load is lateral. There is no gravitational load or roof diaphragm."
+  ],
+  "reviewStatus": "author-inspected-independent-review-pending",
+  "native": "pending",
+  "inputBlindReview": "pending"
+}

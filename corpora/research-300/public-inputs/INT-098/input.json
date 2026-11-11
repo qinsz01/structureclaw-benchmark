@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "edition": "current",
+  "caseId": "INT-098",
+  "baseSourceHash": "397660ee73cbbe81645bfa8358ded78d4821bc042a6c9cef8a250f6655f4c1a4",
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Build the 6 m spatial cantilever column in OpenSees using the attached input. Its Iy/Iz table conflicts with the local-axis annotation: the two labels are interchanged. Confirm which table and axis orientation govern before giving numerical results. Keep the top global force (20,15,-400) kN and the separate mid-height global X force -8 kN at Z=3 m. Report top global Uz, Ux and Uy and base support Rz and My, with signed units, case D and current turn.\nUse the stated OpenSees engine for every computable changed state. First-order linear elastic analysis; self-weight, P-delta, rigid diaphragms, rigid offsets and construction stages are off. Preserve all fields not explicitly changed. Report every requested signed value with node/member, global direction, unit, case/combination, turn, model state and traceable . Rz denotes the vertical support reaction Fz. Retain original cases and evaluate every listed combination separately. Resolve essential missing or contradictory inputs before reporting new numerical results.",
+      "attachments": [
+        {
+          "name": "input.md",
+          "source": "edition",
+          "path": "input.md",
+          "sha256": "1106e92644bb2ed6a80ba74369608c9c808e120327974aaf3c6dbee20b0e26a8"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "instruction": "Use the corrected attachment. Both column segments point upward: local x=+global Z, local y=-global Y, local z=+global X, with reference vector +global X and zero roll. Rectangle B=300 mm along local y, H=500 mm along local z; use the corrected complete A/Iy/Iz/J table. Preserve all support and global load vectors and the separate -8 kN load at Z=3 m. Now analyze. Report top global Uz, Ux and Uy and base support Rz and My, with signed units, case D and current turn.",
+      "attachments": [
+        {
+          "name": "input-t2.md",
+          "source": "edition",
+          "path": "input-t2.md",
+          "sha256": "52cb135baaed0c33094801b4f53c9e4bb678fab7c8d673390d4fffddbac7dd57"
+        }
+      ]
+    }
+  ]
+}

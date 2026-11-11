@@ -1,0 +1,276 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "semantics": "global-z-up",
+      "version": 1,
+      "dimension": "2d",
+      "plane": "xz",
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "A",
+        "x": 0,
+        "y": 0.0,
+        "z": 0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "F1",
+        "x": 0,
+        "y": 0.0,
+        "z": 3,
+        "restraints": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        "mass": 10.0
+      },
+      {
+        "id": "F2",
+        "x": 0,
+        "y": 0.0,
+        "z": 6.8,
+        "restraints": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          true
+        ],
+        "mass": 7.0
+      }
+    ],
+    "elements": [
+      {
+        "id": "C1",
+        "nodes": [
+          "A",
+          "F1"
+        ],
+        "type": "column",
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "C2",
+        "nodes": [
+          "F1",
+          "F2"
+        ],
+        "type": "column",
+        "material": "S",
+        "section": "C"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "C",
+        "name": "column",
+        "type": "custom",
+        "properties": {
+          "A": 0.024,
+          "Iy": 0.0003,
+          "Iz": 0.0001,
+          "J": 4e-05
+        }
+      },
+      {
+        "id": "B",
+        "name": "beam",
+        "type": "custom",
+        "properties": {
+          "A": 0.016,
+          "Iy": 0.00015,
+          "Iz": 6e-05,
+          "J": 2e-05
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": []
+      }
+    ],
+    "load_combinations": [],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false,
+      "mass_source": "nodal",
+      "mass_directions": [
+        "x"
+      ]
+    }
+  },
+  "kind": "transient",
+  "requests": [
+    {
+      "id": "F2-ux-at-0.4s",
+      "path": [
+        "timeHistory",
+        19,
+        "nodes",
+        "F2",
+        "ux"
+      ],
+      "unit": "m",
+      "value": -0.0025034130019625945,
+      "tolerance": {
+        "absolute": 1e-09,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "F2-signed-peak-ux",
+      "path": [
+        "timeHistory",
+        "*",
+        "nodes",
+        "F2",
+        "ux"
+      ],
+      "operation": "max_abs",
+      "unit": "m",
+      "value": 0.009867465217315545,
+      "time": 0.84,
+      "tolerance": {
+        "absolute": 1e-09,
+        "relative": 1e-06
+      }
+    }
+  ],
+  "parameters": {
+    "analysisType": "time_history",
+    "timeStep": 0.02,
+    "duration": 1.2,
+    "dampingRatio": 0.05,
+    "direction": "x",
+    "groundMotion": [
+      0.0,
+      0.00011713307926249998,
+      0.00092535426816875,
+      0.0030580223794749997,
+      0.0070368009341,
+      0.01322500424958125,
+      0.021791323867556247,
+      0.03268641395105625,
+      0.045633972136331254,
+      0.060137086887062506,
+      0.07549969199289999,
+      0.09086199064092498,
+      0.1052478730200625,
+      0.11762157424145624,
+      0.12695023831380625,
+      0.13226862732339373,
+      0.1327420887079,
+      0.12772389964228126,
+      0.11680344098106248,
+      0.09984213617892498,
+      0.0769948015935875,
+      0.04871487343025624,
+      0.01574292047698125,
+      -0.020921163877249998,
+      -0.06006096644393125,
+      -0.1002991089072875,
+      -0.1401625968882125,
+      -0.17815437416599372,
+      -0.21282713610703122,
+      -0.24285531292749996,
+      -0.26710120451511876,
+      -0.28467156479965,
+      -0.2949615048991187,
+      -0.2976832511209375,
+      -0.29287821449639373,
+      -0.28091172460959996,
+      -0.26245080895442496,
+      -0.23842635152380623,
+      -0.20998182977270624,
+      -0.17841162711211875,
+      -0.14509244519896874,
+      -0.11141175094021875,
+      -0.07869731080929374,
+      -0.04815176578060625,
+      -0.02079589373015,
+      0.0025763761197125,
+      0.02142879898534375,
+      0.035498013603499995,
+      0.04479250027476875,
+      0.049575709748075,
+      0.050334668456537494,
+      0.04773626292343125,
+      0.042574060750900006,
+      0.0357091336163625,
+      0.02800861983609375,
+      0.020285889090249996,
+      0.0132460407396625,
+      0.00744008593120625,
+      0.0032306390327749993,
+      0.000771160632725,
+      0.0,
+      0.0006495091394750001
+    ],
+    "groundMotionUnit": "m/s2",
+    "monitorNodeIds": [
+      "F1",
+      "F2"
+    ],
+    "monitorElementIds": [
+      "C1",
+      "C2"
+    ],
+    "monitorSupportNodeIds": [
+      "A"
+    ]
+  },
+  "referenceChecks": [
+    {
+      "method": "independent-condensed-linear-Newmark",
+      "dt": 0.02,
+      "alphaMass": 0.7514023361315552,
+      "betaCurrentStiffness": 0.0016468536139726882,
+      "halfStepMaxDifference": 7.487607528282618e-05
+    }
+  ],
+  "reportIds": [
+    "F2-ux-at-0.4s",
+    "F2-signed-peak-ux"
+  ],
+  "engine": "OpenSees"
+}

@@ -1,0 +1,72 @@
+{
+  "caseId": "V3-INT-093",
+  "turnId": "t3",
+  "family": "INT",
+  "designedLevel": "L4",
+  "engine": "OpenSees",
+  "kind": "project",
+  "title": "洛阳钢构工程：洛阳卓扬春都生物科技钢结构厂房：2号分析子结构",
+  "instruction": "在上部分配梁中跨的中间节点 U1-2增加设备恒载 23 kN，沿全局 -Z，仅计入 D。保留上一轮 Q 重分布，其他已签发输入不变。",
+  "sourceId": "SRC-LUOYANG-2022",
+  "answerFile": "answer.json",
+  "integration": "rigid",
+  "constraints": [
+    {
+      "id": "upperVertical",
+      "absoluteLimit": 0.002983,
+      "unit": "m",
+      "scope": "All secondary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryVertical",
+      "absoluteLimit": 0.02723,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; signed max-abs uz"
+    },
+    {
+      "id": "primaryLateral",
+      "absoluteLimit": 0.0008538,
+      "unit": "m",
+      "scope": "All primary analysis joints, all issued combinations; max sqrt(ux^2+uy^2)"
+    },
+    {
+      "id": "primaryEndAction",
+      "absoluteLimit": 437.4,
+      "unit": "kN.m",
+      "scope": "All beam/column end cuts and M2/M3 components, or all axial bars when no beam/column exists; signed max-abs"
+    }
+  ],
+  "requirements": {
+    "upperSelections": [],
+    "primarySelections": [],
+    "completeEnumerationRequired": false,
+    "gravityRecalculationRequired": true,
+    "oneWayTransfer": false,
+    "combinedSelections": [
+      {
+        "kind": "combination",
+        "id": "SERVICE"
+      },
+      {
+        "kind": "combination",
+        "id": "WIND"
+      },
+      {
+        "kind": "combination",
+        "id": "REVERSE"
+      }
+    ],
+    "coupling": "Shared translations and rotations at the four issued rigid connection joints; no extra restraints."
+  },
+  "report": [
+    "design",
+    "feasible",
+    "volume",
+    "metrics",
+    "transfers",
+    "jobIdsByModel"
+  ],
+  "attachments": [
+    "engineering-revision.md"
+  ]
+}

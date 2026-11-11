@@ -1,0 +1,209 @@
+输入表。截面shape的B、H尺寸为mm，截面properties数值为输入依据。全局X水平、Z向上，Y补成右手系。坐标m；节点力kN；节点力矩kN*m；线载kN/m；E、G为MPa；A为m2；Iy、Iz、J为m4；密度kg/m3。约束顺序ux,uy,uz,rx,ry,rz；true表示固定。构件局部x沿起点到终点。平面XZ构件局部y为全局+Y，局部z=x叉乘y，绕局部y弯曲采用Iy。空间杆局部z取明示参考向量在垂直局部x平面的投影，局部y=z叉乘x。一阶线弹性静力，自重关闭；不自动添加荷载、组合、楼板、刚域或二阶效应。分布载荷区间按实际杆长以m计，除非本轮明确待确认该基准。未列荷载分量为零。梁柱共节点刚接；桁架仅轴向受力，转动约束只消除未激活自由度。每个可计算状态使用OpenSees；物理修改后重新计算，纯查询仅在状态未变时复用可追溯结果。保存软件版本/设置、运行ID、成功日志、模型快照和原始结果映射。
+截面shape内B和H尺寸单位为mm，其余截面properties按上述明确单位。使用OpenSees，输出带符号数值并注明节点/位置、全局方向、单位、工况及当前轮次。Rz表示全局+Z支反力；固端My指按右手定则绕全局+Y的支座反力矩。物理模型修改后必须重新运行；保存输入、模型快照、软件版本/设置、运行ID、成功日志及结果位置映射。纯查询仅可复用可追溯至同一未变状态的有效结果；必要信息未解决时不得编造数值。不得额外引入释放、支承、质量、刚域、自动组合或附加载荷。内部连通节点不增加平移支承。后续只执行明确修改。
+跨度6 m，梁沿全局X轴，x=0铰支、x=6 m竖向滚支。工况D含全跨向下20 kN/m及x=1.5 m向下12 kN点力。x=3 m是连通观测节点。
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "n0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n1",
+      "x": 1.5,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n2",
+      "x": 3,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n3",
+      "x": 6,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "b1",
+      "type": "beam",
+      "nodes": [
+        "n0",
+        "n1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b2",
+      "type": "beam",
+      "nodes": [
+        "n1",
+        "n2"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b3",
+      "type": "beam",
+      "nodes": [
+        "n2",
+        "n3"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "uniform-b1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b1",
+          "start": 0,
+          "end": 1.5,
+          "wz": -20
+        },
+        {
+          "id": "uniform-b2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b2",
+          "start": 0.0,
+          "end": 1.5,
+          "wz": -20
+        },
+        {
+          "id": "uniform-b3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b3",
+          "start": 0,
+          "end": 3,
+          "wz": -20
+        },
+        {
+          "id": "near-support-point",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "n1",
+          "fz": -12
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "b1": [
+        0,
+        0,
+        1.5
+      ],
+      "b2": [
+        0,
+        0,
+        1.5
+      ],
+      "b3": [
+        0,
+        0,
+        3
+      ]
+    }
+  }
+}

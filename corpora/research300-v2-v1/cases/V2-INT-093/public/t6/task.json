@@ -1,0 +1,51 @@
+{
+  "caseId": "V2-INT-093",
+  "turnId": "t6",
+  "family": "INT",
+  "title": "低烈度区典型房屋建筑和桥梁抗震加固案例：钢筋混凝土框架结构房屋·校舍1：子问题2：有限截面方案与约束比选",
+  "designLevel": "L4",
+  "engine": "OpenSees",
+  "analysis": "scheme",
+  "instruction": "只恢复初始位移限值；保留最近确认的D/Q和方案目录，再选最优可行方案。",
+  "requests": [],
+  "derived": [],
+  "reportIds": [],
+  "requireShapes": false,
+  "sourceId": "SRC-CQ-SCHOOL1-2020",
+  "constraint": {
+    "nodes": [
+      "OBS-B0-1",
+      "OBS-B0-2",
+      "OBS-B0-3",
+      "OBS-B0-4",
+      "OBS-B0-5",
+      "OBS-B0-6"
+    ],
+    "component": "uz",
+    "absoluteLimit": 0.000719762
+  },
+  "schemeSelections": [
+    "SERVICE",
+    "REVERSE"
+  ],
+  "authoringBasis": [
+    [
+      "来源 SRC-CQ-SCHOOL1-2020；与纵向不同的六层横向单跨框架：跨宽必须由清晰轴线或题设给定，不能用最宽外轮廓12.24m冒充跨度。",
+      "来源事实：SRC-CQ-SCHOOL1-2020-F1 重庆1999年六层RC校舍，各层3.9m，T形平面中部有变形缝；基顶嵌固。；SRC-CQ-SCHOOL1-2020-F2 平面主翼相邻开间标注9.6、9.6、9.45m；中间有300mm缝。；SRC-CQ-SCHOOL1-2020-F3 原横向单跨框架；梁柱原设计C30，屋顶楼梯间高出3m。",
+      "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+      "作者材料：未开裂线弹性RC，E=30000MPa，nu=0.2，G=12500MPa，rho=2500kg/m³。",
+      "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+      "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+      "纵向9.6/9.6/9.45m是建筑开间，作者按其建立等效柱轴线；横向6.6m为明确作者设定。来源层高3.9m；不跨越变形缝、不含填充墙和空心板。",
+      "公开受荷：D对recipe中全部指定梁，p=4.0kN/m²；Q对列出的交替梁，p=2.5kN/m²；分担宽3.2m。未列构件不重复分配面载。",
+      "W为最高自由节点上题给等效横力10kN；3D另加全局y向4kN，不声称原工程风压规范计算结果。",
+      "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+      "截面尺寸(m)：B=0.35×0.75, C=0.55×0.65, A=0.08×0.1",
+      "位移限值为题设的线弹性方案筛选条件，不是规范安全结论；数值在候选运行前固定。"
+    ]
+  ],
+  "interactionRule": "Apply only this issued change order to the last confirmed state; retain all other prior inputs. Initial restores refer to t1.",
+  "attachments": [
+    "change-order.json"
+  ]
+}

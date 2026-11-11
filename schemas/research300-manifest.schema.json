@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research300-manifest.schema.json",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "corpusId": {
+      "const": "research-300"
+    },
+    "evaluationProfile": {
+      "const": "engineering-v2.3"
+    },
+    "modelProtocol": {
+      "const": "2.2.0"
+    },
+    "responseContractVersion": {
+      "const": "research300-response-v1"
+    },
+    "sourcePlan": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!.*(?:\\\\|:|%|[\\u0000-\\u001f]))(?!/)(?!.*(?:^|/)\\.)[^/]+(?:/[^/]+)*$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "originalSources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\\\|:|%|[\\u0000-\\u001f]))(?!/)(?!.*(?:^|/)\\.)[^/]+(?:/[^/]+)*$"
+          },
+          "expectedSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "present": {
+            "type": "boolean"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "role",
+          "path",
+          "expectedSha256",
+          "sha256",
+          "present",
+          "verified"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^(STD|INT|MM)-(00[1-9]|0[1-9][0-9]|100)$"
+          },
+          "modelId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "family": {
+            "type": "string",
+            "minLength": 1
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1
+          },
+          "plannedEngine": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contract": {
+            "type": "string",
+            "pattern": "^(?!.*(?:\\\\|:|%|[\\u0000-\\u001f]))(?!/)(?!.*(?:^|/)\\.)[^/]+(?:/[^/]+)*$"
+          },
+          "publicFiles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "pattern": "^(?!.*(?:\\\\|:|%|[\\u0000-\\u001f]))(?!/)(?!.*(?:^|/)\\.)[^/]+(?:/[^/]+)*$"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "privateFiles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "pattern": "^(?!.*(?:\\\\|:|%|[\\u0000-\\u001f]))(?!/)(?!.*(?:^|/)\\.)[^/]+(?:/[^/]+)*$"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "publicSha256": {
+            "type": "string",
+            "minLength": 1
+          },
+          "responseContractSha256": {
+            "anyOf": [
+              { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              { "type": "null" }
+            ]
+          },
+          "responseContractTurnHashes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "turnId": { "type": "string", "minLength": 1 },
+                "sha256": {
+                  "anyOf": [
+                    { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+                    { "type": "null" }
+                  ]
+                }
+              },
+              "required": ["turnId", "sha256"],
+              "additionalProperties": false
+            }
+          },
+          "privateSha256": {
+            "type": "string",
+            "minLength": 1
+          },
+          "filesSha256": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statuses": {
+            "type": "object"
+          },
+          "validation": {
+            "type": "object"
+          },
+          "sourceHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "id",
+          "modelId",
+          "family",
+          "language",
+          "plannedEngine",
+          "contract",
+          "publicFiles",
+          "privateFiles",
+          "publicSha256",
+          "privateSha256",
+          "filesSha256",
+          "statuses",
+          "validation",
+          "sourceHash",
+          "responseContractSha256",
+          "responseContractTurnHashes"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "summary": {
+      "type": "object"
+    },
+    "validation": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "corpusId",
+    "evaluationProfile",
+    "modelProtocol",
+    "responseContractVersion",
+    "sourcePlan",
+    "originalSources",
+    "cases",
+    "summary",
+    "validation"
+  ],
+  "additionalProperties": false
+}

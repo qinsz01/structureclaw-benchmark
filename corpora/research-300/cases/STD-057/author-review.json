@@ -1,0 +1,63 @@
+{
+  "id": "STD-057",
+  "sourceTask": {
+    "id": "STD-057",
+    "family": "standard_workflow",
+    "baseGroup": "M-STD-057",
+    "title": "三层两跨框架分层侧力",
+    "subcategory": "分层侧力与竖载组合",
+    "difficulty": "L2",
+    "difficultyReason": "侧力值按楼层顺序不同且与重力共存，需要保持节点和工况索引。",
+    "language": "中文",
+    "inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "turns": 1,
+    "scenario": "三层各3.6m、两跨6m，各梁10kN/m，右侧逐层X向10、15、20kN；完整属性按公共契约随题给出。 D为各梁10kN/m，W为右侧一至三层10/15/20kN；求D、W、D+W。",
+    "modelingFocus": "楼层作用点和力值顺序",
+    "expectedOutput": "各层三条柱线X位移及对应层间位移差、柱脚反力、下层柱端弯矩。",
+    "gradingFocus": "楼层作用点和力值顺序；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "origin": "旧题改编",
+    "oldPrimaryId": "std-frame-3s2b-wind",
+    "oldSecondaryId": "无",
+    "reuseChange": "保留旧题主要几何与荷载，显式补齐单位、自重、观测位置和结果评分；新契约下须重新核验真值。",
+    "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立框架矩阵解；风荷载总剪力/倾覆力矩与反力复核，检查线性叠加。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+    "prerequisite": "多工况/多组合执行及结果索引需验证；完整题面、参数/单位契约与真值待验证",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "STD-057",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "当前为二维钢框架题，采用 OpenSees，保留平面分析假设，不增造空间柱网。 本题重点：楼层作用点和力值顺序。",
+      "executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "三层节点侧力与 D、W、D+W 结果索引须验证。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+      "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立框架矩阵解；风荷载总剪力/倾覆力矩与反力复核，检查线性叠加。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+      "analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+      "requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-STD-057",
+    "taskId": "STD-057",
+    "structure": "平面钢框架",
+    "dimension": "2D",
+    "difficulty": "L2",
+    "title": "三层两跨框架分层侧力",
+    "spec": "三层各3.6m、两跨6m，各梁10kN/m，右侧逐层X向10、15、20kN；完整属性按公共契约随题给出。 D为各梁10kN/m，W为右侧一至三层10/15/20kN；求D、W、D+W。 边界：全部柱脚固定。",
+    "challenge": "楼层作用点和力值顺序",
+    "source": "std-frame-3s2b-wind",
+    "prerequisite": "多工况/多组合执行及结果索引需验证；完整题面、参数/单位契约与真值待验证",
+    "distinctness": "平面三层两等跨钢框架；全部柱脚固定；D全部梁同值线载；W右侧各层递增侧力；组合；单钢材料；梁柱分组截面",
+    "topologyKey": "平面三层两等跨钢框架",
+    "boundaryKey": "全部柱脚固定",
+    "loadKey": "D全部梁同值线载；W右侧各层递增侧力；组合",
+    "propertyKey": "单钢材料；梁柱分组截面"
+  },
+  "appendixDecisions": [
+    "Missing source material/section appendix completed with explicit solid-rectangle steel properties; this is an author decision, not a recovered source value or a numerical reference.",
+    "梁B1、柱C1；“下层柱”明确为第一层c0-1、c1-1、c2-1，分别报告两端弯矩。层间位移差为位移差而非层间位移角，三条柱线各自计算，不设刚性楼板。"
+  ],
+  "reviewStatus": "author-inspected-independent-review-pending",
+  "native": "pending",
+  "inputBlindReview": "pending"
+}

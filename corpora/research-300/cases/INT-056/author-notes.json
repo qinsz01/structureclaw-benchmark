@@ -1,0 +1,61 @@
+{
+  "sourceTask": {
+    "id": "INT-056",
+    "family": "interactive_robustness",
+    "baseGroup": "M-INT-056",
+    "title": "工业框架荷载对象指认",
+    "subcategory": "荷载对象澄清",
+    "difficulty": "L2",
+    "difficultyReason": "屋面分布载与吊车节点力不同，更新目标必须明确",
+    "language": "英文",
+    "inputForm": "文本3轮＋完整属性附件（仅暂缺项除外）",
+    "turns": 3,
+    "scenario": "T1所用独立模型为M-INT-056（工业框架左柱中部设备侧力）。T1建立M-INT-056；T2要求吊车荷载增加20%但未说明两分量还是仅竖向；T3确认仅右柱顶竖向98改117.6kN，左柱中部14kN不变。",
+    "modelingFocus": "吊车等效荷载方向与屋面分项；荷载位置的独立状态保持",
+    "expectedOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "gradingFocus": "水平10kN、屋面36kN/m不变；右柱顶位置保持；不得整体放大所有荷载；左柱中部14kN不随右柱顶吊车竖力比例修改；若已有信息可唯一推得缺项，接受说明依据后直接完成，否则再澄清。",
+    "origin": "新增",
+    "oldPrimaryId": "无",
+    "oldSecondaryId": "无",
+    "reuseChange": "新增交互场景；独立起始模型来源另见M-INT-056，不把同基础模型计为旧交互题沿用。该题已有独立物理改动，不与其他任务共享模型。",
+    "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+    "prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "INT-056",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "2D平面钢框架的荷载对象澄清，重点是吊车等效荷载方向与屋面分项，用显式杆系模型核对状态与响应。",
+      "executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "未逐题验收；前置检查项：基础工具，并核对荷载对象澄清后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+      "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+      "requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-INT-056",
+    "taskId": "INT-056",
+    "structure": "平面钢框架",
+    "dimension": "2D",
+    "difficulty": "L2",
+    "title": "工业框架左柱中部设备侧力",
+    "spec": "跨度24m、高12m，屋面36kN/m，右柱顶向下98kN及X向10kN；左柱z=6m处另设节点并加X正向14kN，右柱顶吊车两分量仍独立；所有柱脚面内三自由度固定。",
+    "challenge": "吊车等效荷载方向与屋面分项；荷载位置需与交互状态独立保持",
+    "source": "frame-industrial-heavy",
+    "prerequisite": "基础工具",
+    "distinctness": "相对原结构锚点新增/修改荷载位置：左柱z=6m处另设节点并加X正向14kN，右柱顶吊车两分量仍独立",
+    "topologyKey": "平面钢框架；跨度24m、高12m",
+    "boundaryKey": "所有柱脚面内三自由度固定",
+    "loadKey": "跨度24m、高12m，屋面36kN/m，右柱顶向下98kN及X向10kN；左柱z=6m处另设节点并加X正向14kN，右柱顶吊车两分量仍独立",
+    "propertyKey": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值"
+  },
+  "authorReview": {
+    "sourceInspection": "Crane components separate IDs, equipment connected at Z=6. T2 is a later unresolved edit, with no new state. Only one vertical-force field changes at T3.",
+    "appendixCompletion": "Source supplies no complete numerical section/material appendix. Explicit steel E=206000 MPa, nu=0.3, G=E/2.6, rho=7850 kg/m3; base B1=300x600 mm, C1=500x500 mm solid rectangles, unless the case-specific public table overrides. A/Iy/Iz/J are explicit, not engine defaults. UDL uses actual member length; sections are linear elastic engineering inputs, not design-code defaults.",
+    "reviewStatus": "Author checked source topology, supports, load magnitudes/locations and turn sequence. Independent blind reconstruction and native execution pending."
+  },
+  "validationStatus": "Structural checks only; independent input review, numerical reference and native execution remain pending."
+}

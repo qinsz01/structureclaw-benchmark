@@ -1,0 +1,88 @@
+{
+  "units": {
+    "E": "MPa",
+    "G": "MPa",
+    "rho": "kg/m3",
+    "shape": "mm",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4"
+  },
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "load_combinations": [
+    {
+      "id": "C0",
+      "factors": {
+        "D": 1
+      }
+    },
+    {
+      "id": "C1",
+      "factors": {
+        "D": 1,
+        "L1": 1
+      }
+    },
+    {
+      "id": "C2",
+      "factors": {
+        "D": 1,
+        "L2": 1
+      }
+    }
+  ],
+  "localAxes": {},
+  "analysis": "first-order linear elastic Euler-Bernoulli frame and axial-only truss",
+  "restraintConvention": "[ux,uy,uz,rx,ry,rz]; true = zero prescribed displacement; false = free active DOF; planar inactive DOFs and truss rotations are explicitly suppressed",
+  "sectionRollConvention": "ey_new=cos(theta)*ey+sin(theta)*ez; ez_new=-sin(theta)*ey+cos(theta)*ez; theta in degrees about i-to-j"
+}

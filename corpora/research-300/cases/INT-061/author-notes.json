@@ -1,0 +1,61 @@
+{
+  "sourceTask": {
+    "id": "INT-061",
+    "family": "interactive_robustness",
+    "baseGroup": "M-INT-061",
+    "title": "层高与总高度冲突后明确",
+    "subcategory": "几何累加澄清",
+    "difficulty": "L2",
+    "difficultyReason": "层高与绝对标高不能混为一谈",
+    "language": "中文",
+    "inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "turns": 2,
+    "scenario": "T1所用独立模型为M-INT-061（非等层框架首层梁不同材料）。T1给M-INT-061层高3.6、4.2m同时屋顶总高写4.2m；T2确认屋顶标高7.8m。",
+    "modelingFocus": "标高累加与跨度列表；材料分组的独立状态保持",
+    "expectedOutput": "最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "gradingFocus": "节点z=0、3.6、7.8m；两跨4.5、7.5m保持；按各梁原荷载；各层材料角色保持，修正标高不能全局覆盖E。",
+    "origin": "新增",
+    "oldPrimaryId": "无",
+    "oldSecondaryId": "无",
+    "reuseChange": "新增交互场景；独立起始模型来源另见M-INT-061，不把同基础模型计为旧交互题沿用。该题已有独立物理改动，不与其他任务共享模型。",
+    "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+    "prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "INT-061",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "2D平面钢框架的几何累加澄清，重点是标高累加与跨度列表，用显式杆系模型核对状态与响应。",
+      "executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "未逐题验收；前置检查项：基础工具，并核对几何累加澄清后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+      "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+      "requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：最高层最右梁柱节点Ux/Uz及最左首层柱底My/Rz。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-INT-061",
+    "taskId": "INT-061",
+    "structure": "平面钢框架",
+    "dimension": "2D",
+    "difficulty": "L2",
+    "title": "非等层框架首层梁不同材料",
+    "spec": "两层3.6、4.2m，两跨4.5、7.5m，逐梁明示线载；一层梁E=210000MPa，其余梁柱E=200000MPa，全部完整材料属性显式提供；所有柱脚面内三自由度固定；柱线x=0/4.5/12m，楼层z=0/3.6/7.8m；每层两梁完整连接；一层所有梁向下8kN/m、二层所有梁向下12kN/m。",
+    "challenge": "标高累加与跨度列表；材料分组需与交互状态独立保持",
+    "source": "无",
+    "prerequisite": "基础工具",
+    "distinctness": "相对原结构锚点新增/修改材料分组：一层梁E=210000MPa，其余梁柱E=200000MPa，全部完整材料属性显式提供",
+    "topologyKey": "柱线x=0/4.5/12m，楼层z=0/3.6/7.8m；每层两梁完整连接。",
+    "boundaryKey": "所有柱脚面内三自由度固定",
+    "loadKey": "两层3.6、4.2m，两跨4.5、7.5m，逐梁明示线载；一层所有梁向下8kN/m、二层所有梁向下12kN/m。",
+    "propertyKey": "一层梁E=210000MPa，其余梁柱E=200000MPa，全部完整材料属性显式提供"
+  },
+  "authorReview": {
+    "sourceInspection": "Source exact E grouping 210000 first-floor beams versus 200000 all other members. Initial roof coordinates withheld while both contradictory source statements retained; resolution supplies 7.8 only in T2.",
+    "appendixCompletion": "Source supplies no complete numerical section/material appendix. Explicit steel E=206000 MPa, nu=0.3, G=E/2.6, rho=7850 kg/m3; base B1=300x600 mm, C1=500x500 mm solid rectangles, unless the case-specific public table overrides. A/Iy/Iz/J are explicit, not engine defaults. UDL uses actual member length; sections are linear elastic engineering inputs, not design-code defaults.",
+    "reviewStatus": "Author checked source topology, supports, load magnitudes/locations and turn sequence. Independent blind reconstruction and native execution pending."
+  },
+  "validationStatus": "Structural checks only; independent input review, numerical reference and native execution remain pending."
+}

@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-003",
+  "evaluationProfile": "engineering-v2.3",
+  "referenceKind": "independent-elastic-matrix",
+  "notCommercialScoringTruth": true,
+  "sameEngineTruthStatus": "pending",
+  "warnings": [
+    "Euler-Bernoulli reference omits shear deformation; Timoshenko displacements may differ physically. Frozen request tolerances are unchanged.",
+    "Commercial-engine references remain diagnostic pending independently reviewed same-engine native truth."
+  ],
+  "toleranceFrozenBeforeCandidate": true,
+  "inputHashes": {
+    "contract.json": "5f1e92f451aa0cf83744a2c034177ceb4f242db35f0b2add032e51023e6a08b4",
+    "reference-requests.json": "9e29a1914a6cc0aadb75ed84a996fb9b71e7574d9bba29fa3f4155310d8017ba",
+    "model-state-1.json": "f6a8eea9a54fda29ee199142f4c628eb067f3e0365b4bdc26fa6181ad3c52495"
+  },
+  "sourceHash": "d812b8018ebeae8f34cdb56e31027aaca1f974cb9f3d31712d798f015829dcee",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "5f1e92f451aa0cf83744a2c034177ceb4f242db35f0b2add032e51023e6a08b4"
+      },
+      {
+        "path": "input-tables.txt",
+        "sha256": "a1b8ae6c467604eb1b6f9ffed36820915fad0d63a91ef0e28f454a79ba51be3a"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "f6a8eea9a54fda29ee199142f4c628eb067f3e0365b4bdc26fa6181ad3c52495"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "52b10ea453fa517dfb5bb5b0ed2430369072120cb95ed79531ace20612579449"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "9e29a1914a6cc0aadb75ed84a996fb9b71e7574d9bba29fa3f4155310d8017ba"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "quantities": [
+        {
+          "id": "D-x3p25-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n2"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -7.433559687949577e-05
+        },
+        {
+          "id": "D-x6p5-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n4"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 5.0355649946063645e-05
+        },
+        {
+          "id": "D-x2p5-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.603301420352497e-05
+        }
+      ],
+      "derived": []
+    }
+  ],
+  "checks": [
+    {
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 3.694822225952521e-13,
+      "forceMomentBalance": [
+        0.0,
+        0.0,
+        4.263256414560601e-14,
+        0.0,
+        -1.1368683772161603e-13,
+        0.0
+      ],
+      "dofs": 30,
+      "freeDofs": 12,
+      "factorization": "scipy-sparse-superlu",
+      "factorizationCount": 1,
+      "rightHandSides": 1,
+      "minimumScaledPivot": 0.01314508276533577,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ]
+}

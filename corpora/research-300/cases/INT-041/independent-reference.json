@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-041",
+  "evaluationProfile": "engineering-v2.3",
+  "referenceKind": "independent-elastic-matrix",
+  "notCommercialScoringTruth": true,
+  "sameEngineTruthStatus": "pending",
+  "warnings": [
+    "Euler-Bernoulli reference omits shear deformation; Timoshenko displacements may differ physically. Frozen request tolerances are unchanged.",
+    "Commercial-engine references remain diagnostic pending independently reviewed same-engine native truth."
+  ],
+  "toleranceFrozenBeforeCandidate": true,
+  "inputHashes": {
+    "contract.json": "105b41d039675c8896c6c37884b0ddba5f9ce92a9cf08d9eb6a9467b1c67fb4d",
+    "reference-requests.json": "5653b765895a33fa9cddad6a19af01258732277d7ef02f09a41c0056f2226e9a",
+    "model-state-1.json": "fa11b9418ef4fad968b9a4037cb33192589a8d3c81f12cc21f6dd51ffab6342c"
+  },
+  "sourceHash": "3502be5944393663463d7124fbaf5e762b2e12f2e0234b060ea7203522c9545e",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "105b41d039675c8896c6c37884b0ddba5f9ce92a9cf08d9eb6a9467b1c67fb4d"
+      },
+      {
+        "path": "input-t1.txt",
+        "sha256": "ddaa61340ce2d72932dac99048d29c70607a7100ff0c147263c479b758994ec9"
+      },
+      {
+        "path": "input-t2.txt",
+        "sha256": "96df8cf6c39c3301877dc45ba2fe15be84e156951a86891db0785009efeb76b7"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "fa11b9418ef4fad968b9a4037cb33192589a8d3c81f12cc21f6dd51ffab6342c"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "3301c4ae835670150e164a38ab55e64ba348800c3de114e5093f64290858857a"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "5653b765895a33fa9cddad6a19af01258732277d7ef02f09a41c0056f2226e9a"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "quantities": [
+        {
+          "id": "case:D:node:P:ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "P"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 2.355501046059071e-05
+        },
+        {
+          "id": "case:D:node:P:uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "P"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -4.3532128526077574e-05
+        },
+        {
+          "id": "case:D:node:P:uy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "P"
+          },
+          "component": "uy",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -1.0951956627995515e-05
+        },
+        {
+          "id": "case:D:node:A:Fx",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A"
+          },
+          "component": "Fx",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 4.645159123447012
+        },
+        {
+          "id": "case:D:node:A:Fy",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A"
+          },
+          "component": "Fy",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.967738685170518
+        },
+        {
+          "id": "case:D:node:A:Fz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "A"
+          },
+          "component": "Fz",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 6.967738685170518
+        },
+        {
+          "id": "case:D:member:AB:0:right:N",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "AB",
+            "positionM": 0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 0.0
+        }
+      ],
+      "derived": []
+    }
+  ],
+  "checks": [
+    {
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 3.552713678800501e-15,
+      "forceMomentBalance": [
+        0.0,
+        -8.881784197001252e-16,
+        0.0,
+        1.4210854715202004e-14,
+        0.0,
+        -1.4210854715202004e-14
+      ],
+      "dofs": 30,
+      "freeDofs": 3,
+      "factorization": "scipy-sparse-superlu",
+      "factorizationCount": 1,
+      "rightHandSides": 1,
+      "minimumScaledPivot": 0.9512848916173454,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ]
+}

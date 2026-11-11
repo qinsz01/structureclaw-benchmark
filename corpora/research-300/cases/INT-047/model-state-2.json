@@ -1,0 +1,325 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "A",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "B",
+      "x": 18,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "ML",
+      "x": 0,
+      "y": 0,
+      "z": 4,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "TL",
+      "x": 6,
+      "y": 0,
+      "z": 4,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "SR",
+      "x": 18,
+      "y": 0,
+      "z": 5,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "TR",
+      "x": 20,
+      "y": 0,
+      "z": 5,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "L",
+      "x": 0,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "R",
+      "x": 18,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "cLa",
+      "type": "column",
+      "nodes": [
+        "A",
+        "ML"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "cLb",
+      "type": "column",
+      "nodes": [
+        "ML",
+        "L"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "cRa",
+      "type": "column",
+      "nodes": [
+        "B",
+        "SR"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "cRb",
+      "type": "column",
+      "nodes": [
+        "SR",
+        "R"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "roof",
+      "type": "beam",
+      "nodes": [
+        "L",
+        "R"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "mezz",
+      "type": "beam",
+      "nodes": [
+        "ML",
+        "TL"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "stub",
+      "type": "beam",
+      "nodes": [
+        "SR",
+        "TR"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "q-roof",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roof",
+          "wz": -6
+        },
+        {
+          "id": "q-mezz",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "mezz",
+          "wz": -4
+        },
+        {
+          "id": "q-stub",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "stub",
+          "wz": -3
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "cLa": [
+        -4,
+        0,
+        0
+      ],
+      "cLb": [
+        -3,
+        0,
+        0
+      ],
+      "cRa": [
+        -5,
+        0,
+        0
+      ],
+      "cRb": [
+        -2,
+        0,
+        0
+      ],
+      "roof": [
+        0,
+        0,
+        18
+      ],
+      "mezz": [
+        0,
+        0,
+        6
+      ],
+      "stub": [
+        0,
+        0,
+        2
+      ]
+    }
+  }
+}

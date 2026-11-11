@@ -1,0 +1,60 @@
+{
+  "caseId": "V2-STD-098",
+  "turnId": "t1",
+  "family": "STD",
+  "title": "低烈度区典型房屋建筑和桥梁抗震加固案例：单层混凝土工业厂房：子问题3：有限截面方案与约束比选",
+  "designLevel": "L4",
+  "engine": "OpenSees",
+  "analysis": "scheme",
+  "instruction": "依据签发图表和约定重建物理模型，执行指定分析并交付带符号结果、单位及真实作业标识。",
+  "requests": [],
+  "derived": [],
+  "reportIds": [],
+  "requireShapes": false,
+  "sourceId": "SRC-SH-RC-2020",
+  "constraint": {
+    "nodes": [
+      "OBS-B0-1",
+      "OBS-B1-1",
+      "OBS-B0-2",
+      "OBS-B1-2"
+    ],
+    "component": "uz",
+    "absoluteLimit": 0.000299127
+  },
+  "schemeSelections": [
+    "SERVICE",
+    "REVERSE"
+  ],
+  "authoringBasis": [
+    [
+      "来源 SRC-SH-RC-2020；新增柱间支撑的局部改造跨：在同一明确轴网比较给定截面及双向线弹性支撑传力。",
+      "来源事实：SRC-SH-RC-2020-F1 上海机械厂房改创业园办公楼，原单层主体7.7m，横向18m、纵向60m、双坡屋面。；SRC-SH-RC-2020-F2 改造增加3.85m结构层、新柱梁板，并以新增柱间支撑改善侧向刚度。；SRC-SH-RC-2020-F3 改造后表中结构高度7.680m，与工程概况7.700m略有差异。",
+      "仅线弹性小位移杆系；刚接梁柱、双向轴力杆及题给支座。所有截面、连接简化与新增边界属于作者设定，不是原工程图纸复现或规范设计结论。",
+      "作者材料：未开裂线弹性RC，E=30000MPa，nu=0.2，G=12500MPa，rho=2500kg/m³。",
+      "作者截面：B/C/A均为等效实心矩形，截面尺寸及由矩形公式计算的A/Iy/Iz/J以model.sections为准；不代表原工程型钢或实配筋。",
+      "自重自动生成关闭。D/Q/W均显式给定；荷载recipe是唯一编译输入，面载只按q=p×分担宽度折算一次，沿杆实际长度作用。SERVICE=D+Q，REVERSE=D-W。",
+      "来源有新增柱间支撑；作者截取6+6m两跨两层，3.85m层高，RC裸框架加双向钢斜杆。钢杆E206000MPa、nu0.3、rho7850；连接、杆截面与横梁为题设。",
+      "公开受荷：D对recipe中全部指定梁，p=3.0kN/m²；Q对列出的交替梁，p=1.5kN/m²；分担宽3.0m。未列构件不重复分配面载。",
+      "W为最高自由节点上题给等效横力10kN；3D另加全局y向4kN，不声称原工程风压规范计算结果。",
+      "观测跨中节点与两侧梁连续连接，无新增铰、质量或约束；细分段保持原截面及同一荷载强度。constraintHint指向实际模型节点。",
+      "截面尺寸(m)：B=0.32×0.65, C=0.5×0.65, A=0.09×0.11",
+      "位移限值为题设的线弹性方案筛选条件，不是规范安全结论；数值在候选运行前固定。"
+    ]
+  ],
+  "loadInput": "Build load_cases from load-recipe.json. Convert surface pressure to member line vectors exactly once.",
+  "attachments": [
+    "analysis-control.json",
+    "combinations.json",
+    "load-recipe.json",
+    "materials.csv",
+    "materials.json",
+    "members.csv",
+    "model-convention.json",
+    "nodes.csv",
+    "schemes.json",
+    "sections.json",
+    "source-basis.json",
+    "tool-contract.md"
+  ]
+}

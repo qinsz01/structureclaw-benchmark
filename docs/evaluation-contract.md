@@ -1,5 +1,7 @@
 # Engineering evaluation contract / 工程评测契约
 
+This document records the historical evaluation profiles and representative-pack boundaries. The separate `research-300` implementation uses `engineering-v2.3` and model protocol `2.2.0`; see [Research 300](research-300.md) and its [implementation contract](implementation/research-300-contract.md). Existing frozen profiles retain the semantics below.
+
 The 300-task workbook is a plan, not an accepted executable corpus. `analysis-capabilities.json` records feature evidence and representative planned IDs; it does not award a pass to those tasks. The frozen corpus and its numerical/equilibrium checks remain read-only.
 
 300题表仍是规划。能力清单按特征记录实现证据与示例题号，不能据此把题目标记为已验收。已有冻结标答、独立数值复算和平衡核验保留，不重写历史数据。
@@ -32,6 +34,10 @@ Add numerical/evidence assertions for **every required case/combination**; a pas
 The new matcher permits renumbering and subdivision of an unchanged straight member. Every new interior node must have degree two, no support and no connection to another original member. Every segment must retain the assigned section/material and bending axes. Gaps, overlapping members, disconnected coincident nodes, changed supports and hidden extra connections fail. Refinement involving releases/offsets remains unreviewed and rejects.
 
 逐工况将节点/杆件荷载转换到同一物理位置和全局轴，对照有符号分量、分段分布及组合系数。不能把D/L混成一个总荷载，也不能用反力总和掩盖荷载位置错误。错误建模与缺工况不能由好看的图补分。
+
+Research-300 的线弹性数值任务允许用完整显式刚度表示截面：两侧均须明确给出有限正值 E/G、有效 nu 和 A/Iy/Iz/J，并继续逐项比较。此时可以省略不参与该计算的材料类别和参数化 shape，也可使用无 shape 的 custom 截面。两侧均给出类别或具体形状时仍要求一致；等级、强度、密度、用途、附加属性、荷载、约束和局部轴继续检查。该选项不会改变历史默认严格匹配，也不会改写候选或原生回执。材料 type→category 的已知迁移和空 extra 默认值按等价表示处理。
+
+公开题面中的节点支反力 Rx/Ry/Rz 在 N/kN 力单位下等价于内部 Fx/Fy/Fz；不将 rad 转角或杆件分量套用该别名。当前公开报告支持 Unicode 负号及 `×10⁻³` / `×10^-3` 数值写法，只规范化无歧义的数学排版；不更改数值、单位、符号、重复行或原有数值容差。
 
 Numerical matching selects the exact identified result; partial/preliminary/error responses fail. OpenSees endpoint forces are transformed through actual local axes, using the first and last solver segments of each physical member. A missing last segment cannot fall back to the first segment. Commercial responses use the target engine's independently reviewed truth. Their signed envelopes cannot yet be reversed/refined without a verified station transform; those mappings fail explicitly. Cross-engine magnitude summaries are **calibration diagnostics**, not the correctness comparator.
 

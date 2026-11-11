@@ -1,0 +1,24 @@
+Analysis and property appendix
+
+First-order linear elastic static analysis; self-weight OFF. No P-delta, rigid diaphragm, rigid offsets, stiffness reductions, or automatic combinations.
+Global XYZ, Z up. Units: m, kN, kN*m; E/G MPa, density kg/m3, A m2, Iy/Iz/J m4. Displacements m, rotations rad.
+Load components use global XYZ axes: fx/fy/fz are concentrated forces in kN; mx/my/mz are nodal moments in kN*m (right-hand rule); wx/wy/wz are distributed forces in kN/m per actual member length, not projected length. A negative z component acts along global -Z.
+3D geometry is defined jointly by the labelled orthographic views. All rotations of axial-only joints are inactive and restrained; these are not physical moment supports. Local 1 follows member start to end; local 2 = normalized(reference cross local 1); local 3 = local 1 cross local 2. Reference is global +X for vertical rods and global +Z otherwise.
+All members are axial-only pin-jointed truss rods. Rotations are inactive. Do not add bending stiffness.
+
+Materials
+M1: E=206000, G=79230.7692, nu=0.3, rho=7850
+
+Sections (solid rectangular appendix; local y width B and local z depth H)
+A1: A=0.01, Iy=8.33333333e-06, Iz=8.33333333e-06, J=1.40833333e-05
+
+Explicit constraints and load vectors by drawing ID
+B0: restrained DOFs ux, uy, uz, rx, ry, rz
+B1: restrained DOFs ux, uy, uz, rx, ry, rz
+B2: restrained DOFs ux, uy, uz, rx, ry, rz
+B3: restrained DOFs ux, uy, uz, rx, ry, rz
+D/D-T: T: fz=-30
+
+Analyze the explicitly labelled basic case D.
+
+Report section forces using local axes; support forces/moments use global axes. Preserve signs, selected cases/combinations and section sides.

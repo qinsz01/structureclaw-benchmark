@@ -1,0 +1,63 @@
+{
+  "id": "STD-072",
+  "sourceTask": {
+    "id": "STD-072",
+    "family": "standard_workflow",
+    "baseGroup": "M-STD-072",
+    "title": "不等层高混凝土框架",
+    "subcategory": "混凝土非规则网格",
+    "difficulty": "L2",
+    "difficultyReason": "非等层高和不等跨需正确累计，逐层荷载与节点归属一致。",
+    "language": "英文",
+    "inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "turns": 1,
+    "scenario": "三层3.3、4.0、3.1m，两跨5、7m，所有柱脚固定；完整属性按公共契约随题给出。 层高3.3/4.0/3.1m，对应标高3.3/7.3/10.4m；各梁依层取12/10/8kN/m。",
+    "modelingFocus": "楼层标高和各跨连接",
+    "expectedOutput": "各层各柱线位移、对应层间位移差、各柱脚反力与底柱端弯矩。",
+    "gradingFocus": "楼层标高和各跨连接；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "origin": "新增",
+    "oldPrimaryId": "无",
+    "oldSecondaryId": "无",
+    "reuseChange": "新增工程场景；母模型、提示词和真值均待建立。",
+    "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立框架解；各层几何/载荷合计与节点平衡核验。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+    "prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "status": "规划，待编题与验证",
+    "enginePlan": {
+      "id": "STD-072",
+      "suitableEngines": "OpenSees",
+      "plannedEngine": "OpenSees",
+      "assignmentReason": "当前为二维混凝土弹性框架题，采用 OpenSees，不另加楼板或空间建筑假设。 本题重点：楼层标高和各跨连接。",
+      "executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+      "adapterStatus": "待逐题验证",
+      "adapterGap": "不等层高累加后的几何与逐层线载须验收。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+      "truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立框架解；各层几何/载荷合计与节点平衡核验。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。",
+      "analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+      "requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+      "referenceCodes": "OPS；COMMON"
+    }
+  },
+  "sourceModel": {
+    "id": "M-STD-072",
+    "taskId": "STD-072",
+    "structure": "平面混凝土框架",
+    "dimension": "2D",
+    "difficulty": "L2",
+    "title": "不等层高混凝土框架",
+    "spec": "三层3.3、4.0、3.1m，两跨5、7m，所有柱脚固定；完整属性按公共契约随题给出。 层高3.3/4.0/3.1m，对应标高3.3/7.3/10.4m；各梁依层取12/10/8kN/m。 边界：全部柱脚固定。",
+    "challenge": "楼层标高和各跨连接",
+    "source": "无",
+    "prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "distinctness": "平面三层两不等跨；三层层高不同；全部柱脚固定；三层分别递减梁线载；混凝土材料；梁柱分组截面",
+    "topologyKey": "平面三层两不等跨；三层层高不同",
+    "boundaryKey": "全部柱脚固定",
+    "loadKey": "三层分别递减梁线载",
+    "propertyKey": "混凝土材料；梁柱分组截面"
+  },
+  "appendixDecisions": [
+    "The source leaves concrete grade and section sizes to an appendix. Freeze C30 E=30000 MPa, nu=0.2, rho=2500 kg/m3, columns 500x500 mm and beams 300x600 mm.",
+    "Story displacement difference is explicitly the signed horizontal ux difference across each actual column segment, not a drift ratio or an absolute value."
+  ],
+  "reviewStatus": "author-inspected-independent-review-pending",
+  "native": "pending",
+  "inputBlindReview": "pending"
+}

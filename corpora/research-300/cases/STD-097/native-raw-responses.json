@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-097",
+  "runs": [
+    {
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "factors": {
+        "D": 1.0
+      },
+      "responses": {
+        "runtime": {
+          "module": "openseespy.opensees",
+          "version": "3.7.1"
+        },
+        "analysisReturnCode": 0,
+        "nodes": {
+          "base": {
+            "tag": 1,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reaction": [
+              0.0,
+              0.0,
+              900.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "mid": {
+            "tag": 2,
+            "displacement": [
+              0.0,
+              0.0,
+              -0.0009335324869305453,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reaction": [
+              0.0,
+              0.0,
+              -1.1368683772161603e-13,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "top": {
+            "tag": 3,
+            "displacement": [
+              0.0,
+              0.0,
+              -0.0016596133100987471,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "reaction": [
+              0.0,
+              0.0,
+              1.1368683772161603e-13,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "elements": {
+          "1": {
+            "localForce": [
+              900.0,
+              0.0,
+              0.0,
+              -0.0,
+              0.0,
+              0.0,
+              -900.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "globalForce": [
+              0.0,
+              0.0,
+              900.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              -900.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "2": {
+            "localForce": [
+              699.9999999999999,
+              0.0,
+              0.0,
+              -0.0,
+              0.0,
+              0.0,
+              -699.9999999999999,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "globalForce": [
+              0.0,
+              0.0,
+              699.9999999999999,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              -699.9999999999999,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "nativeInput": {
+          "nodes": {
+            "base": {
+              "tag": 1,
+              "xyz": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "fixed": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "authoredFixed": [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+              ],
+              "authored": true
+            },
+            "mid": {
+              "tag": 2,
+              "xyz": [
+                0.0,
+                0.0,
+                2.5
+              ],
+              "fixed": [
+                false,
+                true,
+                false,
+                true,
+                false,
+                true
+              ],
+              "authoredFixed": [
+                false,
+                true,
+                false,
+                true,
+                false,
+                true
+              ],
+              "authored": true
+            },
+            "top": {
+              "tag": 3,
+              "xyz": [
+                0.0,
+                0.0,
+                5.0
+              ],
+              "fixed": [
+                false,
+                true,
+                false,
+                true,
+                false,
+                true
+              ],
+              "authoredFixed": [
+                false,
+                true,
+                false,
+                true,
+                false,
+                true
+              ],
+              "authored": true
+            }
+          },
+          "members": {
+            "lower-column": {
+              "element": {
+                "id": "lower-column",
+                "type": "column",
+                "nodes": [
+                  "base",
+                  "mid"
+                ],
+                "material": "M1",
+                "section": "HW300"
+              },
+              "length": 2.5,
+              "axes": [
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -1.0,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "properties": {
+                "E": 206000000.0,
+                "A": 0.011699999999999999,
+                "G": 79230769.23076923,
+                "Iy": 0.00019932749999999983,
+                "Iz": 6.752249999999999e-05,
+                "J": 7.649999999999999e-07
+              },
+              "stationNodes": [
+                [
+                  0.0,
+                  "base"
+                ],
+                [
+                  2.5,
+                  "mid"
+                ]
+              ]
+            },
+            "upper-column": {
+              "element": {
+                "id": "upper-column",
+                "type": "column",
+                "nodes": [
+                  "mid",
+                  "top"
+                ],
+                "material": "M1",
+                "section": "HW300"
+              },
+              "length": 2.5,
+              "axes": [
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -1.0,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "properties": {
+                "E": 206000000.0,
+                "A": 0.011699999999999999,
+                "G": 79230769.23076923,
+                "Iy": 0.00019932749999999983,
+                "Iz": 6.752249999999999e-05,
+                "J": 7.649999999999999e-07
+              },
+              "stationNodes": [
+                [
+                  0.0,
+                  "mid"
+                ],
+                [
+                  2.5,
+                  "top"
+                ]
+              ]
+            }
+          },
+          "segments": [
+            {
+              "tag": 1,
+              "member": "lower-column",
+              "start": 0.0,
+              "end": 2.5,
+              "nodes": [
+                "base",
+                "mid"
+              ]
+            },
+            {
+              "tag": 2,
+              "member": "upper-column",
+              "start": 0.0,
+              "end": 2.5,
+              "nodes": [
+                "mid",
+                "top"
+              ]
+            }
+          ],
+          "pointLoads": [],
+          "nodalLoads": [
+            {
+              "node": "top",
+              "values": [
+                0.0,
+                0.0,
+                -700.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "node": "mid",
+              "values": [
+                0.0,
+                0.0,
+                -200.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "dimension": "2d",
+          "nativeNdm": 3,
+          "nativeNdf": 6,
+          "addedMass": 0.0
+        }
+      }
+    }
+  ]
+}

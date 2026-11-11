@@ -1,0 +1,415 @@
+输入表。截面shape的B、H尺寸为mm，截面properties数值为输入依据。全局X水平、Z向上，Y补成右手系。坐标m；节点力kN；节点力矩kN*m；线载kN/m；E、G为MPa；A为m2；Iy、Iz、J为m4；密度kg/m3。约束顺序ux,uy,uz,rx,ry,rz；true表示固定。构件局部x沿起点到终点。平面XZ构件局部y为全局+Y，局部z=x叉乘y，绕局部y弯曲采用Iy。空间杆局部z取明示参考向量在垂直局部x平面的投影，局部y=z叉乘x。一阶线弹性静力，自重关闭；不自动添加荷载、组合、楼板、刚域或二阶效应。分布载荷区间按实际杆长以m计，除非本轮明确待确认该基准。未列荷载分量为零。梁柱共节点刚接；桁架仅轴向受力，转动约束只消除未激活自由度。每个可计算状态使用OpenSees；物理修改后重新计算，纯查询仅在状态未变时复用可追溯结果。保存软件版本/设置、运行ID、成功日志、模型快照和原始结果映射。
+编题补齐附件：明确连接表与截面绝对属性补齐源规划的待编附表。所有单元为两端铰接、仅轴向受力的桁架杆；轴力N以受拉为正。不添加节点质量。E/G单位MPa，密度kg/m3，截面属性完整明列。转动自由度约束仅消除轴力单元未激活的记账自由度，不提供抗弯刚度。首根下弦输出杆为BC1，按L0→L1方向定义；截面A1为0.10×0.10 m实心方形。所有null X坐标均未提供，不表示0。
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "L0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "U0",
+      "x": 0,
+      "y": 0,
+      "z": 2.2,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "L1",
+      "x": 2,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "U1",
+      "x": 2,
+      "y": 0,
+      "z": 2.2,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "L2",
+      "x": null,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "U2",
+      "x": null,
+      "y": 0,
+      "z": 2.2,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "L3",
+      "x": null,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "U3",
+      "x": null,
+      "y": 0,
+      "z": 2.2,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "L4",
+      "x": null,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "U4",
+      "x": null,
+      "y": 0,
+      "z": 2.2,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "BC1",
+      "type": "truss",
+      "nodes": [
+        "L0",
+        "L1"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "TC1",
+      "type": "truss",
+      "nodes": [
+        "U0",
+        "U1"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "BC2",
+      "type": "truss",
+      "nodes": [
+        "L1",
+        "L2"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "TC2",
+      "type": "truss",
+      "nodes": [
+        "U1",
+        "U2"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "BC3",
+      "type": "truss",
+      "nodes": [
+        "L2",
+        "L3"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "TC3",
+      "type": "truss",
+      "nodes": [
+        "U2",
+        "U3"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "BC4",
+      "type": "truss",
+      "nodes": [
+        "L3",
+        "L4"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "TC4",
+      "type": "truss",
+      "nodes": [
+        "U3",
+        "U4"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "V0",
+      "type": "truss",
+      "nodes": [
+        "L0",
+        "U0"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "V1",
+      "type": "truss",
+      "nodes": [
+        "L1",
+        "U1"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "V2",
+      "type": "truss",
+      "nodes": [
+        "L2",
+        "U2"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "V3",
+      "type": "truss",
+      "nodes": [
+        "L3",
+        "U3"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "V4",
+      "type": "truss",
+      "nodes": [
+        "L4",
+        "U4"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "DG1",
+      "type": "truss",
+      "nodes": [
+        "L0",
+        "U1"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "DG2",
+      "type": "truss",
+      "nodes": [
+        "L1",
+        "U2"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "DG3",
+      "type": "truss",
+      "nodes": [
+        "U2",
+        "L3"
+      ],
+      "material": "M1",
+      "section": "A1"
+    },
+    {
+      "id": "DG4",
+      "type": "truss",
+      "nodes": [
+        "U3",
+        "L4"
+      ],
+      "material": "M1",
+      "section": "A1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "A1",
+      "name": "A1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 100.0,
+        "H": 100.0
+      },
+      "properties": {
+        "A": 0.010000000000000002,
+        "Iy": 8.333333333333335e-06,
+        "Iz": 8.333333333333335e-06,
+        "J": 1.4083333333333338e-05
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "vertical-U1",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "U1",
+          "fz": -8
+        },
+        {
+          "id": "vertical-U2",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "U2",
+          "fz": -12
+        },
+        {
+          "id": "vertical-U3",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "U3",
+          "fz": -10
+        },
+        {
+          "id": "horizontal-U2",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "U2",
+          "fx": 4
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {},
+  "panelLengthsM": [
+    2,
+    null,
+    4,
+    3
+  ],
+  "coordinateStatus": "第二节间长度未给出；U2/L2及其右侧节点的X坐标待补齐"
+}

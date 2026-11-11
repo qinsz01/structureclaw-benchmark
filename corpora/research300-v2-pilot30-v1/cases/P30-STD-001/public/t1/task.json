@@ -1,0 +1,117 @@
+{
+  "caseId": "P30-STD-001",
+  "turnId": "t1",
+  "engine": "OpenSees",
+  "analysis": "static",
+  "instruction": "建立6m简支梁：左端铰支、右端竖向滚支，全长向下20kN/m。x=3m为两梁段共享的连通观测节点。报告左右支反力、跨中Z位移及跨中截面弯矩。\n\n实际运行 OpenSees，按 input.md 完成全部指定输出，并检查平衡；必要信息缺失或冲突时先澄清。\n\n交付方式以delivery.md为准。",
+  "requests": [
+    {
+      "id": "case:D:node:N0:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0"
+      },
+      "component": "Fx",
+      "unit": "kN"
+    },
+    {
+      "id": "case:D:node:N0:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N0"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    },
+    {
+      "id": "case:D:node:N2:Fx",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N2"
+      },
+      "component": "Fx",
+      "unit": "kN"
+    },
+    {
+      "id": "case:D:node:N2:Fz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N2"
+      },
+      "component": "Fz",
+      "unit": "kN"
+    },
+    {
+      "id": "case:D:node:N1:uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "N1"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "case:D:member:E01:M2@3:left",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "E01",
+        "positionM": 3.0,
+        "side": "left"
+      },
+      "component": "M2",
+      "unit": "kN.m"
+    },
+    {
+      "id": "case:D:member:E02:M2@0:right",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "E02",
+        "positionM": 0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m"
+    }
+  ],
+  "reportIds": [
+    "case:D:member:E01:M2@3:left",
+    "case:D:member:E02:M2@0:right",
+    "case:D:node:N0:Fx",
+    "case:D:node:N0:Fz",
+    "case:D:node:N1:uz",
+    "case:D:node:N2:Fx",
+    "case:D:node:N2:Fz"
+  ],
+  "derived": [],
+  "attachments": [
+    "input.md"
+  ]
+}

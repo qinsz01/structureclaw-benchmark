@@ -1,0 +1,126 @@
+{
+  "units": {
+    "coordinates": "m",
+    "member_length": "m",
+    "E": "MPa",
+    "G": "MPa",
+    "rho": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "shape": "mm",
+    "force": "kN",
+    "moment": "kN.m",
+    "line_load": "kN/m of actual member length",
+    "rotation_angle": "degree",
+    "displacement": "m"
+  },
+  "axisDefinitions": {
+    "globalAxes": "Right-handed XYZ; Z upward.",
+    "planarAxes": "XZ plane: local x = i to j, local y = global +Y, local z = x cross y.",
+    "spatialAxes": "local x = i to j; y = normalize(reference cross x); z = x cross y; reference vectors are explicit per member.",
+    "sectionRoll": "y_new=cos(theta)*y+sin(theta)*z; z_new=-sin(theta)*y+cos(theta)*z; theta in degrees.",
+    "reactionNaming": "Rz in the task means vertical support force Fz, not nodal rotation rz."
+  },
+  "analysisMethod": "First-order linear elastic Euler-Bernoulli beam/column and axial-only truss analysis.",
+  "geometry": {
+    "storeyHeightsM": [
+      3.3,
+      4.0,
+      3.1
+    ],
+    "firstBayLengthM": 5,
+    "totalBays": null,
+    "subsequentBayLengthsM": null,
+    "connectivity": null,
+    "supports": "All ground-level columns fixed in ux,uz,ry."
+  },
+  "memberAssignmentRules": {
+    "columns": "C1, material M1",
+    "beams": "B1, material M1",
+    "jointType": "rigid",
+    "initialRollDegrees": 0
+  },
+  "loadRules": {
+    "D": "Every beam: downward 8 kN/m.",
+    "L": "No live load on the first (leftmost) bay. Load group R has downward 6 kN/m on every storey; its span membership and connectivity remain to be supplied with the missing bay geometry."
+  },
+  "documentType": "Public engineering input tables",
+  "materialTable": [
+    {
+      "id": "M1",
+      "name": "C30",
+      "type": "concrete",
+      "E": 30000,
+      "G": 12500.0,
+      "nu": 0.2,
+      "rho": 2500
+    }
+  ],
+  "sectionTable": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    }
+  ],
+  "combinationTable": [
+    {
+      "id": "D+L",
+      "factors": {
+        "D": 1,
+        "L": 1
+      }
+    }
+  ],
+  "analysisSettings": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinateContract": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "memberAxisData": {}
+}

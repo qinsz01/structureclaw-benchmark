@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-002",
+  "evaluationProfile": "engineering-v2.3",
+  "referenceKind": "independent-elastic-matrix",
+  "notCommercialScoringTruth": true,
+  "sameEngineTruthStatus": "pending",
+  "warnings": [
+    "Euler-Bernoulli reference omits shear deformation; Timoshenko displacements may differ physically. Frozen request tolerances are unchanged.",
+    "Commercial-engine references remain diagnostic pending independently reviewed same-engine native truth."
+  ],
+  "toleranceFrozenBeforeCandidate": true,
+  "inputHashes": {
+    "contract.json": "89d0ecb97519f31c542bba7bfb13487dff759167c828b9a10039f581d364a227",
+    "reference-requests.json": "5e6c78ac0c788e44a657aa35d92ba71986b4bdfffde8efa3f5d1bf4460cae914",
+    "model-state-1.json": "570e43a6489ea8f6b070f8774e0d0becb161151a1aa259a30c9913882f4e44a8"
+  },
+  "sourceHash": "f2d6766c84853a4e06379a77b7f7b31d37b765b650a0501eb5350c5762ae6d67",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "89d0ecb97519f31c542bba7bfb13487dff759167c828b9a10039f581d364a227"
+      },
+      {
+        "path": "input-tables.txt",
+        "sha256": "874b992d34fe41b3318e0529d14f0ff33f238e2fb53a31f9862ed451aae2af40"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "570e43a6489ea8f6b070f8774e0d0becb161151a1aa259a30c9913882f4e44a8"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "90a6a0dcd879dcd1b27679e3a11cae21b377ec847d8be00a33f63b3bb7f5a4c1"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "5e6c78ac0c788e44a657aa35d92ba71986b4bdfffde8efa3f5d1bf4460cae914"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "quantities": [
+        {
+          "id": "D-x3-ux",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1"
+          },
+          "component": "ux",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 4.0453074433656964e-07
+        },
+        {
+          "id": "D-x3-uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n1"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -8.0906148867314e-05
+        },
+        {
+          "id": "D-x0-My",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "n0"
+          },
+          "component": "My",
+          "unit": "kN*m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -30.000000000000025
+        }
+      ],
+      "derived": []
+    }
+  ],
+  "checks": [
+    {
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 3.552713678800501e-15,
+      "forceMomentBalance": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.4210854715202004e-14,
+        0.0
+      ],
+      "dofs": 12,
+      "freeDofs": 3,
+      "factorization": "scipy-sparse-superlu",
+      "factorizationCount": 1,
+      "rightHandSides": 1,
+      "minimumScaledPivot": 0.2499999999999999,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ]
+}

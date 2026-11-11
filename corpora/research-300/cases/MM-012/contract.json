@@ -1,0 +1,348 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "MM-012",
+  "modelId": "M-MM-012",
+  "family": "multimodal_reverse_engineering",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "新工程PNG的总图/局部详图给本题几何、连接、支承和荷载位置；图中构件索引关联完整属性表，正文不重述拓扑。所有新附件待制作、盲审与验证。",
+    "task.scenario": "几何：刚接折线梁通过XZ点(0,0)、(4,0)、(6,3)m；边界：首点固支，其余无支座；荷载：末端全局Z向-20kN；属性：统一钢材M1/B1，折点不设内铰。（本栏是编题规格，实际用户输入按图/表分工呈现。）",
+    "task.modelingFocus": "折点是刚性连接，斜段和水平段的局部轴不同。",
+    "task.expectedOutput": "末端Ux/Uz、折点两侧内力；附与数值一致的模型/结果图。",
+    "task.gradingFocus": "模型核对：直斜梁改为水平段加斜段的折线梁，增加刚接转折和两种轴向投影。；数值/表述核对：末端Ux/Uz、折点两侧内力，位置、方向、单位须一致。",
+    "task.prerequisite": "斜杆荷载与局部轴需验证；本题新增几何/属性与真值均待独立核验；材料截面代号须在本题附录定值。斜杆全局荷载和局部轴适配待验证。",
+    "model.topologyKey": "刚接折线梁通过XZ点(0,0)、(4,0)、(6,3)m",
+    "model.boundaryKey": "首点固支，其余无支座",
+    "model.loadKey": "末端全局Z向-20kN",
+    "model.propertyKey": "统一钢材M1/B1，折点不设内铰。",
+    "engine.analysisContract": "一阶线弹性；自重OFF并保存配置；按附录实际E/A/I/J，不套默认刚度折减；无默认刚性楼板。全局Z向上，核对XZ到求解器平面的映射及Ry符号。题给线载/点力/力矩按原位映射；如作等效节点加载，须保留原始分布荷载并采用与单元插值一致的等效荷载，核验跨内响应及合力/力矩，不用统一楼面载替代。荷载契约：末端全局Z向-20kN；未指定组合时仅算题定基本荷载，指定组合逐组执行，不能用软件默认包络替换。",
+    "engine.executionRequirement": "两段真实梁在折点刚接；核对各段局部轴和全局端力分解；执行后按原题完整输出：末端Ux/Uz、折点两侧内力；附与数值一致的模型/结果图。本轮仅规划，不运行。",
+    "engine.requiredEvidence": "计划保存输入PNG/DXF及图中构件/标签→计算节点/构件ID映射、可复现OpenSees输入模型、引擎版本与设置快照、实际运行日志、原始结果表/观测点索引、可视图所用数据。",
+    "engine.adapterGap": "尚未确认本题可通过；接口/求解/读回预检重点：两段真实梁在折点刚接；核对各段局部轴和全局端力分解。特殊单元、轴向、边界及组合均不因OpenSees原生支持而视作已接通。",
+    "engine.truthPlan": "独立建立并复核OpenSees参考模型，固定版本/求解设置及观测位置；以适用解析解或独立刚度法交叉校核位移、内力和整体平衡。不把展示层插值或图像读数直接当数值真值。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input.png",
+    "input.svg",
+    "joint-detail.png",
+    "joint-detail.svg",
+    "properties.txt"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Reconstruct the model from the supplied OpenSees input drawings and property appendix. Use OpenSees for the actual analysis. Resolve missing or contradictory essential data before analysis. Preserve the drawing connectivity, supports, load positions and property groups.\n\nRequested outputs:\nFree-end Ux and Uz; N, V3 and M2 at both sides of the rigid kink.\nProvide a model/result figure consistent with the numerical table, including support/load/ID mapping and signed result units.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input.png",
+        "input.svg",
+        "joint-detail.png",
+        "joint-detail.svg",
+        "properties.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "output-1",
+      "description": "Free-end Ux and Uz; N, V3 and M2 at both sides of the rigid kink.",
+      "state": 1,
+      "quantityIds": [
+        "D-n2-ux",
+        "D-n2-uz",
+        "D-b1-end-N",
+        "D-b1-end-V3",
+        "D-b1-end-M2",
+        "D-b2-start-N",
+        "D-b2-start-V3",
+        "D-b2-start-M2"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "model-result-figure",
+      "description": "Provide a model/result figure consistent with the numerical table, including support/load/ID mapping and signed result units.",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "figure",
+      "turnIds": [
+        "t1"
+      ]
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1,
+        2,
+        3
+      ],
+      "targets": [
+        "attachment:input.png",
+        "attachment:input.svg",
+        "attachment:joint-detail.png",
+        "attachment:joint-detail.svg",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "targets": [
+        "attachment:input.png",
+        "attachment:input.svg",
+        "attachment:joint-detail.png",
+        "attachment:joint-detail.svg",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        10
+      ],
+      "targets": [
+        "attachment:input.png",
+        "attachment:input.svg",
+        "attachment:joint-detail.png",
+        "attachment:joint-detail.svg",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        11,
+        12
+      ],
+      "targets": [
+        "output:output-1",
+        "output:model-result-figure",
+        "gate:figure-consistency"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        13,
+        14
+      ],
+      "targets": [
+        "output:output-1",
+        "output:model-result-figure",
+        "gate:figure-consistency"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        15,
+        16,
+        17,
+        18
+      ],
+      "targets": [
+        "gate:same-engine-truth",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        19
+      ],
+      "targets": [
+        "attachment:input.png",
+        "attachment:input.svg",
+        "attachment:joint-detail.png",
+        "attachment:joint-detail.svg",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        20
+      ],
+      "targets": [
+        "attachment:input.png",
+        "attachment:input.svg",
+        "attachment:joint-detail.png",
+        "attachment:joint-detail.svg",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        21
+      ],
+      "targets": [
+        "attachment:input.png",
+        "attachment:input.svg",
+        "attachment:joint-detail.png",
+        "attachment:joint-detail.svg",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        22
+      ],
+      "targets": [
+        "attachment:input.png",
+        "attachment:input.svg",
+        "attachment:joint-detail.png",
+        "attachment:joint-detail.svg",
+        "attachment:properties.txt",
+        "gate:model-source-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "targets": [
+        "attachment:properties.txt",
+        "turn:t1",
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        37
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        38,
+        39,
+        40,
+        41
+      ],
+      "targets": [
+        "gate:adapter-preflight"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        42,
+        43,
+        44
+      ],
+      "targets": [
+        "gate:same-engine-truth",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence/gate mapping only; native execution and independent validation remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "input-blind-review",
+      "status": "pending",
+      "description": "Independent input reconstruction and modality/legibility review."
+    },
+    {
+      "id": "model-source-review",
+      "status": "pending",
+      "description": "Independent review against every original source requirement."
+    },
+    {
+      "id": "native-execution",
+      "status": "pending",
+      "description": "Actual prescribed engine version, input, configuration, logs, raw results and observation mapping."
+    },
+    {
+      "id": "same-engine-truth",
+      "status": "pending",
+      "description": "Independently reviewed same-engine reference and separate equilibrium/stiffness cross-check."
+    },
+    {
+      "id": "figure-consistency",
+      "status": "pending",
+      "description": "Requested model/result figures and their underlying numeric data match."
+    },
+    {
+      "id": "adapter-preflight",
+      "status": "pending",
+      "description": "Case-specific conversion and readback tests, including axes and load jumps."
+    }
+  ],
+  "authoringNotes": [
+    "Unspecified property appendix frozen before candidate runs: steel M1 E=206000 MPa, nu=0.3, rho=7850 kg/m3; B1 solid 0.30 x 0.60 m, B2 solid 0.30 x 0.70 m; M2, where assigned, E=180000 MPa. Saint-Venant J stated explicitly."
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN*m",
+    "E": "MPa",
+    "G": "MPa",
+    "density": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "rotation_angle": "deg"
+  },
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 400.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.2,
+        "Iy": 0.004166666666666667,
+        "Iz": 0.0026666666666666674,
+        "J": 0.005474167466666667
+      }
+    },
+    {
+      "id": "C2",
+      "name": "C2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 450.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.27,
+        "Iy": 0.0081,
+        "Iz": 0.00455625,
+        "J": 0.009840743591308595
+      }
+    },
+    {
+      "id": "C3",
+      "name": "C3",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 650.0
+      },
+      "properties": {
+        "A": 0.325,
+        "Iy": 0.011442708333333334,
+        "Iz": 0.0067708333333333336,
+        "J": 0.014341285610914651
+      }
+    },
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 220.0,
+        "H": 450.0
+      },
+      "properties": {
+        "A": 0.099,
+        "Iy": 0.0016706250000000002,
+        "Iz": 0.0003993,
+        "J": 0.001107604305896979
+      }
+    },
+    {
+      "id": "B2",
+      "name": "B2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 250.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.125,
+        "Iy": 0.0026041666666666665,
+        "Iz": 0.0006510416666666666,
+        "J": 0.0017881266276041667
+      }
+    },
+    {
+      "id": "B3",
+      "name": "B3",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 280.0,
+        "H": 550.0
+      },
+      "properties": {
+        "A": 0.15400000000000003,
+        "Iy": 0.0038820833333333346,
+        "Iz": 0.0010061333333333336,
+        "J": 0.002740980961086498
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinate_system": {
+    "dimension": "3d",
+    "plane": null,
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "analysis": "first-order linear elastic static; use full explicit stiffness; no automatic reduction",
+  "localAxes": {
+    "beam": "local x follows the thin arrow on each drawn member from first to second end",
+    "2d": "XZ plane; before roll local y = global +Y, local z = local x cross local y; Iy controls unrolled in-plane bending; M2 is about local y",
+    "3d": "local y = reference cross local x; local z = local x cross local y; rotation_angle applies right-hand roll about local x"
+  },
+  "notes": [
+    "材料 M1 为线弹性钢，E=206000 MPa、ν=0.30、G=E/[2(1+ν)]、ρ=7850 kg/m³。截面表内六组均为实心矩形，其数值为本题明定输入。",
+    "构件局部 1 轴由首节点指向末节点；参考向量 r 确定局部 2=(r×1)/|r×1|，局部 3=1×2。柱取 r=+X，梁取 r=+Z。",
+    "输出柱脚轴力取下层柱 s=0 的构件内侧；支座竖向反力不能替代轴力输出。"
+  ]
+}

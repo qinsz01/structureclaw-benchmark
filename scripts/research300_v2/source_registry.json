@@ -1,0 +1,1188 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-28",
+  "scope": "StructureClaw现有范围内的线弹性杆系、裸框架、双向轴力杆及显式质量线性动力子问题；不是原项目完整复现或工程安全认证。",
+  "selectionPolicy": {
+    "targetRealProjectCases": 60,
+    "maxCasesPerProject": 6,
+    "maxSubproblemsPerProject": 3,
+    "maxTaskVariantsPerSubproblem": 2,
+    "distinctProjectGroups": 10,
+    "distinctRealProjectPublications": 8,
+    "engineeringExampleCount": 1,
+    "originalPlanningTargetRealProjectCases": 90,
+    "originalPlanningTargetSources": 15,
+    "remainingToOriginalTargetCases": 30,
+    "remainingToOriginalTargetSources": 5,
+    "capacityIsNotImplementationCount": true,
+    "projectCountingRule": "同一可研内多个单体为一个项目；同一政府案例汇编中明确不同年代/用途/建筑的项目分别计组。匿名项目只称原始工程报告，不称可独立验收的实建竣工项目。"
+  },
+  "globalAuthoringRules": [
+    "每道题必须附sourceId与所用factId，逐条分开“来源事实”和“作者设定”。",
+    "保留来源中的具体子结构及传力特征；不得仅挂项目名后生成无关参数模板。",
+    "同源最多三类子结构，每类最多两种输入或任务；不能换数刷数量。",
+    "新模型真值由独立线性数值oracle验证，禁止拿不同建模假设的原文软件结果作精确真值。",
+    "所有最终选题仍需逐项审核实际模型是否保留来源事实；登记候选容量不代表60题已通过审查。"
+  ],
+  "licensePolicy": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+  "sources": [
+    {
+      "sourceId": "SRC-COLD-2023",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "shangqiu-high-rack-cold-store",
+      "title": "某单层钢结构冷库结构设计",
+      "url": "https://www.yjk.cn/article/1892/",
+      "publicationDate": "2023-09-04",
+      "authors": [
+        "柴浩（机械工业第六设计研究院有限公司）"
+      ],
+      "publisher": "YJK 官方技术交流",
+      "constructionStatus": "design or project report; construction completion not independently verified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://www.yjk.cn/article/1892/",
+          "locator": "报告第1页 §1 工程概况",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        },
+        {
+          "url": "https://dls-cdn.yjk.cn/image/20230904/1693814432/351721/image.png",
+          "locator": "报告第1页 §1 工程概况",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "frame",
+        "spansM": [
+          23.61,
+          32.21
+        ],
+        "heightM": 31.2,
+        "tributaryWidthM": 7.5,
+        "longitudinalBaysM": [
+          6.8,
+          7.5,
+          7.5,
+          7.5,
+          7.5,
+          7.5,
+          7.5,
+          7.5,
+          7.5,
+          7.5,
+          7.4
+        ],
+        "factRefs": [
+          "SRC-COLD-2023-F1",
+          "SRC-COLD-2023-F2",
+          "SRC-COLD-2023-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-COLD-2023-F1",
+          "statement": "河南商丘单层高架冷库；冷库与穿堂以结构缝分开。",
+          "locator": "报告第1页 §1 工程概况"
+        },
+        {
+          "factId": "SRC-COLD-2023-F2",
+          "statement": "横向轴线跨23.61m、32.21m；檐高31.2m；纵向柱距6.8m、9×7.5m、7.4m。",
+          "locator": "报告第1页 §1 工程概况"
+        },
+        {
+          "factId": "SRC-COLD-2023-F3",
+          "statement": "附加屋面恒载2.0kN/m²，屋面活载0.5kN/m²；无吊车和天窗。",
+          "locator": "报告第1页 §1 工程概况"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-COLD-2023-P1",
+          "description": "横向不等双跨主刚架：保留23.61+32.21m及31.2m檐高，明确屋面斜度与刚接理想化。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-COLD-2023-P2",
+          "description": "纵向边柱列局部三跨：保留6.8+7.5+7.5m轴网，截断边界显式给定；不能冒充真实纵向抗侧体系。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-COLD-2023-P3",
+          "description": "屋面檩条/连续传力梁子结构：采用7.5m相邻柱距及屋面恒活载，檩条间距、支承连续性明确设定。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "31.2m为檐口高度；平顶简化须直说。主刚架变截面改为显式等效常截面。附加恒载中已包括屋面附属构造，不能重复自动加同一部分。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "低温温度作用、冷库围护系统、变截面完整设计"
+      ],
+      "dataConflicts": [],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": [
+        {
+          "localReviewName": "cold-first.png",
+          "sha256": "e4b041255ad3c8827e91e0314ccce4b45ee6433a9e860fb2231e79959d62f3c9"
+        }
+      ]
+    },
+    {
+      "sourceId": "SRC-JIANGSU-2023",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "jiangsu-five-span-factory",
+      "title": "PKPM结构V2全新三维门刚项目实测：江苏某工业厂房设计",
+      "url": "https://help.pkpm.cn/admin/ms/detail?SiteID=123&id=5385&type=sourceBook",
+      "publicationDate": "2023-10-12",
+      "authors": [
+        "PKPM结构"
+      ],
+      "publisher": "PKPM 官方",
+      "constructionStatus": "design or project report; construction completion not independently verified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://help.pkpm.cn/admin/ms/detail?SiteID=123&id=5385&type=sourceBook",
+          "locator": "工程概况、§4 吊车建模",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "frame",
+        "spansM": [
+          8,
+          8
+        ],
+        "heightM": 11.35,
+        "tributaryWidthM": 8,
+        "craneLevelM": 7.5,
+        "transverseBayCount": 5,
+        "roofSlope": 0.05,
+        "factRefs": [
+          "SRC-JIANGSU-2023-F1",
+          "SRC-JIANGSU-2023-F2",
+          "SRC-JIANGSU-2023-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-JIANGSU-2023-F1",
+          "statement": "江苏某五跨工业厂房；檐口11.35m、柱距8m、屋面坡度5%。",
+          "locator": "工程概况第1段"
+        },
+        {
+          "factId": "SRC-JIANGSU-2023-F2",
+          "statement": "每跨两台5t吊车；吊车柱脚按刚接，抗风柱脚按铰接。",
+          "locator": "工程概况第1段"
+        },
+        {
+          "factId": "SRC-JIANGSU-2023-F3",
+          "statement": "吊车建模标高7.5m。",
+          "locator": "§4 吊车建模"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-JIANGSU-2023-P1",
+          "description": "纵向相邻柱列的两跨局部框架：柱距8+8m、柱高11.35m，明确侧向体系简化。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-JIANGSU-2023-P2",
+          "description": "含7.5m吊车作用点的单根阶梯柱/带横梁局部构架：用题给等效节点力，检查反力及分段内力。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-JIANGSU-2023-P3",
+          "description": "抗风柱局部构件：柱脚铰支、顶部水平约束，题面补足稳定约束及风压折算宽度。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "8m是纵向柱距，不是原报告五个横向跨的跨度。吊车吨位不能直接当成各节点荷载；题面单列等效轮压。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "移动吊车、轮压影响线、疲劳、原工程受拉支撑"
+      ],
+      "dataConflicts": [
+        "正文建筑面积1849m²与112m×112m互相矛盾；面积及整体平面长宽全部弃用。"
+      ],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": []
+    },
+    {
+      "sourceId": "SRC-LUOYANG-2022",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "luoyang-zhuoyang-chundu-workshop",
+      "title": "洛阳钢构工程：洛阳卓扬春都生物科技钢结构厂房",
+      "url": "https://www.lymcgg.com/gjggccf/zycdswkj.html",
+      "publicationDate": "2022-05-26",
+      "authors": [
+        "河南三建美辰建筑科技有限公司"
+      ],
+      "publisher": "施工单位原始项目页",
+      "constructionStatus": "contractor project account with site photographs",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://www.lymcgg.com/gjggccf/zycdswkj.html",
+          "locator": "工程概括及现场项目照片",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "frame",
+        "spansM": [
+          24.46,
+          25,
+          24.46
+        ],
+        "heightM": 8.5,
+        "tributaryWidthM": 7.7,
+        "longitudinalBaysM": [
+          7.7,
+          7.7
+        ],
+        "factRefs": [
+          "SRC-LUOYANG-2022-F1",
+          "SRC-LUOYANG-2022-F2",
+          "SRC-LUOYANG-2022-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-LUOYANG-2022-F1",
+          "statement": "项目为宜阳县香鹿山镇联合生产车间，单层门式刚架并有局部夹层。",
+          "locator": "工程概括"
+        },
+        {
+          "factId": "SRC-LUOYANG-2022-F2",
+          "statement": "三跨24.46+25+24.46m，柱距7.7m，柱顶8.5m。",
+          "locator": "工程概括"
+        },
+        {
+          "factId": "SRC-LUOYANG-2022-F3",
+          "statement": "钢柱、梁及连接板为Q355B。",
+          "locator": "工程概括"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-LUOYANG-2022-P1",
+          "description": "完整三跨横向弹性框架：保留不等跨及8.5m柱高，题设常截面及屋面几何。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-LUOYANG-2022-P2",
+          "description": "纵向两跨柱列局部构架：7.7+7.7m，显式声明端部截断及刚接等效。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-LUOYANG-2022-P3",
+          "description": "局部屋面梁/檩条连续体系：以柱列7.7m跨距建两跨梁，明确构件性质、支座及分担宽度。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "不得凭“局部夹层”编造夹层层高或范围；本批不以未给尺寸的夹层作原工程事实。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟"
+      ],
+      "dataConflicts": [],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": []
+    },
+    {
+      "sourceId": "SRC-PIPE-2020",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "caofeidian-industrial-park-pipe-rack",
+      "title": "桁架跨高比对用钢量影响的研究",
+      "url": "http://www.sxjzty.cn/qikanfile/2020/22/017.pdf",
+      "publicationDate": "2020-11",
+      "authors": [
+        "曹凯",
+        "汤中发",
+        "张孝轮",
+        "张磊",
+        "刘巍"
+      ],
+      "publisher": "山西建筑46(22):43–46；北京首钢国际工程技术有限公司",
+      "constructionStatus": "design or project report; construction completion not independently verified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "http://www.sxjzty.cn/qikanfile/2020/22/017.pdf",
+          "locator": "印刷43–46页；正文、表2/3及图2–7",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "truss",
+        "spansM": [
+          20
+        ],
+        "heightM": 2.5,
+        "tributaryWidthM": 2.5,
+        "studiedSpansM": [
+          15,
+          20,
+          25,
+          30,
+          35
+        ],
+        "studiedDepthsM": [
+          1.5,
+          2,
+          2.5,
+          3,
+          3.5
+        ],
+        "maxPanelLengthM": 3.5,
+        "factRefs": [
+          "SRC-PIPE-2020-F1",
+          "SRC-PIPE-2020-F2",
+          "SRC-PIPE-2020-F3",
+          "SRC-PIPE-2020-F4"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-PIPE-2020-F1",
+          "statement": "唐山曹妃甸工业园实际管架；九条管道分三排，架面宽2.5m、管顶约10m。",
+          "locator": "印刷43页 §2；PDF第1页"
+        },
+        {
+          "factId": "SRC-PIPE-2020-F2",
+          "statement": "比较跨度15/20/25/30/35m与矢高1.5/2/2.5/3/3.5m；这些是论文研究方案，并非25个已建结构。",
+          "locator": "印刷43–44页 §1、§3"
+        },
+        {
+          "factId": "SRC-PIPE-2020-F3",
+          "statement": "左右两片桁架对称；三层水平横梁，节间不超过3.5m。",
+          "locator": "印刷44页 §3.1"
+        },
+        {
+          "factId": "SRC-PIPE-2020-F4",
+          "statement": "2.5m节间：单片中间节点G=10.37kN、Q=18.50kN，端节点G=5.48kN、Q=9.25kN。",
+          "locator": "印刷44页 表3"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-PIPE-2020-P1",
+          "description": "单片纵向管架平面桁架：选论文20m×2.5m方案，保持对称腹杆与偶数节间；节点G/Q直接可追溯表3。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-PIPE-2020-P2",
+          "description": "2.5m宽的横向三层管道承重梁/支承架：各排管径及线荷载按表1/2转换，支承连接显式给定。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-PIPE-2020-P3",
+          "description": "双片桁架和横梁的空间杆系子结构：保留2.5m片距及三层横梁，补足双向弹性水平支撑，研究荷载分配。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "geometryHint.heightM=2.5m为研究桁架矢高；10m是管顶标高，不可当成支柱净高。表3为单片节点力，不能再平分一次。",
+        "完整正文实际在017.pdf；016.pdf仅在最后一页包含本文首页，不能把其余页误记为本论文。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "管道热膨胀、压力/流体动力、钢耗优化及规范验算"
+      ],
+      "dataConflicts": [],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": [
+        {
+          "localReviewName": "pipe-017.pdf",
+          "sha256": "53b4eb4088f32def4cff9305c662cf16aa291b6ffaed4eba46708aab5cb90798"
+        }
+      ],
+      "retrievalNote": "HTTPS网页工具访问失败；使用原始期刊域名HTTP链接与浏览器User-Agent下载，PyMuPDF逐页读取并目视检查图。下载件SHA-256见evidenceHashes。"
+    },
+    {
+      "sourceId": "SRC-SH-STEEL-2020",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "shanghai-1999-metallurgical-hall-reuse",
+      "title": "低烈度区典型房屋建筑和桥梁抗震加固案例：单层钢结构工业厂房",
+      "url": "https://zfcxjw.cq.gov.cn/zwgk_166/zfxxgkmls/zcwj/qtwj/202010/W020241104549131259218.pdf",
+      "publicationDate": "2020-09",
+      "authors": [
+        "重庆市住房和城乡建设委员会组织编写；多家设计院联合编制"
+      ],
+      "publisher": "重庆市住房和城乡建设委员会",
+      "constructionStatus": "design or project report; construction completion not independently verified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://zfcxjw.cq.gov.cn/zwgk_166/zfxxgkmls/zcwj/qtwj/202010/W020241104549131259218.pdf",
+          "locator": "印刷135–142页；PDF第139–146页",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "frame-truss",
+        "spansM": [
+          29,
+          22,
+          35.4
+        ],
+        "heightM": 33.6,
+        "tributaryWidthM": 13.5,
+        "longitudinalBaysM": [
+          13.5,
+          13.5,
+          13.5,
+          13.5,
+          13.5,
+          13.5,
+          13.5
+        ],
+        "factRefs": [
+          "SRC-SH-STEEL-2020-F1",
+          "SRC-SH-STEEL-2020-F2",
+          "SRC-SH-STEEL-2020-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-SH-STEEL-2020-F1",
+          "statement": "上海1999年冶金厂房改会议中心；三跨29/22/35.4m，柱距13.5m，总轴长94.5m。",
+          "locator": "印刷135页 §2.5.1(一)；PDF第139页"
+        },
+        {
+          "factId": "SRC-SH-STEEL-2020-F2",
+          "statement": "AB/CD跨为平行弦屋架，BC跨为实腹梁；纵向2–3及4–5轴有柱间支撑。",
+          "locator": "印刷135–137页，图2.5.1-1/2"
+        },
+        {
+          "factId": "SRC-SH-STEEL-2020-F3",
+          "statement": "下柱为格构柱，部分顶标高24.450/20.086m；上柱顶33.600/32.970m。",
+          "locator": "印刷135页 原结构设计(3)"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-SH-STEEL-2020-P1",
+          "description": "AB跨29m平行弦屋架的双向轴力杆子结构：桁高/节间按题面补全，不宣称复刻图纸。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-SH-STEEL-2020-P2",
+          "description": "BC跨22m实腹屋面梁及支柱的弹性局部框架：几何高程及柱等效刚度明确给出。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-SH-STEEL-2020-P3",
+          "description": "13.5m纵向柱间支撑跨：采用真实支撑轴位，格构柱简化及双向杆连接公开。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "33.6m只是报告列出的一个上柱顶标高，不是所有柱统一高度。格构柱转为常截面柱需显式定义等效EA/EI。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "会议中心改造后抗震合格结论、塑性时程、加固节点与吊车拆装"
+      ],
+      "dataConflicts": [],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": [
+        {
+          "localReviewName": "rehab.pdf",
+          "sha256": "0edbf7cc8682bf021ff865d339f64f8f1a5e5e63d199b390ce8ea925711ade6f"
+        }
+      ],
+      "dateNote": "2020-09为原始报告封面日期；政府托管文件URL中的更新时间不代表案例工程建造时间。"
+    },
+    {
+      "sourceId": "SRC-SPORT-2023",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "three-storey-sports-training-hall",
+      "title": "某体育综合训练馆大跨钢结构楼盖振动舒适度分析",
+      "url": "https://www.yjk.cn/article/1763/",
+      "publicationDate": "2023-05-25",
+      "authors": [
+        "张郁林（中国建筑第五工程局有限公司）"
+      ],
+      "publisher": "YJK 官方技术交流",
+      "constructionStatus": "design or project report; construction completion not independently verified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://www.yjk.cn/article/1763/",
+          "locator": "原文第1–3页 §1.1–1.2及图1.1-2/1.2",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        },
+        {
+          "url": "https://dls-cdn.yjk.cn/image/20230525/1684980217/355564/image.png",
+          "locator": "原文第1–3页 §1.1–1.2及图1.1-2/1.2",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        },
+        {
+          "url": "https://dls-cdn.yjk.cn/image/20230525/1684980236/151011/image.png",
+          "locator": "原文第1–3页 §1.1–1.2及图1.1-2/1.2",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        },
+        {
+          "url": "https://dls-cdn.yjk.cn/image/20230525/1684980255/715802/image.png",
+          "locator": "原文第1–3页 §1.1–1.2及图1.1-2/1.2",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "truss-floor",
+        "spansM": [
+          38
+        ],
+        "heightM": 2.3,
+        "tributaryWidthM": null,
+        "buildingStories": 3,
+        "buildingHeightM": 23.4,
+        "factRefs": [
+          "SRC-SPORT-2023-F1",
+          "SRC-SPORT-2023-F2",
+          "SRC-SPORT-2023-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-SPORT-2023-F1",
+          "statement": "三层钢框架训练馆，建筑总高约23.4m；大跨楼盖跨度约38m，钢桁架总高约2.3m，楼板厚120mm。",
+          "locator": "原文第1页 §1.1、图1.1-2"
+        },
+        {
+          "factId": "SRC-SPORT-2023-F2",
+          "statement": "原作者仅取单层大跨区域计算竖向振动：弦杆梁单元、腹杆斜杆，混凝土楼板平面内外刚度参与。",
+          "locator": "原文第2–3页 §1.2"
+        },
+        {
+          "factId": "SRC-SPORT-2023-F3",
+          "statement": "原文舒适度模型阻尼0.06，场地人群荷载0.12kN/m²；它们不是一般承载力荷载参数。",
+          "locator": "原文第3页 §1.2"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-SPORT-2023-P1",
+          "description": "38m×2.3m单榀楼盖桁架：显式节间、等效节点重力，计算静力挠度/轴力。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-SPORT-2023-P2",
+          "description": "弦杆连续梁与双向腹杆混合的平面楼盖桁架：保持原文梁/斜杆差异，题设连接及受荷节点。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-SPORT-2023-P3",
+          "description": "相邻两榀桁架与横梁形成裸空间楼盖片：榀距/横梁参数为作者设定，给节点质量后仅做线性模态。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "原文含楼板刚度；裸杆系删板后的周期不可与原文直接对比。榀距未在已读页面明确，必须标为题设。",
+        "3层总高23.4m不能当成每层高；2.3m为桁架高度。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "人致振动舒适度判定、活动人群荷载生成、组合楼板/壳作用"
+      ],
+      "dataConflicts": [],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": [
+        {
+          "localReviewName": "sports-1.png",
+          "sha256": "2a356f4c58234b2750042e70053a40d6cb756bee1e5682e6a4f620c3d296e3c1"
+        },
+        {
+          "localReviewName": "sports-2.png",
+          "sha256": "bbf77fa44854876d5e7e6718d80e42bb69e17d4c41654ddf15145342d0d03cdb"
+        },
+        {
+          "localReviewName": "sports-3.png",
+          "sha256": "9015dd828ace21274c190bb116f28be0736d4e18aba4cebbe91d6667b17d3f19"
+        }
+      ]
+    },
+    {
+      "sourceId": "SRC-CABLE-2010",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "hunan-xinxin-wind-cable-plant",
+      "title": "湖南新新线缆有限公司风电线缆项目可行性研究报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2011-04-19/59287507.PDF",
+      "publicationDate": "2010-12",
+      "authors": [
+        "中机国际工程设计研究院"
+      ],
+      "publisher": "企业原始可研／巨潮资讯披露2011-04-19",
+      "constructionStatus": "real proposed project documented by feasibility report; as-built status unverified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://static.cninfo.com.cn/finalpage/2011-04-19/59287507.PDF",
+          "locator": "封面、印刷52–55页 §6.4；PDF第53–56页",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "frame",
+        "spansM": [],
+        "heightM": 20.1,
+        "storyHeightsM": [
+          4.5,
+          3.9,
+          3.9,
+          3.9,
+          3.9
+        ],
+        "tributaryWidthM": null,
+        "officePlanM": [
+          96,
+          18
+        ],
+        "factorySpansM": [
+          24,
+          27,
+          18
+        ],
+        "factoryBaySpacingM": 9,
+        "factRefs": [
+          "SRC-CABLE-2010-F1",
+          "SRC-CABLE-2010-F2",
+          "SRC-CABLE-2010-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-CABLE-2010-F1",
+          "statement": "综合楼96×18m，5层；首层4.5m，其余3.9m，钢筋混凝土框架。",
+          "locator": "印刷52页 §6.4.4.2；PDF第53页"
+        },
+        {
+          "factId": "SRC-CABLE-2010-F2",
+          "statement": "宿舍45×18m，4层、各层3m；同属一个项目组，不能另计独立来源。",
+          "locator": "印刷52页 §6.4.4.3"
+        },
+        {
+          "factId": "SRC-CABLE-2010-F3",
+          "statement": "厂房有24m、27m、18m跨，主要柱距9m、另有6m；部分二层为4.5+3.6m、屋架下弦8.1m。",
+          "locator": "印刷53–54页 §6.4.2.2"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-CABLE-2010-P1",
+          "description": "五层综合楼局部裸RC框架：层高4.5+4×3.9m，18m宽内的柱网分割须标为题设。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-CABLE-2010-P2",
+          "description": "厂房24m屋架及9m柱距的屋面杆系：屋架节间、矢高、节点荷载全部显式补充。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-CABLE-2010-P3",
+          "description": "四层宿舍的局部裸RC框架：各层3m，与综合楼属于同项目内的不同实际子建筑。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "20.1m为5层层高相加所得模型高度；不当作原文建筑高度。综合楼与宿舍柱网未给，不能将18m直接认作单跨。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "可研工程经济、配筋、砌体填充、基础和消防设计"
+      ],
+      "dataConflicts": [
+        "厂房建筑段给240×204m，而结构段给204×204m；整体厂房长宽弃用。"
+      ],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": []
+    },
+    {
+      "sourceId": "SRC-SH-RC-2020",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "shanghai-mechanical-factory-office-reuse",
+      "title": "低烈度区典型房屋建筑和桥梁抗震加固案例：单层混凝土工业厂房",
+      "url": "https://zfcxjw.cq.gov.cn/zwgk_166/zfxxgkmls/zcwj/qtwj/202010/W020241104549131259218.pdf",
+      "publicationDate": "2020-09",
+      "authors": [
+        "重庆市住房和城乡建设委员会组织编写；多家设计院联合编制"
+      ],
+      "publisher": "重庆市住房和城乡建设委员会",
+      "constructionStatus": "design or project report; construction completion not independently verified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://zfcxjw.cq.gov.cn/zwgk_166/zfxxgkmls/zcwj/qtwj/202010/W020241104549131259218.pdf",
+          "locator": "印刷144–150页；PDF第148–154页",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "frame",
+        "spansM": [
+          18
+        ],
+        "heightM": 7.7,
+        "storyHeightsM": [
+          3.85,
+          3.85
+        ],
+        "tributaryWidthM": null,
+        "planLengthM": 60,
+        "factRefs": [
+          "SRC-SH-RC-2020-F1",
+          "SRC-SH-RC-2020-F2",
+          "SRC-SH-RC-2020-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-SH-RC-2020-F1",
+          "statement": "上海机械厂房改创业园办公楼，原单层主体7.7m，横向18m、纵向60m、双坡屋面。",
+          "locator": "印刷144页 §2.5.2(一)、图2.5.2-1；PDF第148页"
+        },
+        {
+          "factId": "SRC-SH-RC-2020-F2",
+          "statement": "改造增加3.85m结构层、新柱梁板，并以新增柱间支撑改善侧向刚度。",
+          "locator": "印刷144、149–150页"
+        },
+        {
+          "factId": "SRC-SH-RC-2020-F3",
+          "statement": "改造后表中结构高度7.680m，与工程概况7.700m略有差异。",
+          "locator": "印刷148页 表2.5.2-3"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-SH-RC-2020-P1",
+          "description": "原18m屋架与7.7m排架柱的裸杆系：屋架矢高/腹杆及柱脚按题面设定。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-SH-RC-2020-P2",
+          "description": "新增3.85m夹层的局部两层框架：柱位置与楼面梁参数明确给定，不假称原图完整复现。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-SH-RC-2020-P3",
+          "description": "新增柱间支撑的局部改造跨：在同一明确轴网比较给定截面及双向线弹性支撑传力。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "7.7m是概况主体高度，原剖面基顶至檐口约7.9m；题面应选定基准，不能混合标高。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "改造后抗震认证、混凝土开裂/损伤、碳纤维/粘钢加固本构"
+      ],
+      "dataConflicts": [
+        "建筑年代概况写80年代初，小结写70年代；年代不用于模型。原/改造后7.70与7.68m不得混用。"
+      ],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": [
+        {
+          "localReviewName": "rehab.pdf",
+          "sha256": "0edbf7cc8682bf021ff865d339f64f8f1a5e5e63d199b390ce8ea925711ade6f"
+        }
+      ],
+      "dateNote": "2020-09为原始报告封面日期；政府托管文件URL中的更新时间不代表案例工程建造时间。"
+    },
+    {
+      "sourceId": "SRC-CQ-SCHOOL1-2020",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "chongqing-1999-six-storey-school",
+      "title": "低烈度区典型房屋建筑和桥梁抗震加固案例：钢筋混凝土框架结构房屋·校舍1",
+      "url": "https://zfcxjw.cq.gov.cn/zwgk_166/zfxxgkmls/zcwj/qtwj/202010/W020241104549131259218.pdf",
+      "publicationDate": "2020-09",
+      "authors": [
+        "重庆市住房和城乡建设委员会组织编写；多家设计院联合编制"
+      ],
+      "publisher": "重庆市住房和城乡建设委员会",
+      "constructionStatus": "design or project report; construction completion not independently verified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://zfcxjw.cq.gov.cn/zwgk_166/zfxxgkmls/zcwj/qtwj/202010/W020241104549131259218.pdf",
+          "locator": "印刷30–38页；PDF第34–42页；图2.2.2-1目视复核",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "frame",
+        "spansM": [
+          9.6,
+          9.6,
+          9.45
+        ],
+        "heightM": 23.4,
+        "storyHeightsM": [
+          3.9,
+          3.9,
+          3.9,
+          3.9,
+          3.9,
+          3.9
+        ],
+        "tributaryWidthM": null,
+        "roofStairProjectionM": 3,
+        "factRefs": [
+          "SRC-CQ-SCHOOL1-2020-F1",
+          "SRC-CQ-SCHOOL1-2020-F2",
+          "SRC-CQ-SCHOOL1-2020-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-CQ-SCHOOL1-2020-F1",
+          "statement": "重庆1999年六层RC校舍，各层3.9m，T形平面中部有变形缝；基顶嵌固。",
+          "locator": "印刷30页 §2.2.1一(一)；PDF第34页"
+        },
+        {
+          "factId": "SRC-CQ-SCHOOL1-2020-F2",
+          "statement": "平面主翼相邻开间标注9.6、9.6、9.45m；中间有300mm缝。",
+          "locator": "印刷30页 图2.2.2-1（原文图号如此）"
+        },
+        {
+          "factId": "SRC-CQ-SCHOOL1-2020-F3",
+          "statement": "原横向单跨框架；梁柱原设计C30，屋顶楼梯间高出3m。",
+          "locator": "印刷30–32页及表2.2.1-2"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-CQ-SCHOOL1-2020-P1",
+          "description": "变形缝一侧的六层三开间纵向框架：保留9.6/9.6/9.45m及3.9m层高，节点截取范围给定。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-CQ-SCHOOL1-2020-P2",
+          "description": "与纵向不同的六层横向单跨框架：跨宽必须由清晰轴线或题设给定，不能用最宽外轮廓12.24m冒充跨度。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-CQ-SCHOOL1-2020-P3",
+          "description": "六层主体上部三层的局部纵向框架：沿同一9.6/9.6/9.45m开间截取，题面给截断端约束/等效作用；不把楼梯间尺寸误称已核实RC框架。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "9.6m等是建筑平面开间，具体梁柱轴线由题面理想化；23.4m为六层高度和，不是报告室外地坪至屋面23.7m或结构高24.2m。",
+        "屋顶楼梯间虽有3m高度事实，但其构件布置/材料未核实，本批不据此编造楼梯间RC框架。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "填充墙、预应力空心板、灌浆修复、完整加固鉴定"
+      ],
+      "dataConflicts": [],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": [
+        {
+          "localReviewName": "rehab.pdf",
+          "sha256": "0edbf7cc8682bf021ff865d339f64f8f1a5e5e63d199b390ce8ea925711ade6f"
+        }
+      ],
+      "dateNote": "2020-09为原始报告封面日期；政府托管文件URL中的更新时间不代表案例工程建造时间。"
+    },
+    {
+      "sourceId": "SRC-HILLSIDE-2020",
+      "kind": "real-project-report",
+      "realProjectEligible": true,
+      "projectGroup": "five-storey-hillside-unequal-base-frame",
+      "title": "不等高嵌固多层框架结构抗震性能变化规律的探讨",
+      "url": "http://www.sxjzty.cn/qikanfile/2020/22/018.pdf",
+      "publicationDate": "2020-11",
+      "authors": [
+        "刘庆海（济南中建建筑设计院有限公司）"
+      ],
+      "publisher": "山西建筑46(22):47–49",
+      "constructionStatus": "design or project report; construction completion not independently verified",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "http://www.sxjzty.cn/qikanfile/2020/22/018.pdf",
+          "locator": "印刷47–49页；PDF第1–3页；图1/2目视复核",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "frame",
+        "spansM": [
+          8.4,
+          8.4,
+          8.4
+        ],
+        "heightM": 19,
+        "storyHeightsM": [
+          3.8,
+          3.8,
+          3.8,
+          3.8,
+          3.8
+        ],
+        "tributaryWidthM": 8.4,
+        "longitudinalBaysM": [
+          8.4,
+          8.4,
+          8.4,
+          8.4,
+          8.4,
+          8.4,
+          8.4,
+          8.4
+        ],
+        "transverseBaysM": [
+          8.4,
+          2.1,
+          8.4
+        ],
+        "studiedBaseOffsetsM": [
+          0,
+          0.5,
+          1,
+          1.5,
+          2,
+          2.5,
+          3
+        ],
+        "factRefs": [
+          "SRC-HILLSIDE-2020-F1",
+          "SRC-HILLSIDE-2020-F2",
+          "SRC-HILLSIDE-2020-F3"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-HILLSIDE-2020-F1",
+          "statement": "文章明确以实际坡地工程为背景，地上5层，标准层3.8m。",
+          "locator": "印刷47页 §0–1；PDF第1页"
+        },
+        {
+          "factId": "SRC-HILLSIDE-2020-F2",
+          "statement": "标准层纵向8×8.4m；横向8.4+2.1+8.4m。",
+          "locator": "印刷47页 图1，已目视"
+        },
+        {
+          "factId": "SRC-HILLSIDE-2020-F3",
+          "statement": "研究等高基准及0.5/1/1.5/2/2.5/3m吊脚高差。",
+          "locator": "印刷47页 §1、图2"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-HILLSIDE-2020-P1",
+          "description": "纵向多跨五层裸框架：8.4m柱网与3.8m标准层，明确等高支承基准。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-HILLSIDE-2020-P2",
+          "description": "横向三跨五层框架：8.4+2.1+8.4m不等跨，题给质量与水平节点作用。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-HILLSIDE-2020-P3",
+          "description": "具有不同底柱净长的坡地支承框架：按图2选择高差，题面定义支点高程及短柱有效长度。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "19m是五层标准层之和；原图2还显示嵌固段，模型若删除嵌固段必须注明，不能复用原文周期。吊脚高差为研究方案参数，不是多个实建项目。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "原文规范地震组合、扭转比验收、边坡岩土相互作用"
+      ],
+      "dataConflicts": [],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": [
+        {
+          "localReviewName": "pipe-018.pdf",
+          "sha256": "65d5c5aa5ee4daf145ba141c35ecd3d0e966039efdec06a7e6c01ead08b21a79"
+        }
+      ],
+      "retrievalNote": "HTTPS网页工具访问失败；使用原始期刊域名HTTP链接与浏览器User-Agent下载，PyMuPDF逐页读取并目视检查图。下载件SHA-256见evidenceHashes。"
+    },
+    {
+      "sourceId": "SRC-PV-2023",
+      "kind": "engineering-example",
+      "realProjectEligible": false,
+      "projectGroup": "y-pv-rigid-support-worked-example",
+      "title": "应用Y-PV进行光伏结构设计算例—刚性支架",
+      "url": "https://www.yjk.cn/article/1869/",
+      "publicationDate": "2023-08-22",
+      "authors": [
+        "李焘"
+      ],
+      "publisher": "YJK 官方技术交流",
+      "constructionStatus": "official worked example; construction identity and completion not established",
+      "evidenceStatus": "primary-source-read",
+      "evidence": [
+        {
+          "url": "https://www.yjk.cn/article/1869/",
+          "locator": "报告第1页及平面图",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        },
+        {
+          "url": "https://dls-cdn.yjk.cn/image/20230822/1692683843/536167/image.png",
+          "locator": "报告第1页及平面图",
+          "readMethod": "原始正文/原始报告页面已读取；含图的数字仅在人工检查后录入"
+        }
+      ],
+      "geometryHint": {
+        "type": "pv",
+        "spansM": [
+          3.4,
+          3.4,
+          3.4,
+          3.4
+        ],
+        "heightM": null,
+        "tributaryWidthM": 2.6,
+        "factRefs": [
+          "SRC-PV-2023-F1",
+          "SRC-PV-2023-F2"
+        ]
+      },
+      "facts": [
+        {
+          "factId": "SRC-PV-2023-F1",
+          "statement": "Y-PV5.2.1操作演示中的某分布式光伏双桩双立柱刚性支架。",
+          "locator": "报告第1页开头"
+        },
+        {
+          "factId": "SRC-PV-2023-F2",
+          "statement": "平面4×3.4m纵向跨，两排间距2.6m。",
+          "locator": "报告第1页平面图，已目视"
+        }
+      ],
+      "subproblemProposals": [
+        {
+          "subproblemId": "SRC-PV-2023-P1",
+          "description": "单榀双柱支架的杆系截面，明确柱高/斜度及节点荷载。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-PV-2023-P2",
+          "description": "连续3.4m纵向支承梁及立柱的局部构架。",
+          "maxTaskVariants": 2
+        },
+        {
+          "subproblemId": "SRC-PV-2023-P3",
+          "description": "双排多跨空间刚性支架，显式双向轴力杆连接及节点质量。",
+          "maxTaskVariants": 2
+        }
+      ],
+      "maxCases": 6,
+      "authoredAssumptions": [
+        "题面必须给定E、G、密度及A/Iy/Iz/J，不能由钢号或混凝土强度等级猜测；未逐项核实的截面为出题者设定。",
+        "题面必须明确节点坐标、连接、约束及荷载/质量的归属；截取子结构的边界属于出题者理想化。",
+        "线性动力题必须显式给定节点质量、阻尼和激励；原工程周期/舒适度/验算结论不能作为新模型真值。",
+        "不能声称已建项目；柱高、坡度、荷载在本登记已读页面未核实的部分须另列题设。"
+      ],
+      "excludedEffects": [
+        "材料或几何非线性、屈曲、承载力及规范合规判断",
+        "楼板/墙/壳、地基土和桩基、节点实体连接",
+        "受拉单向杆、索、预应力及施工阶段模拟",
+        "光伏组件壳、风洞/气动弹性、单向拉索、桩土"
+      ],
+      "dataConflicts": [],
+      "reuseNote": "仅转述可核对的工程事实并保留出处；未发现开放许可，不复制原文大段、图片、图纸或完整计算模型。原文版权归原权利人。",
+      "evidenceHashes": [
+        {
+          "localReviewName": "pv-first.png",
+          "sha256": "834e3f14cf5e4f559c5f0d596fca400ce184c31f63a5c9ba2d3fe410edee292b"
+        }
+      ]
+    }
+  ],
+  "deferredSources": [
+    {
+      "sourceId": "RESERVE-CQ-SCHOOL2-2020",
+      "url": "https://zfcxjw.cq.gov.cn/zwgk_166/zfxxgkmls/zcwj/qtwj/202010/W020241104549131259218.pdf",
+      "locator": "印刷39–47页；PDF43–51页",
+      "reason": "4F/16.8m表与概况22.8m、后续5F/23.1m并存；可用原平面6m纵向轴网及500×800柱截面，但本批先不计入以免混用高度。"
+    },
+    {
+      "sourceId": "RESERVE-NANJING-TRUSS-2026",
+      "url": "https://jskjzz.cbpt.cnki.net/portal/journal/portal/client/paper/2f1113b2a6e46a82c24b58e9b2092b29",
+      "locator": "出版社摘要",
+      "reason": "南京芯片之城三期01-19地块2#厂房屋盖跨度36/43.2m可核验；全文未获取、缺少三类子结构细节，暂不计数量。"
+    }
+  ]
+}

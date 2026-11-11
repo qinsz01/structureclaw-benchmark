@@ -1,0 +1,473 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "STD-056",
+  "modelId": "M-STD-056",
+  "family": "standard_workflow",
+  "language": "英文",
+  "locale": "en",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "完整文字任务 + 随题分析属性表（待编制）",
+    "task.scenario": "跨度24m、高12m，屋面36kN/m，右柱顶向下98kN及X向10kN；完整属性按公共契约随题给出。 屋面36kN/m已经折算；吊车在右柱顶施加两分量，原1.5kN/m²只作来源说明。",
+    "task.modelingFocus": "吊车等效荷载方向与屋面分项",
+    "task.expectedOutput": "左右柱顶位移、屋面跨中位移、柱脚反力及右柱端弯矩。",
+    "task.gradingFocus": "吊车等效荷载方向与屋面分项；指定位置/分量对照数值真值，输出文字与结构化结果保持符号、单位和工况一致。",
+    "task.prerequisite": "基础工具；完整题面、参数/单位契约与真值待验证",
+    "model.topologyKey": "平面单层单跨重型厂房框架",
+    "model.boundaryKey": "全部柱脚固定",
+    "model.loadKey": "屋面折算线载加右柱顶竖向/水平设备力",
+    "model.propertyKey": "单钢材料；梁柱分组截面",
+    "engine.analysisContract": "保留题定几何、材料截面、边界和荷载；采用一阶线弹性静力、自重关闭。按明示全局/局部轴、字段单位及工况/组合计算；不新增刚性楼板、未声明刚臂或规范默认组合；结果位置/分量与原题一致。",
+    "engine.executionRequirement": "拟要求真实 OpenSees 求解，保存输入与原始结果的对应关系；解析式/独立矩阵解用于校核，不能替代规定引擎执行证据。",
+    "engine.requiredEvidence": "拟保存（尚未生成）：OpenSees 版本、可运行模型/脚本、节点构件和荷载表、实际计算日志、原始结果与工况索引、平衡/独立解校核记录。",
+    "engine.adapterGap": "屋面线载与吊车集中力分别入模，不得重复施加来源面载。 当前无据认定接口不支持；需实际能力测试后确定，不将未验证能力记为模型失败。",
+    "engine.truthPlan": "拟建立独立审定的 OpenSees 模型及同版本/同设置参考结果；独立框架解；按36kN/m及98/10kN分别复核合力和总力矩。 参考值尚未生成。 所有题定输出均须覆盖，校核实现不复用被测转换链路。"
+  },
+  "modelStates": [
+    "model-state-1.json"
+  ],
+  "attachments": [
+    "input-data.json",
+    "output-requests.json",
+    "analysis-conventions.txt",
+    "input-decisions.txt"
+  ],
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Required solver: OpenSees.\nUse OpenSees to analyze a single-bay industrial frame with span 24 m, roof height 12 m and both column bases fixed. Case D applies global downward 36 kN/m over the roof and one crane-equivalent nodal force at the right column top with Fx = +10 kN and Fz = -98 kN. The 36 kN/m line load is already converted from a 1.5 kN/m² source roof pressure over 24 m tributary width. Report ux, uz and ry at both column tops and at the connected roof midpoint (x = 12 m, z = 12 m), Fx, Fz and My at both bases, and M2 at both ends of the right column. Use the full properties and member directions in the public appendix.\n\nUse all public appendices. Report the complete requested numerical table and the required summaries.",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-data.json",
+        "output-requests.json",
+        "analysis-conventions.txt",
+        "input-decisions.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": []
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "out-case-D-node-roof-n0-ux",
+      "description": "case-D-node-roof-n0-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n0-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-roof-n0-uz",
+      "description": "case-D-node-roof-n0-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n0-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-roof-n0-ry",
+      "description": "case-D-node-roof-n0-ry",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n0-ry"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-roof-n1-ux",
+      "description": "case-D-node-roof-n1-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n1-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-roof-n1-uz",
+      "description": "case-D-node-roof-n1-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n1-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-roof-n1-ry",
+      "description": "case-D-node-roof-n1-ry",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n1-ry"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-roof-n2-ux",
+      "description": "case-D-node-roof-n2-ux",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n2-ux"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-roof-n2-uz",
+      "description": "case-D-node-roof-n2-uz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n2-uz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-roof-n2-ry",
+      "description": "case-D-node-roof-n2-ry",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-roof-n2-ry"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-L-Fx",
+      "description": "case-D-node-base-L-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-L-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-L-Fz",
+      "description": "case-D-node-base-L-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-L-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-L-My",
+      "description": "case-D-node-base-L-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-L-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-R-Fx",
+      "description": "case-D-node-base-R-Fx",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-R-Fx"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-R-Fz",
+      "description": "case-D-node-base-R-Fz",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-R-Fz"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-node-base-R-My",
+      "description": "case-D-node-base-R-My",
+      "state": 1,
+      "quantityIds": [
+        "case-D-node-base-R-My"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-column-R-s0-right-M2",
+      "description": "case-D-member-column-R-s0-right-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-column-R-s0-right-M2"
+      ],
+      "kind": "numerical"
+    },
+    {
+      "id": "out-case-D-member-column-R-s12-left-M2",
+      "description": "case-D-member-column-R-s12-left-M2",
+      "state": 1,
+      "quantityIds": [
+        "case-D-member-column-R-s12-left-M2"
+      ],
+      "kind": "numerical"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        6
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7
+      ],
+      "targets": [
+        "output:out-case-D-node-roof-n0-ux",
+        "output:out-case-D-node-roof-n0-uz",
+        "output:out-case-D-node-roof-n0-ry",
+        "output:out-case-D-node-roof-n1-ux",
+        "output:out-case-D-node-roof-n1-uz",
+        "output:out-case-D-node-roof-n1-ry",
+        "output:out-case-D-node-roof-n2-ux",
+        "output:out-case-D-node-roof-n2-uz",
+        "output:out-case-D-node-roof-n2-ry",
+        "output:out-case-D-node-base-L-Fx",
+        "output:out-case-D-node-base-L-Fz",
+        "output:out-case-D-node-base-L-My",
+        "output:out-case-D-node-base-R-Fx",
+        "output:out-case-D-node-base-R-Fz",
+        "output:out-case-D-node-base-R-My",
+        "output:out-case-D-member-column-R-s0-right-M2",
+        "output:out-case-D-member-column-R-s12-left-M2",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        8,
+        9
+      ],
+      "targets": [
+        "output:out-case-D-node-roof-n0-ux",
+        "output:out-case-D-node-roof-n0-uz",
+        "output:out-case-D-node-roof-n0-ry",
+        "output:out-case-D-node-roof-n1-ux",
+        "output:out-case-D-node-roof-n1-uz",
+        "output:out-case-D-node-roof-n1-ry",
+        "output:out-case-D-node-roof-n2-ux",
+        "output:out-case-D-node-roof-n2-uz",
+        "output:out-case-D-node-roof-n2-ry",
+        "output:out-case-D-node-base-L-Fx",
+        "output:out-case-D-node-base-L-Fz",
+        "output:out-case-D-node-base-L-My",
+        "output:out-case-D-node-base-R-Fx",
+        "output:out-case-D-node-base-R-Fz",
+        "output:out-case-D-node-base-R-My",
+        "output:out-case-D-member-column-R-s0-right-M2",
+        "output:out-case-D-member-column-R-s12-left-M2",
+        "attachment:output-requests.json",
+        "gate:signed-output-completeness"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        10,
+        11
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        12
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        14
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        15,
+        16
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "targets": [
+        "turn:t1",
+        "attachment:input-data.json",
+        "attachment:analysis-conventions.txt",
+        "gate:model-fidelity"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        22,
+        23
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        24
+      ],
+      "targets": [
+        "gate:native-execution"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        25,
+        26,
+        27
+      ],
+      "targets": [
+        "gate:adapter-case-acceptance",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "targets": [
+        "gate:independent-reference"
+      ],
+      "notes": "Authored evidence mapping only; executable and independent acceptance gates remain pending."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending"
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending"
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending"
+    },
+    {
+      "id": "adapter-case-acceptance",
+      "status": "pending"
+    },
+    {
+      "id": "model-fidelity",
+      "status": "pending"
+    },
+    {
+      "id": "signed-output-completeness",
+      "status": "pending"
+    }
+  ],
+  "authoringNotes": [
+    "Missing source material/section appendix completed with explicit solid-rectangle steel properties; this is an author decision, not a recovered source value or a numerical reference.",
+    "The unspecified heavy-frame sections are frozen as beam B1 = 0.40 m wide by 1.20 m deep and column C1 = 0.60 m by 0.80 m. The public section properties define the physical stiffness; these values are author-completed inputs.",
+    "Only the converted 36 kN/m roof load enters the model. Its two 12 m segments share a connected midpoint, and the 98/10 kN nodal force acts only at roof-n2."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "caseId": "P30-MM-003",
+  "turnId": "t1",
+  "engine": "OpenSees",
+  "analysis": "static",
+  "instruction": "从所附图纸重建结构并使用 OpenSees 实际分析；必要缺项或冲突先澄清。报告带符号、单位及工况/组合的下列结果，并附一致的模型/结果图：\n- 顶排x=8 m节点U2的全局Uz\n- 中间弦首杆MC0的轴力（受拉为正）\n\n交付方式以delivery.md为准。",
+  "requests": [
+    {
+      "id": "D-U2-uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "U2"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "D-MC0-N",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "MC0",
+        "positionM": 2.0,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN"
+    }
+  ],
+  "reportIds": [
+    "D-MC0-N",
+    "D-U2-uz"
+  ],
+  "derived": [],
+  "attachments": [
+    "drawing.png"
+  ]
+}

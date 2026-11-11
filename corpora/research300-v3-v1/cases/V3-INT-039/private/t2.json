@@ -1,0 +1,824 @@
+{
+  "model": {
+    "schema_version": "2.2.0",
+    "unit_system": "SI",
+    "coordinate_system": {
+      "dimension": "2d",
+      "plane": "xz",
+      "semantics": "global-z-up",
+      "version": 1,
+      "dof_order": [
+        "ux",
+        "uy",
+        "uz",
+        "rx",
+        "ry",
+        "rz"
+      ]
+    },
+    "nodes": [
+      {
+        "id": "J001",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "J002",
+        "x": 5.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "J003",
+        "x": 10.0,
+        "y": 0.0,
+        "z": 0.0,
+        "restraints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "id": "J004",
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "mass": 3.2267346636713627
+      },
+      {
+        "id": "J005",
+        "x": 5.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "mass": 6.655963271521004
+      },
+      {
+        "id": "J006",
+        "x": 10.0,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "mass": 4.479470695789107
+      },
+      {
+        "id": "J007",
+        "x": 2.5,
+        "y": 0.0,
+        "z": 3.2,
+        "restraints": [
+          false,
+          true,
+          false,
+          true,
+          false,
+          true
+        ],
+        "mass": 4.020037815868582
+      }
+    ],
+    "elements": [
+      {
+        "id": "M001",
+        "type": "column",
+        "nodes": [
+          "J001",
+          "J004"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "M002",
+        "type": "column",
+        "nodes": [
+          "J002",
+          "J005"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "M003",
+        "type": "column",
+        "nodes": [
+          "J003",
+          "J006"
+        ],
+        "material": "S",
+        "section": "C"
+      },
+      {
+        "id": "M004",
+        "type": "beam",
+        "nodes": [
+          "J004",
+          "J007"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "M005",
+        "type": "beam",
+        "nodes": [
+          "J007",
+          "J005"
+        ],
+        "material": "S",
+        "section": "B"
+      },
+      {
+        "id": "M006",
+        "type": "truss",
+        "nodes": [
+          "J001",
+          "J007"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "M007",
+        "type": "truss",
+        "nodes": [
+          "J002",
+          "J007"
+        ],
+        "material": "S",
+        "section": "A"
+      },
+      {
+        "id": "M008",
+        "type": "beam",
+        "nodes": [
+          "J005",
+          "J006"
+        ],
+        "material": "S",
+        "section": "B"
+      }
+    ],
+    "materials": [
+      {
+        "id": "S",
+        "name": "Explicit elastic steel",
+        "type": "steel",
+        "E": 206000.0,
+        "G": 79230.76923076923,
+        "nu": 0.3,
+        "rho": 7850.0
+      }
+    ],
+    "sections": [
+      {
+        "id": "B",
+        "name": "B",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 220.0,
+          "H": 280.0
+        },
+        "properties": {
+          "A": 0.06160000000000001,
+          "Iy": 0.0004024533333333335,
+          "Iz": 0.00024845333333333336,
+          "J": 0.000517499558479106
+        }
+      },
+      {
+        "id": "C",
+        "name": "C",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 295.0,
+          "H": 360.0
+        },
+        "properties": {
+          "A": 0.10619999999999999,
+          "Iy": 0.0011469599999999998,
+          "Iz": 0.0007701712499999999,
+          "J": 0.0015500404859863674
+        }
+      },
+      {
+        "id": "A",
+        "name": "A",
+        "type": "custom",
+        "shape": {
+          "kind": "rectangular",
+          "B": 90.0,
+          "H": 80.0
+        },
+        "properties": {
+          "A": 0.0072,
+          "Iy": 3.8400000000000005e-06,
+          "Iz": 4.86e-06,
+          "J": 7.205894711172076e-06
+        }
+      }
+    ],
+    "load_cases": [
+      {
+        "id": "D",
+        "type": "dead",
+        "loads": [
+          {
+            "id": "D-1",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M001",
+            "wz": -8.175509905499998
+          },
+          {
+            "id": "D-2",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M002",
+            "wz": -8.175509905499998
+          },
+          {
+            "id": "D-3",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M003",
+            "wz": -8.175509905499998
+          },
+          {
+            "id": "D-4",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M004",
+            "wz": -4.742103674
+          },
+          {
+            "id": "D-5",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M005",
+            "wz": -4.742103674
+          },
+          {
+            "id": "D-6",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J001",
+            "fz": -1.1253902828010416
+          },
+          {
+            "id": "D-7",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fz": -1.1253902828010416
+          },
+          {
+            "id": "D-8",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J002",
+            "fz": -1.1253902828010416
+          },
+          {
+            "id": "D-9",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fz": -1.1253902828010416
+          },
+          {
+            "id": "D-10",
+            "reference_frame": "global",
+            "type": "distributed",
+            "element": "M008",
+            "wz": -4.742103674
+          },
+          {
+            "id": "D-11",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J004",
+            "fz": -5.2
+          },
+          {
+            "id": "D-12",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fz": -5.2
+          },
+          {
+            "id": "D-13",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fz": -4.79232
+          },
+          {
+            "id": "D-14",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fz": -2.69568
+          },
+          {
+            "id": "D-15",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fz": -0.45472000000000035
+          },
+          {
+            "id": "D-16",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fz": -2.79328
+          },
+          {
+            "id": "D-17",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fz": -11.6
+          },
+          {
+            "id": "D-18",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J006",
+            "fz": -11.6
+          }
+        ]
+      },
+      {
+        "id": "Q",
+        "type": "live",
+        "loads": [
+          {
+            "id": "Q-1",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J004",
+            "fz": -21.24289156626506
+          },
+          {
+            "id": "Q-2",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fz": -21.24289156626506
+          },
+          {
+            "id": "Q-3",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fz": -21.24289156626506
+          },
+          {
+            "id": "Q-4",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fz": -21.24289156626506
+          },
+          {
+            "id": "Q-5",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fz": -15.294881927710843
+          },
+          {
+            "id": "Q-6",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J006",
+            "fz": -1.699431325301205
+          },
+          {
+            "id": "Q-7",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fz": -12.948048192771086
+          },
+          {
+            "id": "Q-8",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J006",
+            "fz": -19.422072289156628
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "type": "wind",
+        "loads": [
+          {
+            "id": "W-1",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J004",
+            "fx": -0.0,
+            "fz": 2.2
+          },
+          {
+            "id": "W-2",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fx": -0.0,
+            "fz": 2.2
+          },
+          {
+            "id": "W-3",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fx": -0.0,
+            "fz": 2.02752
+          },
+          {
+            "id": "W-4",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fx": -0.0,
+            "fz": 1.14048
+          },
+          {
+            "id": "W-5",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fx": -0.0,
+            "fz": 0.25088000000000027
+          },
+          {
+            "id": "W-6",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fx": -0.0,
+            "fz": 1.5411200000000005
+          },
+          {
+            "id": "W-7",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fx": -0.0,
+            "fz": 6.400000000000001
+          },
+          {
+            "id": "W-8",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J006",
+            "fx": -0.0,
+            "fz": 6.400000000000001
+          },
+          {
+            "id": "W-9",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J004",
+            "fx": 2.5
+          },
+          {
+            "id": "W-10",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J007",
+            "fx": 2.5
+          },
+          {
+            "id": "W-11",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J005",
+            "fx": 2.5
+          },
+          {
+            "id": "W-12",
+            "reference_frame": "global",
+            "type": "nodal",
+            "node": "J006",
+            "fx": 2.5
+          }
+        ]
+      }
+    ],
+    "load_combinations": [
+      {
+        "id": "SERVICE",
+        "factors": {
+          "D": 1.0,
+          "Q": 1.0
+        }
+      },
+      {
+        "id": "WIND",
+        "factors": {
+          "D": 1.0,
+          "Q": 0.5,
+          "W": 1.0
+        }
+      },
+      {
+        "id": "REVERSE",
+        "factors": {
+          "D": 1.0,
+          "Q": 0.25,
+          "W": -1.0
+        }
+      }
+    ],
+    "analysis_control": {
+      "self_weight": false,
+      "rigid_floor": false,
+      "p_delta": false,
+      "rigid_offsets": false,
+      "construction_stage": false,
+      "mass_source": "nodal",
+      "mass_directions": [
+        "x"
+      ]
+    },
+    "metadata": {}
+  },
+  "kind": "modal",
+  "engine": "OpenSees",
+  "requests": [
+    {
+      "id": "mode-1-period",
+      "path": [
+        "modes",
+        0,
+        "period"
+      ],
+      "unit": "s",
+      "value": 0.042921551074438444,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-1-frequency",
+      "path": [
+        "modes",
+        0,
+        "frequency"
+      ],
+      "unit": "Hz",
+      "value": 23.298319258446867,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-1-effectiveMass",
+      "path": [
+        "modes",
+        0,
+        "effectiveMass"
+      ],
+      "unit": "tonne",
+      "value": 18.374408975667674,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-period",
+      "path": [
+        "modes",
+        1,
+        "period"
+      ],
+      "unit": "s",
+      "value": 0.00823925205315926,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-frequency",
+      "path": [
+        "modes",
+        1,
+        "frequency"
+      ],
+      "unit": "Hz",
+      "value": 121.37024010772431,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    },
+    {
+      "id": "mode-2-effectiveMass",
+      "path": [
+        "modes",
+        1,
+        "effectiveMass"
+      ],
+      "unit": "tonne",
+      "value": 0.007112260684791974,
+      "tolerance": {
+        "absolute": 1e-08,
+        "relative": 1e-06
+      }
+    }
+  ],
+  "derived": [],
+  "parameters": {
+    "analysisType": "modal",
+    "numModes": 2,
+    "direction": "x"
+  },
+  "requireShapes": true,
+  "clarificationFields": [],
+  "referenceChecks": [
+    {
+      "method": "independent-condensed-K-M",
+      "totalMass": 18.382206446850056,
+      "effectiveMassSum": 18.382206446850052,
+      "firstPeriods": [
+        0.042921551074438444,
+        0.00823925205315926
+      ]
+    },
+    {
+      "method": "gravity-derived-explicit-X-nodal-mass",
+      "fractionQ": 0.35,
+      "totalParticipatingMassTonne": 18.382206446850056,
+      "massFrom": "D + fractionQ*Q, divided by g; support-X-fixed masses omitted; no density-derived automatic mass."
+    }
+  ],
+  "modalTruth": {
+    "shape": {
+      "J001": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "J002": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "J003": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "J004": [
+        -0.22865718956180112,
+        -0.28994133536508193,
+        0.30769273119207524,
+        -0.28086637278433735
+      ],
+      "J005": [
+        -0.2343973808271559,
+        -0.004869452891494134,
+        -0.2856157440069718,
+        -0.11704279869687939
+      ],
+      "J006": [
+        -0.23998309248224226,
+        0.36324910027519214,
+        0.1824505778440641,
+        0.020264607732760932
+      ],
+      "J007": [
+        -0.22725767394271928,
+        -0.18495429577722125,
+        0.024569309039702295,
+        0.4028598838995232
+      ]
+    },
+    "masses": {
+      "J001": 0,
+      "J002": 0,
+      "J003": 0,
+      "J004": 3.2267346636713627,
+      "J005": 6.655963271521004,
+      "J006": 4.479470695789107,
+      "J007": 4.020037815868582
+    }
+  },
+  "reportIds": [
+    "mode-1-period",
+    "mode-1-frequency",
+    "mode-1-effectiveMass",
+    "mode-2-period",
+    "mode-2-frequency",
+    "mode-2-effectiveMass"
+  ],
+  "loadRules": {
+    "gravityMPerS2": 9.80665,
+    "roofJointRule": "At each issued X/Y grid location take the highest issued joint; use adjacent joints on each Y line as strip bearings.",
+    "loadSharing": "One-way strip resultant to its two bounding roof joints by integrating linear distance weights. Preserve force and first moment. This is an issued lumped deck model, not a plate/shell analysis.",
+    "areaBasis": {
+      "D": "horizontal projection",
+      "Q": "horizontal projection",
+      "W": "actual surface, pressure in the upward local normal"
+    },
+    "stripWidthM": 3.2,
+    "planEdgesY": null,
+    "zones": [
+      {
+        "id": "WEST",
+        "startX": 0.0,
+        "endX": 4.3,
+        "D": 1.3,
+        "Q": 3.4,
+        "W": 0.55
+      },
+      {
+        "id": "EAST",
+        "startX": 4.3,
+        "endX": 10.0,
+        "D": 1.45,
+        "Q": 4.8,
+        "W": 0.8
+      }
+    ],
+    "horizontalAction": {
+      "fxKN": 10,
+      "fyKN": 0.0,
+      "placement": "Equally over roof joints at the largest issued Z."
+    },
+    "memberGravity": "Uniform explicit global -Z line load rho*A*g/1000 on beams/columns; half rho*A*L*g/1000 nodal loads at each axial-bar end. Automatic self_weight stays false.",
+    "liveRevision": {
+      "splitX": 6.0,
+      "westEastPressureRatio": 2.1,
+      "totalLiveKN": 134.336,
+      "scope": "Only Q is redistributed; preserve original D/W zones, properties and gravity."
+    }
+  },
+  "massRule": {
+    "fractionQ": 0.35,
+    "gravityMPerS2": 9.80665,
+    "directions": [
+      "x"
+    ],
+    "supportMassPolicy": "omit X-fixed supports"
+  }
+}

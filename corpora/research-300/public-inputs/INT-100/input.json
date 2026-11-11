@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "edition": "current",
+  "caseId": "INT-100",
+  "baseSourceHash": "ccf6ea936bab564ff5e26e51567f1dbb24f86f82636819e27e18e596e3b63d2e",
+  "turns": [
+    {
+      "id": "t1",
+      "instruction": "Build the 5 m fixed-base spatial column with a real rigidly connected 1 m beam extending along global +X at its top. The arm tip carries global Fy=+10 kN and Fz=-200 kN. A connected column node at Z=2.5 m separately carries global Fx=+16 kN. Report armTip Ux/Uy/Uz and base global support My/Mz for D.\nUse the stated OpenSees engine for every computable changed state. First-order linear elastic analysis; self-weight, P-delta, rigid diaphragms, rigid offsets and construction stages are off. Preserve all fields not explicitly changed. Report every requested signed value with node/member, global direction, unit, case/combination, turn, model state and traceable . Rz denotes the vertical support reaction Fz. Retain original cases and evaluate every listed combination separately. Resolve essential missing or contradictory inputs before reporting new numerical results.",
+      "attachments": [
+        {
+          "name": "input.md",
+          "source": "edition",
+          "path": "input.md",
+          "sha256": "04fbe38c50a7ee051ba71a240529ef7cfabca20a857f91c88377381ede1499a4"
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "instruction": "Change only the arm geometry from 1 m along +X to 1 m along +Y: armTip becomes (0,1,5) m. Retain the global arm-tip load vector Fy=+10, Fz=-200 kN and the column-midpoint +X 16 kN. Recompute armTip Ux/Uy/Uz and base My/Mz.",
+      "attachments": []
+    },
+    {
+      "id": "t3",
+      "instruction": "Undo only the preceding arm geometry change, restoring armTip=(1,0,5) m and the original arm orientation. Keep both force vectors and column height unchanged. Recompute armTip Ux/Uy/Uz and base My/Mz.",
+      "attachments": []
+    }
+  ]
+}

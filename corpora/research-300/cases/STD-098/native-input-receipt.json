@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "id": "STD-098",
+  "inputHashes": {
+    "contract.json": "508f79369f5a3cee09bda31c4e3314fc6038dd41ed55f8e573bbb7cb0223e4c6",
+    "reference-requests.json": "0ff9b7944ac0611a682b216714ff559becb6d288f8b4b2c96e88ba771623f2fa",
+    "model-state-1.json": "14c9de2cec8f5440fae4bf46ee678432c59bf053e7a373c28eae2fc7307428e3"
+  },
+  "sourceHash": "bfaaeee5eae8d062c43ba0b1baa0f01b779801a54b6f6e86fc3f1b04cf27b731",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "analysis-conventions.txt",
+        "sha256": "b94b666f7d23ced7bfdaee28636f02bd297cc602d942a69cd6734c8713f30704"
+      },
+      {
+        "path": "appendix-decisions.txt",
+        "sha256": "29d455ce96a5266295e93641a26995fee44e9fc955c13aff3a743880faafbf62"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "508f79369f5a3cee09bda31c4e3314fc6038dd41ed55f8e573bbb7cb0223e4c6"
+      },
+      {
+        "path": "input-data.json",
+        "sha256": "a03f05b02722b899c4838a810b206c20b06917f5590b6141a2b29e89472990f7"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "14c9de2cec8f5440fae4bf46ee678432c59bf053e7a373c28eae2fc7307428e3"
+      },
+      {
+        "path": "output-requests.json",
+        "sha256": "7bd21daff017c388638884b4acd6f41beebd6700deb96d37e51037cba41a05f1"
+      },
+      {
+        "path": "output-scope.json",
+        "sha256": "55af7134b52566ef34eca6ca483fdeffed413395600e3c2e9c63e7ec9afad680"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "728b0e2ca231e17c6ecfad23c2a9b21d784ae40aabc55978ab717f796b48f111"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "0ff9b7944ac0611a682b216714ff559becb6d288f8b4b2c96e88ba771623f2fa"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "3d",
+          "plane": null,
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "base",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "top",
+            "x": 0,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "column",
+            "type": "column",
+            "nodes": [
+              "base",
+              "top"
+            ],
+            "material": "M1",
+            "section": "C1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "C1",
+            "name": "Unequal-flange welded H",
+            "type": "custom",
+            "shape": {
+              "kind": "custom",
+              "description": "Welded H with unequal centered flange widths and thicknesses; no fillets",
+              "total_depth_mm": 400,
+              "bottom_flange_width_mm": 300,
+              "bottom_flange_thickness_mm": 20,
+              "top_flange_width_mm": 200,
+              "top_flange_thickness_mm": 15,
+              "web_thickness_mm": 12,
+              "centroid_from_bottom_mm": 158.7780269058296
+            },
+            "properties": {
+              "A": 0.01338,
+              "Iy": 0.0003539435207399103,
+              "Iz": 5.5052559999999986e-05,
+              "J": 1.23524e-06
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-1",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "top",
+                "fx": 20,
+                "fy": 15,
+                "fz": -400
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "column": [
+              1,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

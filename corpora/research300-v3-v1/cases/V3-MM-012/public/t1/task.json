@@ -1,0 +1,104 @@
+{
+  "caseId": "V3-MM-012",
+  "turnId": "t1",
+  "family": "MM",
+  "title": "MM-089商业原生模型重组",
+  "designLevel": "L2",
+  "engine": "PKPM",
+  "analysis": "static",
+  "instruction": "按本轮签发资料建立裸框架，使用指定商业引擎计算所列带符号响应。结构化交付即可。",
+  "requests": [
+    {
+      "id": "case-D-n3-2-2-ux",
+      "location": {
+        "kind": "node",
+        "id": "n3-2-2"
+      },
+      "component": "ux",
+      "unit": "m",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    },
+    {
+      "id": "case-D-n3-2-2-uy",
+      "location": {
+        "kind": "node",
+        "id": "n3-2-2"
+      },
+      "component": "uy",
+      "unit": "m",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    },
+    {
+      "id": "case-D-c1-1-1-N-s0-right",
+      "location": {
+        "kind": "member",
+        "id": "c1-1-1",
+        "positionM": 0,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    },
+    {
+      "id": "case-D-c2-1-1-N-s0-right",
+      "location": {
+        "kind": "member",
+        "id": "c2-1-1",
+        "positionM": 0,
+        "side": "right"
+      },
+      "component": "N",
+      "unit": "kN",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "id": "signed-response-governor",
+      "operation": "max_abs",
+      "operands": [
+        "case-D-c1-1-1-N-s0-right",
+        "case-D-c2-1-1-N-s0-right"
+      ],
+      "unit": "kN",
+      "tiePolicy": "any"
+    }
+  ],
+  "reportIds": [
+    "case-D-n3-2-2-ux",
+    "case-D-n3-2-2-uy",
+    "case-D-c1-1-1-N-s0-right",
+    "case-D-c2-1-1-N-s0-right"
+  ],
+  "requireShapes": false,
+  "sourceId": null,
+  "attachments": [
+    "analysis-control.json",
+    "combinations.json",
+    "geometry-nodes-01.png",
+    "geometry-nodes-02.png",
+    "geometry-overview.png",
+    "geometry-stories-01.png",
+    "loads.json",
+    "materials.csv",
+    "materials.json",
+    "members.csv",
+    "metadata.json",
+    "model-convention.json",
+    "sections.json",
+    "tool-contract.md"
+  ]
+}

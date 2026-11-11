@@ -1,0 +1,1293 @@
+{
+  "schemaVersion": 1,
+  "evaluationProfile": "engineering-v2.3",
+  "id": "INT-027",
+  "modelId": "M-INT-027",
+  "family": "interactive_robustness",
+  "language": "中文",
+  "locale": "zh",
+  "plannedEngine": "OpenSees",
+  "sourcePlan": {
+    "task.inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+    "task.scenario": "T1所用独立模型为M-INT-027（弦腹杆不同面积的Pratt桁架）。T1建立M-INT-027；T2每个内部上弦节点的10kN替换为15kN。",
+    "task.modelingFocus": "按给定连接而非名称补猜；截面分组的独立状态保持",
+    "task.expectedOutput": "x=6m上弦的Ux/Uz，左支承反力及附表指定首根下弦/底边杆轴力；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+    "task.gradingFocus": "仅四处更新；端部上下弦不加载；杆件连接、支座及属性保持；上弦A、下弦1.4A、腹杆0.7A的分组保持。",
+    "task.prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+    "model.topologyKey": "桁架；跨度15m、高2.5m、5节间",
+    "model.boundaryKey": "左下节点铰，右下节点水平自由竖向滚支",
+    "model.loadKey": "跨度15m、高2.5m、5节间，四个内部上弦节点各10kN，按旧题连接表",
+    "model.propertyKey": "全部上弦杆截面积A，上下弦中的下弦为1.4A，腹杆为0.7A，材料E相同",
+    "engine.analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+    "engine.executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+    "engine.requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：x=6m上弦的Ux/Uz，左支承反力及附表指定首根下弦/底边杆轴力。",
+    "engine.adapterGap": "未逐题验收；前置检查项：基础工具，并核对荷载组定向更新后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+    "engine.truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。"
+  },
+  "sourceMetadata": {
+    "requirements": [
+      {
+        "id": 1,
+        "sourceField": "task.inputForm",
+        "sourceRange": [
+          0,
+          19
+        ],
+        "candidateFeatures": [
+          "interaction.clarification"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 2,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          0,
+          36
+        ],
+        "candidateFeatures": [
+          "elastic.truss-and-frame-brace",
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 3,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          36,
+          50
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 4,
+        "sourceField": "task.scenario",
+        "sourceRange": [
+          50,
+          73
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "interaction.edit",
+              "kind": "required",
+              "term": "替换",
+              "range": [
+                15,
+                17
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 5,
+        "sourceField": "task.modelingFocus",
+        "sourceRange": [
+          0,
+          12
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 6,
+        "sourceField": "task.modelingFocus",
+        "sourceRange": [
+          12,
+          23
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates",
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "截面",
+              "range": [
+                0,
+                2
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 7,
+        "sourceField": "task.expectedOutput",
+        "sourceRange": [
+          0,
+          34
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 8,
+        "sourceField": "task.expectedOutput",
+        "sourceRange": [
+          34,
+          55
+        ],
+        "candidateFeatures": [
+          "selection.cases-and-linear-combinations",
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 9,
+        "sourceField": "task.expectedOutput",
+        "sourceRange": [
+          55,
+          64
+        ],
+        "candidateFeatures": [
+          "interaction.clarification"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 10,
+        "sourceField": "task.gradingFocus",
+        "sourceRange": [
+          0,
+          6
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 11,
+        "sourceField": "task.gradingFocus",
+        "sourceRange": [
+          6,
+          15
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 12,
+        "sourceField": "task.gradingFocus",
+        "sourceRange": [
+          15,
+          28
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 13,
+        "sourceField": "task.gradingFocus",
+        "sourceRange": [
+          28,
+          51
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 14,
+        "sourceField": "task.prerequisite",
+        "sourceRange": [
+          0,
+          5
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 15,
+        "sourceField": "task.prerequisite",
+        "sourceRange": [
+          5,
+          23
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 16,
+        "sourceField": "model.topologyKey",
+        "sourceRange": [
+          0,
+          3
+        ],
+        "candidateFeatures": [
+          "elastic.truss-and-frame-brace"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 17,
+        "sourceField": "model.topologyKey",
+        "sourceRange": [
+          3,
+          18
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 18,
+        "sourceField": "model.boundaryKey",
+        "sourceRange": [
+          0,
+          18
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 19,
+        "sourceField": "model.loadKey",
+        "sourceRange": [
+          0,
+          36
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 20,
+        "sourceField": "model.propertyKey",
+        "sourceRange": [
+          0,
+          36
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "截面",
+              "range": [
+                5,
+                7
+              ]
+            },
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "材料",
+              "range": [
+                31,
+                33
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 21,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          0,
+          8
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 22,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          8,
+          13
+        ],
+        "candidateFeatures": [
+          "gravity.explicit-self-weight"
+        ],
+        "semantics": {
+          "kind": "forbidden",
+          "atoms": [
+            {
+              "featureId": "gravity.self-weight",
+              "kind": "forbidden",
+              "term": "自重",
+              "range": [
+                0,
+                2
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 23,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          13,
+          39
+        ],
+        "candidateFeatures": [
+          "selection.cases-and-linear-combinations",
+          "diaphragm.rigid-floor"
+        ],
+        "semantics": {
+          "kind": "forbidden",
+          "atoms": [
+            {
+              "featureId": "member.rigid-offset",
+              "kind": "forbidden",
+              "term": "刚域",
+              "range": [
+                10,
+                12
+              ]
+            },
+            {
+              "featureId": "diaphragm.rigid-floor",
+              "kind": "forbidden",
+              "term": "刚性楼板",
+              "range": [
+                5,
+                9
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 24,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          39,
+          72
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "材料",
+              "range": [
+                9,
+                11
+              ]
+            },
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "截面",
+              "range": [
+                12,
+                14
+              ]
+            },
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "局部轴",
+              "range": [
+                19,
+                22
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 25,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          72,
+          80
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 26,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          80,
+          101
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "interaction.edit",
+              "kind": "required",
+              "term": "修改",
+              "range": [
+                8,
+                10
+              ]
+            },
+            {
+              "featureId": "interaction.edit",
+              "kind": "required",
+              "term": "修改",
+              "range": [
+                13,
+                15
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 27,
+        "sourceField": "engine.analysisContract",
+        "sourceRange": [
+          101,
+          111
+        ],
+        "candidateFeatures": [
+          "interaction.clarification"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 28,
+        "sourceField": "engine.executionRequirement",
+        "sourceRange": [
+          0,
+          22
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 29,
+        "sourceField": "engine.executionRequirement",
+        "sourceRange": [
+          22,
+          44
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates"
+        ],
+        "semantics": {
+          "kind": "required",
+          "atoms": [
+            {
+              "featureId": "properties.assignments",
+              "kind": "required",
+              "term": "材料",
+              "range": [
+                6,
+                8
+              ]
+            }
+          ],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 30,
+        "sourceField": "engine.executionRequirement",
+        "sourceRange": [
+          44,
+          75
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 31,
+        "sourceField": "engine.executionRequirement",
+        "sourceRange": [
+          75,
+          88
+        ],
+        "candidateFeatures": [
+          "interaction.clarification"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 32,
+        "sourceField": "engine.requiredEvidence",
+        "sourceRange": [
+          0,
+          24
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates",
+          "interaction.clarification"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 33,
+        "sourceField": "engine.requiredEvidence",
+        "sourceRange": [
+          24,
+          36
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 34,
+        "sourceField": "engine.requiredEvidence",
+        "sourceRange": [
+          36,
+          81
+        ],
+        "candidateFeatures": [
+          "selection.cases-and-linear-combinations",
+          "evaluation.execution-freshness"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 35,
+        "sourceField": "engine.requiredEvidence",
+        "sourceRange": [
+          81,
+          92
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates",
+          "evaluation.execution-freshness"
+        ],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 36,
+        "sourceField": "engine.requiredEvidence",
+        "sourceRange": [
+          92,
+          131
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "output",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 37,
+        "sourceField": "engine.adapterGap",
+        "sourceRange": [
+          0,
+          6
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 38,
+        "sourceField": "engine.adapterGap",
+        "sourceRange": [
+          6,
+          39
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 39,
+        "sourceField": "engine.adapterGap",
+        "sourceRange": [
+          39,
+          75
+        ],
+        "candidateFeatures": [],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 40,
+        "sourceField": "engine.truthPlan",
+        "sourceRange": [
+          0,
+          43
+        ],
+        "candidateFeatures": [
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 41,
+        "sourceField": "engine.truthPlan",
+        "sourceRange": [
+          43,
+          63
+        ],
+        "candidateFeatures": [
+          "interaction.state-updates",
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      },
+      {
+        "id": 42,
+        "sourceField": "engine.truthPlan",
+        "sourceRange": [
+          63,
+          112
+        ],
+        "candidateFeatures": [
+          "coordinates.units-and-axes",
+          "truth.same-engine-independent"
+        ],
+        "semantics": {
+          "kind": "review-required",
+          "atoms": [],
+          "reviewStatus": "rule-classified-needs-case-review"
+        }
+      }
+    ],
+    "task": {
+      "id": "INT-027",
+      "family": "interactive_robustness",
+      "baseGroup": "M-INT-027",
+      "title": "Pratt桁架四节点力统一替换",
+      "subcategory": "荷载组定向更新",
+      "difficulty": "L2",
+      "difficultyReason": "需选对四个内部上弦节点而非所有节点",
+      "language": "中文",
+      "inputForm": "文本2轮＋完整属性附件（仅暂缺项除外）",
+      "turns": 2,
+      "scenario": "T1所用独立模型为M-INT-027（弦腹杆不同面积的Pratt桁架）。T1建立M-INT-027；T2每个内部上弦节点的10kN替换为15kN。",
+      "modelingFocus": "按给定连接而非名称补猜；截面分组的独立状态保持",
+      "expectedOutput": "x=6m上弦的Ux/Uz，左支承反力及附表指定首根下弦/底边杆轴力；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+      "gradingFocus": "仅四处更新；端部上下弦不加载；杆件连接、支座及属性保持；上弦A、下弦1.4A、腹杆0.7A的分组保持。",
+      "origin": "旧题改编",
+      "oldPrimaryId": "robust-update-truss-load",
+      "oldSecondaryId": "无",
+      "reuseChange": "旧题交互机制迁入M-INT-027；补齐属性、完成计算与更新不变量；本行轮次为新契约，旧数字不直接沿用。该题已有独立物理改动，不与其他任务共享模型。",
+      "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "prerequisite": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+      "status": "规划，待编题与验证",
+      "enginePlan": {
+        "id": "INT-027",
+        "suitableEngines": "OpenSees",
+        "plannedEngine": "OpenSees",
+        "assignmentReason": "2D桁架的荷载组定向更新，重点是按给定连接而非名称补猜，用显式杆系模型核对状态与响应。",
+        "executionRequirement": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+        "adapterStatus": "待逐题验证",
+        "adapterGap": "未逐题验收；前置检查项：基础工具，并核对荷载组定向更新后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+        "truthPlan": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+        "analysisContract": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+        "requiredEvidence": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：x=6m上弦的Ux/Uz，左支承反力及附表指定首根下弦/底边杆轴力。",
+        "referenceCodes": "OPS；COMMON"
+      }
+    },
+    "model": {
+      "id": "M-INT-027",
+      "taskId": "INT-027",
+      "structure": "桁架",
+      "dimension": "2D",
+      "difficulty": "L2",
+      "title": "弦腹杆不同面积的Pratt桁架",
+      "spec": "跨度15m、高2.5m、5节间，四个内部上弦节点各10kN，按旧题连接表；全部上弦杆截面积A，上下弦中的下弦为1.4A，腹杆为0.7A，材料E相同。",
+      "challenge": "按给定连接而非名称补猜；截面分组需与交互状态独立保持",
+      "source": "truss-pratt-static",
+      "prerequisite": "基础工具",
+      "distinctness": "相对原结构锚点新增/修改截面分组：全部上弦杆截面积A，上下弦中的下弦为1.4A，腹杆为0.7A，材料E相同",
+      "topologyKey": "桁架；跨度15m、高2.5m、5节间",
+      "boundaryKey": "左下节点铰，右下节点水平自由竖向滚支",
+      "loadKey": "跨度15m、高2.5m、5节间，四个内部上弦节点各10kN，按旧题连接表",
+      "propertyKey": "全部上弦杆截面积A，上下弦中的下弦为1.4A，腹杆为0.7A，材料E相同"
+    }
+  },
+  "modelStates": [
+    "model-state-1.json",
+    "model-state-2.json"
+  ],
+  "attachments": [
+    "input-tables.txt"
+  ],
+  "turns": [
+    {
+      "instruction": "按附件建立15m、5节间、高2.5m的M-INT-027；必须按明示端点表连接。报告x=6m上弦T2的带符号Ux、Uz，左支座B0反力Fx、Fz，以及首根下弦BC0轴力N。每个结果注明节点/杆件ID、位置、全局方向或轴力拉压符号、m或kN单位、工况D和当前轮次；轴力拉为正。物理状态修改后使用OpenSees重新计算，保留输入、版本、设置、成功日志、运行ID及原始结果对应关系。必需输入未明确前先澄清，不编造数值。",
+      "state": 1,
+      "expectation": "analyze",
+      "attachments": [
+        "input-tables.txt"
+      ],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "id": "t1"
+    },
+    {
+      "instruction": "仅把四个内部上弦T1、T2、T3、T4原各10kN向下力替换为各15kN；端部上下弦不加载，全部拓扑、支座和分组属性保持。报告x=6m上弦T2的带符号Ux、Uz，左支座B0反力Fx、Fz，以及首根下弦BC0轴力N。每个结果注明节点/杆件ID、位置、全局方向或轴力拉压符号、m或kN单位、工况D和当前轮次；轴力拉为正。物理状态修改后使用OpenSees重新计算，保留输入、版本、设置、成功日志、运行ID及原始结果对应关系。必需输入未明确前先澄清，不编造数值。",
+      "state": 2,
+      "expectation": "analyze",
+      "attachments": [],
+      "unresolvedFields": [],
+      "expectedQuestions": [],
+      "changedFields": [
+        "/load_cases/0/loads/0/fz",
+        "/load_cases/0/loads/1/fz",
+        "/load_cases/0/loads/2/fz",
+        "/load_cases/0/loads/3/fz"
+      ],
+      "preservedFields": [
+        "/nodes",
+        "/elements",
+        "/materials",
+        "/sections",
+        "/analysis_control"
+      ],
+      "id": "t2"
+    }
+  ],
+  "requiredOutputs": [
+    {
+      "id": "s1:case:D:node:T2:ux",
+      "description": "case D: {'kind': 'node', 'id': 'T2'}; ux [m], signed",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:T2:ux"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "s1:case:D:node:T2:uz",
+      "description": "case D: {'kind': 'node', 'id': 'T2'}; uz [m], signed",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:T2:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "s1:case:D:node:B0:Fx",
+      "description": "case D: {'kind': 'node', 'id': 'B0'}; Fx [kN], signed",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:B0:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "s1:case:D:node:B0:Fz",
+      "description": "case D: {'kind': 'node', 'id': 'B0'}; Fz [kN], signed",
+      "state": 1,
+      "quantityIds": [
+        "case:D:node:B0:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "s1:case:D:member:BC0:0:right:N",
+      "description": "case D: {'kind': 'member', 'id': 'BC0', 'positionM': 0, 'side': 'right'}; N [kN], signed",
+      "state": 1,
+      "quantityIds": [
+        "case:D:member:BC0:0:right:N"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "s2:case:D:node:T2:ux",
+      "description": "case D: {'kind': 'node', 'id': 'T2'}; ux [m], signed",
+      "state": 2,
+      "quantityIds": [
+        "case:D:node:T2:ux"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t2"
+      ]
+    },
+    {
+      "id": "s2:case:D:node:T2:uz",
+      "description": "case D: {'kind': 'node', 'id': 'T2'}; uz [m], signed",
+      "state": 2,
+      "quantityIds": [
+        "case:D:node:T2:uz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t2"
+      ]
+    },
+    {
+      "id": "s2:case:D:node:B0:Fx",
+      "description": "case D: {'kind': 'node', 'id': 'B0'}; Fx [kN], signed",
+      "state": 2,
+      "quantityIds": [
+        "case:D:node:B0:Fx"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t2"
+      ]
+    },
+    {
+      "id": "s2:case:D:node:B0:Fz",
+      "description": "case D: {'kind': 'node', 'id': 'B0'}; Fz [kN], signed",
+      "state": 2,
+      "quantityIds": [
+        "case:D:node:B0:Fz"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t2"
+      ]
+    },
+    {
+      "id": "s2:case:D:member:BC0:0:right:N",
+      "description": "case D: {'kind': 'member', 'id': 'BC0', 'positionM': 0, 'side': 'right'}; N [kN], signed",
+      "state": 2,
+      "quantityIds": [
+        "case:D:member:BC0:0:right:N"
+      ],
+      "kind": "numerical",
+      "turnIds": [
+        "t2"
+      ]
+    },
+    {
+      "id": "t1:interaction",
+      "description": "按附件建立15m、5节间、高2.5m的M-INT-027；必须按明示端点表连接。报告x=6m上弦T2的带符号Ux、Uz，左支座B0反力Fx、Fz，以及首根下弦BC0轴力N。每个结果注明节点/杆件ID、位置、全局方向或轴力拉压符号、m或kN单位、工况D和当前轮次；轴力拉为正。物理状态修改后使用OpenSees重新计算，保留输入、版本、设置、成功日志、运行ID及原始结果对应关系。必需输入未明确前先澄清，不编造数值。",
+      "state": 1,
+      "quantityIds": [],
+      "kind": "interaction",
+      "turnIds": [
+        "t1"
+      ]
+    },
+    {
+      "id": "t2:interaction",
+      "description": "仅把四个内部上弦T1、T2、T3、T4原各10kN向下力替换为各15kN；端部上下弦不加载，全部拓扑、支座和分组属性保持。报告x=6m上弦T2的带符号Ux、Uz，左支座B0反力Fx、Fz，以及首根下弦BC0轴力N。每个结果注明节点/杆件ID、位置、全局方向或轴力拉压符号、m或kN单位、工况D和当前轮次；轴力拉为正。物理状态修改后使用OpenSees重新计算，保留输入、版本、设置、成功日志、运行ID及原始结果对应关系。必需输入未明确前先澄清，不编造数值。",
+      "state": 2,
+      "quantityIds": [],
+      "kind": "interaction",
+      "turnIds": [
+        "t2"
+      ]
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "sourceField": "task.inputForm",
+      "requirementIds": [
+        1
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-diff"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "task.scenario",
+      "requirementIds": [
+        2,
+        3,
+        4
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-diff"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "task.modelingFocus",
+      "requirementIds": [
+        5,
+        6
+      ],
+      "targets": [
+        "attachment:input-tables.txt",
+        "turn:t1",
+        "turn:t2",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "requirementIds": [
+        7,
+        8,
+        9
+      ],
+      "targets": [
+        "output:s1:case:D:node:T2:ux",
+        "output:s1:case:D:node:T2:uz",
+        "output:s1:case:D:node:B0:Fx",
+        "output:s1:case:D:node:B0:Fz",
+        "output:s1:case:D:member:BC0:0:right:N",
+        "output:s2:case:D:node:T2:ux",
+        "output:s2:case:D:node:T2:uz",
+        "output:s2:case:D:node:B0:Fx",
+        "output:s2:case:D:node:B0:Fz",
+        "output:s2:case:D:member:BC0:0:right:N",
+        "output:t1:interaction",
+        "output:t2:interaction"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "task.gradingFocus",
+      "requirementIds": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "targets": [
+        "turn:t1",
+        "turn:t2",
+        "gate:state-diff"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "task.prerequisite",
+      "requirementIds": [
+        14,
+        15
+      ],
+      "targets": [
+        "gate:independent-reference",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "model.topologyKey",
+      "requirementIds": [
+        16,
+        17
+      ],
+      "targets": [
+        "attachment:input-tables.txt",
+        "turn:t1",
+        "turn:t2",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "model.boundaryKey",
+      "requirementIds": [
+        18
+      ],
+      "targets": [
+        "attachment:input-tables.txt",
+        "turn:t1",
+        "turn:t2",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "model.loadKey",
+      "requirementIds": [
+        19
+      ],
+      "targets": [
+        "attachment:input-tables.txt",
+        "turn:t1",
+        "turn:t2",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "model.propertyKey",
+      "requirementIds": [
+        20
+      ],
+      "targets": [
+        "attachment:input-tables.txt",
+        "turn:t1",
+        "turn:t2",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.analysisContract",
+      "requirementIds": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "targets": [
+        "attachment:input-tables.txt",
+        "turn:t1",
+        "turn:t2",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.executionRequirement",
+      "requirementIds": [
+        28,
+        29,
+        30,
+        31
+      ],
+      "targets": [
+        "gate:native-execution",
+        "gate:state-diff"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.requiredEvidence",
+      "requirementIds": [
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "targets": [
+        "gate:native-execution",
+        "gate:state-diff"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.adapterGap",
+      "requirementIds": [
+        37,
+        38,
+        39
+      ],
+      "targets": [
+        "gate:independent-reference",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    },
+    {
+      "sourceField": "engine.truthPlan",
+      "requirementIds": [
+        40,
+        41,
+        42
+      ],
+      "targets": [
+        "gate:independent-reference",
+        "gate:input-blind-review"
+      ],
+      "notes": "Authored mapping only; execution, numerical truth and blind input acceptance remain pending."
+    }
+  ],
+  "acceptanceGates": [
+    {
+      "id": "native-execution",
+      "status": "pending",
+      "description": "Fresh successful planned-engine execution for every changed state; version/settings/run ID/raw mapping required."
+    },
+    {
+      "id": "independent-reference",
+      "status": "pending",
+      "description": "Independently authored same-engine truth plus equilibrium and independent numerical review."
+    },
+    {
+      "id": "input-blind-review",
+      "status": "pending",
+      "description": "Blind recovery of each visible input without hidden state or future-turn input."
+    },
+    {
+      "id": "state-diff",
+      "status": "pending",
+      "description": "Only explicitly authorized fields change; undo and query semantics checked against snapshots."
+    }
+  ],
+  "status": "authored-candidate",
+  "sameEngineTruthStatus": "pending",
+  "inputBlindReview": "pending",
+  "llmEndToEnd": "not-run",
+  "authorDecisions": [
+    "E=205000 MPa, nu=0.3, rho=7850 kg/m3 and base A=0.01 m2 retain the explicit property records for linked legacy trusses; these same values are frozen author completions for new trusses lacking an original property appendix. G=E/[2(1+nu)].",
+    "The missing full section appendix is frozen as generic rod properties Iy=Iz=1e-5 m4 and J=2e-5 m4 for every section. These unused transverse properties do not supply bending stiffness to axial-only elements. Only A is multiplied by the source area factors.",
+    "All nodes constrain inactive uy,rx,ry,rz. The left pin also constrains ux,uz; the right roller constrains uz. Rotations are bookkeeping constraints, not flexural member or joint stiffness.",
+    "Load case D is the sole explicit source loading, with no automatic combinations or self-weight. Requested left reaction means its active in-plane Fx,Fz components; other reaction components are identically zero.",
+    "Node and member endpoints preserve the original truss-pratt-static message: 12 nodes and 21 rods.",
+    "Legacy inconsistency: fixtures/drawings/truss-pratt-15m-top10.dxf reverses all five diagonals relative to the named truss-pratt-static source message. This case follows the explicit endpoint sequence in that named source: T0-B1,T1-B2,T2-B3,B3-T4,B4-T5. The new attachment makes this frozen choice explicit; no old numerical truth is reused."
+  ]
+}

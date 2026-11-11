@@ -4,3 +4,43 @@ scripts/representative-models.py -text whitespace=blank-at-eol,blank-at-eof,spac
 scripts/independent-frame-reference.py -text
 scripts/representative-prompts.py -text
 scripts/build-representative-pack.py -text
+# Retained native evidence is hashed before and after checkout without newline conversion.
+corpora/research-300/cases/**/native-commercial/** -text -whitespace
+# Public edition manifests bind exact attachment and validator bytes.
+corpora/research-300/public-inputs/** -text
+scripts/research300/public_input_editorial.py -text
+docs/implementation/reviews/mm-inputs-20261016/inventory.csv text eol=lf
+
+scripts/research300/public_input_visual.py -text
+scripts/research300/render_public_visual.cjs -text
+scripts/research300/blind-input-review-public.cjs -text
+scripts/research300/blind_input_review.cjs -text
+lib/public-input-review.cjs -text
+docs/implementation/reviews/mm-visual-v2-20261016/records/** -text
+docs/implementation/reviews/mm-visual-v2-20261016/reviewer-audits/** -text
+docs/implementation/reviews/mm-visual-v2-20261016/blind-review-protocol.md -text
+docs/implementation/reviews/mm-visual-v2-20261016/verification-logs/** -text
+docs/implementation/reviews/mm-visual-v2-20261016/*.csv text eol=lf
+
+# Preserve whitespace required by the archived git-format-patch payload.
+docs/implementation/reviews/pkpm-2027-compatibility-20261026/structureclaw-fix.patch -text -whitespace
+docs/implementation/reviews/pkpm-numerical-rootcause-20261026/structureclaw-numerical-fix.patch -text -whitespace
+
+# Challenge manifests also bind exact bytes, including standard CSV CRLF records.
+corpora/challenge-6-v1/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Development pilot manifests bind exact public, private and implementation bytes.
+corpora/research300-v2-pilot30-v1/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/pilot30/** -text
+docs/implementation/reviews/research300-v2-pilot30-20261028/** -text
+
+# Complete v2 edition and replay records bind exact bytes.
+corpora/research300-v2-v1/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/research300_v2/** -text
+docs/implementation/reviews/research300-v2-full-20261028/** -text
+
+# Engineering v3 edition and sealed replay records bind exact bytes.
+corpora/research300-v3-v1/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/research300_v3/** -text
+docs/implementation/reviews/research300-v3-20261028/** -text
+docs/implementation/reviews/research300-v3-codex-full-20261028/** -text

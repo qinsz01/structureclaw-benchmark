@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-029",
+  "evaluationProfile": "engineering-v2.3",
+  "referenceKind": "independent-elastic-matrix",
+  "notCommercialScoringTruth": true,
+  "sameEngineTruthStatus": "pending",
+  "warnings": [
+    "Euler-Bernoulli reference omits shear deformation; Timoshenko displacements may differ physically. Frozen request tolerances are unchanged.",
+    "Commercial-engine references remain diagnostic pending independently reviewed same-engine native truth."
+  ],
+  "toleranceFrozenBeforeCandidate": true,
+  "inputHashes": {
+    "contract.json": "b05aa9efcccd0f66e042a0e7b897b4abd1138a8e087c5a9702641996ce63ed39",
+    "reference-requests.json": "40d4f979587bdac93823d2fe854924a3474a4517c127ccc3a54eec5d7df9eb11",
+    "model-state-1.json": "7d920908c2a5d279c179476e2ccfabf5a5a68559044d1687d6e3497b0300e0f9"
+  },
+  "sourceHash": "c342303e9d0cd0d60a521c57f27c70a00c324b50a3058eac31ca028d6aae1f1e",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "b05aa9efcccd0f66e042a0e7b897b4abd1138a8e087c5a9702641996ce63ed39"
+      },
+      {
+        "path": "input.png",
+        "sha256": "ad108d632bd1de94ddff10a51bfc1f50a06c6bf3a44bdd937796b5f99a4769ca"
+      },
+      {
+        "path": "input.svg",
+        "sha256": "1d4749466428201f70594b371d6485e1fda1af617858a441b7a6ae812a69aa97"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "7d920908c2a5d279c179476e2ccfabf5a5a68559044d1687d6e3497b0300e0f9"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "94ec8cfdc3a5cc1b7d4421b02d4d375f5391cc6cd4366413814293abd9fd2276"
+      },
+      {
+        "path": "properties.txt",
+        "sha256": "1f198d6a7f9fc09e6cd5b4ac630142b516fb10cd0af59261f4a9db0ba356eb26"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "40d4f979587bdac93823d2fe854924a3474a4517c127ccc3a54eec5d7df9eb11"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "quantities": [
+        {
+          "id": "case-D:ridge:uz",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "node",
+            "id": "ridge"
+          },
+          "component": "uz",
+          "unit": "m",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": -0.000812086046864843
+        },
+        {
+          "id": "case-D:d1:N@0:right",
+          "selection": {
+            "kind": "case",
+            "id": "D"
+          },
+          "location": {
+            "kind": "member",
+            "id": "d1",
+            "positionM": 0,
+            "side": "right"
+          },
+          "component": "N",
+          "unit": "kN",
+          "tolerance": {
+            "absolute": 1e-08,
+            "relative": 1e-06
+          },
+          "value": 24.037008503093432
+        }
+      ],
+      "derived": []
+    }
+  ],
+  "checks": [
+    {
+      "method": "independent-direct-stiffness",
+      "theory": "Euler-Bernoulli",
+      "freeResidual": 2.5579538487363607e-13,
+      "forceMomentBalance": [
+        8.526512829121202e-14,
+        0.0,
+        5.755396159656812e-13,
+        0.0,
+        -2.9558577807620168e-12,
+        0.0
+      ],
+      "dofs": 42,
+      "freeDofs": 11,
+      "factorization": "scipy-sparse-superlu",
+      "factorizationCount": 1,
+      "rightHandSides": 1,
+      "minimumScaledPivot": 0.08882352876630795,
+      "observationNodes": 0,
+      "addedMass": 0,
+      "assumptions": [
+        "Linear elastic, small-displacement Euler-Bernoulli bending; shear deformation is omitted.",
+        "EB and Timoshenko displacements can differ physically; request tolerances are not adjusted.",
+        "No mass is added by observation/load subdivision; this solver performs static analysis only.",
+        "Commercial-engine comparisons are diagnostic, not same-engine native truth."
+      ],
+      "state": 1,
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ]
+}

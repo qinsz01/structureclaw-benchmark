@@ -3,7 +3,11 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 
-test('production build works under a static subdirectory without any external services', async ({
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('research-locale', 'en'));
+});
+
+test('production build serves public inputs and reference figures from a static subdirectory', async ({
   page,
 }) => {
   const root = path.resolve('dist');
@@ -14,9 +18,11 @@ test('production build works under a static subdirectory without any external se
     '.json': 'application/json',
     '.svg': 'image/svg+xml',
     '.png': 'image/png',
+    '.txt': 'text/plain',
+    '.dxf': 'application/dxf',
   };
   const server = http.createServer((req, res) => {
-    const pathname = new URL(req.url || '/', 'http://localhost').pathname;
+    const pathname = decodeURIComponent(new URL(req.url || '/', 'http://localhost').pathname);
     if (!pathname.startsWith('/explorer/')) {
       res.writeHead(404).end();
       return;
@@ -33,26 +39,39 @@ test('production build works under a static subdirectory without any external se
   const address = server.address() as { port: number };
   const origin = `http://127.0.0.1:${address.port}`;
   const failed: string[] = [];
-  page.on('response', (r) => {
-    if (r.status() >= 400) failed.push(r.url());
+  page.on('response', (response) => {
+    if (response.status() >= 400) failed.push(response.url());
   });
-  page.on('request', (r) => {
-    if (!r.url().startsWith(origin)) failed.push(r.url());
+  page.on('request', (request) => {
+    if (!request.url().startsWith(origin) && !request.url().startsWith('blob:'))
+      failed.push(request.url());
   });
   try {
-    await page.goto(`${origin}/explorer/#/case/beam-static-with-report`);
+    await page.goto(`${origin}/explorer/#/case/MM-082?turn=t1`);
+    await expect(page.locator('.dxf-svg')).toBeVisible();
+    await expect(page.locator('.research-attachment')).toHaveCount(1);
+    await expect(page.locator('.research-attachment')).toHaveAttribute('data-name', 'drawing.dxf');
+    await page.getByRole('tab', { name: 'Benchmark reference' }).click();
     await expect(page.locator('.scene-canvas canvas')).toBeVisible();
-    await expect(page.locator('.numeric-meta')).toContainText('OpenSeesPy');
-    await page.locator('.scene-canvas canvas').click({ position: { x: 350, y: 180 } });
-    await page.getByRole('link', { name: '返回案例库' }).click();
+    await expect(page.locator('.reference-source')).toContainText('YJK');
+    await expect(page.locator('.research-response-figure svg')).toBeVisible();
+    await page.getByRole('link', { name: 'Back to catalogue' }).click();
     await expect(page.locator('.case-card')).toHaveCount(12);
+    await expect(page.getByRole('link', { name: 'Download tasks' })).toHaveJSProperty(
+      'href',
+      `${origin}/explorer/benchmark-inputs.zip`,
+    );
     expect(failed).toEqual([]);
   } finally {
-    await new Promise<void>((resolve, reject) => server.close((e) => (e ? reject(e) : resolve())));
+    await new Promise<void>((resolve, reject) =>
+      server.close((error) => (error ? reject(error) : resolve())),
+    );
   }
 });
 
-test('WebGL fallback still exposes the reference and its numerical answer', async ({ page }) => {
+test('without WebGL the exact model remains visible and frozen responses still render', async ({
+  page,
+}) => {
   await page.addInitScript(() => {
     const original = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function (type: string, ...args: unknown[]) {
@@ -60,9 +79,11 @@ test('WebGL fallback still exposes the reference and its numerical answer', asyn
       return original.apply(this, [type, ...args] as Parameters<typeof original>);
     } as typeof original;
   });
-  await page.goto('/#/case/beam-static-with-report');
+  await page.goto('/#/case/STD-001?turn=t1&tab=reference');
   await expect(page.locator('.fallback svg')).toBeVisible();
-  await expect(page.locator('.fallback')).toContainText('静态参考结构');
-  await expect(page.locator('.numeric-meta')).toContainText('OpenSeesPy');
-  await expect(page.getByRole('button', { name: '导出图片' })).toBeDisabled();
+  await expect(page.locator('.fallback')).toContainText('static');
+  await expect(page.locator('.research-response-figure svg')).toBeVisible();
+  await expect(page.getByRole('button', { name: /Export image/ })).toBeDisabled();
+  await page.locator('.research-quantity-details > summary').click();
+  await expect(page.locator('[data-quantity-id]').first()).toBeVisible();
 });

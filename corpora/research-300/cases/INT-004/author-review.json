@@ -1,0 +1,102 @@
+{
+  "caseId": "INT-004",
+  "sourceRowsRead": true,
+  "sourceAudit": [
+    {
+      "field": "task.inputForm",
+      "source": "文本2轮＋完整属性附件（仅暂缺项除外）",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "task.scenario",
+      "source": "T1所用独立模型为M-INT-004（仅左九米均布的偏心点载梁）。T1给M-INT-004但同时标注两端固支和左铰右滚；T2确认采用左铰右滚。",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "task.modelingFocus",
+      "source": "点载位置与观测位置分离；荷载分布的独立状态保持",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "task.expectedOutput",
+      "source": "跨中x=6m的Uz和左支座Rz；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "task.gradingFocus",
+      "source": "首轮只指出边界冲突，不猜选；点力仍在x=4m，观测点仍为x=6m；局部均布载只覆盖0～9m。",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "task.prerequisite",
+      "source": "基础工具；逐轮状态与目标/非目标差异评测待实现",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "model.topologyKey",
+      "source": "梁；跨度12m",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "model.boundaryKey",
+      "source": "x=0铰、x=12m滚支",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "model.loadKey",
+      "source": "跨度12m，左铰右滚，x=0～9m均布载15kN/m，x=4m处向下50kN，观测跨中；15kN/m均布载只作用x=0～9m，x=9～12m无均布载，x=4m的50kN仍保留",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "model.propertyKey",
+      "source": "各构件组完整A/Iy/Iz/J/G及E、nu记录；按本题附表逐字段给单位，不用模型默认值",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "engine.analysisContract",
+      "source": "一阶线弹性静力；自重关闭；不自动施加刚性楼板/刚域、默认附加载或自动规范组合；严格保留题定约束、材料/截面完整属性、局部轴、荷载坐标与长度基准；单位逐字段明确。 各轮只执行明确修改，未被修改的字段保持；澄清内容按该轮生效。",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "engine.executionRequirement",
+      "source": "计划使用OpenSees完成每个可计算轮次；模型/荷载/材料/约束改变后以当前状态新算；只改查询位置、单位或报告时可复用可追溯结果，若需新网格则重算；缺项未解决时不给虚构数值。",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "engine.requiredEvidence",
+      "source": "逐轮输入与澄清记录、模型状态快照及前后字段差异；变更目标与未变字段核对；原始求解输入/工程、软件版本/设置、运行ID和成功日志、原始结果到节点/构件/工况的映射；结果绑定当前模型状态。核对目标：跨中x=6m的Uz和左支座Rz。",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "engine.adapterGap",
+      "source": "未逐题验收；前置检查项：基础工具，并核对冲突澄清后计算后的模型更新和结果定位；不把一般OpenSees支持等同于当前StructureClaw已实现。",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    },
+    {
+      "field": "engine.truthPlan",
+      "source": "各可计算轮次独立建立并复核OpenSees参考模型，勿复用被测建模/转换路径生成标答；状态改变后独立新算，纯查询沿用有效状态；用解析解（适用时）、整体平衡、刚度/单位/符号检查复核，复杂题再用独立实现或同假设第二求解器核验。",
+      "review": "Mapped to explicit public inputs, turn semantics, output requests or pending acceptance gates; no native acceptance asserted."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "missing-property-appendix",
+      "description": "The source omits absolute section/material properties. This authored appendix freezes Q355 steel E=206000 MPa, nu=0.3, G=E/[2(1+nu)] MPa, rho=7850 kg/m3, and B1 solid rectangle 0.3 m by 0.6 m with explicit A/Iy/Iz/J. They are inputs, not engine defaults."
+    },
+    {
+      "id": "axes-and-fixed-end-moment",
+      "description": "Horizontal members run in +X; local y is global +Y. Uz is global +Z displacement; Rz is global +Z support reaction. Requested fixed-end My is the global +Y support reaction moment, signed by the right-hand rule."
+    },
+    {
+      "id": "observation-connectivity",
+      "description": "All point-load and displacement observation locations use connected beam nodes. Extra internal stations have no added planar support or mass."
+    },
+    {
+      "id": "native-and-reference-status",
+      "description": "Only source/structural authoring checks have run. Independent numerical reference, native engine execution, adapter acceptance and blind input review remain pending."
+    }
+  ],
+  "status": "author-checked; independent input blind review pending",
+  "native": "pending",
+  "llm": "not-run"
+}

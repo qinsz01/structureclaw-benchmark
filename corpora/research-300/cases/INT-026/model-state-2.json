@@ -1,0 +1,361 @@
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "n0",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n1",
+      "x": 4,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n2",
+      "x": 10,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n3",
+      "x": 15,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n4",
+      "x": 17,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "n5",
+      "x": 19,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "b1",
+      "type": "beam",
+      "nodes": [
+        "n0",
+        "n1"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b2",
+      "type": "beam",
+      "nodes": [
+        "n1",
+        "n2"
+      ],
+      "material": "M1",
+      "section": "B2"
+    },
+    {
+      "id": "b3",
+      "type": "beam",
+      "nodes": [
+        "n2",
+        "n3"
+      ],
+      "material": "M1",
+      "section": "B2"
+    },
+    {
+      "id": "b4",
+      "type": "beam",
+      "nodes": [
+        "n3",
+        "n4"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "b5",
+      "type": "beam",
+      "nodes": [
+        "n4",
+        "n5"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "B2",
+      "name": "B2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 700.0
+      },
+      "properties": {
+        "A": 0.21,
+        "Iy": 0.008574999999999998,
+        "Iz": 0.0015749999999999998,
+        "J": 0.004603782069970844
+      }
+    },
+    {
+      "id": "B3",
+      "name": "B3",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 350.0,
+        "H": 800.0
+      },
+      "properties": {
+        "A": 0.27999999999999997,
+        "Iy": 0.014933333333333335,
+        "Iz": 0.0028583333333333325,
+        "J": 0.008291641882975894
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "dead-full-b1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b1",
+          "start": 0,
+          "end": 4,
+          "wz": -8
+        },
+        {
+          "id": "dead-full-b2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b2",
+          "start": 0,
+          "end": 6,
+          "wz": -8
+        },
+        {
+          "id": "dead-full-b3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b3",
+          "start": 0,
+          "end": 5,
+          "wz": -8
+        },
+        {
+          "id": "dead-full-b4",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b4",
+          "start": 0,
+          "end": 2,
+          "wz": -8
+        },
+        {
+          "id": "dead-full-b5",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b5",
+          "start": 0,
+          "end": 2,
+          "wz": -8
+        },
+        {
+          "id": "dead-fourth-midpoint",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "n4",
+          "fz": -16
+        }
+      ]
+    },
+    {
+      "id": "L",
+      "type": "live",
+      "loads": [
+        {
+          "id": "live-second-b2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b2",
+          "start": 0,
+          "end": 6,
+          "wz": -12
+        },
+        {
+          "id": "live-fourth-b4",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b4",
+          "start": 0,
+          "end": 2,
+          "wz": -12
+        },
+        {
+          "id": "live-fourth-b5",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "b5",
+          "start": 0,
+          "end": 2,
+          "wz": -12
+        }
+      ]
+    }
+  ],
+  "load_combinations": [
+    {
+      "id": "C1",
+      "factors": {
+        "D": 1
+      }
+    },
+    {
+      "id": "C2",
+      "factors": {
+        "D": 1,
+        "L": 1
+      }
+    }
+  ],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {
+    "elementReferenceVectors": {
+      "b1": [
+        0,
+        0,
+        4
+      ],
+      "b2": [
+        0,
+        0,
+        6
+      ],
+      "b3": [
+        0,
+        0,
+        5
+      ],
+      "b4": [
+        0,
+        0,
+        2
+      ],
+      "b5": [
+        0,
+        0,
+        2
+      ]
+    }
+  }
+}

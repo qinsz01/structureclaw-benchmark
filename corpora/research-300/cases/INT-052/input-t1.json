@@ -1,0 +1,343 @@
+{
+  "units": {
+    "coordinates": "m",
+    "member_length": "m",
+    "E": "MPa",
+    "G": "MPa",
+    "rho": "kg/m3",
+    "A": "m2",
+    "Iy": "m4",
+    "Iz": "m4",
+    "J": "m4",
+    "shape": "mm",
+    "force": "kN",
+    "moment": "kN.m",
+    "line_load": "kN/m of actual member length",
+    "rotation_angle": "degree",
+    "displacement": "m"
+  },
+  "axisDefinitions": {
+    "globalAxes": "Right-handed XYZ; Z upward.",
+    "planarAxes": "XZ plane: local x = i to j, local y = global +Y, local z = x cross y.",
+    "spatialAxes": "local x = i to j; y = normalize(reference cross x); z = x cross y; reference vectors are explicit per member.",
+    "sectionRoll": "y_new=cos(theta)*y+sin(theta)*z; z_new=-sin(theta)*y+cos(theta)*z; theta in degrees.",
+    "reactionNaming": "Rz in the task means vertical support force Fz, not nodal rotation rz."
+  },
+  "analysisMethod": "First-order linear elastic Euler-Bernoulli beam/column and axial-only truss analysis.",
+  "documentType": "Public engineering input tables",
+  "nodeTable": [
+    {
+      "id": "leftBase",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "leftTop",
+      "x": 0,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "cut6",
+      "x": 6,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "cut16",
+      "x": 16,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "rightTop",
+      "x": 22,
+      "y": 0,
+      "z": 7,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "rightBase",
+      "x": 22,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  "memberTable": [
+    {
+      "id": "leftColumn",
+      "type": "column",
+      "nodes": [
+        "leftBase",
+        "leftTop"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "rightColumn",
+      "type": "column",
+      "nodes": [
+        "rightBase",
+        "rightTop"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "roofLeft",
+      "type": "beam",
+      "nodes": [
+        "leftTop",
+        "cut6"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "roofMiddle",
+      "type": "beam",
+      "nodes": [
+        "cut6",
+        "cut16"
+      ],
+      "material": "M1",
+      "section": "B2"
+    },
+    {
+      "id": "roofRight",
+      "type": "beam",
+      "nodes": [
+        "cut16",
+        "rightTop"
+      ],
+      "material": "M1",
+      "section": "B3"
+    }
+  ],
+  "materialTable": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sectionTable": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "B2",
+      "name": "B2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 700.0
+      },
+      "properties": {
+        "A": 0.21,
+        "Iy": 0.008574999999999998,
+        "Iz": 0.0015749999999999998,
+        "J": 0.004603782069970844
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    },
+    {
+      "id": "C2",
+      "name": "C2",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 350.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.175,
+        "Iy": 0.003645833333333333,
+        "Iz": 0.0017864583333333328,
+        "J": 0.0040575733442708315
+      }
+    },
+    {
+      "id": "A1",
+      "name": "A1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 100.0,
+        "H": 100.0
+      },
+      "properties": {
+        "A": 0.010000000000000002,
+        "Iy": 8.333333333333335e-06,
+        "Iz": 8.333333333333335e-06,
+        "J": 1.4083333333333338e-05
+      }
+    },
+    {
+      "id": "B3",
+      "name": "B3",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.15,
+        "Iy": 0.0031249999999999997,
+        "Iz": 0.001125,
+        "J": 0.0028173707999999994
+      }
+    },
+    {
+      "id": "B4",
+      "name": "B4",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 350.0,
+        "H": 800.0
+      },
+      "properties": {
+        "A": 0.27999999999999997,
+        "Iy": 0.014933333333333335,
+        "Iz": 0.0028583333333333325,
+        "J": 0.008291641882975894
+      }
+    }
+  ],
+  "loadCaseTable": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "D-1",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roofLeft",
+          "wz": -7
+        },
+        {
+          "id": "D-2",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roofMiddle",
+          "wz": -7
+        },
+        {
+          "id": "D-3",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roofRight",
+          "wz": -7
+        }
+      ]
+    }
+  ],
+  "combinationTable": [],
+  "analysisSettings": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "coordinateContract": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "memberAxisData": {}
+}

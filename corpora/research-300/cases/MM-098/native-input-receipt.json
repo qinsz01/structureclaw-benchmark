@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "id": "MM-098",
+  "inputHashes": {
+    "contract.json": "a9785a4cb56655aa08fd40a1e3e773811dc0b11961f8a0d72f338e1adfc806d8",
+    "reference-requests.json": "3e7d79d39394e862cd7506fb19d797b9034600d5ba62f69b7814ccf1e3045fc3",
+    "model-state-1.json": "b3d4500195275c4f642b0eda712434905b727acb14e7d39e79f7af21032b1940"
+  },
+  "sourceHash": "3c3897bece2cfa51564b5cce5e07d450f8ac8f8c68c2c9e4b5b4b6f5af24d6da",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "assignments.json",
+        "sha256": "0b614a32bd0bce278f019242824877f6f73c67a7a5f8cccd85c13df6a7136b89"
+      },
+      {
+        "path": "contract.json",
+        "sha256": "a9785a4cb56655aa08fd40a1e3e773811dc0b11961f8a0d72f338e1adfc806d8"
+      },
+      {
+        "path": "drawing-elevation-0-Y0.png",
+        "sha256": "0b86c8150bec45f551eaec2644c211fdaa44d0aaf2887d7f26f48f26892fc82c"
+      },
+      {
+        "path": "drawing-elevation-0-Y0.svg",
+        "sha256": "a87ace813bff29896df29729292b5b0968828755f13fe64738f87783d9f6f1a0"
+      },
+      {
+        "path": "drawing-elevation-YZ-0-X0.png",
+        "sha256": "94773b420e61dd9c7e8b95401ab36d8ecd9f6c17a3c66f41f4f12007e585303f"
+      },
+      {
+        "path": "drawing-elevation-YZ-0-X0.svg",
+        "sha256": "2d6d8ab3610ad58784a9da1a1d9df90d9b5da89f9a7ac7a137f9c65b249d3e05"
+      },
+      {
+        "path": "drawing-plan-1-Z3.png",
+        "sha256": "738cc51224745b062698c60d165393cd2e68fb5873f696f61296faeafccee6d5"
+      },
+      {
+        "path": "drawing-plan-1-Z3.svg",
+        "sha256": "10533327e484ec9630edf44cdf916eaaa9a952bfad83037ad288c9614423a250"
+      },
+      {
+        "path": "loads.json",
+        "sha256": "680bece7c3b6dacb670a7f4b633d402fae0739d3cb3095cf448c3bb743e8302d"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "b3d4500195275c4f642b0eda712434905b727acb14e7d39e79f7af21032b1940"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "19a4e1ad5310a3bbc50fdbe6d95a4430b96e164a88b47536bdc11ff0915519a3"
+      },
+      {
+        "path": "properties.json",
+        "sha256": "51a0a288eca20f61f377c1afc776072b73260fe1c732c8c62dacc6fbfcbf9a0d"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "3e7d79d39394e862cd7506fb19d797b9034600d5ba62f69b7814ccf1e3045fc3"
+      },
+      {
+        "path": "section-details.png",
+        "sha256": "4294f29a1af2eeca8fbbc165d5f1ae2b60f5bec43c320afb6cd10b4ad4836ae5"
+      },
+      {
+        "path": "section-details.svg",
+        "sha256": "df869c5d4663d6d7986d221edb1ff19b8f6c89c259947bed63b512421525fd67"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "3d",
+          "plane": null,
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "base",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "joint",
+            "x": 0,
+            "y": 0,
+            "z": 3,
+            "restraints": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "id": "top",
+            "x": 0,
+            "y": 0,
+            "z": 6,
+            "restraints": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "id": "tip",
+            "x": 0,
+            "y": 2,
+            "z": 3,
+            "restraints": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "lower-column",
+            "type": "column",
+            "nodes": [
+              "base",
+              "joint"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "upper-column",
+            "type": "column",
+            "nodes": [
+              "joint",
+              "top"
+            ],
+            "material": "M1",
+            "section": "C1"
+          },
+          {
+            "id": "side-arm",
+            "type": "beam",
+            "nodes": [
+              "joint",
+              "tip"
+            ],
+            "material": "M1",
+            "section": "B1"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "C1",
+            "name": "Unequal-flange I 500x300/200x12x20",
+            "type": "H",
+            "shape": {
+              "kind": "unequal-flange-I",
+              "H": 500,
+              "Bpositive3": 300,
+              "Bnegative3": 200,
+              "tw": 12,
+              "tf": 20,
+              "centroidFromNegative3Edge": 280.92783505154637
+            },
+            "properties": {
+              "A": 0.01552,
+              "Iy": 0.000658823972508591,
+              "Iz": 5.8399573333333325e-05,
+              "J": 1.5982933333333336e-06
+            }
+          },
+          {
+            "id": "B1",
+            "name": "B1",
+            "type": "rectangular",
+            "shape": {
+              "kind": "rectangular",
+              "B": 200.0,
+              "H": 350.0
+            },
+            "properties": {
+              "A": 0.06999999999999999,
+              "Iy": 0.0007145833333333331,
+              "Iz": 0.00023333333333333336,
+              "J": 0.0006003187560738581
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "D-top",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "top",
+                "fx": 20,
+                "fy": 15,
+                "fz": -400
+              },
+              {
+                "id": "D-arm",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "tip",
+                "fz": -80
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {
+          "elementReferenceVectors": {
+            "lower-column": [
+              1,
+              0,
+              0
+            ],
+            "upper-column": [
+              1,
+              0,
+              0
+            ],
+            "side-arm": [
+              0,
+              0,
+              1
+            ]
+          }
+        }
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

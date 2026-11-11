@@ -1,0 +1,273 @@
+Input tables. X horizontal, Z upward; Y completes the right-handed system. Section shape dimensions B,H are mm; listed section properties are authoritative. Coordinates m; nodal forces kN; nodal moments kN*m; line loads kN/m; E,G MPa; A m2; Iy,Iz,J m4; density kg/m3. Restraints ordered ux,uy,uz,rx,ry,rz; true=fixed. Member local x follows the ordered end nodes. For planar XZ members local y is global +Y and local z=x cross y; bending about local y uses Iy. For spatial members the explicit reference vector defines local z by its projection normal to local x, local y=z cross x. Linear elastic first-order static analysis, self-weight OFF, no automatic loads/combinations, diaphragm, rigid offsets or P-delta. Distributed load intervals are measured in m along the actual member unless this turn explicitly leaves that basis unresolved. All omitted load components are zero. Beam-column joints are rigid unless explicitly restrained; truss elements are axial-only. Truss rotational restraints eliminate inactive bookkeeping DOFs and do not add rotational stiffness. Use OpenSees for every calculable state; rerun after a physical edit, and reuse a result for a pure query only when its state is unchanged. Retain solver version/settings, run ID, successful log, model snapshot and raw result mapping.
+Unresolved conflicting dimension note: overall width=30 m; individual bay schedule=18 m+18 m. Coordinates below are the bay-schedule alternative, not a resolution.
+
+{
+  "schema_version": "2.2.0",
+  "unit_system": "SI",
+  "coordinate_system": {
+    "dimension": "2d",
+    "plane": "xz",
+    "semantics": "global-z-up",
+    "version": 1,
+    "dof_order": [
+      "ux",
+      "uy",
+      "uz",
+      "rx",
+      "ry",
+      "rz"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "A",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "B",
+      "x": 18,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "C",
+      "x": 36,
+      "y": 0,
+      "z": 0,
+      "restraints": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "L",
+      "x": 0,
+      "y": 0,
+      "z": 9,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "M",
+      "x": 18,
+      "y": 0,
+      "z": 9,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "P",
+      "x": 27,
+      "y": 0,
+      "z": 9,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "R",
+      "x": 36,
+      "y": 0,
+      "z": 9,
+      "restraints": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "cL",
+      "type": "column",
+      "nodes": [
+        "A",
+        "L"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "cM",
+      "type": "column",
+      "nodes": [
+        "B",
+        "M"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "cR",
+      "type": "column",
+      "nodes": [
+        "C",
+        "R"
+      ],
+      "material": "M1",
+      "section": "C1"
+    },
+    {
+      "id": "roofL",
+      "type": "beam",
+      "nodes": [
+        "L",
+        "M"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "roofRa",
+      "type": "beam",
+      "nodes": [
+        "M",
+        "P"
+      ],
+      "material": "M1",
+      "section": "B1"
+    },
+    {
+      "id": "roofRb",
+      "type": "beam",
+      "nodes": [
+        "P",
+        "R"
+      ],
+      "material": "M1",
+      "section": "B1"
+    }
+  ],
+  "materials": [
+    {
+      "id": "M1",
+      "name": "Q355",
+      "type": "steel",
+      "E": 206000,
+      "G": 79230.76923076923,
+      "nu": 0.3,
+      "rho": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "B1",
+      "name": "B1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 300.0,
+        "H": 600.0
+      },
+      "properties": {
+        "A": 0.18,
+        "Iy": 0.0053999999999999986,
+        "Iz": 0.0013499999999999996,
+        "J": 0.0037078593749999985
+      }
+    },
+    {
+      "id": "C1",
+      "name": "C1",
+      "type": "rectangular",
+      "shape": {
+        "kind": "rectangular",
+        "B": 500.0,
+        "H": 500.0
+      },
+      "properties": {
+        "A": 0.25,
+        "Iy": 0.005208333333333333,
+        "Iz": 0.005208333333333333,
+        "J": 0.008802083333333334
+      }
+    }
+  ],
+  "load_cases": [
+    {
+      "id": "D",
+      "type": "dead",
+      "loads": [
+        {
+          "id": "q-roofL",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roofL",
+          "wz": -6
+        },
+        {
+          "id": "q-roofRa",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roofRa",
+          "wz": -6
+        },
+        {
+          "id": "q-roofRb",
+          "reference_frame": "global",
+          "type": "distributed",
+          "element": "roofRb",
+          "wz": -6
+        },
+        {
+          "id": "hoist",
+          "reference_frame": "global",
+          "type": "nodal",
+          "node": "P",
+          "fz": -24
+        }
+      ]
+    }
+  ],
+  "load_combinations": [],
+  "analysis_control": {
+    "self_weight": false,
+    "rigid_floor": false,
+    "p_delta": false,
+    "rigid_offsets": false,
+    "construction_stage": false
+  },
+  "metadata": {}
+}

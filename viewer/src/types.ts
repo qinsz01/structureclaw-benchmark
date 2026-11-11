@@ -7,26 +7,41 @@ export type Element = {
   type: string;
   material?: string;
   section?: string;
+  rotation_angle?: number;
 };
 export type Load = {
+  id?: string;
   type?: string;
   node?: string;
   element?: string;
   fx?: number;
   fy?: number;
   fz?: number;
+  mx?: number;
+  my?: number;
+  mz?: number;
   wx?: number;
   wy?: number;
   wz?: number;
+  start?: number;
+  end?: number;
   reference_frame?: string;
 };
 export type Geometry = {
   nodes: Node[];
   elements: Element[];
-  coordinate_system: { dimension: string; plane?: string; semantics: string; dof_order: string[] };
+  coordinate_system: {
+    dimension: string;
+    plane?: string;
+    semantics: string;
+    dof_order: string[];
+    version?: number;
+  };
 };
 export type Model = Geometry & {
+  schema_version?: string;
   unit_system: string;
+  analysis_control?: Raw;
   materials: Raw[];
   sections: Raw[];
   load_cases: { id: string; type?: string; loads: Load[] }[];

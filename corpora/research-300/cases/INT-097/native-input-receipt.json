@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "id": "INT-097",
+  "inputHashes": {
+    "contract.json": "c7e576fd6939f859892eb8140e498a4c1c4b5b9b80e508618eb2fed58f28bbe9",
+    "reference-requests.json": "7e818e2b90bb4f893cf4d7f0e429ca59e2e89a688d901cf0227581a649e6100f",
+    "model-state-1.json": "063b686a5b8d1970425a71cf42c35271a75ecee228be4961486ad97d84fefde3"
+  },
+  "sourceHash": "5508c4992d607fc81638d585e6df871185a233cbaee5a61cb3164e9719782d9a",
+  "sourceManifest": {
+    "schemaVersion": 1,
+    "files": [
+      {
+        "path": "contract.json",
+        "sha256": "c7e576fd6939f859892eb8140e498a4c1c4b5b9b80e508618eb2fed58f28bbe9"
+      },
+      {
+        "path": "input.json",
+        "sha256": "b192f9f274f8c5ef17f697e9245ce76d152415eb8db0d3fa085876c020765764"
+      },
+      {
+        "path": "model-state-1.json",
+        "sha256": "063b686a5b8d1970425a71cf42c35271a75ecee228be4961486ad97d84fefde3"
+      },
+      {
+        "path": "prompt.txt",
+        "sha256": "8769ada4fc326b54d1fdafb2d441737173beab213531e3c624d061ed2a5d3ccf"
+      },
+      {
+        "path": "reference-requests.json",
+        "sha256": "7e818e2b90bb4f893cf4d7f0e429ca59e2e89a688d901cf0227581a649e6100f"
+      }
+    ]
+  },
+  "states": [
+    {
+      "state": 1,
+      "model": {
+        "schema_version": "2.2.0",
+        "unit_system": "SI",
+        "coordinate_system": {
+          "dimension": "2d",
+          "plane": "xz",
+          "semantics": "global-z-up",
+          "version": 1,
+          "dof_order": [
+            "ux",
+            "uy",
+            "uz",
+            "rx",
+            "ry",
+            "rz"
+          ]
+        },
+        "nodes": [
+          {
+            "id": "base",
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "restraints": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "id": "mid",
+            "x": 0,
+            "y": 0,
+            "z": 2,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "id": "top",
+            "x": 0,
+            "y": 0,
+            "z": 5,
+            "restraints": [
+              false,
+              true,
+              false,
+              true,
+              false,
+              true
+            ]
+          }
+        ],
+        "elements": [
+          {
+            "id": "column1",
+            "type": "column",
+            "nodes": [
+              "base",
+              "mid"
+            ],
+            "material": "M1",
+            "section": "HW300"
+          },
+          {
+            "id": "column2",
+            "type": "column",
+            "nodes": [
+              "mid",
+              "top"
+            ],
+            "material": "M1",
+            "section": "HW300"
+          }
+        ],
+        "materials": [
+          {
+            "id": "M1",
+            "name": "Q355",
+            "type": "steel",
+            "E": 206000,
+            "G": 79230.76923076923,
+            "nu": 0.3,
+            "rho": 7850
+          }
+        ],
+        "sections": [
+          {
+            "id": "HW300",
+            "name": "HW300x300",
+            "type": "i_section",
+            "shape": {
+              "kind": "i_section",
+              "B": 300,
+              "H": 300,
+              "tw": 10,
+              "tf": 15
+            },
+            "properties": {
+              "A": 0.011699999999999999,
+              "Iy": 0.00019932749999999983,
+              "Iz": 6.752249999999999e-05,
+              "J": 7.649999999999999e-07
+            }
+          }
+        ],
+        "load_cases": [
+          {
+            "id": "D",
+            "type": "dead",
+            "loads": [
+              {
+                "id": "top-compression",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "top",
+                "fz": -700
+              },
+              {
+                "id": "mid-lateral",
+                "reference_frame": "global",
+                "type": "nodal",
+                "node": "mid",
+                "fx": 12
+              }
+            ]
+          }
+        ],
+        "load_combinations": [],
+        "analysis_control": {
+          "self_weight": false,
+          "rigid_floor": false,
+          "p_delta": false,
+          "rigid_offsets": false,
+          "construction_stage": false
+        },
+        "metadata": {}
+      },
+      "modelPath": "model-state-1.json"
+    }
+  ]
+}

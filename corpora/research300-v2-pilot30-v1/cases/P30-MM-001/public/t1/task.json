@@ -1,0 +1,45 @@
+{
+  "caseId": "P30-MM-001",
+  "turnId": "t1",
+  "engine": "OpenSees",
+  "analysis": "static",
+  "instruction": "从所附图纸重建结构并使用 OpenSees 实际分析；必要缺项或冲突先澄清。报告带符号、单位及工况/组合的下列结果，并附一致的模型/结果图：\n- x=3 m 节点竖向位移 Uz、左端截面弯矩 M2。\n\n交付方式以delivery.md为准。",
+  "requests": [
+    {
+      "id": "D-n1-uz",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "node",
+        "id": "n1"
+      },
+      "component": "uz",
+      "unit": "m"
+    },
+    {
+      "id": "D-b1-start-M2",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      },
+      "location": {
+        "kind": "member",
+        "id": "b1",
+        "positionM": 0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN.m"
+    }
+  ],
+  "reportIds": [
+    "D-b1-start-M2",
+    "D-n1-uz"
+  ],
+  "derived": [],
+  "attachments": [
+    "drawing.png"
+  ]
+}

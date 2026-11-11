@@ -1,0 +1,25 @@
+{
+  "caseId": "INT-042",
+  "sourceRowsRead": true,
+  "sourceAudit": [
+    {
+      "sourceField": "task.scenario",
+      "check": "Exact original turn count, edits, and delayed clarification retained."
+    },
+    {
+      "sourceField": "model.spec",
+      "check": "底面三角形边长4m，两层各3m，弦杆横杆斜杆按表连接，底节点固定，顶层侧力；三角形底点(0,0)/(4,0)/(2,2√3)m，各层z=0、3、6m；0～3m竖弦杆2A，上层竖弦杆A，横杆斜杆A；顶层三节点各X正向10kN，底层三点三平移约束。"
+    },
+    {
+      "sourceField": "task.expectedOutput",
+      "check": "顶层(0,0,6)m节点的Ux/Uz/Uy，左支承反力及附表指定首根下弦/底边杆轴力；所有值附位置、方向、单位、工况及当前轮次；澄清前不编造数值。"
+    }
+  ],
+  "decisions": [
+    "The source leaves absolute section/material appendix unspecified. Freeze explicit E=206000 MPa, nu=0.3, G=E/(2*(1+nu)), density=7850 kg/m3; B1=0.30x0.60m, C1=0.50x0.50m solid rectangles; proportional I sections are general sections with unchanged A,J. All values are public inputs, not tuned reference values.",
+    "Source did not provide topology tables A/B. Frozen appendix: each level has triangle AB/BC/CA; each tier has three verticals and three cyclic face diagonals. B reverses two upper face diagonals. Pure-Python assembled axial stiffness rank checks both states before acceptance as authored data; independent native analysis remains pending. A=0.01 m2; lower verticals 2A."
+  ],
+  "status": "author-checked; independent input blind review pending",
+  "native": "pending",
+  "llm": "not-run"
+}

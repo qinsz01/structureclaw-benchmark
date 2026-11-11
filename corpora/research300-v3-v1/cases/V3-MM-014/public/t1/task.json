@@ -1,0 +1,89 @@
+{
+  "caseId": "V3-MM-014",
+  "turnId": "t1",
+  "family": "MM",
+  "title": "MM-084商业原生模型重组",
+  "designLevel": "L2",
+  "engine": "YJK",
+  "analysis": "static",
+  "instruction": "按本轮签发资料建立裸框架，使用指定商业引擎计算所列带符号响应。结构化交付即可。",
+  "requests": [
+    {
+      "id": "case-D-D-transfer-midpoint-uz",
+      "location": {
+        "kind": "node",
+        "id": "n1-0-2"
+      },
+      "component": "uz",
+      "unit": "m",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    },
+    {
+      "id": "case-D-D-transfer-midpoint-left-M2",
+      "location": {
+        "kind": "member",
+        "id": "x0-0-2",
+        "positionM": 6,
+        "side": "left"
+      },
+      "component": "M2",
+      "unit": "kN*m",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    },
+    {
+      "id": "case-D-D-transfer-midpoint-right-M2",
+      "location": {
+        "kind": "member",
+        "id": "x1-0-2",
+        "positionM": 0,
+        "side": "right"
+      },
+      "component": "M2",
+      "unit": "kN*m",
+      "selection": {
+        "kind": "case",
+        "id": "D"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "id": "signed-response-governor",
+      "operation": "max_abs",
+      "operands": [
+        "case-D-D-transfer-midpoint-left-M2",
+        "case-D-D-transfer-midpoint-right-M2"
+      ],
+      "unit": "kN*m",
+      "tiePolicy": "any"
+    }
+  ],
+  "reportIds": [
+    "case-D-D-transfer-midpoint-uz",
+    "case-D-D-transfer-midpoint-left-M2",
+    "case-D-D-transfer-midpoint-right-M2"
+  ],
+  "requireShapes": false,
+  "sourceId": null,
+  "attachments": [
+    "analysis-control.json",
+    "combinations.json",
+    "geometry-nodes-01.png",
+    "geometry-overview.png",
+    "geometry-stories-01.png",
+    "loads.json",
+    "materials.csv",
+    "materials.json",
+    "members.csv",
+    "metadata.json",
+    "model-convention.json",
+    "sections.json",
+    "tool-contract.md"
+  ]
+}
