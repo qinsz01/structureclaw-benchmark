@@ -139,3 +139,5 @@ node scripts/research300/replay_input_precheck_archive.cjs \
 ```
 
 Python 包装层还提供 `pilot30-archive --review NEW_OUTPUT`。源码和题库仍从当前仓库读取，历史审查及工作目录从只读档案读取，输出拒绝写入档案。旧版校验中的历史源码差异仍会如实拒绝；包装层不绕过源码绑定，也不放宽校验。
+
+StructureClaw 最终答复若带说明文字，`extract_structureclaw_answer.py` 可定位唯一完整 JSON 围栏中的原始结构化交付，返回原 UTF-8 文本的字节切片及起止偏移/SHA。它拒绝多围栏、重复键、无效或截断 JSON，不添加字段、数值或作业引用，不读取参考答案；完整原答复仍须封存。该格式适配不改变 v3.3 判定。
