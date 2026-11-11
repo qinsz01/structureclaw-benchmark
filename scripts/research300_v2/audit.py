@@ -8,7 +8,6 @@ absence of those transcriptions is reported explicitly, never called a blind pas
 from __future__ import annotations
 
 import argparse
-import os
 from collections import Counter,defaultdict
 from copy import deepcopy
 import csv
@@ -495,7 +494,7 @@ def audit(edition,registry_path,manual_path=None,schema_root=None,schema_python=
         schema_rows=json.loads(process.stdout) if process.returncode==0 else []
         for row in schema_rows:check(row['id']+':pinned_schema_valid',row['passed'],row.get('error'))
         schema_result.update(attempted=len(schema_models),passed=sum(r['passed'] for r in schema_rows),status='completed' if process.returncode==0 else 'failed',rows=schema_rows)
-    guard=read(Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser()/'docs/implementation/reviews/codex-diversity300-20261027/source-integrity.json')['files']
+    guard=read(ROOT/'docs/implementation/reviews/codex-diversity300-20261027/source-integrity.json')['files']
     for row in guard:check('legacy_frozen:'+row['path'],sha(ROOT/row['path'])==row['sha256'])
     failed=[c for c in checks if not c['passed']]
     for row in case_rows:

@@ -124,3 +124,18 @@ python3 -m scripts.research300_v3.replay_retained_parallel_v33 \
 ```
 
 新入口将同一批维护者原件和原 v3.2 对照应用于 v3.3，单独保存源码指纹。`--answers` 必须直接包含 `CASE/TURN/answer.json`；对分片目录先查原始清单及逐文件 SHA，不能猜测或重新生成答案。v3.2/v3.3 判定源码及数值容差不变。离线回归不会授予真实采集器验收或正式实验资格。
+
+旧版封存清单绑定的脚本保留原字节，档案路径通过新包装入口传入：
+
+```sh
+python3 -m scripts.legacy_archive_inputs --archive-root /path/to/read-only-archive \
+  pilot30-audit --edition corpora/research300-v2-pilot30-v1 \
+  --tools /path/to/public-tools --output .bench-work/pilot-audit.json
+python3 -m scripts.legacy_archive_inputs --archive-root /path/to/read-only-archive \
+  v2-audit --edition corpora/research300-v2-v1 --output .bench-work/v2-audit.json
+python3 -m scripts.legacy_archive_inputs --archive-root /path/to/read-only-archive pkpm-precision-tests
+node scripts/research300/replay_input_precheck_archive.cjs \
+  --archive-root /path/to/read-only-archive --evidence /path/to/extracted-legacy-inputs
+```
+
+Python 包装层还提供 `pilot30-archive --review NEW_OUTPUT`。源码和题库仍从当前仓库读取，历史审查及工作目录从只读档案读取，输出拒绝写入档案。旧版校验中的历史源码差异仍会如实拒绝；包装层不绕过源码绑定，也不放宽校验。

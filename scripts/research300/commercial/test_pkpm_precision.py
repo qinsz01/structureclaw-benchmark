@@ -4,7 +4,6 @@ import hashlib
 import importlib
 import json
 from pathlib import Path
-import os
 import shutil
 import tempfile
 import unittest
@@ -70,7 +69,7 @@ class CanonicalPrecision(unittest.TestCase):
 
 class CapturedEvidence(unittest.TestCase):
     ROOT = Path(__file__).resolve().parents[3]
-    EVIDENCE = Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser() / 'docs/implementation/reviews/commercial-calibration-20261015/native-cases/pkpm/final-native-candidates'
+    EVIDENCE = ROOT / 'docs/implementation/reviews/commercial-calibration-20261015/native-cases/pkpm/final-native-candidates'
 
     def setUp(self):
         self.assertIsNotNone(precision, 'The precision-certificate implementation is missing')
