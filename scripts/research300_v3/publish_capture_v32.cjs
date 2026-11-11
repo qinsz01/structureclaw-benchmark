@@ -57,6 +57,22 @@ function publish({sourceRoot,inventoryPath,inventorySha256,edition,output}){
  function originalJSON(descriptor){keep(descriptor);return JSON.parse(readSealed(sourceRoot,descriptor));}
  keep({path:inventoryPath,sha256:inventorySha256});keep(inventory.sourceManifest);
  const entries=[],turns=[],runs=new Set(),ids=new Set(),usedCaptures=new Set(),captureIds=new Set();
+ function probeArtifacts(metadata,prefix){
+  const probes=metadata.availabilityProbes||[];
+  must(Array.isArray(probes),'AVAILABILITY_PROBE_INVENTORY_INVALID');
+  return probes.flatMap(probe=>{
+   const expected=source.files.find(row=>row.path==='backend/src/agent-skills/analysis/opensees-static/opensees_runtime.py')?.sha256;
+   must(probe.kind==='opensees-runtime-availability-probe'&&digestProbe(probe.sourceSha256)&&probe.sourceSha256===expected
+    &&(Number.isInteger(probe.returnCode)||typeof probe.exceptionType==='string')
+    &&record(probe.artifacts)&&['stdout','stderr'].every(name=>record(probe.artifacts[name])),
+    'PINNED_AVAILABILITY_PROBE_REQUIRED');
+   return Object.values(probe.artifacts).map(file=>{
+    must(['bytes','text-utf8'].includes(file.representation),'PROBE_OUTPUT_REPRESENTATION_INVALID');
+    const descriptor={path:(prefix==='.'?'':prefix+'/')+file.path,sha256:file.sha256};keep(descriptor);return descriptor;
+   });
+  });
+ }
+ function digestProbe(value){return typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);}
  function capture(descriptor,archive,engine){
   const metadata=originalJSON(descriptor),prefix=path.posix.dirname(descriptor.path);
   must(metadata.kind==='structureclaw-python-worker-capture'&&metadata.schemaVersion===2&&metadata.workerSha256===workerSha
@@ -75,7 +91,7 @@ function publish({sourceRoot,inventoryPath,inventorySha256,edition,output}){
    'WORKER_REQUEST_DIFFERS_FROM_RUN');
   if(archive.request.requestId!==undefined)must(request.input.requestId===archive.request.requestId,'WORKER_REQUEST_ID_CHANGED');
   must(response.ok===true&&response.data?.success===true&&record(response.data.data),'ORIGINAL_WORKER_DID_NOT_SUCCEED');
-  return {metadata,prefix,descriptor,request:request.input,response:response.data,artifacts:Object.values(files)};
+  return {metadata,prefix,descriptor,request:request.input,response:response.data,artifacts:[...Object.values(files),...probeArtifacts(metadata,prefix)]};
  }
  function bindRecord(archive,key,row,captures,engine){
   const matches=captures.filter(c=>engine==='OpenSees'?(row.selection?.kind==='case'?
@@ -155,6 +171,7 @@ function publish({sourceRoot,inventoryPath,inventorySha256,edition,output}){
      for(const receipt of meta.receipts||[])for(const [name,file]of Object.entries(receipt.artifacts||{})){
       keep({path:(prefix==='.'?'':prefix+'/')+file,sha256:receipt.receipt?.[name+'Sha256']});
      }
+     probeArtifacts(meta,prefix);
     }
     must(!collected.captureComplete||descriptors.length>0||attempt.rawArtifacts?.length>0,'FAILED_ATTEMPT_LOGS_REQUIRED');
     continue;

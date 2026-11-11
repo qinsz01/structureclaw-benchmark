@@ -75,3 +75,36 @@ test('completed capture cannot hide a failed native attempt without its original
  const f=setup(t);f.inventory.turns[0].attempts.push({attemptId:'attempt-2',status:'failed'});
  assert.throws(()=>publish(f.seal()),/FAILED_ATTEMPT_LOGS_REQUIRED/);
 });
+function withAvailabilityProbe(f,options){
+ const meta=JSON.parse(fs.readFileSync(path.join(options.sourceRoot,'worker/capture.json')));
+ const source=JSON.parse(fs.readFileSync(path.join(options.sourceRoot,'source-manifest.json'))),probeSha='a'.repeat(64);
+ source.files.push({path:'backend/src/agent-skills/analysis/opensees-static/opensees_runtime.py',sha256:probeSha});
+ const artifacts={};for(const name of ['stdout','stderr']){
+  const file=f.put('worker/probes/0-'+name+'.txt',Buffer.from(name==='stdout'?'available\n':''));
+  artifacts[name]={path:'probes/0-'+name+'.txt',sha256:file.sha256,representation:'text-utf8'};
+ }
+ meta.availabilityProbes=[{kind:'opensees-runtime-availability-probe',sourceSha256:probeSha,returnCode:0,artifacts}];
+ f.inventory.sourceManifest=f.put('source-manifest.json',source);
+ f.inventory.turns[0].attempts[0].captures=[f.put('worker/capture.json',meta)];
+ options.inventorySha256=f.put('inventory.json',f.inventory).sha256;
+ return options;
+}
+test('availability solves retain their pinned source and original probe output',t=>{
+ const f=setup(t),options=withAvailabilityProbe(f,f.seal()),result=publish(options);
+ assert.equal(fs.readFileSync(path.join(result.output,'original/worker/probes/0-stdout.txt'),'utf8'),'available\n');
+ const proof=JSON.parse(fs.readFileSync(path.join(result.output,'runs',fs.readdirSync(path.join(result.output,'runs'))[0],'execution-proof.json')));
+ assert(proof.artifacts.some(file=>file.path==='original/worker/probes/0-stdout.txt'));
+});
+test('a recorded availability solve cannot use an unpinned source',t=>{
+ const f=setup(t),options=withAvailabilityProbe(f,f.seal());
+ const file=path.join(options.sourceRoot,'worker/capture.json'),meta=JSON.parse(fs.readFileSync(file));
+ meta.availabilityProbes[0].sourceSha256='f'.repeat(64);
+ f.inventory.turns[0].attempts[0].captures=[f.put('worker/capture.json',meta)];
+ options.inventorySha256=f.put('inventory.json',f.inventory).sha256;
+ assert.throws(()=>publish(options),/PINNED_AVAILABILITY_PROBE_REQUIRED/);
+});
+test('a recorded availability solve cannot lose its original output seal',t=>{
+ const f=setup(t),options=withAvailabilityProbe(f,f.seal());
+ fs.appendFileSync(path.join(options.sourceRoot,'worker/probes/0-stdout.txt'),'tampered');
+ assert.throws(()=>publish(options),{code:'EVIDENCE_HASH_MISMATCH'});
+});

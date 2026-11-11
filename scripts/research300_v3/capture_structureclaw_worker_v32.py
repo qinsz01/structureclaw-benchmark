@@ -15,6 +15,7 @@ import time
 import os
 from pathlib import Path
 import runpy
+import subprocess
 import sys
 import uuid
 
@@ -70,6 +71,42 @@ def main():
     original_attach = evidence.attach_execution_artifacts
     captured = {}
     receipts = []
+    probes = []
+    original_run = subprocess.run
+    probe_path = worker.parent.parent / 'opensees-static' / 'opensees_runtime.py'
+
+    def capture_run(*args, **kwargs):
+        command = args[0] if args else kwargs.get('args')
+        if not (isinstance(command, (list, tuple)) and len(command) >= 2
+                and os.path.normcase(os.path.abspath(command[1])) == os.path.normcase(str(probe_path))):
+            return original_run(*args, **kwargs)
+        row = {'kind': 'opensees-runtime-availability-probe', 'startedAt': time.time(),
+               'command': list(map(str, command)), 'sourceSha256': sha(probe_path.read_bytes())}
+        probe_number = len(probes)
+        probes.append(row)
+        outputs = {}
+        try:
+            result = original_run(*args, **kwargs)
+            row['returnCode'] = result.returncode
+            outputs = {'stdout': result.stdout, 'stderr': result.stderr}
+            return result
+        except BaseException as error:
+            row['exceptionType'] = type(error).__name__
+            outputs = {'stdout': getattr(error, 'stdout', None), 'stderr': getattr(error, 'stderr', None)}
+            raise
+        finally:
+            row['completedAt'] = time.time()
+            row['artifacts'] = {}
+            for name, value in outputs.items():
+                # Preserve the subprocess API's return value without changing
+                # its encoding, capture options, exceptions or exit status.
+                filename = f'probes/{probe_number}-{name}.txt'
+                data = value.encode('utf8') if isinstance(value, str) else value or b''
+                target = folder / filename
+                target.parent.mkdir(exist_ok=True)
+                target.write_bytes(data)
+                row['artifacts'][name] = {'path': filename, 'sha256': sha(data),
+                                         'representation': 'text-utf8' if isinstance(value, str) else 'bytes'}
 
     def capture_hash(value):
         result = original_hash(value)
@@ -97,6 +134,7 @@ def main():
 
     evidence.artifact_sha256 = capture_hash
     evidence.attach_execution_artifacts = capture_attach
+    subprocess.run = capture_run
     previous_stdout, previous_stderr = sys.stdout, sys.stderr
     exit_code = 0
     try:
@@ -113,12 +151,14 @@ def main():
             finally:
                 sys.stdout, sys.stderr = previous_stdout, previous_stderr
     finally:
+        subprocess.run = original_run
         index = {'schemaVersion': 2, 'kind': 'structureclaw-python-worker-capture',
                  'captureId': capture_id, 'workerPid': os.getpid(),
                  'startedAt': started_at, 'completedAt': time.time(),
                  'wrapperSha256': sha(Path(__file__).read_bytes()),
                  'worker': str(worker), 'workerSha256': sha(worker.read_bytes()),
                  'requestSha256': sha(request), 'exitCode': exit_code, 'receipts': receipts,
+                 'availabilityProbes': probes,
                  'files': {name: sha((folder / name).read_bytes()) for name in ('request.json', 'stdout.json', 'stderr.log') if (folder / name).is_file()}}
         (folder / 'capture.json').write_text(json.dumps(index, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     return exit_code
