@@ -1,5 +1,6 @@
 """Recompute reviewer-facing evidence from retained files; never run candidates."""
 import argparse
+import os
 from collections import Counter
 import hashlib
 import json
@@ -7,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EDITION = ROOT / 'corpora/research300-v3-v1'
-REVIEWS = ROOT / 'docs/implementation/reviews'
+REVIEWS = Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser() / 'docs/implementation/reviews'
 
 
 def sha(data):

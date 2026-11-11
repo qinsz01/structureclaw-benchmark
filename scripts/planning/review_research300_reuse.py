@@ -5,10 +5,11 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import os
 
 ROOT = Path(__file__).resolve().parents[2]
 EDITION = ROOT / '.bench-work/section-diversity-v1-final-20261027'
-ARCHIVE = ROOT / 'docs/implementation/reviews/codex-diversity300-20261027'
+ARCHIVE = Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser() / 'docs/implementation/reviews/codex-diversity300-20261027'
 DEST = ROOT / 'planning/research300-v2/reuse-review'
 
 # Editorial selection after inspecting old task briefs, states, public input

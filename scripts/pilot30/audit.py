@@ -1,5 +1,6 @@
 """Check frozen edition/source bindings and public/private packaging boundaries."""
 import argparse
+import os
 import hashlib
 import json
 from pathlib import Path
@@ -10,7 +11,7 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
 def audit(edition,tools):
-    manifest=read(edition/'manifest.json');guard=read(ROOT/'docs/implementation/reviews/codex-diversity300-20261027/source-integrity.json')['files']
+    manifest=read(edition/'manifest.json');guard=read(Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser()/'docs/implementation/reviews/codex-diversity300-20261027/source-integrity.json')['files']
     for f in guard:assert sha(ROOT/f['path'])==f['sha256'],f['path']
     for f in manifest['files']:assert sha(edition/f['path'])==f['sha256'],f['path']
     old=ROOT/'.bench-work/section-diversity-v1-final-20261027/corpora/research-300/cases'

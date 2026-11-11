@@ -1,5 +1,6 @@
 """Freeze final numerical evidence and relevant failed maintainer attempts."""
 import argparse
+import os
 import hashlib
 import json
 from pathlib import Path
@@ -42,7 +43,7 @@ def archive(review):
         add(old/name,'attempts/oracle-r1/'+name)
     for name in ['pilot30-input-review-final-20261028.json','pilot30-physics-final-r5-20261028.log','pilot30-public-schema-final-20261028.json','pilot30-packaging-final-r2-20261028.json']:
         add(work/name,'reviews/'+name)
-    guarded=read(ROOT/'docs/implementation/reviews/codex-diversity300-20261027/source-integrity.json')['files']
+    guarded=read(Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser()/'docs/implementation/reviews/codex-diversity300-20261027/source-integrity.json')['files']
     paths={f['path'] for f in guarded}
     paths.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'scripts/pilot30').iterdir() if p.is_file())
     implementation=[]

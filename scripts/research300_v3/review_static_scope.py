@@ -11,10 +11,12 @@ import hashlib
 import json
 import math
 import argparse
+import os
 import struct
 import subprocess
 
-ROOT = Path('/mnt/nas/qsz/01research/02structureclaw-bench')
+ROOT = Path(__file__).resolve().parents[2]
+ARCHIVE_ROOT = Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser()
 EDITION = Path('/home/openclaw/.cache/structureclaw-bench/research300-v3-codex-full-r1-20261028/edition')
 OUT = ROOT / '.bench-work/research300-v3-static-scope-20261029'
 PRIMARY = '00ecd812a315a75b7714d5fc030ec3652bfaf869'
@@ -437,11 +439,11 @@ def case_assessment(row, input_row, sources):
 
 def write_reports(rows, stats):
     manifest_data = (EDITION / 'manifest.json').read_bytes()
-    binding = read(REVIEW / 'fork-binding.json')
+    binding = read(ARCHIVE_ROOT / 'docs/implementation/reviews/research300-v3-sclaw-static-scope-20261029/fork-binding.json')
     if sha(manifest_data) != binding['editionManifestSha256'] or sha((ROOT / 'corpora/research300-v3-v1/manifest.json').read_bytes()) != binding['editionManifestSha256']:
         raise ValueError('Published/cached edition manifest differs from the reviewed edition')
     manifest = json.loads(manifest_data)
-    old = read(ROOT / 'docs/implementation/reviews/research300-v3-20261028/input-audit.json')
+    old = read(ARCHIVE_ROOT / 'docs/implementation/reviews/research300-v3-20261028/input-audit.json')
     if old['manifestSha256'] != sha(manifest_data): raise ValueError('Historical input record has another edition binding')
     previous = {r['caseId']: r for r in old['rows']}
     sources, by_case, source_issues = public_sources(rows, manifest)

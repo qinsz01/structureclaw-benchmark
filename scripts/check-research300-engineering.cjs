@@ -39,7 +39,7 @@ function publicInputs(root, filename) {
   check(report.diagnosticOnly === true && report.scoringOrToleranceChanged === false,
     'Expected the retained diagnostic-only public-input experiment');
   // Bind to the original frozen archive and implementation, not candidate data.
-  const archiveDir = path.join(ROOT, 'docs/implementation/reviews/codex-diversity300-20261027');
+  const archiveDir = path.join(path.resolve(process.env.SCLAW_BENCH_ARCHIVE || ROOT), 'docs/implementation/reviews/codex-diversity300-20261027');
   const meta = read(path.join(archiveDir, 'evidence-meta.json'));
   check(report.archiveSha256 === meta.sha256, 'Public-input experiment archive mismatch');
   const manifestBytes = fs.readFileSync(path.join(archiveDir, 'archive-manifest.json'));

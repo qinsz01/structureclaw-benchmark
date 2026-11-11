@@ -4,6 +4,7 @@ Does not import an evaluator/SUT, call a model, start a solver or run tests.
 Missing operator-owned configuration/collector receipts remain unresolved.
 """
 import argparse
+import os
 from collections import Counter
 import hashlib
 import json
@@ -12,7 +13,7 @@ import re
 import shutil
 
 ROOT = Path(__file__).resolve().parents[2]
-REVIEW = ROOT / 'docs/implementation/reviews/research300-v3-sclaw-static-scope-20261029'
+REVIEW = Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser().resolve() / 'docs/implementation/reviews/research300-v3-sclaw-static-scope-20261029'
 PUBLISHED = '00ecd812a315a75b7714d5fc030ec3652bfaf869'
 LOCAL = '0a17bfdcd1a6cfa827a0aa15c05856fa3bd0e2d1'
 HISTORICAL = 'db3c0b1da44fe668a6037a6c2e7f068d14354539'

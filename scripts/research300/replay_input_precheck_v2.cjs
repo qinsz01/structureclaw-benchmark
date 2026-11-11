@@ -7,7 +7,7 @@ const review=require('../../lib/public-input-review-v2.cjs'),legacy=require('../
 function main(argv=process.argv.slice(2)){
   const args={};for(let i=0;i<argv.length;i+=2){assert(['--evidence','--out'].includes(argv[i])&&argv[i+1],'Use --evidence EXTRACTED_ARCHIVE [--out NEW_FILE]');args[argv[i].slice(2)]=argv[i+1];}
   assert(args.evidence,'An extracted evidence directory is required');
-  const root=path.resolve(__dirname,'../..'),evidence=path.resolve(args.evidence),reportDir=path.join(root,'docs/implementation/reviews/backend-and-codex-precheck-20261026');
+  const root=path.resolve(__dirname,'../..'),evidence=path.resolve(args.evidence),reportDir=path.join(path.resolve(process.env.SCLAW_BENCH_ARCHIVE||root),'docs/implementation/reviews/backend-and-codex-precheck-20261026');
   const manifest=legacy.readJson(path.join(reportDir,'codex-archive-manifest.json'));
   assert.equal(legacy.sha256(fs.readFileSync(path.join(reportDir,'codex-blind-evidence.zip.bin'))),manifest.archiveSha256);
   for(const f of manifest.files){const bytes=fs.readFileSync(legacy.safeFile(evidence,f.path));assert.equal(bytes.length,f.bytes,f.path);assert.equal(legacy.sha256(bytes),f.sha256,f.path);}

@@ -74,7 +74,7 @@ def main():
     run('continuous-observations', ['node', str(HERE / 'measure_codex_full_v32.cjs'), str(edition), str(work), str(pin), sha(pin), str(reviewed), str(measured)])
     run('independent-load-witnesses', ['python3', '-m', 'scripts.research300_v3.review_codex_full_loads_v32',
                                     '--edition', str(edition), '--work', str(work), '--diagnostic', str(reviewed),
-                                    '--public-audit', str(ROOT / 'docs/implementation/reviews/research300-v3-codex-full-20261028/public-load-arithmetic.json'),
+                                    '--public-audit', str(Path(os.environ.get('SCLAW_BENCH_ARCHIVE', ROOT)).expanduser() / 'docs/implementation/reviews/research300-v3-codex-full-20261028/public-load-arithmetic.json'),
                                     '--output', str(report / 'independent-load-witnesses.json')])
     while not (report / 'replay/cold-replay.json').exists():
         if not alive(parent['pid']):
