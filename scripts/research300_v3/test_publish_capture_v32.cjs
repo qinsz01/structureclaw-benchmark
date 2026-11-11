@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os');
-const {publish}=require('./publish_capture_v32.cjs'),{loadControlledIndex}=require('./controlled-evidence-v32.cjs');
+const {publish,commercialStationsMatch}=require('./publish_capture_v32.cjs'),{loadControlledIndex}=require('./controlled-evidence-v32.cjs');
 const {example,sha}=require('./test-support-v32.cjs'),{modelFingerprint}=require('../../lib/analysis-evidence.cjs');
 
 // A synthetic worker/archive pair exercises the offline publisher contract.
@@ -133,3 +133,29 @@ test('protocol label normalization retains unknown load extensions',t=>{
  f.canonical.normalizedInput.load_cases[0].loads[0].unmapped_load_override=2;
  assert.throws(()=>publish(f.seal()),/NATIVE_INPUT_OR_SETTINGS_CHANGED/);
 });
+function commercialStations(){
+ const model={nodes:[{id:'a',x:-1,y:2,z:0},{id:'b',x:2,y:6,z:0}],elements:[{id:'e',nodes:['a','b']}]};
+ const native={e:[{positionM:2.5,side:'right',components:{N:-2,My:3},localAxes:[[.6,.8,0],[-.8,.6,0],[0,0,1]],
+  nativeComponents:[-2,3],source:{sha256:'a'.repeat(64)}}]};
+ const archived=structuredClone(native);archived.e[0].global={x:.5,y:4,z:0};
+ return {model,native,archived};
+}
+test('commercial binding accepts exactly derived global coordinates and preserves originals',()=>{
+ const f=commercialStations(),before=structuredClone(f);
+ assert(commercialStationsMatch(f.model,f.native,f.archived));assert.deepEqual(f,before);
+ assert(commercialStationsMatch(f.model,f.native,f.native));
+});
+for(const [name,change]of [
+ ['changed global coordinate',f=>f.archived.e[0].global.y+=Number.EPSILON*4],
+ ['changed station force',f=>f.archived.e[0].components.N=-3],
+ ['changed local axis',f=>f.archived.e[0].localAxes[0][0]=-.6],
+ ['changed source seal',f=>f.archived.e[0].source.sha256='b'.repeat(64)],
+ ['unknown station extension',f=>f.archived.e[0].unknownOverride=1],
+ ['unknown global extension',f=>f.archived.e[0].global.frame='override'],
+ ['missing station',f=>f.archived.e=[]],
+ ['changed station position',f=>f.archived.e[0].positionM=3],
+ ['out of range position',f=>{f.native.e[0].positionM=f.archived.e[0].positionM=6;}],
+ ['ambiguous source member',f=>f.model.elements.push(structuredClone(f.model.elements[0]))],
+ ['ambiguous source node',f=>f.model.nodes.push(structuredClone(f.model.nodes[0]))],
+ ['changed native coordinate',f=>f.native.e[0].global={x:0,y:0,z:0}],
+])test('commercial station binding rejects '+name,()=>{const f=commercialStations();change(f);assert.equal(commercialStationsMatch(f.model,f.native,f.archived),false);});

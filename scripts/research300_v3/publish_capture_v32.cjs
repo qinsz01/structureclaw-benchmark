@@ -12,6 +12,36 @@ const record=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const equal=(a,b)=>isDeepStrictEqual(JSON.parse(JSON.stringify(a)),JSON.parse(JSON.stringify(b)));
 const must=(ok,code)=>{if(!ok)throw new EvidenceError(code,code);};
 const selectors={OpenSees:['builtin-opensees','opensees-static','opensees-dynamic'],PKPM:['builtin-pkpm','pkpm-static'],YJK:['builtin-yjk','yjk-static']};
+function commercialStationsMatch(model,native,archived){
+ // The host's withGlobalResultLocations adds only derived display coordinates.
+ // Check those against the original model exactly before comparing every
+ // original station field. Never remove a coordinate already supplied natively.
+ if(!record(native)||!record(archived))return false;
+ const view=structuredClone(archived);
+ for(const [id,rows]of Object.entries(view)){
+  if(!Array.isArray(rows)||!Array.isArray(native[id])||rows.length!==native[id].length)return false;
+  for(let i=0;i<rows.length;i++){
+   const row=rows[i],original=native[id][i];
+   if(!record(row)||!record(original))return false;
+   if(Object.hasOwn(row,'global')&&!Object.hasOwn(original,'global')){
+    const elements=(model.elements||[]).filter(e=>e.id===id);
+    if(elements.length!==1||!Array.isArray(elements[0].nodes)||elements[0].nodes.length!==2)return false;
+    const endpoints=elements[0].nodes.map(id=>(model.nodes||[]).filter(n=>n.id===id));
+    if(endpoints.some(nodes=>nodes.length!==1))return false;
+    const [a,b]=endpoints.map(nodes=>nodes[0]),keys=['x','y','z'];
+    if(!keys.every(k=>Number.isFinite(a[k])&&Number.isFinite(b[k])))return false;
+    const length=Math.hypot(b.x-a.x,b.y-a.y,b.z-a.z),position=row.positionM;
+    const roundoff=8*Number.EPSILON*Math.max(1,length);
+    if(!length||!Number.isFinite(position)||position < -roundoff||position > length+roundoff)return false;
+    const fraction=Math.max(0,Math.min(length,position))/length;
+    const expected=Object.fromEntries(keys.map(k=>[k,a[k]+fraction*(b[k]-a[k])]));
+    if(!equal(row.global,expected))return false;
+    delete row.global;
+   }
+  }
+ }
+ return equal(native,view);
+}
 function hostInputView(model){
  // StructureModelV2 drops these display names and explicitly materializes the
  // documented global load-frame default. Keep the protected originals intact;
@@ -155,7 +185,9 @@ function publish({sourceRoot,inventoryPath,inventorySha256,edition,output}){
   must(native.nativeContext?.engine===engine.toLowerCase()&&native.nativeContext.linearStatic===true
    &&native.nativeContext.effectiveSettingsVerified===true&&native.nativeContext.stationConventionsVerified===true,'COMMERCIAL_NATIVE_CONTEXT_UNVERIFIED');
   for(const field of ['displacements','reactions','forces','memberStations','nativeContext','forceSemantics','units','selectedResult']){
-   must(native[field]!==undefined&&equal(native[field],row.data[field]),'COMMERCIAL_NATIVE_FIELD_CHANGED: '+field);
+   must(native[field]!==undefined&&(field==='memberStations'?
+    commercialStationsMatch(archive.request.model,native[field],row.data[field]):equal(native[field],row.data[field])),
+    'COMMERCIAL_NATIVE_FIELD_CHANGED: '+field);
   }
   return native.nativeContext.engineVersion;
  }
@@ -231,4 +263,4 @@ if(require.main===module){
   process.stdout.write(JSON.stringify(publish(opts))+'\n');
  }catch(error){process.stderr.write(JSON.stringify({outcome:'ungradable_evidence',code:error.code||'COLLECTION_INVALID',message:error.message})+'\n');process.exitCode=2;}
 }
-module.exports={publish};
+module.exports={publish,commercialStationsMatch};
