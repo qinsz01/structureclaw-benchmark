@@ -12,8 +12,20 @@ const record=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const equal=(a,b)=>isDeepStrictEqual(JSON.parse(JSON.stringify(a)),JSON.parse(JSON.stringify(b)));
 const must=(ok,code)=>{if(!ok)throw new EvidenceError(code,code);};
 const selectors={OpenSees:['builtin-opensees','opensees-static','opensees-dynamic'],PKPM:['builtin-pkpm','pkpm-static'],YJK:['builtin-yjk','yjk-static']};
-function physics(model){
+function hostInputView(model){
+ // StructureModelV2 drops these display names and explicitly materializes the
+ // documented global load-frame default. Keep the protected originals intact;
+ // explicit frames, IDs, loads and every unknown field still bind exactly.
  const value=structuredClone(model);
+ for(const row of value.load_cases||[]){
+  if(typeof row.name==='string')delete row.name;
+  for(const load of row.loads||[])if(['nodal','distributed','point'].includes(load.type)&&load.reference_frame===undefined)load.reference_frame='global';
+ }
+ for(const row of value.load_combinations||[])if(typeof row.name==='string')delete row.name;
+ return value;
+}
+function physics(model){
+ const value=hostInputView(model);
  for(const m of value.materials||[])if(['steel','concrete','rebar','other'].includes(m.type)){
   must(m.category==null||m.category===m.type,'CAPTURE_MATERIAL_ALIAS_CONFLICT');m.category=m.type;delete m.type;
  }
@@ -131,7 +143,7 @@ function publish({sourceRoot,inventoryPath,inventorySha256,edition,output}){
     must(Array.isArray(keys)&&equal([...keys].sort(),Object.keys(parsed.solverResponse).sort())
      &&keys.every(k=>equal(parsed.solverResponse[k],row.data[k])),'DYNAMIC_NATIVE_PAYLOAD_CHANGED');
    }else{
-    const binding=verifyStructureClawPayloadBinding({model:archive.request.model,selection:row.selection,data:row.data,
+    const binding=verifyStructureClawPayloadBinding({model:hostInputView(archive.request.model),selection:row.selection,data:row.data,
      meta:row.meta,execution,artifactBytes:canonical});must(binding.pass,'STATIC_NATIVE_PAYLOAD_UNBOUND: '+binding.failures.join('; '));
    }
    must(equal(row.data.meta?.execution?.artifacts,execution.artifacts),'ARCHIVED_EXECUTION_RECEIPT_CHANGED');

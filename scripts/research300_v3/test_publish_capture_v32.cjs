@@ -108,3 +108,28 @@ test('a recorded availability solve cannot lose its original output seal',t=>{
  fs.appendFileSync(path.join(options.sourceRoot,'worker/probes/0-stdout.txt'),'tampered');
  assert.throws(()=>publish(options),{code:'EVIDENCE_HASH_MISMATCH'});
 });
+function withProtocolNormalization(f){
+ f.request.input.model.load_cases[0].name='Public display label';
+ f.archive.request.model=structuredClone(f.request.input.model);
+ f.archive.modelHash=modelFingerprint(f.archive.request.model);
+ f.archive.results['analysis:modal'].meta.modelHash=f.archive.modelHash;
+ f.canonical.normalizedInput=structuredClone(f.request.input.model);
+ delete f.canonical.normalizedInput.load_cases[0].name;
+ f.canonical.normalizedInput.load_cases[0].loads[0].reference_frame='global';
+}
+test('pinned protocol display names and omitted global load frames bind to their actual normalized input',t=>{
+ const f=setup(t);withProtocolNormalization(f);
+ assert.equal(publish(f.seal()).entries,1);
+ assert.equal(f.request.input.model.load_cases[0].name,'Public display label');
+ assert.equal(f.request.input.model.load_cases[0].loads[0].reference_frame,undefined);
+});
+test('normalizing an omitted frame cannot hide a changed explicit frame',t=>{
+ const f=setup(t);withProtocolNormalization(f);
+ f.canonical.normalizedInput.load_cases[0].loads[0].reference_frame='element-local';
+ assert.throws(()=>publish(f.seal()),/NATIVE_INPUT_OR_SETTINGS_CHANGED/);
+});
+test('protocol label normalization retains unknown load extensions',t=>{
+ const f=setup(t);withProtocolNormalization(f);
+ f.canonical.normalizedInput.load_cases[0].loads[0].unmapped_load_override=2;
+ assert.throws(()=>publish(f.seal()),/NATIVE_INPUT_OR_SETTINGS_CHANGED/);
+});
